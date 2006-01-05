@@ -6,17 +6,19 @@
 
 \description{
 Export sound data as a text file that can be read by a wave player like
-'Goldwave'
+'Goldwave')
 }
 
 \usage{
-export(wave, f, file = "newwave.txt", ...)
+export(wave, f,
+file = paste(as.character(deparse(substitute(wave))),".txt",sep=""),
+...)
 }
 
 \arguments{
   \item{wave}{data describing the time wave to be exported.}
   \item{f}{sampling frequency of \code{wave}.}
-  \item{file}{name of the new file (by default: "newwave.txt")}
+  \item{file}{name of the new file}
   \item{\dots}{other \code{\link{write.table}} parameters.}
 }
 
@@ -28,7 +30,7 @@ This type of file can be read by wave players like
 Goldwave (\url{http://www.goldwave.com/}).
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \examples{
 a<-synth(f=8000,d=2,cf=2000,plot=FALSE)

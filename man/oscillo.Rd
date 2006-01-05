@@ -67,7 +67,7 @@ points on the oscillogram.
 } 
 
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr} and 
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{cutw}}, \code{\link{pastew}}, \code{\link{timer}}.}

@@ -51,7 +51,7 @@ describing the sound synthesized.
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr},
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr},
 Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 

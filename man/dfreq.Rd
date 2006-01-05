@@ -35,7 +35,7 @@ numeric data corresponding to the dominant frequency along the time wave.
 
 \details{A Hanning function is applied to the analysis window.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
 

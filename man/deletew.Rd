@@ -30,7 +30,7 @@ If \code{plot} is \code{FALSE}, \code{deletew} returns a one-column matrix
 describing the resulting wave with the same sampling frequency as original data.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}}, \code{\link{pastew}},
 \code{\link{timer}}.}

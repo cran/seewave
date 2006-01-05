@@ -39,7 +39,7 @@ two elements:
   \item{peaks }{the peaks values (in kHz).}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{oscillo}}}
 

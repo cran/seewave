@@ -35,7 +35,7 @@ pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, ...)
 \value{A one-column matrix describing a wave with the same sampling
 frequency as original data.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{cutw}}, \code{\link{deletew}}, \code{\link{mute}},
 \code{\link{oscillo}}, \code{\link{timer}}.}
