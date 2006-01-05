@@ -8,7 +8,7 @@ pause periods and their ratio.
 \usage{
 timer(wave, f, threshold, smooth = 0, plot = TRUE,
 plotthreshold = TRUE, col = "black", colval = "red", 
-xlab = "Time (s)", ylab = "Absolute amplitude", ...)
+xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 \arguments{
   \item{wave}{data describing a time wave.}

@@ -5,7 +5,7 @@ op1<-par(ask=TRUE)
 # different oscillograms of a tropical sparrow song
 oscillo(tico,f=22050)
 oscillo(tico,f=22050,k=2,j=2,byrow=TRUE)
-oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",colbg="grey",
+oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="green",colbg="grey",
     coltitle="yellow",collab="red",colline="white",
     colaxis="blue",coly0="grey50")
 
@@ -32,14 +32,14 @@ meanspec(orni,f=22050,wl=512,type="l")
 title("meanspec()")
 par(op)
 
-# spectrogram and dominant frequency overlaid of a tropical sparrow song
-spectro(tico,f=22050,wl=512,ovlp=50,zp=16,scale=FALSE,collevels=seq(-40,0,1),palette=rev.terrain.colors)
-par(new=TRUE)
-dfreq(tico,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
-    ann=FALSE,xaxs="i",yaxs="i")
-
 # basic 2D spectrogram of a bird song
-spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors)
+spectro(tico,f=22050,wl=512,ovlp=50,zp=16,collevels=seq(-40,0,0.5))
+
+# spectrogram and dominant frequency overlaid of a bird song
+spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors,scale=FALSE)
+par(new=TRUE)
+dfreq(alauda,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
+    ann=FALSE,xaxs="i",yaxs="i")
 
 # 2D spectrogram of a cricket song with colour modifications
 op<-par(bg="black",col="white")
@@ -50,7 +50,12 @@ colline="white")
 par(op)
 
 # sound synthesis
-synth(f=22050,d=1,cf=4000,am=c(50,10), fm=c(1000,10,1000),wl=256,ovlp=75,osc=T)
+F1<-synth(f=22050,am=c(50,10),cf=2000,d=1,fm=c(500,5,0),plot=FALSE)
+F2<-synth(f=22050,a=0.8,cf=4000,am=c(50,10),d=1,fm=c(500,5,0),plot=FALSE)
+F3<-synth(f=22050,a=0.6,cf=6000,am=c(50,10),d=1,fm=c(500,5,2000),plot=FALSE)
+F4<-synth(f=22050,a=0.4,cf=8000,am=c(50,10),d=1,fm=c(500,5,2000),plot=FALSE)
+final1<-F1+F2+F3+F4
+spectro(final1,f=22050,wl=512,ovlp=75,osc=TRUE)
 title(main="synthesis of a AM/FM sound")
 
 # 3D spectrogram of a tropical sparrow  song

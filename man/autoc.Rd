@@ -46,7 +46,7 @@ Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr}}
 
 \examples{
 data(sheep)
-# fundamental frequency of a bird call (Vanellus vanellus)
+# fundamental frequency of a sheep
 autoc(sheep,f=8000,wl=512,t=5,fmin=700)
 # overlay on spectrogram
 spectro(sheep,f=8000,wl=512,ovlp=75,zp=16,scale=FALSE)
