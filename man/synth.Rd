@@ -89,5 +89,5 @@ final2<-rbind(final1.1,final1.2,final1.3)
 spectro(final2,f=22050,wl=512,ovlp=75,scale=FALSE)
 }
 
-\keyword{dplot}
+\keyword{datagen}
 \keyword{ts}
