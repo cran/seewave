@@ -37,7 +37,8 @@ frequency as original data.}
 
 \author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
 
-\seealso{\code{\link{cutw}}, \code{\link{oscillo}}, \code{\link{timer}}.}
+\seealso{\code{\link{cutw}}, \code{\link{deletew}}, \code{\link{mute}},
+\code{\link{oscillo}}, \code{\link{timer}}.}
 
 \examples{
 data(tico)

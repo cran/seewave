@@ -1,16 +1,14 @@
-\name{cutw}
+\name{deletew}
+\alias{deletew}
 
-\alias{cutw}
-
-\title{Cut a section of a time wave}
+\title{Delete a section of a time wave}
 
 \description{
-This function selects and cuts a section of data describing a time wave.
-Original and cut sections can be plotted as oscillograms for comparison. 
+This function selects and delete a section of data describing a time wave.
+Original section and section after deletion can be plotted as oscillograms for comparison. 
 }
-
 \usage{
-cutw(wave, f, from, to, plot = FALSE, marks = TRUE, ...)
+deletew(wave, f, from = FALSE, to = FALSE, plot = FALSE, marks = TRUE, ...)
 }
 
 \arguments{
@@ -23,27 +21,27 @@ cutw(wave, f, from, to, plot = FALSE, marks = TRUE, ...)
   \item{marks}{logical, if \code{TRUE} shows the start and end mark on the plot (by default \code{TRUE}).}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
   }
-
+  
 \details{If \code{plot} is \code{TRUE} returns a two-frame plot with both 
-original and cut sections.}
+original and resulting sections.}
 
 \value{
-If \code{plot} is \code{FALSE}, \code{cutw} returns a one-column matrix
-describing the cut wave with the same sampling frequency as original data.
+If \code{plot} is \code{FALSE}, \code{deletew} returns a one-column matrix
+describing the resulting wave with the same sampling frequency as original data.
 }
 
 \author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{pastew}}, \code{\link{deletew}},
-\code{\link{mute}}, \code{\link{timer}}.}
+\seealso{\code{\link{oscillo}}, \code{\link{cutw}}, \code{\link{pastew}},
+\code{\link{timer}}.}
 
 \examples{
-# a 0.4 s section in a bird song
+# deletion a 0.4 s section in a bird song
 data(tico)
-a<-cutw(tico,f=22050,from=0.5,to=0.9)
+a<-deletew(tico,f=22050,from=0.5,to=0.9)
 oscillo(a,22050)
 # a direct way to see what has been cut
-cutw(tico,f=22050,from=0.5,to=0.9,plot=TRUE)
+deletew(tico,f=22050,from=0.5,to=0.9,plot=TRUE)
 }
 
 \keyword{dplot}

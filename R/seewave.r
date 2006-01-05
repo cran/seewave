@@ -511,7 +511,7 @@ if (side == 2 | side == 4)
     if (side == 4)
       {
       axis(4,pos=0.95,...)
-      abline(v=0)
+      abline(v=c(0,0.95))
       }
     }
 
@@ -536,6 +536,47 @@ if (side == 1  | side == 3)
       }
     }    
 }    
+
+
+################################################################################
+#                                DELETEW
+################################################################################
+
+deletew<-function(
+wave,
+f,
+from=FALSE,
+to=FALSE,
+plot = FALSE,
+marks = TRUE,
+...)
+
+{
+if (from == 0) {a<-1; b<-round(to*f)}
+if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
+if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
+else {a<-round(from*f); b<-round(to*f)}
+wavecut<-as.matrix(wave[-(a:b),])
+
+if (plot == TRUE)
+  {
+  def.par <- par(no.readonly = TRUE)
+  on.exit(par(def.par))
+  par(mfrow=c(2,1))
+  oscillo(wave,f=f,k=1,j=1,...)
+  title(main="original")
+    if (marks == TRUE)
+      {
+      abline(v=from, col="red", lty=2)
+      abline(v=to, col="red", lty=2)
+      }
+  oscillo(wavecut,f=f,k=1,j=1,...)
+  title(main="after deletion")
+  }
+else return(wavecut)
+}
+
+
 ################################################################################
 #                                DFREQ                                         
 ################################################################################
@@ -594,6 +635,25 @@ if (plot==TRUE)
 else
 return(y)
 }
+
+
+
+################################################################################
+#                               EXPORT                                        
+################################################################################
+
+export<-function(
+wave,
+f,
+file = "newwave.txt",
+...)
+
+{
+n<-nrow(wave)
+header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")
+write.table(x=wave, file=file, row.names=FALSE, col.names=header, ...)
+}
+
 
 
 ################################################################################
@@ -826,6 +886,21 @@ if (from | to)
   }
 if (plot == TRUE) {oscillo(wave.muted,f=f,...)} else return(wave.muted)
 
+}
+
+
+################################################################################
+#                                NOISE                                        
+################################################################################
+
+noise<-function(
+f,
+d,
+...
+)
+
+{
+as.matrix(rnorm(d*f))
 }
 
 
@@ -1381,11 +1456,11 @@ z3<-z2/max(z2)
 # replaces 0 values in spectra (that can't be processed by the following log10())
 z4<-ifelse(z3==0,yes=1e-6,no=z3)
 # to get dB values
-z<-20*log10(z4)					  
+z<-20*log10(z4)[-1,]					  
 
 # settings of X, Y, Z plot axis
 X<-seq(0,n/f,length.out=length(step))
-Y<-seq(0,f/2000,length.out=(wl+zp)/2)
+Y<-seq(0,f/2000,length.out=((wl+zp)/2)-1)
 Z<-t(z)
    
 if (plot==TRUE)
@@ -2238,11 +2313,12 @@ else
 plot(wave,
 		col=colwave, type="l",
 		xaxs="i", yaxs="i",
-		xlab=xlab, ylab=ylab,
+		xlab=xlab, ylab="",
 		yaxt="n", bty="l",
 		...)
 axis(side=1, col=colline,labels=FALSE)
 axis(side=2, at=max(wave,na.rm=TRUE), col=colline,labels=FALSE)
+mtext(text=ylab,side=2,cex=0.85,line=2.75)
 abline(h=0,col=coly0,lty=2)
 }
 

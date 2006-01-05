@@ -32,7 +32,8 @@ Data are returned as one-column matrix if \code{plot} is \code{FALSE}.
 
 \author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{pastew}}, \code{\link{cutw}}}
+\seealso{\code{\link{oscillo}}, \code{\link{cutw}},
+\code{\link{pastew}}, \code{\link{deletew}}}
 \examples{
 data(tico)
 mute(tico,f=22050,from=0.5,to=0.9)
