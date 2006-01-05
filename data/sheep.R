@@ -1,0 +1,1 @@
+sheep <- read.table("sheep.txt", skip=1)

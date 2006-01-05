@@ -1,0 +1,1 @@
+orni <- read.table("orni.txt", skip=1)
