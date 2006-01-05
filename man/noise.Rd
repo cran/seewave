@@ -26,7 +26,7 @@ Returns a one column matrix with random data (by defalut: mean = 0, sd = 1).
 }
 
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{synth}}}
 

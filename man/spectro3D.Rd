@@ -35,7 +35,8 @@ A Hanning function is applied to the analysis window.\cr
 \code{zp} adds 0 values on both sides of the analysis window. This increases
 frequency resolution without altering time resolution.\cr
 Any colour palette can be used. In particular, it is possible to use other palettes coming with
-\pkg{seewave}: \code{spectro.colors} and \code{rev.heat.colors}, 
+\pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2},
+\code{spectro.colors}, \code{rev.heat.colors}, 
 \code{rev.cm.colors}, \code{rev.topo.colors}, corresponding to the reverse
 of \code{heat.colors},\code{topo.colors},
 \code{cm.colors}.\cr
@@ -46,7 +47,7 @@ Use \code{magt}, \code{magf} and \code{maga} to resize the plot.
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
 corresponds to a Fourier transform of length \code{wl}.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr} and 
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \note{This function runs with \pkg{rgl} and is based on \code{\link{fft}}.

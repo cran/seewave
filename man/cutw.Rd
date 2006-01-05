@@ -32,7 +32,7 @@ If \code{plot} is \code{FALSE}, \code{cutw} returns a one-column matrix
 describing the cut wave with the same sampling frequency as original data.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{pastew}}, \code{\link{deletew}},
 \code{\link{mute}}, \code{\link{timer}}.}

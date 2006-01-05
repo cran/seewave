@@ -62,7 +62,7 @@ two elements:
   \item{peaks }{the peaks values (in kHz).}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr} and 
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
 Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 

@@ -25,7 +25,7 @@ A numeric vector or a matrix is returned.
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \examples{
 # two sources of 60 dB give an intensity or pressure level of 63 dB

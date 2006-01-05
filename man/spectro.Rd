@@ -59,7 +59,8 @@ A Hanning function is applied to the analysis window.\cr
 \code{zp} adds 0 values on both sides of the analysis window. This increases
 frequency resolution without altering time resolution.\cr
 Any colour palette can be used. In particular, it is possible to use other palettes coming with
-\pkg{seewave}: \code{rev.heat.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
+\pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2}, 
+\code{rev.heat.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
 \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
 \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
 Use \code{\link{locator}} to identify  points.
@@ -73,7 +74,7 @@ corresponds to a Fourier transform of length \code{wl}.}
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr} and 
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
@@ -116,7 +117,7 @@ spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,osc=TRUE,
     lwd=1.5,lty=2,palette=rev.terrain.colors)
 # black and white spectrogram 
 spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,
-    palette=rev.gray.colors)
+    palette=rev.gray.colors.1)
 # colour modifications
 spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,
 palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 

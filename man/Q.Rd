@@ -34,7 +34,7 @@ alab = "Relative amplitude (dB)",...)
 
 \value{Q is returned as a single numeric data.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
 

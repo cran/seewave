@@ -46,7 +46,7 @@ time process. Type argument of \code{plot} cannot be set to \dQuote{l}.}
 \references{Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998.
 \emph{Animal acoustic communication.} Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr},
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr},
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr}}
 

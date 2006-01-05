@@ -30,7 +30,7 @@ this results in completely muting \code{wave}.
 Data are returned as one-column matrix if \code{plot} is \code{FALSE}.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}},
 \code{\link{pastew}}, \code{\link{deletew}}}

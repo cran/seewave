@@ -36,7 +36,7 @@ par(op)
 spectro(tico,f=22050,wl=512,ovlp=50,zp=16,collevels=seq(-40,0,0.5))
 
 # spectrogram and dominant frequency overlaid of a bird song
-spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors,scale=FALSE)
+spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors.1,scale=FALSE)
 par(new=TRUE)
 dfreq(alauda,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
     ann=FALSE,xaxs="i",yaxs="i")

@@ -16,7 +16,7 @@ corresponds to a sampling frequency change.}
 
 \value{Data are returned as a one-column matrix.}
 
-\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \note{Resampling might change frequency properties of the time wave.}
 

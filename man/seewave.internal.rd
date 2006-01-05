@@ -8,7 +8,8 @@
 \alias{check.pks}
 \alias{peaksign}
 \alias{rev.cm.colors}
-\alias{rev.gray.colors}
+\alias{rev.gray.colors.1}
+\alias{rev.gray.colors.2}
 \alias{rev.heat.colors}
 \alias{rev.terrain.colors}
 \alias{rev.topo.colors}

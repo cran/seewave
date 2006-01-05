@@ -645,7 +645,7 @@ return(y)
 export<-function(
 wave,
 f,
-file = "newwave.txt",
+file = paste(as.character(deparse(substitute(wave))),".txt",sep=""),
 ...)
 
 {
@@ -1864,7 +1864,7 @@ filled.contour.modif1<-
 function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     z, xlim = range(x, finite = TRUE), ylim = range(y, finite = TRUE),
     zlim = range(z, finite = TRUE), levels = pretty(zlim, nlevels),
-    nlevels = 20, color.palette = rev.gray.colors,
+    nlevels = 20, color.palette = rev.gray.colors.1,
     col = color.palette(length(levels) - 1),
     plot.title, plot.axes, key.title, key.axes, scalelab, scalefontlab,
     asp = NA, xaxs = "i", yaxs = "i", axisX = TRUE, axisY = TRUE, axes = TRUE,
@@ -2006,7 +2006,7 @@ filled.contour.modif3<-
 function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     z, xlim = range(x, finite = TRUE), ylim = range(y, finite = TRUE),
     zlim = range(z, finite = TRUE), levels = pretty(zlim, nlevels),
-    nlevels = 20, color.palette = rev.gray.colors,
+    nlevels = 20, color.palette = rev.gray.colors.1,
     col = color.palette(length(levels) - 1), plot.title, plot.axes, key.title,
     key.axes, scalelab, scalefontlab, asp = NA,
     xaxs = "i", yaxs = "i", axisX = TRUE, axisY = TRUE, axes = TRUE, las=1,
@@ -2177,10 +2177,19 @@ function (x)
 
 
 ################################################################################
-#                                REV.GRAY.COLORS                                       
+#                                REV.GRAY.COLORS.1                                       
 ################################################################################ 
-rev.gray.colors<-
+rev.gray.colors.1<-
 function (x, start=1, end=0, gamma = 1.7)
+gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
+
+
+
+################################################################################
+#                                REV.GRAY.COLORS.2                                       
+################################################################################ 
+rev.gray.colors.2<-
+function (x, start = 1, end = 0, gamma = 1)
 gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
 
 
