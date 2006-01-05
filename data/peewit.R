@@ -1,0 +1,1 @@
+peewit <- read.table("peewit.txt", skip=1)

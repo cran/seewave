@@ -1,0 +1,1 @@
+alauda <- read.table("alauda.txt", skip=1)

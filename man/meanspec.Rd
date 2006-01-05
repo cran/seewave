@@ -1,0 +1,112 @@
+\name{meanspec}
+
+\alias{meanspec}
+
+\title{Mean frequency spectrum of a time wave}
+
+\description{
+This function returns the mean frequency spectrum (i.e. the mean relative amplitude of the
+frequency distribution) of a time wave. Results can be expressed either in absolute 
+or dB data.
+}
+
+\usage{
+meanspec(wave, f, wl, ovlp = 0, PSD = FALSE, dB = FALSE,
+from = FALSE, to = FALSE, peaks = FALSE, identify = FALSE,
+col = "black", cex = 1, colpeaks = "red", cexpeaks = 1, 
+fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
+alab = "Amplitude", flim = c(0,f/2000),alim = NULL,...)
+}
+
+\arguments{
+  \item{wave}{data describing a time wave.}
+  \item{f}{sampling frequency of \code{wave}.}
+  \item{wl}{length of the window for the analysis (even number of points).}
+  \item{ovlp}{overlap between two successive analysis windows (in \%).}
+  \item{PSD}{if \code{TRUE} return Power Spectra Density,
+      \emph{i. e.} the square of the spectra.}   
+  \item{dB}{logical, if \code{TRUE} return the spectrum in dB 
+      (by default \code{FALSE}).}
+  \item{from}{start mark where to compute the spectrum (in s).}
+  \item{to}{end mark where to compute the spectrum (in s).}
+  \item{peaks}{to return peaks values.}
+  \item{identify}{to identify frequency values on the plot with the help of a cursor.}
+  \item{col}{colour of the spectrum.}
+  \item{cex}{pitch size.}
+  \item{colpeaks}{colour of peaks value plotted on the spectrum.}
+  \item{cexpeaks}{character size of peaks value plotted on the spectrum.}
+  \item{fontpeaks}{font of peaks value plotted on the spectrum.}
+  \item{plot}{if \code{1} returns frequency on x-axis, if \code{2} returns 
+  frequency on y-axis, (by default \code{1}).}
+  \item{flab}{title of the frequency axis.}
+  \item{alab}{title of the amplitude axis.}
+  \item{flim}{range of frequency axis.}
+  \item{alim}{range of amplitude axis.}
+  \item{\dots}{other \code{\link{plot}} graphical parameters.}
+}
+
+\details{
+A Hanning function is applied to the analysis window.\cr
+If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
+computes the mean spectrum of the whole signal.\cr
+\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.\cr
+When using \code{identify}, press \sQuote{stop} tools bar button to return values in the console.  
+}
+
+\value{
+If \code{plot} is \code{FALSE}, \code{meanspec} returns  a vector of numeric
+data corresponding to the computed spectrum.
+If \code{peaks} is \code{TRUE}, \code{spec} returns a list with
+two elements:
+  \item{spec}{the spectrum computed}
+  \item{peaks }{the peaks values (in kHz).}
+}
+
+\author{Jérôme Sueur \email{jerome.sueur@ibaic.u-psud.fr} and 
+Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
+
+\note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
+
+\seealso{\code{\link{spec}}, \code{\link{corspec}}, \code{\link{fft}}.}
+
+\examples{
+data(orni)
+# compute the mean spectrum of the whole time wave
+meanspec(orni,f=22050,wl=512,type="l")
+# compute the mean spectrum of a time wave section (from 0.32 s to 0.39 s)
+meanspec(orni,f=22050,wl=512,from=0.32,to=0.39,type="l")
+# different window lengths
+op<-par(mfrow=c(3,1))
+meanspec(orni,f=22050,wl=256,type="l")
+title("wl=256")
+meanspec(orni,f=22050,wl=1024,type="l")
+title("wl=1024")
+meanspec(orni,f=22050,wl=4096,type="l")
+title("wl=4096")
+par(op)
+# different overlap values (almost no effects here...)
+op<-par(mfrow=c(3,1))
+meanspec(orni,f=22050,wl=512,type="l")
+title("ovlp=0")
+meanspec(orni,f=22050,wl=512,ovlp=50,type="l")
+title("ovlp=50")
+meanspec(orni,f=22050,wl=512,ovlp=95,type="l")
+title("ovlp=95")
+par(op)
+# use of flim to zoom in
+op<-par(mfrow=c(2,1))
+meanspec(orni,f=22050,wl=512,type="l")
+title("zoom in")
+meanspec(orni,f=22050,wl=512,type="l",flim=c(4,6))
+par(op)
+# comparaison of spectrum and mean spectrum
+op<-par(mfrow=c(2,1))
+spec(orni,f=22050,type="l")
+title("spec()")
+meanspec(orni,f=22050,wl=512,type="l")
+title("meanspec()")
+par(op)
+}
+
+\keyword{dplot}
+\keyword{ts}

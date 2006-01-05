@@ -1,0 +1,1 @@
+tico <- read.table("tico.txt", skip=1)
