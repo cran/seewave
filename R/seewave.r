@@ -488,31 +488,54 @@ collab = "black",
 )
 
 {
-    plot.new()
-    levels<-collevels
-    col <- palette(length(collevels) - 1)
-    par(las=1,...)
+plot.new()
+levels<-collevels
+col <- palette(length(collevels) - 1)
+par(las=1,...)
+    
+if (side == 2 | side == 4)
+    {    
     plot.window(xlim = c(0, 1), ylim = range(collevels), xaxs = "i",
         yaxs = "i")
     mtext(textlab, side=3, outer=FALSE, line=1.5, adj=0, font=fontlab, cex=cexlab, col=collab)
-    rect(0, levels[-length(levels)], 0.95, levels[-1], col = col, lty=0)
+    rect(xleft=0, ybottom=levels[-length(levels)], xright=0.95, ytop=levels[-1], col = col, lty=0)
+    segments(x0=0,y0=0,x1=0.95,y1=0)
+    segments(x0=0,y0=min(collevels),x1=0.95,y1=min(collevels))
+          
     if (side == 2)
       {
       axis(2,...)
       abline(v=c(0,0.95))
-      segments(x0=0,y0=0,x1=0.95,y1=0)
-      segments(x0=0,y0=min(collevels),x1=0.95,y1=min(collevels))
       }
+      
     if (side == 4)
       {
       axis(4,pos=0.95,...)
       abline(v=0)
-      segments(x0=0,y0=0,x1=0.95,y1=0)
-      segments(x0=0,y0=min(collevels),x1=0.95,y1=min(collevels))
       }
-}
+    }
 
-
+if (side == 1  | side == 3)
+    {    
+    plot.window(xlim = range(collevels), ylim = c(0, 1), xaxs = "i",
+        yaxs = "i")
+    mtext(textlab, side=3, outer=FALSE, line=1.5, adj=0, font=fontlab, cex=cexlab, col=collab)
+    rect(xleft=levels[-length(levels)], ybottom=0, xright=levels[-1], ytop=0.95, col = col, lty=0)
+    segments(x0=0,y0=0,x1=0,y1=0.95)
+    segments(x0=min(collevels),y0=0,x1=min(collevels),y1=0.95)
+          
+    if (side == 1)
+      {
+      axis(1,...)
+      abline(h=0.95)
+      }
+    if (side == 3)
+      {
+      axis(3,pos=0.95,...)
+      abline(h=0)
+      }
+    }    
+}    
 ################################################################################
 #                                DFREQ                                         
 ################################################################################
@@ -819,6 +842,7 @@ to = FALSE,
 zoom = FALSE,
 k=1,
 j=1,
+labels = TRUE,
 byrow = TRUE, 
 env = FALSE,
 smooth= 0,
@@ -891,7 +915,7 @@ if (k == 1 & j == 1)
           {axis(side=1, col=colline,labels=FALSE)
           axis(side=2, at=max(wave,na.rm=TRUE), col=colline,labels=FALSE)}
 	   mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
-	   mtext("Absolute amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=2.5)
+	   mtext("Amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=2.5)
 	   abline(h=0,col=coly0,lty=2)
     
     cat("choose start and end positions on the wave")
@@ -917,9 +941,14 @@ if (k == 1 & j == 1)
   if (bty == "l" | bty == "o")
       {axis(side=1, col=colline,labels=FALSE)
       axis(side=2, at=max(wave,na.rm=TRUE), col=colline,labels=FALSE)}
-	mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
-	mtext("Absolute amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=3)
-	abline(h=0,col=coly0,lty=2)
+	
+	if (labels == TRUE)
+      { 
+      mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
+      mtext("Amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=3)
+	    }
+	    
+  abline(h=0,col=coly0,lty=2)
 
   if (identify == TRUE)
       {
@@ -945,7 +974,7 @@ else
   on.exit(par(def.par))
   m<-matrix(1:p,k,j,byrow=byrow)
 	layout(m)
-	par(tcl=0.5,omi=c(0.4,0.25,0.35,0.1),
+	par(tcl=0.5,oma=c(3,2,2,0.5),
       mar=rep(0,4)+0.8, mgp=c(0,0.15,0),
       bg=colbg, col.axis=colaxis, col=colline, las=0)
 
@@ -975,10 +1004,13 @@ else
 	}
 
 # X-Y labels
-	mtext("Time (s)",col=collab, side=1,line=1, font=fontlab,cex=cexlab,outer=TRUE)
-	mtext("Absolute amplitude",col=collab, side=2, font=fontlab,cex=cexlab,
+if (labels == TRUE)
+  {
+  mtext("Time (s)",col=collab, side=1,line=1.5, font=fontlab,cex=cexlab,outer=TRUE)
+	mtext("Amplitude",col=collab, side=2, font=fontlab,cex=cexlab,
         line=0.4,outer=TRUE)
-
+  }
+  
 # plots following windows
 for(i in 1:(p-1))
   {
@@ -1355,7 +1387,7 @@ z<-20*log10(z4)
 X<-seq(0,n/f,length.out=length(step))
 Y<-seq(0,f/2000,length.out=(wl+zp)/2)
 Z<-t(z)
-
+   
 if (plot==TRUE)
  	{
   Zlim<-range(Z, finite = TRUE) 
@@ -1365,11 +1397,12 @@ if (plot==TRUE)
     on.exit(par(def.par))
     layout(matrix(c(3, 2 ,1, 0), nc = 2, byrow=TRUE),
               widths = c(6, 1), heights=c(3,1))
-    par(mar=c(5,4,1,0)+0.1, las=0)
+    par(mar=c(5,3.7,1,0), las=0)
     soscillo(wave=wave,f=f,...)
+    par(mar=c(5,4,3,0), las=0)
     filled.contour.modif1(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title,color.palette=palette,scalelab=scalelab,
-      scalefontlab=scalefontlab,axisX=axisX , axisY=axisY)		
+      scalefontlab=scalefontlab,axisX=axisX,axisY=axisY)		
   	if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
     }
   
@@ -1561,7 +1594,7 @@ plotthreshold = TRUE,
 col = "black",
 colval = "red",
 xlab = "Time (s)",
-ylab = "Absolute amplitude",
+ylab = "Amplitude",
 ...)
 
 
@@ -2072,7 +2105,7 @@ function (x)
 #                                REV.GRAY.COLORS                                       
 ################################################################################ 
 rev.gray.colors<-
-function (x, start = 1, end = 0, gamma = 2.2)
+function (x, start=1, end=0, gamma = 1.7)
 gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
 
 

@@ -11,7 +11,7 @@ multi-frame plot. The envelope of the wave can also be shown.
 
 \usage{
 oscillo(wave, f, from = FALSE, to = FALSE, zoom = FALSE,
-k=1, j=1, byrow = TRUE, env = FALSE, smooth = 0,
+k=1, j=1, labels = TRUE, byrow = TRUE, env = FALSE, smooth = 0,
 identify = FALSE, plot = TRUE, colwave = "black", 
 colbg = "white", coltitle = "black", collab = "black", 
 cexlab = 1, fontlab = 1, colline = "black", 
@@ -27,6 +27,7 @@ title = FALSE, bty = "l")
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
   \item{k}{number of horizontal sections (by default =1).}
   \item{j}{number of vertical sections (by default =1).}
+  \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
   \item{byrow}{logical, if \code{TRUE}, the sections are filled by
           rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
   \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
