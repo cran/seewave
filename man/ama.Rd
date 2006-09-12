@@ -11,12 +11,14 @@ modulations.
 }
 
 \usage{
-ama(wave, f, wl, plot = TRUE, ...)
+ama(wave, f, wl = 512, plot = TRUE, ...)
 }
 
 \arguments{
-  \item{wave}{data describing the time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing the time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{wl}{length of the window for the analysis (even number of points).}  
   \item{plot}{logical, if \code{TRUE} the spectrum of the envelope 
       (by default \code{TRUE}).}

@@ -12,7 +12,7 @@ This function displays a vertical or horizontal dB colour scale to be used with
 \usage{
 dBscale(collevels, palette = spectro.colors, side = 4,
 textlab = "Amplitude\n(dB)", cexlab = 0.75,
-fontlab = 1, collab = "black", ...)
+fontlab = 1, collab = "black", colaxis = "black",...)
 }
 
 
@@ -27,6 +27,7 @@ fontlab = 1, collab = "black", ...)
   \item{cexlab}{character size of the label.}
   \item{fontlab}{font of the label.}
   \item{collab}{colour of the label.}
+  \item{colaxis}{colour of the axis.}
   \item{\dots}{other \code{\link{axis}} arguments.}
 }    
 

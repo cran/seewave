@@ -14,8 +14,10 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
   the time wave(by default \code{TRUE}).}
   \item{interpol}{interpolation factor.}

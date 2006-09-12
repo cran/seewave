@@ -11,7 +11,7 @@ or dB data.
 }
 
 \usage{
-spec(wave, f, wl = FALSE, PSD = FALSE, dB = FALSE,
+spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE, PMF = FALSE, dB = FALSE,
 at = FALSE, from = FALSE, to = FALSE, peaks = FALSE,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1, fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
@@ -19,12 +19,17 @@ alab = "Amplitude", flim = c(0, f/2000),alim = NULL,...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave or a \code{\link[Sound]{Sample}}
+  object created loading a wav file with \code{\link[Sound]{loadSample}}
+  (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz)}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
-      \emph{i. e.} the square of the spectra.}   
+      \emph{i. e.} the square of the spectra.}  
+  \item{PMF}{if \code{TRUE} return Probability Mass Function,
+      \emph{i. e.} the probability distribution of frequencie.}    
   \item{dB}{logical, if \code{TRUE} return the spectrum in dB 
       (by default \code{FALSE}).}
   \item{at}{position where to compute the spectrum (in s).}
@@ -46,7 +51,6 @@ alab = "Amplitude", flim = c(0, f/2000),alim = NULL,...)
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 \details{
-A Hanning function is applied to the analysis window.\cr
 If \code{at}, \code{from} or \code{to} are \code{FALSE} then \code{spec} 
 computes the spectrum of the whole signal.\cr
 \code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.\cr 

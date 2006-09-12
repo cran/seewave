@@ -10,18 +10,21 @@ their maximal covariance and the time shift related to it.
 }
 
 \usage{
-covspectro(wave1, wave2, f, wl, n, plot = TRUE, plotval = TRUE,
+covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red", cexval = 1,
 fontval = 1, xlab = "Time (s)",
 ylab = "Normalised covariance (cov)", ...)
 }
 
 \arguments{
-  \item{wave1}{data describing a first time wave.}
-  \item{wave2}{data describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2}.}
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).}
   \item{wl}{length of the window for the analysis
       (even number of points).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{n}{number of covariances computed between \code{wave1} and \code{wave2}
       when sliding \code{wave2} along \code{wave1}.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift

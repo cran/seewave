@@ -16,12 +16,14 @@ identify = FALSE, plot = TRUE, colwave = "black",
 colbg = "white", coltitle = "black", collab = "black", 
 cexlab = 1, fontlab = 1, colline = "black", 
 colaxis = "black", coly0 = "grey47",
-title = FALSE, bty = "l")
+title = FALSE, xaxt="s", yaxt="n", bty = "l")
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
@@ -48,6 +50,8 @@ title = FALSE, bty = "l")
   \item{coly0}{colour of the y=0 line.}
   \item{title}{logical, if \code{TRUE} plots the title 
       with information on time and \code{f} (by default \code{FALSE}).}
+  \item{xaxt}{equivalent to \code{xaxt} of \code{\link{par}} (by default =\code{"s"}).}    
+  \item{yaxt}{equivalent to \code{yaxt} of \code{\link{par}} (by default =\code{"n"}).}    
   \item{bty}{the type of box to be drawn around the oscillogram.} 
 }
 

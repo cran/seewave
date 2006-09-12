@@ -10,15 +10,18 @@ time wave. The function corresponds to short-term Fourier transform.
 }
 
 \usage{
-spectro3D(wave, f, wl, zp = 0, ovlp = 0, plot = TRUE,
+spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0, ovlp = 0, plot = TRUE,
 magt = 10, magf = 10, maga = 2, palette = rev.terrain.colors)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{wl}{length of the window for the analysis
     (even number of points).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
@@ -31,9 +34,16 @@ magt = 10, magf = 10, maga = 2, palette = rev.terrain.colors)
 }
 
 \details{
-A Hanning function is applied to the analysis window.\cr
-\code{zp} adds 0 values on both sides of the analysis window. This increases
-frequency resolution without altering time resolution.\cr
+Following Heisenberg uncertainty principle, the short-term Fourier transform
+cannot be precised in both time and frequency. The temporal and frequency
+precisions of the function are actually dependent of the \code{wl} value.
+Choosing a high \code{wl} value will increase the frequency resolution but
+reduce the temporal one, and \emph{vice versa}. The frequency precision is
+obtained by calculating the ratio \code{f}/\code{wl},
+and the temporal precision is obtained by calculating the reverse ratio
+\code{wl}/\code{f}. This problem can be reduced in some way with \code{zp} that
+adds 0 values on both sides of the analysis window. This increases frequency
+resolution without altering time resolution.\cr
 Any colour palette can be used. In particular, it is possible to use other palettes coming with
 \pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2},
 \code{spectro.colors}, \code{rev.heat.colors}, 

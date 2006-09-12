@@ -14,8 +14,10 @@ mute(wave, f, from = FALSE, to = FALSE, plot = TRUE, ...)
 }
 
 \arguments{
-  \item{wave}{data describing the time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing the time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{from}{start of the silence section (in s).}
   \item{to}{end of the silence section (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot

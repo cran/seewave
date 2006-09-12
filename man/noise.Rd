@@ -7,28 +7,29 @@
 \description{
 This function generates noise.
 }
+
 \usage{
 noise(f, d, ...)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{f}{sampling frequency of the signal to be generated}
+  \item{f}{sampling frequency of the signal to be generated (in Hz)}
   \item{d}{duration of the signal to be generated}
   \item{\dots}{other \code{\link{rnorm}} parameters.}
 }
 
 \details{
-\code{am} is based on \code{\link{rnorm}}
+\code{noise} is based on \code{\link{rnorm}}
 }
 
 \value{
-Returns a one column matrix with random data (by defalut: mean = 0, sd = 1). 
+Returns a one column matrix with random data (by default: mean = 0, sd = 1). 
 }
 
 
 \author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
-\seealso{\code{\link{synth}}}
+\seealso{\code{\link{synth}}, \code{\link{pulse}}}
 
 \examples{
 # add noise to a synthetic signal
@@ -37,5 +38,6 @@ b<-synth(f=8000,d=1,cf=2000,plot=FALSE)
 c<-a+b
 spectro(c,f=8000,wl=512)
 }
+
 \keyword{datagen}
 \keyword{ts}

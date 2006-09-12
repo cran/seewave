@@ -8,16 +8,19 @@
 This function gives the dominant frequency (i. e. the frequency of highest amplitude) of a time wave.}
 
 \usage{
-dfreq(wave, f, wl, ovlp = 0, threshold = FALSE,
+dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = FALSE,
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{wl}{length of the window for the analysis
     (even number of points).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \% ).}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency against time
@@ -33,8 +36,6 @@ If \code{plot} is \code{FALSE}, \code{dfreq} function returns a vector of
 numeric data corresponding to the dominant frequency along the time wave.
 }
 
-\details{A Hanning function is applied to the analysis window.}
-
 \author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
@@ -47,7 +48,7 @@ dfreq(tico,f=22050,wl=512,ovlp=50,threshold=5)
 # overlay on spectrogram
 spectro(tico,f=22050,wl=512,ovlp=50,zp=16,scale=FALSE,
     collevels=seq(-40,0,1),palette=rev.terrain.colors)
-par(new=TRUE)
+par(new=TRUE,las=1)
 dfreq(tico,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
     ann=FALSE,xaxs="i",yaxs="i")
 }
