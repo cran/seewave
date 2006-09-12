@@ -10,9 +10,11 @@ corresponds to a sampling frequency change.}
 \usage{resamp(wave, f, g)}
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
-  \item{g}{new sampling frequency of \code{wave}.}}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{g}{new sampling frequency of \code{wave} (in Hz).}}
 
 \value{Data are returned as a one-column matrix.}
 

@@ -12,8 +12,10 @@ deletew(wave, f, from = FALSE, to = FALSE, plot = FALSE, marks = TRUE, ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{from}{start mark (in s).}
   \item{to}{end mark (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original

@@ -1,12 +1,14 @@
 \name{seewave-internal}
-\alias{filled.contour.modif1}
+\alias{bartlett.w}
+\alias{blackman.w}
 \alias{filled.contour.modif2}
-\alias{filled.contour.modif3}
+\alias{flattop.w}
 \alias{hamming.w}
 \alias{hanning.w}
 \alias{peaks}
 \alias{check.pks}
 \alias{peaksign}
+\alias{rectangle.w}
 \alias{rev.cm.colors}
 \alias{rev.gray.colors.1}
 \alias{rev.gray.colors.2}

@@ -11,7 +11,7 @@ and/or frequency modulation (fm).
 
 \usage{
 synth(f, d, cf, a = 1, p = 0, am = c(0, 0), fm = c(0, 0, 0),
-plot = TRUE, wl = 512, ovlp = 50, ...)
+plot = FALSE, wl = 512, ovlp = 50, play = FALSE,...)
 }
 
 \arguments{
@@ -25,11 +25,14 @@ plot = TRUE, wl = 512, ovlp = 50, ...)
   \item{fm}{a vector of length 3 describing frequency modulation parameters,
       see \code{details}.}
   \item{plot}{if \code{TRUE} returns the spectrogram
-      of the synthezised sound (by default \code{TRUE}).}
+      of the synthezised sound (by default \code{FALSE}).}
   \item{wl}{if \code{plot} is \code{TRUE},
       length of the window for the spectrographic analysis (even number of points).}
   \item{ovlp}{if \code{plot} is \code{TRUE}, overlap between two successive
       windows of the spectrographic analysis (in \%).}
+  \item{play}{if \code{TRUE} the new sound is played back
+      using \code{\link[Sound]{play}} from the package \pkg{Sound}
+      (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{spectro}} graphical parameters.}
 }
                                    
@@ -55,30 +58,30 @@ Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{spectro}}}
+\seealso{\code{\link{noise}}, \code{\link{pulse}}}
 
 \examples{
 # pure tone
-synth(f=22050,d=1,cf=4000)
+synth(f=22050,d=1,cf=4000,plot=TRUE)
 # pure tones with am
-synth(f=22050,d=1,cf=4000,am=c(50,10),osc=TRUE)
+synth(f=22050,d=1,cf=4000,am=c(50,10),plot=TRUE,osc=TRUE)
 # pure tone with +2000 Hz linear fm 
-synth(f=22050,d=1,cf=4000,fm=c(0,0,2000))
+synth(f=22050,d=1,cf=4000,fm=c(0,0,2000),plot=TRUE)
 # pure tone with sinusoidal fm
 # (maximum excursion of 1000 Hz, frequency of 10 Hz)
-synth(f=22050,d=1,cf=4000,fm=c(1000,10,0),wl=256,ovlp=75)
+synth(f=22050,d=1,cf=4000,fm=c(1000,10,0),plot=TRUE,wl=256,ovlp=75)
 # pure tone with sinusoidal am
 # (maximum excursion of 1000 Hz, frequency of 10 Hz)
 # and linear fm (maximum excurion of 1000 Hz
-synth(f=22050,d=1,cf=4000,fm=c(1000,10,1000),wl=256,ovlp=75)
+synth(f=22050,d=1,cf=4000,fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75)
 # the same with am
 synth(f=22050,d=1,cf=4000,am=c(50,10),
-    fm=c(1000,10,1000),wl=256,ovlp=75,osc=TRUE)
+    fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75,osc=TRUE)
 # more complex sound
 F1<-synth(f=22050,cf=2000,d=1,fm=c(500,5,0),plot=FALSE)
-F2<-synth(f=22050,a=0.8,cf=4000,d=1,fm=c(500,5,0),plot=FALSE)
-F3<-synth(f=22050,a=0.6,cf=6000,d=1,fm=c(500,5,0),plot=FALSE)
-F4<-synth(f=22050,a=0.4,cf=8000,d=1,fm=c(500,5,0),plot=FALSE)
+F2<-synth(f=22050,a=0.8,cf=4000,d=1,fm=c(500,5,0))
+F3<-synth(f=22050,a=0.6,cf=6000,d=1,fm=c(500,5,0))
+F4<-synth(f=22050,a=0.4,cf=8000,d=1,fm=c(500,5,0))
 final1<-F1+F2+F3+F4
 spectro(final1,f=22050,wl=512,ovlp=75,scale=FALSE)
 # insert 0.25 s silence
@@ -86,7 +89,7 @@ final1.1<-as.matrix(final1[1:(nrow(final1)/2),])
 final1.2<-as.matrix(rep(0,0.25*22050))
 final1.3<-as.matrix(final1[(nrow(final1)/2):nrow(final1),])
 final2<-rbind(final1.1,final1.2,final1.3)
-spectro(final2,f=22050,wl=512,ovlp=75,scale=FALSE)
+spectro(final2,f=22050,plot=TRUE,wl=512,ovlp=75,scale=FALSE)
 }
 
 \keyword{datagen}

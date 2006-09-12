@@ -2,7 +2,7 @@
 \alias{timer}
 \title{Time measurements of a time wave}
 \description{
-This functions computes and shows the duration of signal periods, 
+This function computes and shows the duration of signal periods, 
 pause periods and their ratio.
 }
 \usage{
@@ -11,8 +11,10 @@ plotthreshold = TRUE, col = "black", colval = "red",
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{smooth}{smoothes the envelope by averaging the number of points selected}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 

@@ -11,13 +11,15 @@ after a time delay.
 }
 
 \usage{
-autoc(wave, f, wl, fmin, threshold = FALSE, plot = TRUE,
+autoc(wave, f, wl = 512, fmin, threshold = FALSE, plot = TRUE,
 xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave.}
-  \item{f}{sampling frequency of \code{wave}.}
+  \item{wave}{data describing a time wave
+  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).}
   \item{wl}{length of the window for the analysis (even number of points).}
   \item{fmin}{the minimum frequency to detect (in Hz).}  
   \item{threshold}{amplitude threshold for signal detection (in \%).}

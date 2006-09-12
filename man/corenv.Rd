@@ -16,9 +16,11 @@ ylab = "Coefficient of correlation (r)", ...)
 }
 
 \arguments{
-  \item{wave1}{data describing a first time wave.}
-  \item{wave2}{data describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2}.}
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).}
   \item{smooth}{smoothes the envelopes of \code{wave1} and \code{wave2}
       by averaging the number of points selected.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift

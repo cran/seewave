@@ -15,9 +15,13 @@ pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, ...)
 }
 
 \arguments{
-  \item{wave1}{data describing the time wave to be pasted.}
-  \item{wave2}{data describing the time wave into which \code{wave1} will be pasted.}
-  \item{f}{sampling frequency of both \code{wave1} and \code{wave2}.}
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound})
+  describing the time wave to be pasted.}
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  with \code{\link[Sound]{loadSample}} (package \pkg{Sound})
+  describing the time wave into which \code{wave1} will be pasted.}
+  \item{f}{sampling frequency of both \code{wave1} and \code{wave2} (in Hz).}
   \item{at}{\code{wave2} position in seconds
     where \code{wave1} will be pasted into (by default at the end of \code{wave2}).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 

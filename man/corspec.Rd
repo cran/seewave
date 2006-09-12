@@ -10,18 +10,19 @@ their maximal correlation and the frequency shift related to it.
 }
 
 \usage{
-corspec(x, y, range, plot = TRUE, plotval = TRUE,
+corspec(spec1, spec2, f, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Frequency (kHz)",
 ylab = "Coefficient of correlation (r)", ...)
 }
 
 \arguments{
-  \item{x}{a first data set resulting of a spectral analysis obtained
+  \item{spec1}{a first data set resulting of a spectral analysis obtained
       with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
-  \item{y}{a second data set resulting of a spectral analysis obtained
+  \item{spec2}{a second data set resulting of a spectral analysis obtained
       with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
-  \item{range}{range of \code{x} and \code{y} (in kHz).}
+  \item{f}{sampling frequency of waves used to obtain \code{spec1}
+      and \code{spec2} (in Hz).}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value
   and frequency offset (by default \code{TRUE}).}  
@@ -39,19 +40,19 @@ ylab = "Coefficient of correlation (r)", ...)
 
 \details{
 It is important not to have data in dB.\cr
-Successive correlations between \code{x} and \code{y} are computed when regularly
-shifting \code{y} towards lower or higher frequencies.\cr
+Successive correlations between \code{spec1} and \code{spec2} are computed when regularly
+shifting \code{spec2} towards lower or higher frequencies.\cr
 The maximal correlation is obtained at a particular shift (frequency offset). 
 This shift may be positive or negative.\cr
 The corresponding p value, obtained with \code{\link{cor.test}}, is plotted.\cr
-Inverting \code{x} and \code{y} may give slight different results, see examples.
+Inverting \code{spec1} and \code{spec2} may give slight different results, see examples.
 }
 
 \value{
 If \code{plot} is \code{FALSE}, \code{corspec} returns a list containing four
      components:
-  \item{r}{the successive correlation values between \code{x} and \code{y}.}
-  \item{rmax}{the maximum correlation value between \code{x} and \code{y}.}
+  \item{r}{the successive correlation values between \code{spec1} and \code{spec2}.}
+  \item{rmax}{the maximum correlation value between \code{spec1} and \code{spec2}.}
   \item{p}{the p value corresponding to \code{rmax}.}
   \item{f}{the frequency offset corresponding to \code{rmax}.}
 }
@@ -76,25 +77,25 @@ par(new=TRUE)
 spec(tico,f=22050,wl=512,at=1.1,col="green",type="l")
 legend(x=8,y=0.5,c("Note A", "Note C"),lty=1,col=c("blue","green"),bty="o")
 par(mar=c(5,4,2,1))
-corspec(a,c,range=c(0,11.025),type="l",
+corspec(a,c,f=22050,type="l",
   ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
 par(op)
 # different correlation methods give different results...
 op<-par(mfrow=c(3,1))
-corspec(a,c,range=c(0,11.025),
+corspec(a,c,f=22050,
   type="l",xaxs="i",las=1, ylim=c(-0.25,0.8))
 title("spearmann correlation (by default)")
-corspec(a,c,range=c(0,11.025),
+corspec(a,c,f=22050,
   type="l",xaxs="i",las=1,ylim=c(0,1),method="pearson")
 title("pearson correlation")
-corspec(a,c,range=c(0,11.025),
+corspec(a,c,f=22050,
   type="l",xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
 title("kendall correlation")
 par(op)
 # inverting x and y does not give exactly similar results
 op<-par(mfrow=c(2,1),mar=c(2,4,3,1))
-corspec(a,c,range=c(0,11.025),type="l")
-corspec(c,a,range=c(0,11.025),type="l")
+corspec(a,c,f=22050,type="l")
+corspec(c,a,f=22050,type="l")
 par(op)
 }
 

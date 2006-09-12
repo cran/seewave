@@ -37,7 +37,7 @@ spectro(tico,f=22050,wl=512,ovlp=50,zp=16,collevels=seq(-40,0,0.5))
 
 # spectrogram and dominant frequency overlaid of a bird song
 spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors.1,scale=FALSE)
-par(new=TRUE)
+par(new=TRUE,las=1)
 dfreq(alauda,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
     ann=FALSE,xaxs="i",yaxs="i")
 
@@ -45,8 +45,7 @@ dfreq(alauda,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
 op<-par(bg="black",col="white")
 pellu2<-cutw(pellucens,f=22050,from=1,to=nrow(pellucens)/22050,plot=FALSE)
 spectro(pellu2,f=22050,wl=512,ovlp=85,collevels=seq(-25,0,1),osc=TRUE,palette=rev.heat.colors,
-colgrid="white", colwave="white",colaxis="white",collab="white",
-colline="white")
+colgrid="white", colwave="white",colaxis="white",collab="white")
 par(op)
 
 # sound synthesis

@@ -45,7 +45,7 @@ Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 \seealso{\code{\link{convSPL}}, \code{\link{moredB}}}
 
 \examples{
-# theoretical attenuation up to 200 m of a 100 dB/1m sound source
+# theoretical attenuation up to 150 m of a 100 dB/1m sound source
 attenuation(lref=100,dstop=150,n=200,type="l")
 }
 
