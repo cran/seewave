@@ -2505,8 +2505,8 @@ function (x)
 #                                REV.GRAY.COLORS.1                                       
 ################################################################################ 
 rev.gray.colors.1<-
-function (x, start=1, end=0, gamma = 1.7)
-gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
+function (x)
+gray(seq(from = 1^1.7, to = 0, length = x)^(1/1.7))
 
 
 
@@ -2514,8 +2514,8 @@ gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
 #                                REV.GRAY.COLORS.2                                       
 ################################################################################ 
 rev.gray.colors.2<-
-function (x, start = 1, end = 0, gamma = 1)
-gray(seq(from = start^gamma, to = end^gamma, length = x)^(1/gamma))
+function (x)
+gray(seq(from = 1, to = 0, length = x))
 
 
 
