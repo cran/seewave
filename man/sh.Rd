@@ -13,12 +13,12 @@
 
 \details{
 Spectral entropy is calculated according to:\cr
-\deqn{S = -\frac{sum(y[i], i==1, N)y[i]log[2]y[i]}{log(N)}}{% 
+\deqn{S = -\frac{\sum_{i = 1}^{N} y_i log_2(y_i)}{log_2(N)}}{% 
       S = -sum(ylogy)/log(N)}
 with:\cr
 \emph{y} = relative amplitude of the \emph{i} frequency,\cr
 and
-\deqn{sum(y[i], i==1, N)=1}{% 
+\deqn{\sum_{i = 1}^{N} y_i = 1}{% 
       sum(y) = 1}\cr 
 and \emph{N} = number of frequencies.
 }
