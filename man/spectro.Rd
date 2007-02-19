@@ -5,7 +5,7 @@
 \title{2D-spectrogram of a time wave}
 
 \description{
-This functions returns a two-dimension spectrographic representation of a time
+This function returns a two-dimension spectrographic representation of a time
 wave. The function corresponds to short-term Fourier transform.
 An amplitude contour plot can be overlaid.}
 
@@ -17,7 +17,8 @@ contlevels = seq(-30, 0, 10), colcont = "black", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
-scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE,
+scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE, tlim = NULL,
+flim = NULL, flimd = NULL,
 ...)
 }
 
@@ -55,8 +56,12 @@ scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE,
   \item{scalelab}{amplitude scale label.}
   \item{scalefontlab}{font of the amplitude scale label.}
   \item{scalecexlab}{cex of the amplitude scale label.}
-  \item{axisX}{logical, if \code{TRUE} plots X-axis (by default \code{TRUE}).}  
-  \item{axisY}{logical, if \code{TRUE} plots Y-axis (by default \code{TRUE}).}   
+  \item{axisX}{logical, if \code{TRUE} plots time X-axis (by default \code{TRUE}).}  
+  \item{axisY}{logical, if \code{TRUE} plots frequency Y-axis (by default \code{TRUE}).}
+  \item{tlim}{modifications of the time X-axis limits.} 
+  \item{flim}{modifications of the frequency Y-axis limits.} 
+  \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
+      and \code{ovlp} arguments are applied to increase time/frequency resolution.}    
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }
@@ -102,10 +107,10 @@ data(peewit)
 data(pellucens)
 data(alauda)
 # simple plots
-spectro(tico,f=22050,wl=512)
-spectro(tico,f=22050,wl=512,osc=TRUE)
-spectro(tico,f=22050,wl=512,scale=FALSE)
-spectro(tico,f=22050,wl=512,osc=TRUE, scale=FALSE)
+spectro(tico,f=22050)
+spectro(tico,f=22050,osc=TRUE)
+spectro(tico,f=22050,scale=FALSE)
+spectro(tico,f=22050,osc=TRUE, scale=FALSE)
 # manipulating wl
 op<-par(mfrow=c(2,2))
 spectro(tico,f=22050,wl=256,scale=FALSE)
@@ -119,24 +124,27 @@ title("wl = 4096")
 par(op)
 # manipulating ovlp
 op<-par(mfrow=c(2,1))
-spectro(alauda,f=22050,wl=512,scale=FALSE)
+spectro(alauda,f=22050,scale=FALSE)
 title("ovlp = 0")
-spectro(alauda,f=22050,wl=512,ovlp=95,scale=FALSE)
+spectro(alauda,f=22050,ovlp=95,scale=FALSE)
 title("ovlp = 95")
 par(op)
+# vertical zoom using flim
+spectro(tico,f=22050, ylim=c(2,6))
+spectro(tico,f=22050, ylimd=c(2,6))
 # a full plot
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
-spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,osc=TRUE,
+spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
     cont=TRUE,contlevels=seq(-30,0,20),colcont="red",
     lwd=1.5,lty=2,palette=rev.terrain.colors)
 # black and white spectrogram 
-spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,
+spectro(pellu2,f=22050,ovlp=85,zp=16,
     palette=rev.gray.colors.1)
 # colour modifications
-spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,
+spectro(pellu2,f=22050,ovlp=85,zp=16,
 palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
 op<-par(bg="black",col="white")
-spectro(pellu2,f=22050,wl=512,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
+spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
 colgrid="white", colwave="white",colaxis="white",collab="white")
 par(op)
 }

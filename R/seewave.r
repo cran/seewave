@@ -132,6 +132,167 @@ else return(y)
 
 
 ################################################################################
+#                                CCOH                                        
+################################################################################
+
+ccoh<-function(
+wave1,
+wave2,
+f,
+wl = 512,
+ovlp = 0,
+plot = TRUE,
+grid = TRUE,
+scale = TRUE,
+cont = FALSE,
+collevels = seq(0,1,0.01),
+palette = rev.heat.colors,
+contlevels = seq (0,1,0.01),
+colcont = "black",
+colgrid = "black",
+colaxis = "black",
+collab = "black",
+plot.title =
+    title(main = "", xlab = "Time (s)",
+    ylab = "Frequency (kHz)"),
+scalelab = "Coherence",
+scalefontlab = 1,
+scalecexlab =0.75,
+axisX = TRUE,
+axisY = TRUE,
+flim = NULL,
+flimd = NULL,
+...)
+
+{
+if(class(wave1)=="Sample") wave1<-as.matrix(wave1$sound[1,])
+if(class(wave2)=="Sample") wave2<-as.matrix(wave2$sound[1,])
+
+n1<-nrow(wave1)
+n2<-nrow(wave2)
+if (n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
+n<-n1
+
+
+# dynamic vertical zoom (modifications of analysis parameters)
+if (!is.null(flimd))
+  {
+  # zoom magnification
+  mag<-round((f/2000)/(flimd[2]-flimd[1]))
+  # new parameters
+  wl<-wl*mag
+  if (ovlp==0) ovlp<-100
+  ovlp<-100-round(ovlp/mag)
+  # use of normal flim for following axis modifications
+  flim<-flimd
+  }
+
+step<-seq(1,n-wl,wl-(wl/100))		# coherence windows
+
+z1<-matrix(data=numeric((wl)*length(step)),wl,length(step))
+
+for(i in step)
+  {
+  z1[,which(step==i)]<-spec.pgram(cbind(wave1[i:(wl+i-1),],
+    wave2[i:(wl+i-1),]), spans = c(3,3), fast=FALSE, taper=FALSE, plot=FALSE)$coh
+  }
+
+z<-z1[1:(wl/2),]							  
+
+# X axis settings
+X<-seq(0,n/f,length.out=length(step))
+#Y<-seq(0,f/2000,length.out=nrow(z))
+
+# vertical zoom
+if (is.null(flim)==TRUE)
+  {
+  Y<-seq(0,f/2000,length.out=nrow(z))
+  }
+else
+  {
+  fl1<-flim[1]*nrow(z)*2000/f
+  fl2<-flim[2]*nrow(z)*2000/f
+  z<-z[fl1:fl2,]
+  Y<-seq(flim[1],flim[2],length.out=nrow(z))
+  }
+  
+Z<-t(z)
+   
+if (plot==TRUE)
+ 	{
+  Zlim<-range(Z, finite = TRUE) 
+    
+  if (scale==TRUE)
+    {
+    def.par <- par(no.readonly = TRUE)
+    on.exit(par(def.par))
+    layout(matrix(c(1, 2), nc = 2, byrow=TRUE), widths = c(6, 1))
+    par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab)
+    filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+			plot.title=plot.title, color.palette=palette,axisX=axisX, axisY=axisY)
+   	if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+		if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+    par(mar=c(5,1,4.5,3),las=0)
+    dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
+      cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
+    }
+  
+  if (scale==FALSE)
+   {
+   par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,...)
+   filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+			plot.title=plot.title, color.palette=palette, axisX=axisX, axisY=axisY,
+      col.lab=collab,colaxis=colaxis)		
+   if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+ 	 if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+   }
+
+  if (cont==TRUE) 
+	 {
+   contour(X,Y,Z,add=TRUE,
+	 levels=contlevels,nlevels=5,col=colcont,...)
+	 }  
+  }
+else return(z)
+}
+
+
+################################################################################
+#                                COH                                         
+###############################################################################
+
+coh<-function(
+wave1,
+wave2,
+f,
+plot =TRUE,
+xlab = "Frequency (kHz)",
+ylab = "Coherence",
+xlim = c(0,f/2000),
+...
+)
+
+{
+if(class(wave1)=="Sample") wave1<-as.matrix(wave1$sound[1,])
+if(class(wave2)=="Sample") wave2<-as.matrix(wave2$sound[1,])
+
+n1<-nrow(wave1)
+n2<-nrow(wave2)
+if (n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
+
+Y<-spec.pgram(cbind(wave1, wave2), fast=FALSE, taper=FALSE, 
+    spans = c(3,3),plot=FALSE)$coh
+if (plot == TRUE)
+  {
+  X<-seq(0,f/2000,length.out=nrow(Y))
+  plot(x=X,y=Y,xlab=xlab,ylab=ylab,xlim=xlim,...)
+  }
+else return(Y)
+}
+
+
+
+################################################################################
 #                                CONVSPL                                         
 ###############################################################################
 
@@ -1844,12 +2005,31 @@ scalefontlab = 1,
 scalecexlab =0.75,
 axisX = TRUE,
 axisY = TRUE,
+tlim = NULL,
+flim = NULL,
+flimd = NULL,
 ...)
 
 {
 if(class(wave)=="Sample") wave<-as.matrix(wave$sound[1,])
 
+if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])
+
 n<-nrow(wave)
+
+# dynamic vertical zoom (modifications of analysis parameters)
+if (!is.null(flimd))
+  {
+  # zoom magnification
+  mag<-round((f/2000)/(flimd[2]-flimd[1]))
+  # new parameters
+  wl<-wl*mag
+  if (ovlp==0) ovlp<-100
+  ovlp<-100-round(ovlp/mag)
+  # use of normal flim for following axis modifications
+  flim<-flimd
+  }
+
 step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
 
 z1<-matrix(data=numeric((wl+(zp))*length(step)),wl+zp,length(step))
@@ -1878,9 +2058,23 @@ z4<-ifelse(z3==0,yes=1e-6,no=z3)
 # to get dB values
 z<-20*log10(z4)[-1,]					  
 
-# settings of X, Y, Z plot axis
+# X axis settings
 X<-seq(0,n/f,length.out=length(step))
-Y<-seq(0,f/2000,length.out=((wl+zp)/2)-1)
+
+
+# vertical zoom
+if (is.null(flim)==TRUE)
+  {
+  Y<-seq(0,f/2000,length.out=nrow(z))
+  }
+else
+  {
+  fl1<-flim[1]*nrow(z)*2000/f
+  fl2<-flim[2]*nrow(z)*2000/f
+  z<-z[fl1:fl2,]
+  Y<-seq(flim[1],flim[2],length.out=nrow(z))
+  }
+  
 Z<-t(z)
    
 if (plot==TRUE)
@@ -1895,11 +2089,12 @@ if (plot==TRUE)
     par(mar=c(0,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab)
     filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title, color.palette=palette,axisX=FALSE, axisY=axisY)
-  	if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+  	if(grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+    if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
     if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
     par(mar=c(0,1,4.5,3),las=0)
     dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
-      cexlab=scalecexlab,collab=collab,colaxis=colaxis)
+      cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
     par(mar=c(5,4.1,0,0),las=0,col="white",col=colaxis,col.lab=collab)
     soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,colline=colaxis,...)
     }
@@ -1912,11 +2107,12 @@ if (plot==TRUE)
     par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab)
     filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title, color.palette=palette,axisX=axisX, axisY=axisY)
-   	if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-		if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+   	if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+		if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+    if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
     par(mar=c(5,1,4.5,3),las=0)
     dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
-      cexlab=scalecexlab,collab=collab,colaxis=colaxis)
+      cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
     }
 
   if (osc==TRUE & scale==FALSE)
@@ -1930,8 +2126,9 @@ if (plot==TRUE)
     filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title, color.palette=palette, axisX=FALSE, axisY=axisY,
       col.lab=collab,colaxis=colaxis)		
-    if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-		if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+    if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+    if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+    if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
     }
   
   if (osc==FALSE & scale==FALSE)
@@ -1940,19 +2137,13 @@ if (plot==TRUE)
    filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title, color.palette=palette, axisX=axisX, axisY=axisY,
       col.lab=collab,colaxis=colaxis)		
-   if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
- 	 if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
-   }
-
-  if (cont==TRUE) 
-	 {
-   contour(X,Y,Z,add=TRUE,
-	 levels=contlevels,nlevels=5,col=colcont,...)
-	 }  
+   if (grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+   if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+ 	 if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+   } 
   }
 else return(z)
 }
-
 
 ################################################################################
 #                                SPECTRO3D                                        
