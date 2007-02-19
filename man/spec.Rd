@@ -46,7 +46,7 @@ alab = "Amplitude", flim = c(0, f/2000),alim = NULL,...)
   frequency on y-axis, (by default \code{1}).}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
-  \item{flim}{the range of frequency values.}
+  \item{flim}{range of frequency axis.}
   \item{alim}{range of amplitude axis.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
