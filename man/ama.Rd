@@ -11,17 +11,21 @@ modulations.
 }
 
 \usage{
-ama(wave, f, wl = 512, plot = TRUE, ...)
+ama(wave, f, wl = 512, plot = TRUE, type = "l", ...)
 }
 
 \arguments{
   \item{wave}{data describing the time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
-  \item{wl}{length of the window for the analysis (even number of points).}  
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  \item{wl}{length of the window for the analysis (even number of points,
+  by default = 512).}  
   \item{plot}{logical, if \code{TRUE} the spectrum of the envelope 
       (by default \code{TRUE}).}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{meanspec}} parameters.}
 }
 \details{
@@ -41,7 +45,7 @@ two elements:
   \item{peaks }{the peaks values (in kHz).}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{oscillo}}}
 
@@ -51,9 +55,9 @@ data(orni)
 # one with a 0.020 kHz frequency (due to signal/silence periodicity)
 # one with a 0.258 kHz frequency (due to pulses in the echemes)
 # one with a 2.369 kHz frequency (fundamental frequency)
-ama(orni,f=22050,wl=1024,type="l")
+ama(orni,f=22050,wl=1024)
 # these amplitude modulations can be identify with a cursor:
-ama(orni,f=22050,wl=1024,type="l",identify=TRUE)
+ama(orni,f=22050,wl=1024,identify=TRUE)
 }
 
 \keyword{dplot}

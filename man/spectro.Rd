@@ -18,17 +18,18 @@ colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
 scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE, tlim = NULL,
-flim = NULL, flimd = NULL,
+flim = NULL, flimd = NULL, play=FALSE,
 ...)
 }
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+     or a \code{\link[Sound]{Sample}} object generated loading a wav file
+     with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+     Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{wl}{window length for the analysis
-    (even number of points).}
+    (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -62,6 +63,9 @@ flim = NULL, flimd = NULL,
   \item{flim}{modifications of the frequency Y-axis limits.} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
       and \code{ovlp} arguments are applied to increase time/frequency resolution.}    
+  \item{play}{if \code{TRUE} the new sound is played back
+      using \code{\link[Sound]{play}} from the package \pkg{Sound}
+      (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }
@@ -93,7 +97,7 @@ corresponds to a Fourier transform of length \code{wl}.}
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and

@@ -15,15 +15,16 @@ meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE, PMF = FALSE,
 dB = FALSE, from = FALSE, to = FALSE, peaks = FALSE, identify = FALSE,
 col = "black", cex = 1, colpeaks = "red", cexpeaks = 1, 
 fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
-alab = "Amplitude", flim = c(0,f/2000),alim = NULL,...)
+alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 }
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
-  \item{wl}{length of the window for the analysis (even number of points).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
@@ -47,6 +48,8 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL,...)
   \item{alab}{title of the amplitude axis.}
   \item{flim}{range of frequency axis.}
   \item{alim}{range of amplitude axis.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -66,7 +69,7 @@ two elements:
   \item{peaks }{the peaks values (in kHz).}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
 Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
@@ -76,38 +79,38 @@ Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 \examples{
 data(orni)
 # compute the mean spectrum of the whole time wave
-meanspec(orni,f=22050,wl=512,type="l")
+meanspec(orni,f=22050)
 # compute the mean spectrum of a time wave section (from 0.32 s to 0.39 s)
-meanspec(orni,f=22050,wl=512,from=0.32,to=0.39,type="l")
+meanspec(orni,f=22050,from=0.32,to=0.39)
 # different window lengths
 op<-par(mfrow=c(3,1))
-meanspec(orni,f=22050,wl=256,type="l")
+meanspec(orni,f=22050,wl=256)
 title("wl=256")
-meanspec(orni,f=22050,wl=1024,type="l")
+meanspec(orni,f=22050,wl=1024)
 title("wl=1024")
-meanspec(orni,f=22050,wl=4096,type="l")
+meanspec(orni,f=22050,wl=4096)
 title("wl=4096")
 par(op)
 # different overlap values (almost no effects here...)
 op<-par(mfrow=c(3,1))
-meanspec(orni,f=22050,wl=512,type="l")
+meanspec(orni,f=22050)
 title("ovlp=0")
-meanspec(orni,f=22050,wl=512,ovlp=50,type="l")
+meanspec(orni,f=22050,ovlp=50)
 title("ovlp=50")
-meanspec(orni,f=22050,wl=512,ovlp=95,type="l")
+meanspec(orni,f=22050,ovlp=95)
 title("ovlp=95")
 par(op)
 # use of flim to zoom in
 op<-par(mfrow=c(2,1))
-meanspec(orni,f=22050,wl=512,type="l")
+meanspec(orni,f=22050)
 title("zoom in")
-meanspec(orni,f=22050,wl=512,type="l",flim=c(4,6))
+meanspec(orni,f=22050,wl=512,flim=c(4,6))
 par(op)
 # comparaison of spectrum and mean spectrum
 op<-par(mfrow=c(2,1))
-spec(orni,f=22050,type="l")
+spec(orni,f=22050)
 title("spec()")
-meanspec(orni,f=22050,wl=512,type="l")
+meanspec(orni,f=22050)
 title("meanspec()")
 par(op)
 }

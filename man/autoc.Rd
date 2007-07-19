@@ -12,15 +12,17 @@ after a time delay.
 
 \usage{
 autoc(wave, f, wl = 512, fmin, threshold = FALSE, plot = TRUE,
-xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), ...)
+xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), type ="l",...)
 }
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
-  \item{wl}{length of the window for the analysis (even number of points).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  \item{wl}{length of the window for the analysis (even number of points,
+  by default = 512).}
   \item{fmin}{the minimum frequency to detect (in Hz).}  
   \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the fundamental frequency 
@@ -28,6 +30,8 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), ...)
   \item{xlab}{title of the x-axis.}
   \item{ylab}{title of the y-axis.}
   \item{ylim}{the range of y values.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -43,17 +47,19 @@ to pause sections in the signal (see \code{threshold}).
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
-Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
+Thierry Aubin \email{thierry.aubin@u-psud.fr}}
+
+\seealso{\code{\link{ceps}}}
 
 \examples{
 data(sheep)
 # fundamental frequency of a sheep
-autoc(sheep,f=8000,wl=512,t=5,fmin=700)
+autoc(sheep,f=8000,threshold=5,fmin=700)
 # overlay on spectrogram
-spectro(sheep,f=8000,wl=512,ovlp=75,zp=16,scale=FALSE)
+spectro(sheep,f=8000,ovlp=75,zp=16,scale=FALSE)
 par(new=TRUE)
-autoc(sheep,f=8000,wl=512,t=5,fmin=700,type="p",col="black",pch=20,
+autoc(sheep,f=8000,wl=512,threshold=5,fmin=700,type="p",col="black",pch=20,
     xaxs="i",yaxs="i",ann=FALSE,yaxt="n")
 legend(0.5,3.6,"Fundamental frequency",pch=20,col="black",bty=0,cex=0.7)
 }

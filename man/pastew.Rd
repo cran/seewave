@@ -15,13 +15,15 @@ pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, ...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound})
   describing the time wave to be pasted.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound})
   describing the time wave into which \code{wave1} will be pasted.}
-  \item{f}{sampling frequency of both \code{wave1} and \code{wave2} (in Hz).}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
+          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
+          \code{\link[Sound]{Sample}} object(s).}
   \item{at}{\code{wave2} position in seconds
     where \code{wave1} will be pasted into (by default at the end of \code{wave2}).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
@@ -39,7 +41,7 @@ pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, ...)
 \value{A one-column matrix describing a wave with the same sampling
 frequency as original data.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{cutw}}, \code{\link{deletew}}, \code{\link{mute}},
 \code{\link{oscillo}}, \code{\link{timer}}.}

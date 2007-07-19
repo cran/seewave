@@ -16,9 +16,10 @@ magt = 10, magf = 10, maga = 2, palette = rev.terrain.colors)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+     or a \code{\link[Sound]{Sample}} object generated loading a wav file
+     with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{wl}{length of the window for the analysis
     (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -57,7 +58,7 @@ Use \code{magt}, \code{magf} and \code{maga} to resize the plot.
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
 corresponds to a Fourier transform of length \code{wl}.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \note{This function runs with \pkg{rgl} and is based on \code{\link{fft}}.

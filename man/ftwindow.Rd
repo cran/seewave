@@ -27,7 +27,7 @@ A vector of length \code{wl}.
 \references{Harris, F.J., 1978. On the use of windows for harmonic analysis
 with the discrete Fourier Transform. \emph{Proceedings of the IEEE}, 66(1): 51-83.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \note{Try the example to see windows shape.}
 

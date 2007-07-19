@@ -13,9 +13,10 @@ deletew(wave, f, from = FALSE, to = FALSE, plot = FALSE, marks = TRUE, ...)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{from}{start mark (in s).}
   \item{to}{end mark (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original
@@ -32,7 +33,7 @@ If \code{plot} is \code{FALSE}, \code{deletew} returns a one-column matrix
 describing the resulting wave with the same sampling frequency as original data.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}}, \code{\link{pastew}},
 \code{\link{timer}}.}

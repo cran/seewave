@@ -12,11 +12,12 @@ This function linearly shifts all the frequency content of a time wave.
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{shift}{positive or negative frequency shift to apply (in Hz).)}
-  \item{wl}{window length for the analysis (even number of points).}
+  \item{wl}{window length for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
 }
 
@@ -37,17 +38,17 @@ amplitude modifications.
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
-Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
+Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \seealso{\code{\link{ffilter}}, \code{\link{spectro}}}
 
 \examples{
 data(orni)
 a<-lfs(orni,f=22050,shift=1000)
-spectro(a,f=22050,wl=512)
+spectro(a,f=22050)
 # to be compared with the original signal
-spectro(orni,f=22050,wl=512)
+spectro(orni,f=22050)
 }
 
 \keyword{ts}

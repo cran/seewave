@@ -11,8 +11,8 @@ multi-frame plot. The envelope of the wave can also be shown.
 
 \usage{
 oscillo(wave, f, from = FALSE, to = FALSE, zoom = FALSE,
-k=1, j=1, labels = TRUE, byrow = TRUE, env = FALSE, smooth = 0,
-identify = FALSE, plot = TRUE, colwave = "black", 
+k=1, j=1, labels = TRUE, byrow = TRUE, env = FALSE, smooth = NULL,
+ksmooth = NULL, identify = FALSE, plot = TRUE, colwave = "black", 
 colbg = "white", coltitle = "black", collab = "black", 
 cexlab = 1, fontlab = 1, colline = "black", 
 colaxis = "black", coly0 = "grey47",
@@ -21,9 +21,10 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
@@ -35,8 +36,11 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
   \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
       (by default \code{FALSE}).}
   \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by averaging the number of points selected.}
-  \item{identify}{returns the time coordinate of points chosen on the oscillogram with a cursor.}
+      by floating average.}
+  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
+      by applying a \code{\link{kernel}} smoothing.}
+  \item{identify}{returns the time coordinate of points chosen  with a cursor
+      on the oscillogram.}
    \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot
       of \code{wave}(by default \code{TRUE}).}
   \item{colwave}{colour of the oscillogram or of the envelope.}
@@ -67,14 +71,15 @@ of points successively chosen on the oscillogram.
 \code{zoom} and \code{identify} do work with a single-frame window only
 (\emph{i. e.} with \code{k} = 1 and \code{j} = 1).\cr
 Press \sQuote{Stop} button of the tools bar after choosing the appropriate
-points on the oscillogram.
+points on the oscillogram.\cr
 } 
 
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{cutw}}, \code{\link{pastew}}, \code{\link{timer}}.}
+\seealso{\code{\link{oscilloST}},\code{\link{cutw}}, \code{\link{pastew}},
+\code{\link{timer}}}
 
 \examples{
 data(tico)
@@ -96,6 +101,8 @@ oscillo(tico,f=22050,k=2,j=2,byrow=FALSE)
 # envelope representation without and with smoothing
 oscillo(tico,f=22050,env=TRUE)
 oscillo(tico,f=22050,env=TRUE,smooth=80)
+oscillo(tico,f=22050,env=TRUE,ksmooth=kernel("daniell",10))
+oscillo(tico,f=22050,env=TRUE,ksmooth=kernel("daniell",500))
 # overplot of oscillographic and envelope representation
 env<-oscillo(tico,f=22050,env=TRUE,plot=FALSE,smooth=40)
 ticonorm<-tico/max(tico)

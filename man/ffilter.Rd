@@ -15,9 +15,10 @@ wl = 512, wn = "hanning")
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object created generated a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
@@ -40,9 +41,9 @@ amplitude modifications.
 \code{fls} returns a one-column matrix describing the new wave.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
-\seealso{\code{\link{afilter}},\code{\link{lfs}}}
+\seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
 
 \examples{
 a<-noise(f=8000,d=1)

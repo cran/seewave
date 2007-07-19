@@ -15,9 +15,10 @@ cutw(wave, f, from, to, plot = FALSE, marks = TRUE, ...)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{from}{start mark (in s).}
   \item{to}{end mark (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original
@@ -31,13 +32,13 @@ original and cut sections.}
 
 \value{
 If \code{plot} is \code{FALSE}, \code{cutw} returns a one-column matrix
-describing the cut wave with the same sampling frequency as original data.
+describing the cut wave with the same sampling frequency as the original wave.
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{pastew}}, \code{\link{deletew}},
-\code{\link{mute}}, \code{\link{timer}}.}
+\code{\link{mute}}, \code{\link{timer}}}
 
 \examples{
 # a 0.4 s section in a bird song
