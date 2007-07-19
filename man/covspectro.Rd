@@ -13,17 +13,19 @@ their maximal covariance and the time shift related to it.
 covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red", cexval = 1,
 fontval = 1, xlab = "Time (s)",
-ylab = "Normalised covariance (cov)", ...)
+ylab = "Normalised covariance (cov)", type = "l", ...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
+          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
+          \code{\link[Sound]{Sample}} object(s).}
   \item{wl}{length of the window for the analysis
-      (even number of points).}
+      (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{n}{number of covariances computed between \code{wave1} and \code{wave2}
       when sliding \code{wave2} along \code{wave1}.}
@@ -40,6 +42,8 @@ ylab = "Normalised covariance (cov)", ...)
   \item{fontval}{font of r max and frequency offset values.}
   \item{xlab}{title of the frequency axis.}
   \item{ylab}{title of the r axis.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -66,7 +70,7 @@ three components:
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{corspec}}, \code{\link{corenv}}, \code{\link{spectro}},
         \code{\link{cor}},}
@@ -76,7 +80,7 @@ communication}. Springer, Berlin, Heidelberg.}
 data(orni)
 orni1<-cutw(orni,f=22050,from=0,to=0.1,plot=FALSE)
 orni2<-cutw(orni,f=22050,from=0.15,to=0.25,plot=FALSE)
-covspectro(orni1,orni2,f=22050,wl=512,n=37,type="l")
+covspectro(orni1,orni2,f=22050,n=37)
 }
 
 \keyword{dplot}

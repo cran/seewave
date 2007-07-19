@@ -24,13 +24,15 @@ flim = NULL, flimd = NULL,
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
+          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
+          \code{\link[Sound]{Sample}} object(s).}
   \item{wl}{window length for the analysis
-    (even number of points).}
+    (even number of points, by default = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the continuous coherence function
         (by default \code{TRUE}).}
@@ -81,7 +83,7 @@ Use \code{\link{locator}} to identify  points.
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
 corresponds to a coherence function of length \code{wl}.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} but this function is
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} but this function is
 mainly based on \code{\link{spec.pgram}} by Martyn Plummer, Adrian Trapletti
 and B.D. Ripley}
 

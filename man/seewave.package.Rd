@@ -19,19 +19,19 @@ seewave provides functions for analysing, manipulating, displaying, editing and 
 \tabular{ll}{
 Package: \tab seewave\cr
 Type: \tab Package\cr
-Version: \tab 1.4.2\cr
-Date: \tab 2007-19-02\cr
+Version: \tab 1.4.3\cr
+Date: \tab 2007-07-19\cr
 License: \tab GPL version 2 or newer\cr
 Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Martin Maechler, Arnold Fertin \cr
 }
 }
 
 \author{
-Jérôme Sueur <jerome.sueur@univ-tours.fr>\cr 
-Thierry Aubin <thierry.aubin@ibaic.u-psud.fr>\cr
+Jérôme Sueur <sueur.jerome@neuf.fr>\cr 
+Thierry Aubin <thierry.aubin@u-psud.fr>\cr
 Caroline Simonis-Sueur <csimonis@mnhn.fr>\cr
 
-Maintainer: Jérôme Sueur <jerome.sueur@univ-tours.fr>\cr
+Maintainer: Jérôme Sueur <sueur.jerome@neuf.fr>\cr
 
 \url{http://sueur.jerome.neuf.fr/seewave.html}
 }

@@ -30,7 +30,7 @@ This type of file can be read by sound players like
 Goldwave (\url{http://www.goldwave.com/}).
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \examples{
 a<-synth(f=8000,d=2,cf=2000,plot=FALSE)

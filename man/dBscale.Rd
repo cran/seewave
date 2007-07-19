@@ -31,7 +31,7 @@ fontlab = 1, collab = "black", colaxis = "black",...)
   \item{\dots}{other \code{\link{axis}} arguments.}
 }    
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \note{This function, based on \code{\link{filled.contour}} by Ross Ihaka,
@@ -64,5 +64,6 @@ par(mar=c(5,4,0.5,2))
 spectro(pellucens, f=22050,wl=512,scale=FALSE)
 par(def.par)   
 }
+
 \keyword{dplot}
 \keyword{ts}

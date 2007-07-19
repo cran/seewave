@@ -4,7 +4,7 @@
 
 \title{Spectral entropy}
 
-\description{Compute the entropy (H) of a spectrum.}
+\description{Compute the entropy of a spectrum.}
 
 \usage{sh(spec)}
 
@@ -24,19 +24,21 @@ and \emph{N} = number of frequencies.
 }
 
 
-\value{Spectral entropy is returned.}
+\value{A single value varying between 0 and 1 is returned.
+The value has no unit.}
 
 \references{Nunes, R. R., Almeida de, M. P. & Sleigh, J. W. 2004
 Spectral entropy: a new method for anesthetic adequacy.
 \emph{Revista Brasileira de Anestesiologia}, \bold{54}, 413-422.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \note{
 The spectral entropy of a noisy signal will tend towards 1 whereas
 the spectral entropy of a pure tone signal will tend towards 0.}
 
-\seealso{\code{\link{csh}}, \code{\link{spec}}, \code{\link{meanspec}}}
+\seealso{\code{\link{csh}}, \code{\link{spec}}, \code{\link{meanspec}},
+\code{\link{th}}, \code{\link{H}}}
 
 \examples{
 a<-synth(f=8000,d=1,cf=2000,plot=FALSE)

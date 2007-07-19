@@ -22,10 +22,10 @@ filename = NULL)
 
 \details{
 This functions uses two functions from the package \pkg{Sound}:
-\code{\link[Sound]{as.Sample}}and \code{\link[Sound]{saveSample}}
+\code{\link[Sound]{Sample}} and \code{\link[Sound]{saveSample}}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \note{The  file automatically owerwrites an existing file
 with the same name.

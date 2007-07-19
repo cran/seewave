@@ -10,9 +10,10 @@
 
 \arguments{
   \item{wave}{data describing the time wave
-  or a \code{\link[Sound]{Sample}} object created loading a wav file
+  or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
   \item{threshold}{amplitude threshold (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the new oscillogram
       (by default \code{TRUE}).}
@@ -27,7 +28,7 @@ of \code{wave}. Signal inferior to this value is clipped.
 \value{If \code{plot} is \code{FALSE}, \code{afilter} returns a one column
 matrix with the new wave.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \note{This function is used as an argument (\code{threshold}) in the 
 following functions: \code{\link{autoc}}, \code{\link{csh}},

@@ -54,8 +54,8 @@ describing the sound synthesized.
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr},
-Thierry Aubin \email{thierry.aubin@ibaic.u-psud.fr} and 
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr},
+Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
 Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{noise}}, \code{\link{pulse}}}

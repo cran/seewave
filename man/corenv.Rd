@@ -12,17 +12,19 @@ their maximal correlation and the time shift related to it.
 corenv(wave1, wave2, f, smooth = 20, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Time (s)",
-ylab = "Coefficient of correlation (r)", ...)
+ylab = "Coefficient of correlation (r)", type = "l",...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object created loading a wav file
+  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
   with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
+          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
+          \code{\link[Sound]{Sample}} object(s).}
   \item{smooth}{smoothes the envelopes of \code{wave1} and \code{wave2}
-      by averaging the number of points selected.}
+      by floating average.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift
       (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value
@@ -36,6 +38,8 @@ ylab = "Coefficient of correlation (r)", ...)
   \item{fontval}{font of r max and frequency offset values.}
   \item{xlab}{title of the frequency axis.}
   \item{ylab}{title of the r axis.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}  
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -60,7 +64,7 @@ If \code{plot} is \code{FALSE}, \code{corenv} returns a list containing four
   \item{f}{the time offset corresponding to \code{rmax}.}
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{spec}},\code{\link{covspectro}},
         \code{\link{cor}}, \code{\link{cor.test}}.}
@@ -70,7 +74,7 @@ data(orni)
 # cross-correlation between two echemes of a cicada song
 wave1<-cutw(orni,f=22050,from=0.3,to=0.4,plot=FALSE)
 wave2<-cutw(orni,f=22050,from=0.58,to=0.68,plot=FALSE)
-corenv(wave1,wave2,f=22050,type="l",ylim=c(-0.7,1.1))
+corenv(wave1,wave2,f=22050,ylim=c(-0.7,1.1))
 }
 
 \keyword{dplot}

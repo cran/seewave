@@ -13,7 +13,7 @@ their maximal correlation and the frequency shift related to it.
 corspec(spec1, spec2, f, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Frequency (kHz)",
-ylab = "Coefficient of correlation (r)", ...)
+ylab = "Coefficient of correlation (r)", type="l",...)
 }
 
 \arguments{
@@ -35,6 +35,8 @@ ylab = "Coefficient of correlation (r)", ...)
   \item{fontval}{font of r max and frequency offset values.}
   \item{xlab}{title of the frequency axis.}
   \item{ylab}{title of the r axis.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -61,7 +63,7 @@ If \code{plot} is \code{FALSE}, \code{corspec} returns a list containing four
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
         \code{\link{covspectro}}, \code{\link{cor}}, \code{\link{cor.test}}.}
@@ -72,30 +74,26 @@ data(tico)
 a<-spec(tico,f=22050,wl=512,at=0.2,plot=FALSE)
 c<-spec(tico,f=22050,wl=512,at=1.1,plot=FALSE)
 op<-par(mfrow=c(2,1), mar=c(4.5,4,3,1))
-spec(tico,f=22050,wl=512,at=0.2,col="blue",type="l")
+spec(tico,f=22050,at=0.2,col="blue")
 par(new=TRUE)
-spec(tico,f=22050,wl=512,at=1.1,col="green",type="l")
+spec(tico,f=22050,at=1.1,col="green")
 legend(x=8,y=0.5,c("Note A", "Note C"),lty=1,col=c("blue","green"),bty="o")
 par(mar=c(5,4,2,1))
-corspec(a,c,f=22050,type="l",
-  ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
+corspec(a,c,f=22050, ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
 par(op)
 # different correlation methods give different results...
 op<-par(mfrow=c(3,1))
-corspec(a,c,f=22050,
-  type="l",xaxs="i",las=1, ylim=c(-0.25,0.8))
+corspec(a,c,f=22050,xaxs="i",las=1, ylim=c(-0.25,0.8))
 title("spearmann correlation (by default)")
-corspec(a,c,f=22050,
-  type="l",xaxs="i",las=1,ylim=c(0,1),method="pearson")
+corspec(a,c,f=22050,xaxs="i",las=1,ylim=c(0,1),method="pearson")
 title("pearson correlation")
-corspec(a,c,f=22050,
-  type="l",xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
+corspec(a,c,f=22050,xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
 title("kendall correlation")
 par(op)
 # inverting x and y does not give exactly similar results
 op<-par(mfrow=c(2,1),mar=c(2,4,3,1))
-corspec(a,c,f=22050,type="l")
-corspec(c,a,f=22050,type="l")
+corspec(a,c,f=22050)
+corspec(c,a,f=22050)
 par(op)
 }
 

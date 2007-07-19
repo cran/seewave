@@ -26,7 +26,7 @@ pulse(dbefore, dpulse, dafter, f, plot = FALSE, ...)
 Returns a one column matrix corresponding to the signal generated. 
 }
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \seealso{\code{\link{synth}}, \code{\link{noise}}}
 

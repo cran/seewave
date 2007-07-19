@@ -11,7 +11,7 @@ quality factor Q at a specific dB level.}
 \usage{
 Q(x, range, level = -3, plot = TRUE, colval = "red",
 cexval = 1, fontval = 1, flab = "Frequency (kHz)",
-alab = "Relative amplitude (dB)",...)
+alab = "Relative amplitude (dB)", type = "l", ...)
 }
 
 \arguments{
@@ -27,6 +27,8 @@ alab = "Relative amplitude (dB)",...)
   \item{fontval}{font of plotting Q.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the ampltiude axis.}
+  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -34,7 +36,7 @@ alab = "Relative amplitude (dB)",...)
 
 \value{Q is returned as a single numeric data.}
 
-\author{Jérôme Sueur \email{jerome.sueur@univ-tours.fr}}
+\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
 
