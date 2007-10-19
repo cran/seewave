@@ -10,8 +10,8 @@ and/or frequency modulation (fm).
 }
 
 \usage{
-synth(f, d, cf, a = 1, p = 0, am = c(0, 0), fm = c(0, 0, 0),
-plot = FALSE, wl = 512, ovlp = 50, play = FALSE,...)
+synth(f, d, cf, a = 1, shape = NULL, p = 0, am = c(0, 0), fm = c(0, 0, 0),
+plot = FALSE, listen = FALSE, Sample = FALSE,...)
 }
 
 \arguments{
@@ -19,6 +19,8 @@ plot = FALSE, wl = 512, ovlp = 50, play = FALSE,...)
   \item{d}{duration (in s).}
   \item{cf}{carrier frequency (in Hz).}
   \item{a}{amplitude (linear scale, relative when adding different waves).}
+  \item{shape}{modification of the whole amplitude shape of the wave.
+  See \code{details}).}
   \item{p}{phase (in radians).}
   \item{am}{a vector of length 2 describing amplitude modulation parameters,
       see \code{details}.}
@@ -26,17 +28,22 @@ plot = FALSE, wl = 512, ovlp = 50, play = FALSE,...)
       see \code{details}.}
   \item{plot}{if \code{TRUE} returns the spectrogram
       of the synthezised sound (by default \code{FALSE}).}
-  \item{wl}{if \code{plot} is \code{TRUE},
-      length of the window for the spectrographic analysis (even number of points).}
-  \item{ovlp}{if \code{plot} is \code{TRUE}, overlap between two successive
-      windows of the spectrographic analysis (in \%).}
-  \item{play}{if \code{TRUE} the new sound is played back
-      using \code{\link[Sound]{play}} from the package \pkg{Sound}
+  \item{listen}{if \code{TRUE} the new sound is played back
+      using \code{\link[sound]{play}} from the package \pkg{sound}
       (by default \code{FALSE}).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.
   \item{\dots}{other \code{\link{spectro}} graphical parameters.}
 }
                                    
 \details{
+\code{shape} allows to modify the whole amplitude shape of the wave. There
+are four options to be given as as character string:
+(i) "incr" : linear increase  
+(ii) "decr" : linear decrease  
+(iii) "sine" : sinusoid-like shape
+(iv) "tria" : triangular shape
+
 \code{am} is a vector of length 2 including: (1) the amplitude modulation
 depth (in \%), (2) the frequency of the amplitude modulation.
 
@@ -46,23 +53,23 @@ depth (in \%), (2) the frequency of the amplitude modulation.
 (3) the maximum excursion of a linear frequency modulation (in Hz).
 }
 
-\value{
-If \code{plot} is \code{FALSE}, \code{synth} returns a one-column matrix
-describing the sound synthesized.
-}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr},
+\author{Jérôme Sueur \email{sueur@mnhn.fr},
 Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
+Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{noise}}, \code{\link{pulse}}}
 
 \examples{
 # pure tone
 synth(f=22050,d=1,cf=4000,plot=TRUE)
+# pure tone with sinusoid-like overall shape
+synth(f=22050,d=1,cf=4000,shape="sine",plot=TRUE,osc=TRUE)
 # pure tones with am
 synth(f=22050,d=1,cf=4000,am=c(50,10),plot=TRUE,osc=TRUE)
 # pure tone with +2000 Hz linear fm 
@@ -77,6 +84,9 @@ synth(f=22050,d=1,cf=4000,fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75)
 # the same with am
 synth(f=22050,d=1,cf=4000,am=c(50,10),
     fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75,osc=TRUE)
+# the same with am and a triangular overall shape 
+synth(f=22050,d=1,cf=4000,shape="tria",am=c(50,10),
+    fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75,osc=TRUE)   
 # more complex sound
 F1<-synth(f=22050,cf=2000,d=1,fm=c(500,5,0),plot=FALSE)
 F2<-synth(f=22050,a=0.8,cf=4000,d=1,fm=c(500,5,0))

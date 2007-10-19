@@ -1,5 +1,5 @@
 ################################################################################
-# Seewave by Jérôme Sueur, Caroline Simonis-Sueur & Thierry Aubin
+# Seewave by Jérôme Sueur, Caroline Simonis & Thierry Aubin
 # Acknowledgements: Michel Baylac, Emmanuel Paradis, Martin Maechler
 # Requires R>=2.2.0, rgl, sound
 ################################################################################
@@ -14,6 +14,7 @@ f,
 at = "middle",
 d = FALSE,
 plot = FALSE,
+Sample = FALSE,
 ...)
 
 {
@@ -29,12 +30,14 @@ sil<-rep(0,d*f)
 wave2<-wave[-(1:pos),1]
 
 wave3<-as.matrix(c(wave1,sil,wave2))
-
+                               
 if (plot == TRUE){oscillo(wave=wave3,f=f,...)}
-
-else return(wave3)
+else 
+    {
+    if (Sample == TRUE){wave3<-as.Sample(as.numeric(wave3), rate=f, bits=16)}
+    return(wave3)
+    }
 }
-
 
 ################################################################################
 #                                AFILTER                                       
@@ -45,6 +48,7 @@ wave,
 f,
 threshold = 5,
 plot = TRUE,
+Sample=FALSE,
 ...
 )
 
@@ -54,7 +58,12 @@ t1<-max(abs(wave))*(threshold/100)
 wave1<-ifelse(abs(wave)<=t1,yes=0,no=1)
 wave2<-as.matrix(wave[,1]*wave1[,1])
 wave<-as.matrix(wave2)
-if (plot == TRUE) oscillo(wave=wave, f=f,...) else return(wave)
+if (plot == TRUE) oscillo(wave=wave, f=f,...)
+else 
+    {
+    if (Sample == TRUE){wave<-as.Sample(as.numeric(wave), rate=f, bits=16)}
+    return(wave)
+    }
 }
 
 ################################################################################
@@ -167,7 +176,6 @@ else return(y)
 }
 
 
-
 ################################################################################
 #                                CCOH                                        
 ################################################################################
@@ -224,7 +232,7 @@ if (!is.null(flimd))
   flim<-flimd
   }
 
-step<-seq(1,n-wl,wl-(wl/100))		# coherence windows
+step<-seq(1,n-wl,wl-(ovlp*wl/100))	# coherence windows
 
 z1<-matrix(data=numeric((wl)*length(step)),wl,length(step))
 
@@ -238,7 +246,6 @@ z<-z1[1:(wl/2),]
 
 # X axis settings
 X<-seq(0,n/f,length.out=length(step))
-#Y<-seq(0,f/2000,length.out=nrow(z))
 
 # vertical zoom
 if (is.null(flim)==TRUE)
@@ -294,28 +301,33 @@ else return(z)
 }
 
 
+
+
 ################################################################################
 #                                CEPS                                         
-###############################################################################
+################################################################################
 
 ceps<-function(
 wave,
 f,
-wl = 512,          
-at = FALSE,          
+wl = 512,
+at = FALSE,
 from = FALSE,
 to = FALSE,
 tpeaks = FALSE,     # peaks in time (s)
-fpeaks = FALSE,     # peaks in frequency (kHz)
-identify = FALSE,   # identify in seconds
+fpeaks = FALSE,     # peaks in frequency (Hz)
+tidentify = FALSE,   # identify in seconds
+fidentify = FALSE,   # identify in Hz
 col = "black",
-cex = 1, 
+cex = 1,
 colpeaks = "red",
 cexpeaks = 0.75,
 fontpeaks = 1,
 plot = TRUE,
-qlab = "Quefrency (s)",
+qlab = "Quefrency (bottom: s, up: Hz)",
 alab = "Amplitude",
+qlim = NULL,
+alim = NULL,
 type= "l",
 ...)
 
@@ -333,7 +345,7 @@ if (from|to)
 
 if (at)
   {
-  if(wl==FALSE) stop("Argument 'wl' has to set up, for instance wl=512")
+  if(wl==FALSE) stop("Argument 'wl' has to be set up, for instance wl=512")
   c<-round(at*f)
   wl2<-wl%/%2
   wave<-as.matrix(wave[(c-wl2):(c+wl2),])
@@ -361,27 +373,42 @@ if (fpeaks)
 
 if (plot == TRUE)
   {
-  x=seq(0,N/f,length.out=N)
-  plot(x=x,y=z,xlab=qlab,ylab=alab,type=type,col=col,cex=cex,yaxt="n",...)
+  x<-seq(0,N/f,length.out=N)
+  plot(x=x,y=z,
+  xlab=qlab,xaxt="n",xaxs="i",
+  ylab=alab,yaxt="n",yaxs="i",
+  type=type,col=col,cex=cex,xlim=qlim,...)
+  if (!is.null(qlim)) E<-qlim[2] else E<-N/f
+  X<-seq(0,E,length.out=7)
+  axis(side=1,at=X, labels=round(X,3))
+  axis(side=3,at=X, labels=round(1/X))
 
-  if(tpeaks)                              
+  if(tpeaks)
     {
     text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
-      as.character(round(seq(z)[p]/f,5)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
+      as.character(round((seq(z)[p]-1)/f,5)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
     }
-  
-  if(fpeaks)                              
+
+  if(fpeaks)
     {
     text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
-      as.character(round(f/seq(z)[p],1)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
+      as.character(round(f/(seq(z)[p]-1),1)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
     }
-  
-  if(identify == TRUE)
+
+  if(tidentify == TRUE)
     {
-    cat("choose points on the cepstrum")
+    cat("time identification: choose points on the cepstrum")
     if (.Platform$OS.type == "windows") flush.console()
     id<-identify(x=x,y=z,labels=round(x,5),tolerance=0.15,col="red")
-    return(id/f)
+    return(round(x[id],5))
+    }
+    
+  if(fidentify == TRUE)
+    {
+    cat("frequency identification: choose points on the cepstrum")
+    if (.Platform$OS.type == "windows") flush.console()
+    id<-identify(x=x,y=z,labels=round(1/round(x,5),1),tolerance=0.15,col="red")
+    return(round(1/round(x[id],5),1))
     }
   }
 
@@ -395,6 +422,95 @@ else
   return(z)
  }
 }
+
+
+################################################################################
+#                                   CEPSTRO                                    
+################################################################################
+
+cepstro<-function(
+wave,
+f,
+wl = 512,
+ovlp = 0,
+plot = TRUE,
+grid = TRUE,
+scale = TRUE,
+cont = FALSE,
+collevels = seq(0,1,0.01),
+palette = rev.heat.colors,
+contlevels = seq (0,1,0.01),
+colcont = "black",
+colgrid = "black",
+colaxis = "black",
+collab = "black",
+plot.title =
+    title(main = "", xlab = "Time (s)",
+    ylab = "Quefrency (ms)"),
+scalelab = "Amplitude",
+scalefontlab = 1,
+scalecexlab =0.75,
+axisX = TRUE,
+axisY = TRUE,
+...)
+
+{
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+ifelse(wave==0,yes=1e-6,no=wave)
+
+n<-nrow(wave)
+p<-round(n/2)
+step<-seq(1,n-wl,wl-(ovlp*wl/100))
+
+N<-length(step)
+WL<-wl%/%2
+z1<-matrix(data=numeric(wl*N),wl,N)
+for(i in step)
+  {z1[,which(step==i)]<-Re(fft(log(abs(fft(wave[i:(wl+i-1),]))),inverse=TRUE))}
+z2<-z1[1:WL,]
+z<-ifelse(z2=="NaN"|z2=="-Inf"|z2<=0,yes=0,no=z2)
+Z<-t(z/max(z))
+
+if (plot == TRUE)
+ 	{
+  X<-seq(0,n/f,length.out=length(step))
+  Y<-seq(0,WL/f,length.out=nrow(z))*1000
+  Zlim<-range(Z, finite = TRUE)
+  if (scale==TRUE)
+    {
+    def.par <- par(no.readonly = TRUE)
+    on.exit(par(def.par))
+    layout(matrix(c(1, 2), nc = 2, byrow=TRUE), widths = c(6, 1))
+    par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab)
+    filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+			plot.title=plot.title, color.palette=palette,axisX=axisX, axisY=axisY)
+   	if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+		if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+    par(mar=c(5,1,4.5,3),las=0)
+    dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
+      cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
+    }
+
+  if (scale==FALSE)
+   {
+   par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,...)
+   filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+			plot.title=plot.title, color.palette=palette, axisX=axisX, axisY=axisY,
+      col.lab=collab,colaxis=colaxis)
+   if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+ 	 if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+   }
+
+  if (cont==TRUE)
+	 {
+   contour(X,Y,Z,add=TRUE,
+	 levels=contlevels,nlevels=5,col=colcont,...)
+	 }
+  }
+
+else{return(Z)}
+}
+
 
 
 ################################################################################
@@ -698,9 +814,9 @@ step2<-round(seq(1,n2,length.out=n))
 
 # wave not time shifted
 spectro1<-sspectro(wave=wave1,f=f,wl=wl,wn=wn)
-
-spectro2a<-array(numeric((wl/2)*lstep1*n),dim=c((wl/2),lstep1,n))
-spectro2b<-array(numeric((wl/2)*lstep1*n),dim=c((wl/2),lstep1,n))
+WL<-wl%/%2
+spectro2a<-array(numeric(WL*lstep1*n),dim=c(WL,lstep1,n))
+spectro2b<-array(numeric(WL*lstep1*n),dim=c(WL,lstep1,n))
 cov1<-numeric(n)
 cov2<-numeric(n)
 
@@ -824,6 +940,7 @@ from = FALSE,
 to = FALSE,
 plot = FALSE,
 marks = TRUE,
+Sample = FALSE,
 ...)
 
 {
@@ -833,24 +950,29 @@ if (from == 0) {a<-1; b<-round(to*f)}
 if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
 if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
 else {a<-round(from*f); b<-round(to*f)}
-wavecut<-as.matrix(wave[a:b,])
+wavecut1<-as.matrix(wave[a:b,])
+wavecut<-wavecut1/max(wavecut1)
   
 if (plot == TRUE)
   {
   def.par <- par(no.readonly = TRUE)
   on.exit(par(def.par))
   par(mfrow=c(2,1))
-  oscillo(wave,f=f,k=1,j=1,...)
+  oscillo(wave,f=f,...)
   title(main="original")
     if (marks == TRUE)
       {
       abline(v=from, col="red", lty=2)
       abline(v=to, col="red", lty=2)
       }
-  oscillo(wavecut,f=f,k=1,j=1,...)
+  oscillo(wavecut,f=f,...)
   title(main="cut")
   }
-else return(wavecut)
+else 
+    {
+    if (Sample == TRUE){wavecut<-as.Sample(as.numeric(wavecut), rate=f, bits=16)}
+    return(wavecut)
+    }
 }
 
  
@@ -917,6 +1039,7 @@ from = FALSE,
 to = FALSE,
 plot = FALSE,
 marks = TRUE,
+Sample = FALSE,
 ...)
 
 {
@@ -943,7 +1066,11 @@ if (plot == TRUE)
   oscillo(wavecut,f=f,k=1,j=1,...)
   title(main="after deletion")
   }
-else return(wavecut)
+else 
+    {
+    if (Sample == TRUE){wavecut<-as.Sample(as.numeric(wavecut), rate=f, bits=16)}
+    return(wavecut)
+    }
 }
 
 
@@ -1190,9 +1317,10 @@ filename = NULL,
 ...)
 
 {
+wave<-wave/(max(wave)*1.5) # this avoids overclipping problems
 n<-nrow(wave)
 if (is.null(filename) == TRUE)
-  filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
+  filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")
 header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")
 write.table(x=wave, file=filename, row.names=FALSE, col.names=header, quote=FALSE, ...)
 }
@@ -1209,7 +1337,8 @@ from = FALSE,
 to = FALSE,
 bandpass = TRUE,
 wl = 512,
-wn="hanning"
+wn="hanning",
+Sample = FALSE
 )
 
 {
@@ -1250,7 +1379,8 @@ z3<-matrix(data=numeric(wl*Lstep),wl,Lstep)
 for(i in 1:Lstep) {z3[,i]<-Re(fft(z2[,i],inverse=TRUE)/nrow(z2))}
 # manipulation to swith from a matrix to a single vector to be read as a signal
 z4<-c(as.vector(z3),rep(0,n-(max(step)+wl-1)))
-z5<-as.matrix(z4)
+if (Sample == TRUE){z5<-as.Sample(z4, rate=f, bits=16)}
+else z5<-as.matrix(z4)
 return(z5)
 }
 
@@ -1266,7 +1396,8 @@ from = FALSE,
 to = FALSE,
 bandpass = TRUE,
 custom = NULL,
-wl = 512
+wl = 512,
+Sample = FALSE
 )
 
 {
@@ -1314,7 +1445,7 @@ wave2<-convolve(wave[,1],pulse4)
 wave3<-(wave2/max(wave2)); rm(wave2)
 wave4<-wave3-mean(wave3); rm(wave3)
 wave5<-as.matrix(wave4); rm(wave4)
-
+if (Sample == TRUE){wave5<-as.Sample(as.numeric(wave5), rate=f, bits=16)}
 return(wave5)
 }
 
@@ -1336,6 +1467,59 @@ if(wn=="hamming")   w<-hamming.w(wl)
 if(wn=="hanning")   w<-hanning.w(wl)
 if(wn=="rectangle") w<-rectangle.w(wl)
 return(w)
+}
+
+################################################################################
+#                                   FUND                                   
+################################################################################
+
+fund<-function(
+wave,
+f,
+wl = 512,
+ovlp = 0,
+fmax,
+threshold = FALSE,
+plot = TRUE,
+xlab = "Time (s)",
+ylab = "Frequency (kHz)",
+ylim = c(0,f/2000),
+...)
+
+{
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+if (threshold) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
+ifelse(wave==0,yes=1e-6,no=wave)
+
+n<-nrow(wave)
+p<-round(n/2)
+step<-seq(1,n-wl,wl-(ovlp*wl/100))
+
+N<-length(step)
+WL<-wl%/%2
+z1<-matrix(data=numeric(wl*N),wl,N)
+for(i in step)
+  {z1[,which(step==i)]<-Re(fft(log(abs(fft(wave[i:(wl+i-1),]))),inverse=TRUE))}
+z2<-z1[1:WL,]
+z<-ifelse(z2=="NaN"|z2=="-Inf",yes=0,no=z2)
+
+fmaxi<-f%/%fmax
+tfund<-numeric(N)
+for (k in 1:N) {tfund[k]<-which.max(z[-c(1:fmaxi),k])}
+tfund<-as.numeric(ifelse(tfund==1,yes="NA",no=tfund))
+ffund<-f/(tfund+fmaxi-1)
+
+if (plot == TRUE)
+  {
+  x<-seq(0,n/f,length.out=N)
+  plot(x=x, y=ffund/1000,
+  xlab = xlab,
+  ylab = ylab, ylim = ylim,
+  las =1,
+  ...)
+  }
+
+else return(ffund/1000)
 }
 
 
@@ -1367,6 +1551,38 @@ return(z)
 
 
 ################################################################################
+#                                LISTEN                                        
+################################################################################
+
+listen<-function(
+wave,
+f,
+from = FALSE,
+to = FALSE
+)
+
+{
+if (from|to)
+  {
+  if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+  if (from == 0) {a<-1; b<-round(to*f)}
+  if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
+  if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
+  else {a<-round(from*f); b<-round(to*f)}
+  wave<-as.matrix(wave[a:b,])
+  wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)
+  }
+
+else
+  {
+  if (class(wave)=="matrix")     {wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)}
+  if (class(wave)=="data.frame") {wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)}
+  }
+play(wave)
+}
+
+
+################################################################################
 #                                LFS                                        
 ################################################################################
 
@@ -1375,7 +1591,8 @@ wave,
 f,
 shift,
 wl = 512,
-wn="hanning"
+wn="hanning",
+Sample = FALSE
 )
 
 {
@@ -1427,7 +1644,8 @@ z3<-matrix(data=numeric(wl*Lstep),wl,Lstep)
 for(i in 1:Lstep) {z3[,i]<-Re(fft(z2[,i],inverse=TRUE)/nrow(z2))}
 # manipulation to swith from a matrix to a single vector to be read as a signal
 z4<-c(as.vector(z3),rep(0,n-(max(step)+wl-1)))
-z5<-as.matrix(z4)
+if (Sample == TRUE){z5<-as.Sample(z4, rate=f, bits=16)}
+else {z5<-as.matrix(z4)}
 return(z5)
 }
 
@@ -1546,7 +1764,10 @@ if(plot == 1) # plots x-y graph with Frequency as X-axis
     cat("choose points on the spectrum")
     if (.Platform$OS.type == "windows") flush.console()
     id<-identify(x=x,y=y,labels=round(x,2),tolerance=0.15,col="red")
-    return(((id*f)/N)/1000)
+    id.freq<-x[id]
+    id.amp<-y[id]
+    coord<-list(freq = id.freq ,amp = id.amp)
+    return(coord)
     }     	
     
     if(peaks)                              
@@ -1597,7 +1818,10 @@ if(plot == 2) # plots x-y graph with Frequency as Y-axis
     cat("choose points on the spectrum")
     if (.Platform$OS.type == "windows") flush.console()
     id<-identify(x=y,y=x,labels=round(x,2),tolerance=0.15,col="red")
-    return(((id*f)/N)/1000)
+    id.freq<-x[id]
+    id.amp<-y[id]
+    coord<-list(freq = id.freq ,amp = id.amp)
+    return(coord)
     }    
     		
     if(peaks)
@@ -1675,6 +1899,7 @@ f,
 from = FALSE,
 to = FALSE,
 plot = TRUE,
+Sample = FALSE,
 ...
 )
 
@@ -1708,7 +1933,12 @@ if (from | to)
       wave.muted<-as.matrix(c(wave[1:(a-1),],rep(0,length(a:b)),wave[(b+1):n,]))
     }
   }
-if (plot == TRUE) {oscillo(wave.muted,f=f,...)} else return(wave.muted)
+if (plot == TRUE) {oscillo(wave.muted,f=f,...)}
+else 
+    {
+    if (Sample == TRUE){wave.muted<-as.Sample(as.numeric(wave.muted), rate=f, bits=16)}
+    return(wave.muted)
+    }
 
 }
 
@@ -1719,11 +1949,14 @@ if (plot == TRUE) {oscillo(wave.muted,f=f,...)} else return(wave.muted)
 
 noise<-function(
 f,
-d
+d,
+Sample = FALSE
 )
 
 {
-as.matrix(runif(d*f),min=-1,max=1)
+wave<-as.matrix(runif(d*f,min=-1,max=1))
+if (Sample == TRUE){wave<-as.Sample(as.numeric(wave), rate=f, bits=16)}
+return(wave)
 }
 
 
@@ -2043,6 +2276,7 @@ f,
 at = FALSE,
 plot = FALSE,
 marks = TRUE,
+Sample = FALSE,
 ...)
 
 {
@@ -2079,10 +2313,12 @@ if (plot == TRUE)
     abline(v=at+(nrow(wave1))/f, col="red", lty=2)
     }
   }
-else return(wave3)
+else    
+    {
+    if (Sample == TRUE){wave3<-as.Sample(as.numeric(wave3), rate=f, bits=16)}
+    return(wave3)
+    }
 }
-
-
 
 
 ################################################################################
@@ -2095,12 +2331,18 @@ dpulse,
 dafter,
 f,
 plot = FALSE,
+Sample = FALSE,
 ...
 )
 
 {
 wave<-as.matrix(c(rep(0,dbefore*f),rep(1,dpulse*f),rep(0,dafter*f)))
 if(plot==TRUE) oscillo(wave,f=f,...)
+else    
+    {
+    if (Sample == TRUE){wave<-as.Sample(as.numeric(wave), rate=f, bits=16)}
+    return(wave)
+    }
 }
 
 
@@ -2164,6 +2406,31 @@ else return(Q)
 
 
 ################################################################################
+#                                REVW                                         
+################################################################################
+
+revw<-function(
+wave,
+f,
+plot = FALSE,
+Sample = FALSE,
+...)
+
+{
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+
+wave2<-as.matrix(rev(wave[,1]))
+
+if (plot == TRUE) {oscillo(wave=wave2,f=f,...)}
+else 
+    {
+    if (Sample == TRUE){wave2<-as.Sample(as.numeric(wave2), rate=f, bits=16)}
+    return(wave2)
+    }
+}
+
+
+################################################################################
 #                                RESAMP                                         
 ################################################################################
 
@@ -2171,7 +2438,8 @@ else return(Q)
 resamp<-function(
 wave,
 f,
-g
+g,
+Sample = FALSE
 )
 
 {
@@ -2181,7 +2449,11 @@ n<-nrow(wave)
 if (g==f) stop ("'f' and 'g' must be different")
 if (g<f)  {r<-f/g; wave1<-wave[seq(1,n,by=r),1]}
 if (g>f)  {s<-(n*g)/f; wave1<-approx(wave,n=s)$y}
-return(as.matrix(wave1))
+
+if (Sample == TRUE){wave1<-as.Sample(as.numeric(wave1), rate=g, bits=16)}
+else wave1<-as.matrix(wave1)
+
+return(wave1)
 }
 
 
@@ -2215,11 +2487,14 @@ filename = NULL
 )
 
 {
-library(sound)
-if (is.null(filename) == TRUE)
-  filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
-wave<-as.Sample(as.numeric(wave), rate=f, bits=16)
-saveSample(wave, filename=filename, overwrite=TRUE)
+if (is.null(filename) == TRUE) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
+if(class(wave)=="Sample") {saveSample(wave, filename=filename, overwrite=TRUE)}
+else
+  {
+  wave<-wave/(max(wave)*1.5) # this avoids overclipping problems
+  wave<-as.Sample(as.numeric(wave), rate=f, bits=16)
+   saveSample(wave, filename=filename, overwrite=TRUE)
+  }
 }
 
 
@@ -2345,7 +2620,7 @@ if (from|to)
   else {a<-round(from*f); b<-round(to*f)}
   wave<-as.matrix(wave[a:b,])
   }
-  
+
 if (at)
   {
   c<-round(at*f)
@@ -2374,7 +2649,7 @@ if (peaks)
   respeaks<-respeaks[1:(length(respeaks)/2)]
   }
 
-x<-seq((f/1000)/n,f/2000,length.out=n%/%2)  
+x<-seq((f/1000)/n,f/2000,length.out=n%/%2)
 
 if (is.null(alim) == TRUE)
   {
@@ -2382,12 +2657,12 @@ if (is.null(alim) == TRUE)
   if (dB == TRUE)  alim<-c(min(20*log10(y)),20)
   if (PMF == TRUE) alim<-c(0,max(y))
   }
-    
+
 if(plot == 1) # plots x-y graph with Frequency as X-axis
 	{
     if(dB == TRUE)
 	  {
-    y<-20*log10(y)	
+    y<-20*log10(y)
 	  plot(x=x,y=y,
 		xaxs = "i", xlab = flab, xlim = flim,
 		yaxs = "i", yaxt = "s", ylab = alab, ylim = alim,
@@ -2414,22 +2689,25 @@ if(plot == 1) # plots x-y graph with Frequency as X-axis
     type = type, las = 1,
     ...)
     }
-	   	   
+
     if(identify == TRUE)
     {
     cat("choose points on the spectrum")
     if (.Platform$OS.type == "windows") flush.console()
     id<-identify(x=x,y=y,labels=round(x,2),tolerance=0.15,col="red")
-    return(((id*f)/n)/1000)
-    } 
-	
+    id.freq<-x[id]
+    id.amp<-y[id]
+    coord<-list(freq = id.freq ,amp = id.amp)
+    return(coord)
+    }
+
     if(peaks)
     {
     if (dB == TRUE)
     text(seq(y)[p]*f/n/1000, y[p]+5,
               as.character(round(seq(y)[p]*f/n/1000,3)),
               col = colpeaks, cex = cexpeaks, font = fontpeaks)
-    else  
+    else
     text(seq(y)[p]*f/n/1000, y[p]+0.05,
               as.character(round(seq(y)[p]*f/n/1000,3)),
               col = colpeaks, cex = cexpeaks, font = fontpeaks)
@@ -2440,7 +2718,7 @@ if(plot == 2) # plots x-y graph with Frequency as Y-axis
 	{
     if(dB == TRUE)
 	  {
-    y<-20*log10(y)	
+    y<-20*log10(y)
 	  plot(x=y,y=x,
 		xaxs = "i", xlab = alab, xlim = alim,
 		yaxs = "i", yaxt = "s", ylab = flab, ylim = flim,
@@ -2467,33 +2745,36 @@ if(plot == 2) # plots x-y graph with Frequency as Y-axis
     type = type, las = 1,
     ...)
     }
-		
+
 
     if(identify == TRUE)
     {
     cat("choose points on the spectrum")
     if (.Platform$OS.type == "windows") flush.console()
     id<-identify(x=y,y=x,labels=round(x,2),tolerance=0.15,col="red")
-    return(((id*f)/n)/1000)
-    } 
-		
+    id.freq<-x[id]
+    id.amp<-y[id]
+    coord<-list(freq = id.freq ,amp = id.amp)
+    return(coord)
+    }
+
     if(peaks)
     {
     if (dB == TRUE)
     text(y[p]+10, seq(y)[p]*f/n/1000,
               as.character(round(seq(y)[p]*f/n/1000,3)),
               col = colpeaks, cex = cexpeaks, font= fontpeaks)
-    else  
+    else
     text(y[p]+0.1, seq(y)[p]*f/n/1000,
               as.character(round(seq(y)[p]*f/n/1000,3)),
               col = colpeaks, cex = cexpeaks, font= fontpeaks)
     }
   }
 
-if(plot == FALSE) 
+if(plot == FALSE)
   {
   if(dB == TRUE) y<-20*log10(y)
-  spec<-y[1:length(y)]	
+  spec<-y[1:length(y)]
   if (peaks)
       {
       results<-list(spec = spec ,peaks = respeaks)
@@ -2502,7 +2783,6 @@ if(plot == FALSE)
   else return(spec)
   }
 }
-
 
 
 ################################################################################
@@ -2565,7 +2845,7 @@ if (!is.null(flimd))
 step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
 
 z1<-matrix(data=numeric((wl+(zp))*length(step)),wl+zp,length(step))
-zpl<-zp/2
+zpl<-zp%/%2
 if(zpl==0)
   {
   W<-ftwindow(wl=wl,wn=wn)
@@ -2755,7 +3035,6 @@ else
   colorlut <- palette(Zlen)
   col <- colorlut[Z-Zlim[1]+1] 
   
-  library(rgl)
 	rgl.clear()
   	rgl.bbox(color="white", emission="gray8", specular="gray",
     shininess=50, alpha=0.8,
@@ -2776,55 +3055,72 @@ else
 ################################################################################
 
 synth<-function(
-f, 
-d, 
-cf,  
-a=1,  
-p = 0,  
+f,
+d,
+cf,
+a = 1,
+shape = NULL,
+p = 0,
 am = c(0,0),
-fm = c(0,0,0), 
+fm = c(0,0,0),
 plot = FALSE,
-wl = 512,
-ovlp = 50,
-play = FALSE,
+listen = FALSE,
+Sample = FALSE,
 ...
 )
 
 {
+n<-round(f*d)
+
 amp<-am[1]/100  # AM modulation percentage
 amf<-am[2]  # AM modulation frequency
 fme<-fm[1]  # FM sinusoidal excursion
 fmf<-fm[2]  # FM sinusoidal frequency
 fmE<-fm[3]  # FM linear excursion
 
-t <- seq(0, d*2*pi, length.out = f*d)
+t <- seq(0, d*2*pi, length.out = n)
 
 
 if (fme==0 & fmf!=0)          stop("FM sinusoidal excursion has to be set")
 if (fme!=0 & fmf==0 & fmE==0) stop("FM sinusoidal frequency or FM linear excursion has to be set")
 if (fme!=0 & fmf==0 & fmE!=0) stop("FM sinusoidal frequency has to be set")
 
-if (fmE>0) freq<-seq(0,fmE/2,length.out=f*d) else freq<-rev(seq(fmE/2,0,length.out=f*d))
+if (fmE>0) freq<-seq(0,fmE/2,length.out=f*d) else freq<-rev(seq(fmE/2,0,length.out=n))
 
-if (fme==0 & fmf==0) {sound0<-a*(1+amp*cos(amf*t))*sin((cf*t)+(freq*t)+p)}
+if (fme==0 & fmf==0) {sound<-a*(1+amp*cos(amf*t))*sin((cf*t)+(freq*t)+p)}
 
 if (fme!=0 & fmf!=0)
   {
-  if (fmE == 0)       sound0<-a*(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+p)
-  else                sound0<-a*(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+(freq*t)+p)
+  if (fmE == 0)       sound<-a*(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+p)
+  else                sound<-a*(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+(freq*t)+p)
   }
 
-sound1<-as.matrix(sound0/max(sound0))
-
-if (play == TRUE) 
+if(is.null(shape)==FALSE)
   {
-  library(sound)
-  sound1<-as.Sample(as.numeric(sound1), rate=f, bits=16)
-  play(sound1)
+  if (shape=="incr") {S<-seq(0,1,length.out=n)}
+  if (shape=="decr") {S<-seq(1,0,length.out=n)}
+  if (shape=="sine") {S<-sin(seq(0,pi,length.out=n))}
+  if (shape=="tria")
+    {
+    if(n%%2 == 1) S<-c(seq(0,1,length.out=n%/%2),seq(1,0,length.out=n%/%2+1))  # if n is odd
+    else S<-c(seq(0,1,length.out=n%/%2),seq(1,0,length.out=n%/%2)) # if n is even
+    }
+  sound<-S*sound
   }
 
-if (plot == TRUE) spectro(sound1, f=f, wl=wl, ovlp=ovlp,...) else return(sound1)
+sound<-as.matrix(sound)
 
+if (listen == TRUE)
+  {
+  listen(sound,f=f)
+  }
+
+if (plot == TRUE) spectro(sound, f=f,...)
+else
+    {
+    if (Sample == TRUE){sound<-as.Sample(as.numeric(sound), rate=f, bits=16)}
+    return(sound)
+    }
 }
 
 

@@ -24,10 +24,10 @@ flim = NULL, flimd = NULL, play=FALSE,
 
 \arguments{
   \item{wave}{data describing a time wave
-     or a \code{\link[Sound]{Sample}} object generated loading a wav file
-     with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+     or a \code{\link[sound]{Sample}} object generated loading a wav file
+     with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-     Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+     Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{window length for the analysis
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
@@ -97,8 +97,8 @@ corresponds to a Fourier transform of length \code{wl}.}
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
+\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
 \code{\link{filled.contour}}}

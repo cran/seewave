@@ -7,7 +7,6 @@
 \description{
 This function returns the frequency coherence between two time
 waves.}
-}
 
 \usage{
 coh(wave1, wave2, f, plot =TRUE, xlab = "Frequency (kHz)",
@@ -15,13 +14,13 @@ ylab = "Coherence", xlim = c(0,f/2000), type = "l",...)
 }
 
 \arguments{
-\item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav
-  file with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-\item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav
-  file with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+\item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav
+  file with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a first time wave.}
+\item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav
+  file with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a second time wave.}
 \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
   Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-  \code{\link[Sound]{Sample}} object(s).}
+  \code{\link[sound]{Sample}} object(s).}
 \item{plot}{logical, if \code{TRUE} plots the continuous coherence function
         (by default \code{TRUE}).}
 \item{xlab}{title of the frequency X-axis.}
@@ -44,7 +43,7 @@ signals of a system.
 If \code{plot} is \code{FALSE}, this function returns a one-column matrix
 corresponding to the coherence.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} but this function
+\author{Jérôme Sueur \email{sueur@mnhn.fr} but this function
 is based on \code{\link{spec.pgram}}
 by Martyn Plummer, Adrian Trapletti and B.D. Ripley.}
 

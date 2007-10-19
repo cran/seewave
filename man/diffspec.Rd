@@ -53,7 +53,7 @@ When \code{plot} is \code{TRUE}, both spectra and their difference surface are
 plotted on the same graph.
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}
 and Sandrine Pavoine \email{pavoine@mnhn.fr}.}
 
 \note{This method can be used as a relative distance estimation

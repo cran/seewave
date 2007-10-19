@@ -31,8 +31,8 @@ fontlab = 1, collab = "black", colaxis = "black",...)
   \item{\dots}{other \code{\link{axis}} arguments.}
 }    
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
+\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function, based on \code{\link{filled.contour}} by Ross Ihaka,
 is not supposed to be used by itself but as a legend of \code{\link{spectro}}.\cr

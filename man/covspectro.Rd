@@ -17,13 +17,13 @@ ylab = "Normalised covariance (cov)", type = "l", ...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a first time wave.}
+  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a second time wave.}
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[Sound]{Sample}} object(s).}
+          \code{\link[sound]{Sample}} object(s).}
   \item{wl}{length of the window for the analysis
       (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -70,7 +70,7 @@ three components:
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{corspec}}, \code{\link{corenv}}, \code{\link{spectro}},
         \code{\link{cor}},}

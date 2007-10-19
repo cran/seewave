@@ -6,17 +6,19 @@
 
 \description{This function deletes all signal which amplitude is below a selected threshold.}
 
-\usage{afilter(wave, f, threshold = 5, plot = TRUE, ...)}
+\usage{afilter(wave, f, threshold = 5, plot = TRUE, Sample = FALSE,...)}
 
 \arguments{
   \item{wave}{data describing the time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{threshold}{amplitude threshold (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the new oscillogram
       (by default \code{TRUE}).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.      
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
@@ -25,10 +27,10 @@ The \code{threshold} value is in \% relative to the maximal value
 of \code{wave}. Signal inferior to this value is clipped. 
 }
 
-\value{If \code{plot} is \code{FALSE}, \code{afilter} returns a one column
-matrix with the new wave.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is used as an argument (\code{threshold}) in the 
 following functions: \code{\link{autoc}}, \code{\link{csh}},

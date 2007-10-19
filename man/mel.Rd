@@ -32,7 +32,7 @@ is therefore computed according to:\cr
 A scale for the measurement of psychological magnitude pitch.
 \emph{Journal of the Acoustical Society of America}, 8: 185-190.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The Mel scale is a perceptual scale of pitches judged by listeners

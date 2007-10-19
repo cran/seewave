@@ -55,7 +55,7 @@ plotted on the same graph. The index is the mean of this function.
 bioacoustic signals: avoiding perceptual pitfalls. \emph{Journal of the Acoustical
 Society of America}, 119: 645-653.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
 \code{\link{diffspec}}, \code{\link{diffenv}}}
