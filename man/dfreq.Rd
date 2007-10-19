@@ -15,10 +15,10 @@ ylim = c(0, f/2000), type ="l",...)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{length of the window for the analysis
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -39,7 +39,7 @@ If \code{plot} is \code{FALSE}, \code{dfreq} function returns a vector of
 numeric data corresponding to the dominant frequency along the time wave.
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
 

@@ -63,7 +63,7 @@ If \code{plot} is \code{FALSE}, \code{corspec} returns a list containing four
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
         \code{\link{covspectro}}, \code{\link{cor}}, \code{\link{cor.test}}.}

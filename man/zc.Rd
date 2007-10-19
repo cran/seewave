@@ -15,10 +15,10 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
   the time wave(by default \code{TRUE}).}
   \item{interpol}{interpolation factor.}
@@ -49,8 +49,8 @@ time process. Type argument of \code{plot} cannot be set to \dQuote{l}.}
 \references{Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998.
 \emph{Animal acoustic communication.} Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr},
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr} and 
+\author{Jérôme Sueur \email{sueur@mnhn.fr},
+Caroline Simonis \email{csimonis@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \examples{

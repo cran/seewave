@@ -26,7 +26,7 @@ and \emph{N} = number of envelope points.
 \value{A single value varying between 0 and 1 is returned.
 The value has no unit.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The temporal entropy of a noisy signal with many amplitude modulations

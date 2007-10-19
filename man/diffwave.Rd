@@ -14,13 +14,13 @@ diffwave(wave1, wave2, f, wl = 512, smooth = NULL)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a first time wave.}
+  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a second time wave.}
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[Sound]{Sample}} object(s).}
+          \code{\link[sound]{Sample}} object(s).}
   \item{wl}{window length for spectral analysis (even number of points).}  
   \item{smooth}{envelope smoothing by floating average.}
 }
@@ -40,7 +40,7 @@ The value has no unit.}
 
 \references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S., in preparation.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{This method can be used as a relative distance estimation
 between different waves.}

@@ -10,10 +10,10 @@
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the wave
   after removing the offset (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
@@ -24,7 +24,7 @@ If \code{plot} is \code{FALSE}, \code{rmoffset} returns a one-column matrix
 describing the new wave with the same sampling frequency as the original wave.
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}}
 

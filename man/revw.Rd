@@ -1,17 +1,12 @@
-\name{cutw}
+\name{revw}
 
-\alias{cutw}
+\alias{revw}
 
-\title{Cut a section of a time wave}
+\title{Time reverse of a time wave}
 
-\description{
-This function selects and cuts a section of data describing a time wave.
-Original and cut sections can be plotted as oscillograms for comparison. 
-}
+\description{Reverse the wave along the time axis.}
 
-\usage{
-cutw(wave, f, from, to, plot = FALSE, marks = TRUE, Sample = FALSE,...)
-}
+\usage{revw(wave, f, plot = FALSE, Sample = FALSE, ...)}
 
 \arguments{
   \item{wave}{data describing a time wave
@@ -19,18 +14,15 @@ cutw(wave, f, from, to, plot = FALSE, marks = TRUE, Sample = FALSE,...)
   with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{from}{start mark (in s).}
-  \item{to}{end mark (in s).}
-  \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original
-   and cut sections (by default \code{FALSE}).}
-  \item{marks}{logical, if \code{TRUE} shows the start and end mark on the plot (by default \code{TRUE}).}
+  \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of
+  the reversed wave (by default \code{FALSE}).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.  
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
-  }
+}
 
-\details{If \code{plot} is \code{TRUE} returns a two-frame plot with both 
-original and cut sections.}
+\details{If \code{plot} is \code{TRUE} returns an oscillogram of the reversed
+wave.}
 
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
@@ -42,12 +34,8 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 \code{\link{mute}}}
 
 \examples{
-# a 0.4 s section in a bird song
 data(tico)
-a<-cutw(tico,f=22050,from=0.5,to=0.9)
-oscillo(a,22050)
-# a direct way to see what has been cut
-cutw(tico,f=22050,from=0.5,to=0.9,plot=TRUE)
+revw(tico,f=22050,plot=TRUE)
 }
 
 \keyword{dplot}

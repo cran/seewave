@@ -17,10 +17,10 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), type ="l",...)
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{length of the window for the analysis (even number of points,
   by default = 512).}
   \item{fmin}{the minimum frequency to detect (in Hz).}  
@@ -47,7 +47,7 @@ to pause sections in the signal (see \code{threshold}).
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
+\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \seealso{\code{\link{ceps}}}

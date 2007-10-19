@@ -13,10 +13,10 @@ This functions estimates the difference between two time waves by computing thei
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{window length for spectral entropy analysis
     (even number of points). See \code{\link{sh}}.}
   \item{smooth}{envelope smoothing by floating average. See \code{\link{th}}.}
@@ -37,7 +37,7 @@ for implications on the results.
 
 \references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S., in preparation.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The  entropy of a noisy signal will tend towards 1 whereas

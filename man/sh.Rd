@@ -31,7 +31,7 @@ The value has no unit.}
 Spectral entropy: a new method for anesthetic adequacy.
 \emph{Revista Brasileira de Anestesiologia}, \bold{54}, 413-422.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The spectral entropy of a noisy signal will tend towards 1 whereas

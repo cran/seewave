@@ -9,7 +9,7 @@ This function generates a rectangle pulse.
 }
 
 \usage{
-pulse(dbefore, dpulse, dafter, f, plot = FALSE, ...)
+pulse(dbefore, dpulse, dafter, f, plot = FALSE, Sample =FALSE, ...)
 }
 
 \arguments{
@@ -19,14 +19,15 @@ pulse(dbefore, dpulse, dafter, f, plot = FALSE, ...)
   \item{f}{sampling frequency of the signal to be generated (in Hz)}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the 
   pulse generated (by default \code{FALSE}).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.
   \item{\dots}{other \code{\link{plot}} parameters.}
 }
 
-\value{
-Returns a one column matrix corresponding to the signal generated. 
-}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{synth}}, \code{\link{noise}}}
 

@@ -8,15 +8,17 @@
 section of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass
 or bandstop frequency filter).}
 
-\usage{fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
-wl = 512)}
+\usage{
+fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
+wl = 512, Sample= FALSE)
+}
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created generated a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object created generated a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
@@ -26,6 +28,8 @@ wl = 512)}
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
     \code{wl} is no more required. See examples.}
   \item{wl}{window length of the impulse filter (even number of points).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.  
 }
 
 \details{
@@ -34,16 +38,17 @@ This function is based on the reverse of the Fourier Transform
 wave to be filtered and the impulse filter.
 }
 
-\value{\code{fir} returns a one-column matrix describing the new wave.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \references{Stoddard, P. K. (1998). Application of Filters in Bioacoustics.
 \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{ffilter}},\code{\link{lfs}}, \code{\link{afilter}},
-\code{\link[signal]{fir1}}, \code{\link[Sound]{fir2}}}
+\code{\link[signal]{fir1}}, \code{\link[sound]{fir2}}}
 
 \examples{
 a<-noise(f=8000,d=1)

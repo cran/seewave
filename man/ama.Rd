@@ -16,10 +16,10 @@ ama(wave, f, wl = 512, plot = TRUE, type = "l", ...)
 
 \arguments{
   \item{wave}{data describing the time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{length of the window for the analysis (even number of points,
   by default = 512).}  
   \item{plot}{logical, if \code{TRUE} the spectrum of the envelope 
@@ -45,7 +45,7 @@ two elements:
   \item{peaks }{the peaks values (in kHz).}
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}}
 

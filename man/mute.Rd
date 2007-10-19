@@ -10,19 +10,21 @@ For a time wave describing a sound, this corresponds in muting the sound or a se
 }
 
 \usage{
-mute(wave, f, from = FALSE, to = FALSE, plot = TRUE, ...)
+mute(wave, f, from = FALSE, to = FALSE, plot = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
   \item{wave}{data describing the time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start of the silence section (in s).}
   \item{to}{end of the silence section (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot
       of \code{wave} with the new silence section (by default \code{TRUE}).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
@@ -31,12 +33,13 @@ By default, \code{from} and \code{from} are \code{FALSE},
 this results in completely muting \code{wave}.  
 }
 
-\value{New wave is returned as one-column matrix if \code{plot} is \code{FALSE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}},
-\code{\link{pastew}}, \code{\link{deletew}}, \code{\link{addsilw}}}
+\code{\link{pastew}}, \code{\link{deletew}}, \code{\link{revw}}, \code{\link{addsilw}}}
 
 \examples{
 data(tico)

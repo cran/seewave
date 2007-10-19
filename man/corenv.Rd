@@ -64,7 +64,7 @@ If \code{plot} is \code{FALSE}, \code{corenv} returns a list containing four
   \item{f}{the time offset corresponding to \code{rmax}.}
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{spec}},\code{\link{covspectro}},
         \code{\link{cor}}, \code{\link{cor.test}}.}

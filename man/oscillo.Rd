@@ -21,10 +21,10 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
@@ -75,8 +75,8 @@ points on the oscillogram.\cr
 } 
 
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
+\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{oscilloST}},\code{\link{cutw}}, \code{\link{pastew}},
 \code{\link{timer}}}

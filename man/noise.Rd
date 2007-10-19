@@ -9,24 +9,24 @@ This function generates noise.
 }
 
 \usage{
-noise(f, d)
+noise(f, d, Sample = FALSE)
 }
 
 \arguments{
   \item{f}{sampling frequency of the signal to be generated (in Hz)}
   \item{d}{duration of the signal to be generated}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.
 }
 
 \details{
 \code{noise} is based on \code{\link{runif}}
 }
 
-\value{
-Returns a one column matrix with random data (by default: mean = 0, sd = 1). 
-}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{synth}}, \code{\link{pulse}}}
 

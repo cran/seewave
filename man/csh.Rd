@@ -13,11 +13,11 @@ ylim = c(0, 1.1), type = "l", ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave or a \code{\link[Sound]{Sample}}
-    object generated loading a wav file with \code{\link[Sound]{loadSample}}
-    (package \pkg{Sound}).}
+  \item{wave}{data describing a time wave or a \code{\link[sound]{Sample}}
+    object generated loading a wav file with \code{\link[sound]{loadSample}}
+    (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -42,7 +42,7 @@ numeric data corresponding to the spectral entropy along the time wave.}
 Spectral entropy as speech features for speech recognition.
 \emph{Proceedings of PEECS}, pp. 60-65.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{The spectral entropy of a noisy signal will tend towards 1 whereas
 the spectral entropy of a pure tone signal will tend towards 0.}

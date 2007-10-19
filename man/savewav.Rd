@@ -21,18 +21,18 @@ filename = NULL)
 }
 
 \details{
-This functions uses two functions from the package \pkg{Sound}:
-\code{\link[Sound]{Sample}} and \code{\link[Sound]{saveSample}}
+This functions uses two functions from the package \pkg{sound}:
+\code{\link[sound]{Sample}} and \code{\link[sound]{saveSample}}
 }
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \note{The  file automatically owerwrites an existing file
 with the same name.
 }
 
-\seealso{\code{\link[Sound]{as.Sample}},
-\code{\link[Sound]{saveSample}}, \code{\link{export}}.}
+\seealso{\code{\link[sound]{as.Sample}},
+\code{\link[sound]{saveSample}}, \code{\link{export}}.}
 
 \examples{
 a<-synth(f=8000,d=2,cf=2000,plot=FALSE)

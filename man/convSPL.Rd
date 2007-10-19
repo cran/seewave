@@ -8,7 +8,6 @@
 This functions converts sound pressure level (in dB)
 in sound power (Watt), intensity (Watt/m2) and pressure (Pa). By default, these
 conversions are applied to air-borne sound.}
-}
 
 \usage{
 convSPL(x, d = 1, Iref = 10^-12, pref = 2*10^-5)
@@ -36,7 +35,7 @@ convSPL(x, d = 1, Iref = 10^-12, pref = 2*10^-5)
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
                 
 \note{
 \code{Iref} and \code{pref} correspond to a 1 kHz sound in air. 

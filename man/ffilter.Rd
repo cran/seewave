@@ -10,15 +10,15 @@ or bandstop frequency filter).}
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-wl = 512, wn = "hanning")
+wl = 512, wn = "hanning", Sample = FALSE)
 }
 
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object created generated a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object created generated a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
@@ -26,6 +26,8 @@ wl = 512, wn = "hanning")
     between \code{from} and  \code{to} (by default \code{TRUE}).}
   \item{wl}{window length for the analysis (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}}.  
 }
 
 \details{
@@ -37,11 +39,10 @@ There is therefore neither temporal modifications nor
 amplitude modifications.
 }
 
-\value{
-\code{fls} returns a one-column matrix describing the new wave.
-}
+\value{A new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
 

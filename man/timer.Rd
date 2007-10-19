@@ -12,10 +12,10 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 \arguments{
   \item{wave}{data describing a time wave
-  or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}).}
+  or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[Sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{smooth}{smoothes the envelope by averaging the number of points selected}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
@@ -35,7 +35,7 @@ If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
   \item{p}{duration of pause periods in seconds}
   \item{r}{ratio between the silence and periods}.
 }
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr}}
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}},  \code{\link{pastew}}.}
 \examples{
 data(tico)

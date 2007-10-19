@@ -19,14 +19,14 @@ bty = "l")
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a first time wave.
-  This can be also a 2 channels \code{\link[Sound]{Sample}} object.}
-  \item{wave2}{data or a \code{\link[Sound]{Sample}} object generated loading a wav file
-  with \code{\link[Sound]{loadSample}} (package \pkg{Sound}) describing a second time wave.}
+  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a first time wave.
+  This can be also a 2 channels \code{\link[sound]{Sample}} object.}
+  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a second time wave.}
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[Sound]{Sample}} object(s).}
+          \code{\link[sound]{Sample}} object(s).}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
@@ -59,8 +59,8 @@ Data are returned as two-column matrix if \code{plot} is \code{FALSE}.
 \code{identify} returns a numeric object with the time coordinate 
 of points successively chosen on the bottom oscillogram.}
 
-\author{Jérôme Sueur \email{sueur.jerome@neuf.fr} and 
-Caroline Simonis-Sueur \email{csimonis@mnhn.fr}.}
+\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{oscillo}}}
 
