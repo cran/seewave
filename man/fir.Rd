@@ -10,7 +10,7 @@ or bandstop frequency filter).}
 
 \usage{
 fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
-wl = 512, Sample= FALSE)
+wl = 512, wn = "hanning", Sample= FALSE)
 }
 
 \arguments{
@@ -28,6 +28,7 @@ wl = 512, Sample= FALSE)
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
     \code{wl} is no more required. See examples.}
   \item{wl}{window length of the impulse filter (even number of points).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.  
 }

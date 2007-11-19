@@ -5,8 +5,7 @@
 \title{Total entropy}
 
 \description{
-This functions estimates the difference between two time waves by computing their
-.
+This function estimates the total entropy of a time wave.
 }
 
 \usage{H(wave, f, wl = 512, smooth = NULL)}
