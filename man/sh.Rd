@@ -4,7 +4,7 @@
 
 \title{Spectral entropy}
 
-\description{Compute the entropy of a spectrum.}
+\description{This function computes the entropy of a frequency spectrum.}
 
 \usage{sh(spec)}
 
@@ -37,16 +37,15 @@ Spectral entropy: a new method for anesthetic adequacy.
 The spectral entropy of a noisy signal will tend towards 1 whereas
 the spectral entropy of a pure tone signal will tend towards 0.}
 
-\seealso{\code{\link{csh}}, \code{\link{spec}}, \code{\link{meanspec}},
-\code{\link{th}}, \code{\link{H}}}
+\seealso{\code{\link{csh}},\code{\link{th}}, \code{\link{H}}, \code{\link{sfm}}}
 
 \examples{
 a<-synth(f=8000,d=1,cf=2000,plot=FALSE)
-speca<-spec(a,f=8000,wl=512,at=0.5,plot=FALSE)
+speca<-spec(a,f=8000,at=0.5,plot=FALSE)
 sh(speca)
 # [1] 0.2336412
 b<-noise(d=1,f=8000)
-specb<-spec(b,f=8000,wl=512,at=0.5,plot=FALSE)
+specb<-spec(b,f=8000,at=0.5,plot=FALSE)
 sh(specb)
 # [1] 0.9740975
 }

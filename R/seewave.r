@@ -1389,65 +1389,81 @@ return(z5)
 #                                FIR                                    
 ################################################################################
 
-fir<-function(
-wave,
-f,
-from = FALSE,
-to = FALSE,
-bandpass = TRUE,
-custom = NULL,
-wl = 512,
-Sample = FALSE
-)
-
+field<-function(f,d)
 {
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+c<-wasp(f=f)$c
+k<-f/c
+kd<-k*d
+if(length(d)==1)
+  {
+  if(kd<0.1) decision<-as.character("You are probably in the near-field, see documentation")
+  if(kd>=0.1 & kd<1) decision<-as.character("You are probably at the limit between near-field and far-field, see documentation")
+  if(kd>=1) decision<-as.character("You are probably in the far-field, see documentation")
+  results<-list(kd=kd,d=decision)
+  }
+else results<-list(kd=kd)
+return(results)
+}
 
-if (from == FALSE) from<-0
-if (to == FALSE)   to<-f/2
-from<-round((from*wl)/f)
-to<-round((to*wl)/f)
 
-n<-nrow(wave)
+################################################################################
+#                                FIR                                    
+################################################################################
+
+fir<-function (wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
+    custom = NULL, wl = 512, wn = "hanning", Sample = FALSE)
+{
+# input
+if (class(wave) == "Sample") {
+    f <- wave$rate
+    wave <- as.matrix(wave$sound[1, ])
+    }
+
+# frequency limits of the filter
+if (from == FALSE) from <- 0
+if (to == FALSE) to <- f/2
+from <- round((from * wl)/f)
+to <- round((to * wl)/f)
+n <- nrow(wave)
 
 # frequency response of the filter
-if(is.null(custom)==FALSE)
-  {
-  if(bandpass == TRUE) {filtspec1<-c(custom,rev(custom))}
-  else {filtspec1<-1-c(custom,rev(custom))}
-  filtspec1<-filtspec1/max(filtspec1)
-  r<-n%/%(length(custom)*2)
-  }
+if (!is.null(custom))
+    {
+    if (bandpass == TRUE)  {filtspec1 <- c(custom, rev(custom))}
+    else                   {filtspec1 <- 1 - c(custom, rev(custom))}
+    filtspec1 <- filtspec1/max(filtspec1)
+    }
 else
-  {
-  filtspec1<-rep(1,wl/2)
-    if(bandpass == TRUE){filtspec1[-(from:to)]<-0}
-    else{filtspec1[from:to]<-0}
-  filtspec1<-c(filtspec1,rev(filtspec1))
-  r<-n%/%wl
-  }
+    {
+    filtspec1 <- rep(1, wl/2)
+    if (bandpass == TRUE)  {filtspec1[-(from:to)] <- 0}
+    else                   {filtspec1[from:to] <- 0}
+    filtspec1 <- c(filtspec1, rev(filtspec1))
+    }
 
-# impulse response of the filter
-pulse1<-Re(fft(filtspec1,inverse=TRUE)/length(filtspec1))
-pulse1<-pulse1/max(pulse1)
-n1<-length(pulse1)
-pulse2<-c(pulse1[(n1/2):n1],pulse1[-((n1/2):n1)])
-pulse3<-rep(pulse2,r)
-n3<-length(pulse3)
+# generation of filter pulse
+pulse1 <- Re(fft(filtspec1, inverse = TRUE)/length(filtspec1))
+pulse1 <- pulse1/max(pulse1)
+pulse2 <- c(pulse1[((wl/2)+1):wl], pulse1[-((wl/2+1):wl)])
 
-# zero padding at the beggining and the end
-zp<-(n-n3)%/%2
-if((n <- as.integer(n-n3)) %% 2 != 1) {pulse4<-c(rep(0,zp),pulse3,rep(0,zp))}
-else {pulse4<-c(rep(0,zp),pulse3,rep(0,zp+1))}
+# window shape
+W <- ftwindow(wl = wl, wn = wn)
 
-# convolution between the signal and the filter impulse
-wave2<-convolve(wave[,1],pulse4)
-wave3<-(wave2/max(wave2)); rm(wave2)
-wave4<-wave3-mean(wave3); rm(wave3)
-wave5<-as.matrix(wave4); rm(wave4)
-if (Sample == TRUE){wave5<-as.Sample(as.numeric(wave5), rate=f, bits=16)}
-return(wave5)
+# filter by convolution between the signal and pulse
+wave2<-convolve(wave[,1],pulse2*W,type="filter")
+
+# adds 0s before and after the signal to compensate for the reduction of wave length
+wave2<-c(rep(0,wl%/%2),wave2,rep(0,wl%/%2-1))
+
+# delete any potential offset
+wave2<-wave2-mean(wave2)
+
+# output format
+if (Sample == TRUE) {wave3 <- as.Sample(wave2, rate = f, bits = 16)}
+else wave3<-as.matrix(wave2)
+return(wave3)
 }
+
 
 
 ################################################################################
@@ -1569,16 +1585,17 @@ if (from|to)
   if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
   if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
   else {a<-round(from*f); b<-round(to*f)}
-  wave<-as.matrix(wave[a:b,])
+  wave<-as.matrix(wave[a:b,])/(2*max(wave))
   wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)
   }
 
 else
   {
-  if (class(wave)=="matrix")     {wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)}
-  if (class(wave)=="data.frame") {wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)}
+  if (class(wave)=="matrix")     {wave<-as.Sample(as.numeric(wave[,1]/(2*max(wave))), rate=f, bits=16)}
+  if (class(wave)=="data.frame") {wave<-as.Sample(as.numeric(wave[,1]/(2*max(wave))), rate=f, bits=16)}
   }
 play(wave)
+
 }
 
 
@@ -2499,6 +2516,28 @@ else
 
 
 ################################################################################
+#                               SFM                                        
+################################################################################
+
+sfm<-function(spec)
+
+{
+if(any(spec<0)) stop("Data do not have to be in dB")
+if(sum(spec)==0) flat<-NA 
+else
+  {ifelse(spec==0,yes=1e-5,no=spec)
+  # PFM multiplied by 10 to avoid values between 0 and 1 that will make gm=0
+  spec<-spec/sum(spec)*100
+  n<-length(spec)
+  geo<-prod(spec)^(1/n)
+  ari<-mean(spec)
+  flat<-geo/ari
+  }
+return(flat)
+}
+
+
+################################################################################
 #                               SH                                        
 ################################################################################
 
@@ -2785,6 +2824,120 @@ if(plot == FALSE)
 }
 
 
+################################################################################
+#                                SPECPROP                                       
+################################################################################
+
+specprop<-function(spec,f,str=FALSE,plot=FALSE,type="l",...)
+{
+L<-length(spec)
+wl<-L*2
+if(any(spec<0)) stop("The frequency spectrum to be analysed does not have to be in dB")
+if(f/wl<0.5) stop("Frequency resolution is to high (<0.5 hz)")
+
+# to get all spectrum values >1 
+# it is necessary to multiply the PMF spectrum by a factor of 10
+s<-spec/sum(spec)
+MS<-min(s) 
+if(diff(range(s))<0.01)
+    {
+    if(1e-2<MS & MS<1e-1) S<-round(s*1e5)
+    if(1e-3<MS & MS<1e-2) S<-round(s*1e6)
+    if(1e-4<MS & MS<1e-3) S<-round(s*1e7)
+    if(1e-5<MS & MS<1e-4) S<-round(s*1e8)
+    if(1e-6<MS & MS<1e-5) S<-round(s*1e9)
+    if(1e-7<MS & MS<1e-6) S<-round(s*1e10)
+    if(1e-8<MS & MS<1e-7) S<-round(s*1e12)
+    }
+else
+    {
+    if(1e-2<MS & MS<1e-1) S<-round(s*1e2)
+    if(1e-3<MS & MS<1e-2) S<-round(s*1e3)
+    if(1e-4<MS & MS<1e-3) S<-round(s*1e4)
+    if(1e-5<MS & MS<1e-4) S<-round(s*1e5)
+    if(1e-6<MS & MS<1e-5) S<-round(s*1e6)
+    if(1e-7<MS & MS<1e-6) S<-round(s*1e7)
+    if(1e-8<MS & MS<1e-7) S<-round(s*1e8)
+    }
+
+
+# generate the frequency vector in Hz to avoid values <1
+X<-round(seq(from=f/wl,to=f/2,length.out=L))
+
+# generate the variable from the distribution function
+V<-numeric(sum(S))
+V[1:S[1]]<-rep(X[1],S[1])
+for (i in 2:L) V[(cumsum(S[1:(i-1)])[i-1]+1):(cumsum(S[1:i])[i])]<-rep(X[i],S[i])
+
+
+# descriptive statistics computation in Hz
+mean<-mean(V)
+sd<-sd(V)
+sem<-sd/sqrt(L)                          # standard error of the mean
+median<-median(V)
+mad<-mad(V)
+mode<-X[which.max(S)]                   # dominant frequency
+Q25<-quantile(V, names = FALSE)[2]
+Q75<-quantile(V, names = FALSE)[4]
+IQR<-IQR(V)
+cent<-sum(X*s)                          # centroid
+z<-sum(s-mean(s)) ; w<-sd(s)
+skew<-(sum((s-mean(s))^3)/(L-1))/w^3    # skewness
+kurt<-(sum((s-mean(s))^4)/(L-1))/w^4    # kurtosis
+sfm<-sfm(s)                             # spectral flatness measure
+sh<-sh(s)                               # spectral entropy
+prec<-f/wl                              # frequency precision 
+
+# plot
+if(plot==1)
+  {
+  par(mar=c(5,5,4,2)+0.1)
+  plot(x=X/1000,y=s,type=type,
+  xlab="Frequency (kHz)", xaxs="i",
+  ylab="",yaxs="i",
+  las=1,
+  ...)
+  mtext("Probability",side=2,line=4)
+  segments(x0=mode/1000, y0=0, x1=mode/1000, y1=s[which(X==mode)], col=4)
+  segments(x0=median/1000, y0=0, x1=median/1000, y1=s[which(X==median)], col=2)
+  segments(x0=Q25/1000, y0=0, x1=Q25/1000, y1=s[which(X==Q25)], col=2, lty=2)
+  segments(x0=Q75/1000, y0=0, x1=Q75/1000, y1=s[which(X==Q75)], col=2, lty=3)
+  legend("topright", legend=c("Q25","median","Q75","mode"),col=c(2,2,2,4),
+        lty=c(2,1,3,1),bty="n")
+  }
+  
+if(plot==2)
+  {
+  C<-cumsum(s)
+  plot(x=X/1000,y=C,type=type,
+  xlab="Frequency (kHz)", xaxs="i",
+  ylab="Cumulative probability",yaxs="i",
+  las=1,
+  ...)
+  segments(x0=mode/1000, y0=0, x1=mode/1000, y1=C[which(X==mode)], col=4)
+  segments(x0=0, y0=C[which(X==mode)], x1=mode/1000, y1=C[which(X==mode)], col=4)
+  segments(x0=median/1000, y0=0, x1=median/1000, y1=max(C)/2, col=2)
+  segments(x0=0, y0=max(C)/2, x1=median/1000, y1=max(C)/2, col=2)
+  segments(x0=Q25/1000, y0=0, x1=Q25/1000, y1=max(C)/4, col=2, lty=2)
+  segments(x0=0, y0=max(C)/4, x1=Q25/1000, y1=max(C)/4, col=2, lty=2)
+  segments(x0=Q75/1000, y0=0, x1=Q75/1000, y1=max(C)*3/4, col=2, lty=3)
+  segments(x0=0, y0=max(C)*3/4, x1=Q75/1000, y1=max(C)*3/4, col=2,lty=3)
+  legend("bottomright", legend=c("Q25","median","Q75","mode"),col=c(2,2,2,4),
+        lty=c(2,1,3,1),bty="n")
+  }
+
+if(plot==FALSE)
+  {
+  results<-list(mean=mean,sd=sd,sem=sem,median=median,mad=mad,mode=mode,
+                Q25=Q25,Q75=Q75,IQR=IQR,
+                cent=cent,skewness=skew,kurtosis=kurt,
+                sfm=sfm,sh=sh,
+                prec=prec)
+  if(str==TRUE) str(results,digits.d=5,give.head=FALSE) else return(results)
+  }
+}
+
+                    
 ################################################################################
 #                                SPECTRO                                        
 ################################################################################
@@ -3263,6 +3416,74 @@ else
   return(timer)
   }
   
+}
+
+
+
+################################################################################
+#                                WASP                                        
+################################################################################
+
+wasp<-function(
+f,
+t = 20,
+c = NULL,
+s = NULL,
+d = NULL,
+medium = "air")
+
+{
+if(medium == "air")
+  {
+  if (!is.null(d)) stop("Depth (d) is not a valuable argument for air medium")
+  if (!is.null(s)) stop("Salinity (s) is not a valuable argument for air medium")
+  if (!is.null(c)) C<-c
+  else C<-331.4+0.6*t
+  }
+  
+if(medium == "sea")
+  {
+  if(!is.null(c)) C<-c
+  if(is.null(s))  stop("Please specify a salinity value (parts per thousand) for sea medium")
+  if(is.null(d))  stop("Please specify a depth value (m) for sea medium")
+  else 
+    {
+    C<-1448.96+4.591*t-(5.304e-2)*t^2+(2.374e-4)*t^3+1.34*(s-35)+(1.63e-2)*d+(1.675e-7)*d^2-(1.025e-2)*t*(s-35)-(7.139e-13)*t*d^3
+    }  
+  }
+  
+if(medium == "fresh")
+  {
+  if (!is.null(c)) C<-c
+  if (!is.null(d)) stop("Depth (d) is not a valuable argument for freshwater medium")
+  if (!is.null(s)) stop("Salinity (s) is not a valuable argument for freshwater medium")
+  else 
+    {
+    C<-1.402385e3+5.038813*t-(5.799136e-2)*t^2+(3.287156e-4)*t^3-(1.398845e-6)*t^4+(2.787860e-9)*t^5
+    }
+  }
+
+lambda<-C/f  
+results<-list(l=lambda,c=C)
+return(results)
+}
+
+
+################################################################################
+#                                ZAPSILW                                        
+################################################################################
+
+zapsilw<-function(wave,f,threshold=5,plot=TRUE,Sample=FALSE,...)
+{
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+wave1<-afilter(wave,f=f,threshold=threshold,plot=FALSE)
+wave2<-as.matrix(wave1[wave1!=0])
+if (plot == TRUE) oscillo(wave=wave2, f=f,...)
+else
+    {
+    if (Sample == TRUE){wave2<-as.Sample(as.numeric(wave2), rate=f, bits=16)}
+    return(wave2)
+    }
 }
 
 
