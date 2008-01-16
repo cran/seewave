@@ -47,7 +47,7 @@ sh(speca)
 b<-noise(d=1,f=8000)
 specb<-spec(b,f=8000,at=0.5,plot=FALSE)
 sh(specb)
-# [1] 0.9740975
+# close to 1
 }
 
 \keyword{ts}

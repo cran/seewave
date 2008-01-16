@@ -1,1 +1,3 @@
-pellucens <- read.table("pellucens.txt", skip=1)
+library(sound)
+pellucens<-loadSample("pellucens.wav")
+pellucens<-as.matrix(pellucens$sound[1,])

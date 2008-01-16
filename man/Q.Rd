@@ -9,15 +9,19 @@ This function estimates the frequency pureness of a time wave by returning the r
 quality factor Q at a specific dB level.}
 
 \usage{
-Q(x, range, level = -3, plot = TRUE, colval = "red",
+Q(spec, f = NULL, level = -3, plot = TRUE, colval = "red",
 cexval = 1, fontval = 1, flab = "Frequency (kHz)",
 alab = "Relative amplitude (dB)", type = "l", ...)
 }
 
 \arguments{
-  \item{x}{a data set resulting of a spectral analysis obtained
-    with \code{\link{spec}}, or \code{\link{meanspec}} (in dB).}
-  \item{range}{range of \code{x} (in kHz).}
+  \item{spec}{a data set resulting of a spectral analysis obtained
+    with \code{\link{spec}}, or \code{\link{meanspec}} (in dB).
+    This can be either a two-column matrix (col1 = frequency, col2 = amplitude)
+    or a vector (amplitude).}
+  \item{f}{sampling frequency of the wave used to obtain \code{spec}
+      (in Hz). Not necessary if \code{spec} is a two columns matrix obtained
+      with \code{\link{spec}} or \code{\link{meanspec}}.}
   \item{level}{frequency bandwidth set by an amplitude value relative
       to \code{spectrum} (in dB).}
   \item{plot}{logical, if \code{TRUE} returns the spectrum 
@@ -46,22 +50,22 @@ alab = "Relative amplitude (dB)", type = "l", ...)
 \examples{
 # bird song
 data(tico)
-t<-spec(tico,f=22050,wl=512,at=1.1,plot=FALSE,dB=TRUE)
+t<-spec(tico,f=22050,at=1.1,plot=FALSE,dB=TRUE)
 op<-par(mfrow=c(2,1),las=1)
-Q(t,range=c(0,11.025),type="l")
-Q(t,range=c(0,11.025),type="l",xlim=c(3.8,4.2),ylim=c(-60,0))
+Q(t,type="l")
+Q(t,type="l",xlim=c(3.8,4.2),ylim=c(-60,0))
 title("zoom in")
 par(op)
 # cricket, changing the dB level
 data(pellucens)
-p<-spec(pellucens,f=11025,wl=512,at=0.5,plot=FALSE,dB=TRUE)
+p<-spec(pellucens,f=11025,at=0.5,plot=FALSE,dB=TRUE)
 op<-par(mfrow=c(3,1))
-Q(p,range=c(0,11.25/2),type="l",xlim=c(1.8,2.6),ylim=c(-70,0))
+Q(p,type="l",xlim=c(1.8,2.6),ylim=c(-70,0))
 title("level = - 3 (default value)",col.main="red")
-Q(p,range=c(0,11.25/2),type="l",level=-6,
+Q(p,type="l",level=-6,
     xlim=c(1.8,2.6),ylim=c(-70,0),colval="blue")
 title("level = - 6",col.main="blue")
-Q(p,range=c(0,11.25/2),type="l",level=-9,
+Q(p,type="l",level=-9,
     xlim=c(1.8,2.6),ylim=c(-70,0),colval="green")
 title("level = - 9",col.main="green")
 par(op)

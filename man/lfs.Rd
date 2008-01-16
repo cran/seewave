@@ -8,7 +8,7 @@
 This function linearly shifts all the frequency content of a time wave. 
 }
 
-\usage{lfs(wave, f, shift, wl = 512, wn = "hanning", Sample = FALSE)}
+\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", Sample = FALSE)}
 
 \arguments{
   \item{wave}{data describing a time wave

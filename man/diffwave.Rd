@@ -51,7 +51,7 @@ between different waves.}
 data(tico)
 data(orni)
 # selection in tico to have two waves of similar duration (length)
-tico<-as.matrix(tico[1:15842,1])
+tico<-as.matrix(tico[1:nrow(orni),1])
 diffwave(tico,orni,f=22050)
 # [1] 0.4027229
 # changing the frequency parameter (wl)

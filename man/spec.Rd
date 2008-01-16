@@ -31,7 +31,7 @@ alab = "Amplitude", flim = c(0, f/2000),alim = NULL, type="l",...)
       \emph{i. e.} the square of the spectra.}  
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
       \emph{i. e.} the probability distribution of frequencie.}    
-  \item{dB}{logical, if \code{TRUE} return the spectrum in dB 
+  \item{dB}{logical, if \code{TRUE} returns the spectrum in dB 
       (by default \code{FALSE}).}
   \item{at}{position where to compute the spectrum (in s).}
   \item{from}{start mark where  to compute the spectrum (in s).}
@@ -63,15 +63,16 @@ When using \code{identify}, press \sQuote{stop} tools bar button to return value
 }
 
 \value{
-This function returns a vector of numeric data corresponding to the computed
-spectrum.\cr 
+This function returns  a two-column matrix,
+the first column corresponding to the frequency axis, the second column
+corresponding to the amplitude axis.\cr 
 If \code{identify} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
 If \code{peaks} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
-  \item{spec}{the spectrum computed}\cr 
+  \item{spec}{the spectrum computed} of length \code{wl}/2, \cr 
   \item{peaks }{the peaks value (in kHz).}
 }
 
@@ -80,7 +81,8 @@ Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}.}
 
 \note{This function is based on \code{\link{fft}}.} 
 
-\seealso{\code{\link{meanspec}}, \code{\link{corspec}}, \code{\link{fft}}.}
+\seealso{\code{\link{meanspec}}, \code{\link{dynspec}}, 
+\code{\link{corspec}}, \code{\link{fft}}.}
 
 \examples{
 data(tico)
@@ -108,9 +110,9 @@ a<-spec(tico,f=22050,wl=512,at=0.2,plot=FALSE)
 b<-spec(tico,f=22050,wl=512,at=0.7,plot=FALSE)
 c<-spec(tico,f=22050,wl=512,at=1.1,plot=FALSE)
 d<-spec(tico,f=22050,wl=512,at=1.6,plot=FALSE)
-all<-cbind(a,b,c,d)
-matplot(x=seq(0,11.025,length.out=nrow(all)),y=all,yaxt="n",
-    xlab="Frequency (kHz)",ylab="Amplitude",xaxs="i")
+all<-cbind(a[,2],b[,2],c[,2],d[,2])
+matplot(x=a[,1],y=all,yaxt="n",
+    xlab="Frequency (kHz)",ylab="Amplitude",xaxs="i",type="l")
 legend(8,0.8,c("Note A","Note B", "Note C", "Note D"),bty="o",
     lty=c(1:4),col=c(1:4))
 # spectrum from a particular position to another one

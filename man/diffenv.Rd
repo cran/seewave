@@ -10,7 +10,7 @@ two amplitude envelopes.}
 \usage{
 diffenv(wave1, wave2, f, smooth = NULL, plot = FALSE,
 lty1 = 1, lty2 = 2, col1 = 2, col2 = 4, cold = 8, xlab = "Time (s)",
-ylab = "Amplitude",...)
+ylab = "Amplitude", ylim = NULL, legend = TRUE, ...)
 }
 
 \arguments{
@@ -31,6 +31,8 @@ ylab = "Amplitude",...)
   \item{cold}{colour of the surface difference.}
   \item{xlab}{title of the time axis.}
   \item{ylab}{title of the amplitude axis.}
+  \item{ylim}{range of amplitude axis.}
+  \item{legend}{logical, if \code{TRUE} adds a legend to the plot.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -58,13 +60,13 @@ between different envelopes.}
 \examples{
 data(tico)
 data(orni)
-# selection in tico to have two waves of similar duration (length)
-tico<-as.matrix(tico[1:15842,1])
-diffenv(tico,orni,f=22050,plot=TRUE)
-# [1] 0.7362514
+# selection in tico to have two waves of similar duration (dim)
+tico2<-as.matrix(tico[1:nrow(orni),1])
+diffenv(tico2,orni,f=22050,plot=TRUE)
+# [1] 0.7364
 # smoothing the envelope gives a better graph but changes the result
-diffenv(tico,orni,f=22050,smooth=20,plot=TRUE)
-# [1] 0.6871243
+diffenv(tico2,orni,f=22050,smooth=20,plot=TRUE)
+# [1] 0.6873974
 # smoothing can have actually dramatic effects
 # so always use the same smooth settings for comparisons
 a<-synth(d=0.5,f=8000,cf=1000,plot=FALSE)

@@ -1,1 +1,3 @@
-peewit <- read.table("peewit.txt", skip=1)
+library(sound)
+peewit<-loadSample("peewit.wav")
+peewit<-as.matrix(peewit$sound[1,])

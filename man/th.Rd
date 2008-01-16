@@ -48,7 +48,7 @@ envorniS<-oscillo(orni,f=22050,env=TRUE,smooth=50,plot=FALSE)
 th(envorniS)
 # [1] 0.8515566
 # If we mute a part of the cicada song, the temporal entropy decreases
-orni2<-mute(orni,f=22050,from=0.3,to=0.55,plot=FALSE)
+orni2<-mutew(orni,f=22050,from=0.3,to=0.55,plot=FALSE)
 envorni2<-oscillo(orni2,f=22050,env=TRUE,plot=FALSE)
 th(envorni2)
 # [1] 0.837402

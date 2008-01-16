@@ -14,7 +14,7 @@ An amplitude contour plot can be overlaid.}
 ccoh(wave1, wave2, f, wl = 512, ovlp = 0, plot = TRUE,
 grid = TRUE, scale = TRUE, cont = FALSE,
 collevels = seq(0, 1, 0.01), palette = rev.heat.colors,
-contlevels = seq(0, 1, 0.01), colcont = "black", colgrid = "black",
+contlevels = seq(0, 1, 0.01), colcont = "black", colbg="white", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Coherence",
@@ -49,6 +49,7 @@ flim = NULL, flimd = NULL,
   \item{contlevels}{a set of levels which are used to partition
       the amplitude range for contour overplot (in dB).}
   \item{colcont}{colour for \code{cont} plotting.}
+  \item{colbg}{background colour.}
   \item{colgrid}{colour for \code{grid} plotting.}
   \item{colaxis}{color of the axes.}
   \item{collab}{color of the labels.}  

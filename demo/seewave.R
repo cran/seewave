@@ -1,4 +1,4 @@
-require(seewave); data(tico); data(orni); data(pellucens); data(alauda)
+require(seewave); data(tico); data(orni); data(pellucens)
 
 op1<-par(ask=TRUE)
 
@@ -36,17 +36,14 @@ par(op)
 spectro(tico,f=22050,wl=512,ovlp=50,zp=16,collevels=seq(-40,0,0.5))
 
 # spectrogram and dominant frequency overlaid of a bird song
-spectro(alauda,f=22050,wl=512,ovlp=75,zp=8,palette=rev.gray.colors.1,scale=FALSE)
-par(new=TRUE,las=1)
-dfreq(alauda,f=22050,wl=512,ovlp=50,threshold=6,type="l",col="red",lwd=2,
-    ann=FALSE,xaxs="i",yaxs="i")
+spectro(tico, f=22050, ovlp=50, palette=rev.gray.colors.2, scale=FALSE)
+par(new=T)
+dfreq(tico, f=22050, ovlp=50, threshold=6, col="red", ann=FALSE, xaxs="i", yaxs="i")
 
 # 2D spectrogram of a cricket song with colour modifications
-op<-par(bg="black",col="white")
-pellu2<-cutw(pellucens,f=22050,from=1,to=nrow(pellucens)/22050,plot=FALSE)
+pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
 spectro(pellu2,f=22050,wl=512,ovlp=85,collevels=seq(-25,0,1),osc=TRUE,palette=rev.heat.colors,
-colgrid="white", colwave="white",colaxis="white",collab="white")
-par(op)
+colgrid="white", colwave="white",colaxis="white",collab="white", colbg="black")
 
 # sound synthesis
 F1<-synth(f=22050,am=c(50,10),cf=2000,d=1,fm=c(500,5,0),plot=FALSE)

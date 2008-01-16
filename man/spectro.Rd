@@ -13,12 +13,12 @@ An amplitude contour plot can be overlaid.}
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0, ovlp = 0, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = seq(-30, 0, 1), palette = spectro.colors,
-contlevels = seq(-30, 0, 10), colcont = "black", colgrid = "black",
+contlevels = seq(-30, 0, 10), colcont = "black", colbg = "white", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
 scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE, tlim = NULL,
-flim = NULL, flimd = NULL, play=FALSE,
+flim = NULL, flimd = NULL, listen=FALSE,
 ...)
 }
 
@@ -50,6 +50,7 @@ flim = NULL, flimd = NULL, play=FALSE,
   \item{contlevels}{a set of levels which are used to partition
       the amplitude range for contour overplot (in dB).}
   \item{colcont}{colour for \code{cont} plotting.}
+  \item{colbg}{background colour.}
   \item{colgrid}{colour for \code{grid} plotting.}
   \item{colaxis}{color of the axes.}
   \item{collab}{color of the labels.}  
@@ -63,9 +64,7 @@ flim = NULL, flimd = NULL, play=FALSE,
   \item{flim}{modifications of the frequency Y-axis limits.} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
       and \code{ovlp} arguments are applied to increase time/frequency resolution.}    
-  \item{play}{if \code{TRUE} the new sound is played back
-      using \code{\link[Sound]{play}} from the package \pkg{Sound}
-      (by default \code{FALSE}).}
+  \item{listen}{if \code{TRUE} the sound is played back (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }
@@ -91,7 +90,7 @@ Use \code{\link{locator}} to identify  points.
 
 \value{
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
-corresponds to a Fourier transform of length \code{wl}.}
+corresponds to a Fourier transform of length \code{wl}/2.}
 
 \references{
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
@@ -103,13 +102,12 @@ Caroline Simonis \email{csimonis@mnhn.fr}.}
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
 \code{\link{filled.contour}}}
 
-\seealso{\code{\link{spectro3D}}, \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
+\seealso{\code{\link{spectro3D}}, \code{\link{dynspec}}, 
+\code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{
 data(tico)
-data(peewit)
 data(pellucens)
-data(alauda)
 # simple plots
 spectro(tico,f=22050)
 spectro(tico,f=22050,osc=TRUE)
@@ -126,13 +124,6 @@ title("wl = 1024")
 spectro(tico,f=22050,wl=4096,scale=FALSE)
 title("wl = 4096")
 par(op)
-# manipulating ovlp
-op<-par(mfrow=c(2,1))
-spectro(alauda,f=22050,scale=FALSE)
-title("ovlp = 0")
-spectro(alauda,f=22050,ovlp=95,scale=FALSE)
-title("ovlp = 95")
-par(op)
 # vertical zoom using flim
 spectro(tico,f=22050, ylim=c(2,6))
 spectro(tico,f=22050, ylimd=c(2,6))
@@ -147,10 +138,8 @@ spectro(pellu2,f=22050,ovlp=85,zp=16,
 # colour modifications
 spectro(pellu2,f=22050,ovlp=85,zp=16,
 palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
-op<-par(bg="black",col="white")
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
-colgrid="white", colwave="white",colaxis="white",collab="white")
-par(op)
+colbg="black",colgrid="white", colwave="white",colaxis="white",collab="white")
 }
 
 \keyword{dplot}

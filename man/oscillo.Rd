@@ -13,9 +13,9 @@ multi-frame plot. The envelope of the wave can also be shown.
 oscillo(wave, f, from = FALSE, to = FALSE, zoom = FALSE,
 k=1, j=1, labels = TRUE, byrow = TRUE, env = FALSE, smooth = NULL,
 ksmooth = NULL, identify = FALSE, plot = TRUE, colwave = "black", 
-colbg = "white", coltitle = "black", collab = "black", 
+colbg = "white", coltitle = "black", cextitle = 1.2, fonttitle = 2, collab = "black",
 cexlab = 1, fontlab = 1, colline = "black", 
-colaxis = "black", coly0 = "grey47",
+colaxis = "black", coly0 = "lightgrey",
 title = FALSE, xaxt="s", yaxt="n", bty = "l")
 }
 
@@ -46,14 +46,18 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
   \item{colwave}{colour of the oscillogram or of the envelope.}
   \item{colbg}{background colour.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
+  \item{cextitle}{character size for the title.}
+  \item{fonttitle}{font for the title.}
   \item{cexlab}{character size for axes title.}
   \item{fontlab}{font for axes title.}
   \item{collab}{colour of axes title.}  
   \item{colline}{colour of axes line.}
   \item{colaxis}{colour of the axes.}
   \item{coly0}{colour of the y=0 line.}
-  \item{title}{logical, if \code{TRUE} plots the title 
-      with information on time and \code{f} (by default \code{FALSE}).}
+  \item{title}{\code{TRUE} to add a title
+      with information on \code{wave} duration and \code{f},
+      \code{FALSE} to live it blanck,
+      or a character string to add any desired title.}
   \item{xaxt}{equivalent to \code{xaxt} of \code{\link{par}} (by default =\code{"s"}).}    
   \item{yaxt}{equivalent to \code{yaxt} of \code{\link{par}} (by default =\code{"n"}).}    
   \item{bty}{the type of box to be drawn around the oscillogram.} 
@@ -118,8 +122,7 @@ oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",colbg="grey",
     colaxis="blue",coly0="grey50")
 # change the title
 data(orni)
-oscillo(orni,f=22050,title=FALSE)
-mtext("The song of a famous cicada",side=3,line=2,font=2,col="red",cex=1.5)
+oscillo(orni,f=22050,title="The song of a famous cicada")
 }
 
 \keyword{dplot}

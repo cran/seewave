@@ -86,9 +86,9 @@ wasp(f=1000,c=1497)$l
 op<-par(bg="lightgrey")
 a<-seq(1000,20000,by=100) ; na<-length(a)
 b<-seq(-20,40,by=10) ; nb<-length(b)
-c<-matrix(numeric(na*nb),nrow=na)
-for(i in b) {c[,which(b==i)]<-wasp(a,t=i)$l}
-matplot(x=a,y=c,type="l",lty=1,col= spectro.colors(nb),
+res<-matrix(numeric(na*nb),nrow=na)
+for(i in 1:nb) res[,i]<-wasp(a,t=b[i])$l
+matplot(x=a,y=res,type="l",lty=1,col= spectro.colors(nb),
   xlab="Frequency (Hz)",ylab="Wavelength (m)")
 title("Wavelength of air-borne sound at different temperatures")
 legend(x=15000,y=0.3,c("-20°C","-10°C","0°C","10°C","20°C","30°C","40°C"),

@@ -1,1 +1,3 @@
-orni <- read.table("orni.txt", skip=1)
+library(sound)
+orni<-loadSample("orni.wav")
+orni<-as.matrix(orni$sound[1,])

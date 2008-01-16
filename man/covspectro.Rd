@@ -53,7 +53,7 @@ the spectrogram of \code{wave2} are computed when regularly sliding
 forward and backward \code{wave2} along \code{wave1}.\cr
 The maximal covariance is obtained at a particular shift (time offset). 
 This shift may be positive or negative.\cr 
-\code{n} sets in how many steps \code{wave2}will be slided along \code{wave1}.
+\code{n} sets in how many steps \code{wave2} will be slided along \code{wave1}.
 Time process can be then decreased by setting low \code{n} value.\cr
 Inverting \code{wave1} and \code{wave2} may give slight different results.
 }
@@ -76,11 +76,11 @@ communication}. Springer, Berlin, Heidelberg.}
         \code{\link{cor}},}
 
 \examples{
-# covariance between two echemes of a cicada calling song
-data(orni)
-orni1<-cutw(orni,f=22050,from=0,to=0.1,plot=FALSE)
-orni2<-cutw(orni,f=22050,from=0.15,to=0.25,plot=FALSE)
-covspectro(orni1,orni2,f=22050,n=37)
+# covariance between two notes of a birdsong
+data(tico)
+note1<-cutw(tico, f=22050, from=0.5, to=0.9)
+note2<-cutw(tico, f=22050, from=0.9, to=1.3)
+covspectro(note1,note2,f=22050,n=37)
 }
 
 \keyword{dplot}

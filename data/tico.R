@@ -1,1 +1,3 @@
-tico <- read.table("tico.txt", skip=1)
+library(sound)
+tico<-loadSample("tico.wav")
+tico<-as.matrix(tico$sound[1,])

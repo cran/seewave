@@ -40,8 +40,8 @@ signals of a system.
 }
 
 \value{
-If \code{plot} is \code{FALSE}, this function returns a one-column matrix
-corresponding to the coherence.}
+If \code{plot} is \code{FALSE}, this function returns a two-column matrix, the
+first column being the frequency axis and the second column being the coherence.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr} but this function
 is based on \code{\link{spec.pgram}}
@@ -55,7 +55,7 @@ by Martyn Plummer, Adrian Trapletti and B.D. Ripley.}
 \examples{
 wave1<-synth(d=1,f=4000,cf=500)
 wave2<-synth(d=1,f=4000,cf=800)
-ccoh(wave1,wave2,f=4000)
+coh(wave1,wave2,f=4000)
 }
 
 \keyword{dplot}

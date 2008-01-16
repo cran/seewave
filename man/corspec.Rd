@@ -10,7 +10,7 @@ their maximal correlation and the frequency shift related to it.
 }
 
 \usage{
-corspec(spec1, spec2, f, plot = TRUE, plotval = TRUE,
+corspec(spec1, spec2, f = NULL, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Frequency (kHz)",
 ylab = "Coefficient of correlation (r)", type="l",...)
@@ -18,11 +18,16 @@ ylab = "Coefficient of correlation (r)", type="l",...)
 
 \arguments{
   \item{spec1}{a first data set resulting of a spectral analysis obtained
-      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
-  \item{spec2}{a second data set resulting of a spectral analysis obtained
-      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
+      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB). This
+      can be either a two-column matrix (col1 = frequency, col2 = amplitude)
+      or a vector (amplitude).}
+  \item{spec2}{a first data set resulting of a spectral analysis obtained
+      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB). This
+      can be either a two-column matrix (col1 = frequency, col2 = amplitude)
+      or a vector (amplitude).}
   \item{f}{sampling frequency of waves used to obtain \code{spec1}
-      and \code{spec2} (in Hz).}
+      and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
+      is a two columns matrix obtained with \code{\link{spec}} or \code{\link{meanspec}}.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value
   and frequency offset (by default \code{TRUE}).}  
@@ -53,7 +58,9 @@ Inverting \code{spec1} and \code{spec2} may give slight different results, see e
 \value{
 If \code{plot} is \code{FALSE}, \code{corspec} returns a list containing four
      components:
-  \item{r}{the successive correlation values between \code{spec1} and \code{spec2}.}
+  \item{r}{a two-column matrix, the first colum corresponding to the frequency
+  shift (frequency x-axis) and the second column corresponding to the successive
+  r correlation values between \code{spec1} and \code{spec2} (correlation y-axis).}
   \item{rmax}{the maximum correlation value between \code{spec1} and \code{spec2}.}
   \item{p}{the p value corresponding to \code{rmax}.}
   \item{f}{the frequency offset corresponding to \code{rmax}.}
@@ -79,21 +86,21 @@ par(new=TRUE)
 spec(tico,f=22050,at=1.1,col="green")
 legend(x=8,y=0.5,c("Note A", "Note C"),lty=1,col=c("blue","green"),bty="o")
 par(mar=c(5,4,2,1))
-corspec(a,c,f=22050, ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
+corspec(a,c, ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
 par(op)
 # different correlation methods give different results...
 op<-par(mfrow=c(3,1))
-corspec(a,c,f=22050,xaxs="i",las=1, ylim=c(-0.25,0.8))
+corspec(a,c,xaxs="i",las=1, ylim=c(-0.25,0.8))
 title("spearmann correlation (by default)")
-corspec(a,c,f=22050,xaxs="i",las=1,ylim=c(0,1),method="pearson")
+corspec(a,c,xaxs="i",las=1,ylim=c(0,1),method="pearson")
 title("pearson correlation")
-corspec(a,c,f=22050,xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
+corspec(a,c,xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
 title("kendall correlation")
 par(op)
 # inverting x and y does not give exactly similar results
 op<-par(mfrow=c(2,1),mar=c(2,4,3,1))
-corspec(a,c,f=22050)
-corspec(c,a,f=22050)
+corspec(a,c)
+corspec(c,a)
 par(op)
 }
 
