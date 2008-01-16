@@ -6,7 +6,7 @@
 
 \description{Add or insert a silence section to a time wave.}
 
-\usage{addsilw(wave, f, at = "middle", d = FALSE, plot = FALSE, Sample = FALSE,...)}
+\usage{addsilw(wave, f, at = "end", d = FALSE, plot = FALSE, Sample = FALSE,...)}
 
 \arguments{
   \item{wave}{data describing a time wave
@@ -15,7 +15,7 @@
   \item{f}{sampling frequency of \code{wave} (in Hz).
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{at}{position where to add the silence section (in s).
-  Can be also specified as "start", "middle" or "end".}
+  Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
   \item{d}{duration of the silence section to add (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot
   of \code{wave} with the new silence section (by default \code{TRUE}).}
@@ -29,9 +29,10 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{cutw}},
-\code{\link{pastew}}, \code{\link{deletew}}, \code{\link{revw}},
-\code{\link{mute}}}
+\seealso{\code{\link{oscillo}}, \code{\link{cutw}},\code{\link{deletew}},
+\code{\link{fadew}},\code{\link{pastew}}, \code{\link{mutew}},\code{\link{revw}},
+\code{\link{zapsilw}}
+}
 
 \examples{
 data(tico)
@@ -41,6 +42,5 @@ addsilw(tico,f=22050,at=0.33,d=0.46)
 }
 
 \keyword{dplot}
-
 \keyword{ts}
 

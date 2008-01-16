@@ -1,0 +1,14 @@
+citHeader("To cite 'seewave' in a publication please use:")
+
+citEntry(entry="Manual",
+        title = "Seewave",
+        author = personList(as.person("J. Sueur"),as.person("T. Aubin"), as.person("C. Simonis")),
+      	year = "2007",
+        url = "http://cran.r-project.org/src/contrib/Descriptions/seewave.html",
+        note = paste("R package version", packageDescription("seewave")$Version),
+        textVersion = paste("Sueur J., Aubin T., Simonis C. (2007)",
+        "Seewave",
+        packageDescription("seewave")$Version,
+        "http://cran.r-project.org/src/contrib/Descriptions/seewave.html",
+        ".", sep=" ")
+)

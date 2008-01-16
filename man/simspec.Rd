@@ -8,18 +8,25 @@
  two frequency spectra.}
 
 \usage{
-simspec(spec1, spec2, f, plot = FALSE, type = "l", lty1 = 1, lty2 = 2,
+simspec(spec1, spec2, f = NULL, plot = FALSE, type = "l", lty1 = 1, lty2 = 2,
 lty3 = 3, col1 = 2, col2 = 4, col3 = 1, flab = "Frequency (kHz)",
-alab = "Amplitude (percentage)", flim = c(0, f/2000), alim = c(0, 100), ...)
+alab = "Amplitude (percentage)", flim = c(0, f/2000), alim = c(0, 100),
+legend = TRUE, ...)
 }
 
 \arguments{
   \item{spec1}{a first data set resulting of a spectral analysis obtained
-      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
-  \item{spec2}{a second data set resulting of a spectral analysis obtained
-      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
+      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB). This
+      can be either a two-column matrix (col1 = frequency, col2 = amplitude)
+      or a vector (amplitude).}
+  \item{spec2}{a first data set resulting of a spectral analysis obtained
+      with \code{\link{spec}} or \code{\link{meanspec}} (not in dB). This
+      can be either a two-column matrix (col1 = frequency, col2 = amplitude)
+      or a vector (amplitude).}
   \item{f}{sampling frequency of waves used to obtain \code{spec1}
-      and \code{spec2} (in Hz).}
+      and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
+      is a two columns matrix obtained with \code{\link{spec}}
+      or \code{\link{meanspec}}.}
   \item{plot}{logical, if \code{TRUE} plots both spectra and similarity function 
       (by default \code{FALSE}).}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
@@ -34,6 +41,7 @@ alab = "Amplitude (percentage)", flim = c(0, f/2000), alim = c(0, 100), ...)
   \item{alab}{title of the amplitude axis.}
   \item{flim}{the range of frequency values.}
   \item{alim}{range of amplitude axis.}
+  \item{legend}{logical, if \code{TRUE} adds a legend to the plot.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -48,7 +56,7 @@ Spectra similarity is assessed according to:\cr
 \value{
 The similarity index is returned. This value is in \%.\cr
 When \code{plot} is \code{TRUE}, both spectra and the similarity function are
-plotted on the same graph. The index is the mean of this function.
+plotted on the same graph. The similarity index is the mean of this function.
 }
 
 \references{Deecke, V. B. and Janik, V. M. 2006. Automated categorization of
@@ -65,22 +73,16 @@ a<-noise(f=8000,d=1)
 b<-synth(f=8000,d=1,cf=2000)
 c<-synth(f=8000,d=1,cf=1000)
 d<-noise(f=8000,d=1)
-speca<-spec(a,f=8000,wl=512,at=0.5,plot=FALSE)
-specb<-spec(b,f=8000,wl=512,at=0.5,plot=FALSE)
-specc<-spec(c,f=8000,wl=512,at=0.5,plot=FALSE)
-specd<-spec(d,f=8000,wl=512,at=0.5,plot=FALSE)
-simspec(speca,speca,f=8000)
-#[1] 100 => similar spectra of course!
-simspec(speca,specb,f=8000)
-#[1] 0.3873278
-simspec(speca,specc,f=8000,plot=TRUE)
-#[1] 0.5920857
-# two pure tone at different frequency are...
-simspec(specb,specc,f=8000,plot=TRUE)
+speca<-spec(a,f=8000,at=0.5,plot=FALSE)
+specb<-spec(b,f=8000,at=0.5,plot=FALSE)
+specc<-spec(c,f=8000,at=0.5,plot=FALSE)
+specd<-spec(d,f=8000,at=0.5,plot=FALSE)
+simspec(speca,speca)
+simspec(speca,specb)
+simspec(speca,specc,plot=TRUE)
+simspec(specb,specc,plot=TRUE)
 #[1] 12.05652
-#... less similar than two noises
-simspec(speca,specd,f=8000,plot=TRUE)
-#[1] 57.40742
+simspec(speca,specd,plot=TRUE)
 }
 
 \keyword{dplot}

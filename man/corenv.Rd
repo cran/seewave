@@ -12,7 +12,7 @@ their maximal correlation and the time shift related to it.
 corenv(wave1, wave2, f, smooth = 20, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Time (s)",
-ylab = "Coefficient of correlation (r)", type = "l",...)
+ylab = "Coefficient of correlation (r)", type = "l", ...)
 }
 
 \arguments{
@@ -39,7 +39,7 @@ ylab = "Coefficient of correlation (r)", type = "l",...)
   \item{xlab}{title of the frequency axis.}
   \item{ylab}{title of the r axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
-      See \code{\link{plot}} for details (by default "l" for lines).}  
+      See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -58,10 +58,12 @@ Inverting \code{wave1} and \code{wave2} may give slight different results.
 \value{
 If \code{plot} is \code{FALSE}, \code{corenv} returns a list containing four
      components:
-  \item{r}{the successive correlation values between \code{x} and \code{y}.}
+  \item{r}{a two-column matrix, the first colum corresponding to the time
+  shift (frequency x-axis) and the second column corresponding to the successive
+  r correlation values between \code{env1} and \code{env2} (correlation y-axis).}
   \item{rmax}{the maximum correlation value between \code{x} and \code{y}.}
   \item{p}{the p value corresponding to \code{rmax}.}
-  \item{f}{the time offset corresponding to \code{rmax}.}
+  \item{t}{the time offset corresponding to \code{rmax}.}
 }
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}

@@ -10,7 +10,7 @@ or bandstop frequency filter).}
 
 \usage{
 fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
-wl = 512, wn = "hanning", Sample= FALSE)
+wl = 512, wn = "hanning", listen = FALSE, Sample= FALSE)
 }
 
 \arguments{
@@ -29,6 +29,7 @@ wl = 512, wn = "hanning", Sample= FALSE)
     \code{wl} is no more required. See examples.}
   \item{wl}{window length of the impulse filter (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
+  \item{listen}{if \code{TRUE} the new sound is played back.}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.  
 }
@@ -39,10 +40,10 @@ This function is based on the reverse of the Fourier Transform
 wave to be filtered and the impulse filter.
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+\value{A new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\references{Stoddard, P. K. (1998). Application of Filters in Bioacoustics.
+\references{Stoddard, P. K. (1998). Application of filters in bioacoustics.
 \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
@@ -66,15 +67,15 @@ spectro(d,f=8000)
 e<-fir(a,f=8000,from=1500,to=2500,bandpass=FALSE)
 spectro(e,f=8000)
 # custom filter manually generated
-myfilter1<-rep(c(rep(0,64),rep(1,64)),4)
+myfilter1<-rep(c(rep(0,32),rep(1,32)),4)
 g<-fir(a,f=8000,custom=myfilter1)
 spectro(g,f=8000)
 # custom filter generated using spec()
-data(orni)
-myfilter2<-spec(orni,f=22050,at=0.21,wl=512,plot=FALSE)
+data(tico)
+myfilter2<-spec(tico,f=22050,at=0.7,wl=512,plot=FALSE)
 b<-noise(d=1,f=22050)
-h<-fir(b,f=8000,custom=myfilter2)
-spectro(h,f=8000)
+h<-fir(b,f=22050,custom=myfilter2)
+spectro(h,f=22050)
 }
 
 \keyword{ts}

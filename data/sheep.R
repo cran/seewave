@@ -1,1 +1,3 @@
-sheep <- read.table("sheep.txt", skip=1)
+library(sound)
+sheep<-loadSample("sheep.wav")
+sheep<-as.matrix(sheep$sound[1,])

@@ -1,6 +1,6 @@
-\name{mute}
+\name{mutew}
 
-\alias{mute}
+\alias{mutew}
 
 \title{Replace time wave data by 0 values}
 
@@ -10,7 +10,7 @@ For a time wave describing a sound, this corresponds in muting the sound or a se
 }
 
 \usage{
-mute(wave, f, from = FALSE, to = FALSE, plot = TRUE, Sample = FALSE,...)
+mutew(wave, f, from = FALSE, to = FALSE, plot = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
@@ -38,12 +38,13 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{cutw}},
-\code{\link{pastew}}, \code{\link{deletew}}, \code{\link{revw}}, \code{\link{addsilw}}}
+\seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
+\code{\link{deletew}},\code{\link{fadew}}, \code{\link{pastew}},
+\code{\link{revw}}, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)
-mute(tico,f=22050,from=0.5,to=0.9)
+mutew(tico,f=22050,from=0.5,to=0.9)
 }
 
 \keyword{dplot}

@@ -6,7 +6,7 @@
 
 \description{This function deletes all signal which amplitude is below a selected threshold.}
 
-\usage{afilter(wave, f, threshold = 5, plot = TRUE, Sample = FALSE,...)}
+\usage{afilter(wave, f, threshold = 5, plot = TRUE, listen = FALSE, Sample = FALSE,...)}
 
 \arguments{
   \item{wave}{data describing the time wave
@@ -17,6 +17,7 @@
   \item{threshold}{amplitude threshold (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the new oscillogram
       (by default \code{TRUE}).}
+  \item{listen}{if \code{TRUE} the new sound is played back.}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.      
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}

@@ -37,9 +37,9 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{pastew}}, \code{\link{deletew}},
-\code{\link{addsilw}}, \code{\link{revw}},
-\code{\link{mute}}}
+\seealso{\code{\link{oscillo}}, \code{\link{addsilw}},\code{\link{deletew}},
+\code{\link{fadew}},\code{\link{mutew}},\code{\link{pastew}},\code{\link{revw}},
+\code{\link{zapsilw}}}
 
 \examples{
 # a 0.4 s section in a bird song

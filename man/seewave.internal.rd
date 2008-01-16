@@ -18,6 +18,7 @@
 \alias{soscillo}
 \alias{sspectro}
 \alias{spectro.colors}
+\alias{stft}
 
 \title{Internal Seewave Functions}
 

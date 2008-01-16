@@ -31,7 +31,7 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
       \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
       \emph{i. e.} the probability distribution of frequencie.}  
-  \item{dB}{logical, if \code{TRUE} return the spectrum in dB 
+  \item{dB}{logical, if \code{TRUE} returns the spectrum in dB 
       (by default \code{FALSE}).}
   \item{from}{start mark where to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
@@ -62,16 +62,17 @@ When using \code{identify}, press \sQuote{stop} tools bar button to return value
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{meanspec} returns  a vector of numeric
-data corresponding to the computed spectrum.
+If \code{plot} is \code{FALSE}, \code{meanspec} returns  a two columns matrix,
+the first column corresponding to the frequency axis, the second column
+corresponding to the amplitude axis.\cr 
 If \code{identify} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
 If \code{peaks} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
-  \item{spec}{the spectrum computed}\cr 
-  \item{peaks }{the peaks values (in kHz).}\ 
+  \item{spec}{the spectrum computed} of length \code{wl}/2,\cr 
+  \item{peaks }{the peaks values (in kHz).} 
 }
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr} and 
@@ -79,7 +80,8 @@ Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
 
-\seealso{\code{\link{spec}}, \code{\link{corspec}}, \code{\link{fft}}.}
+\seealso{\code{\link{spec}}, \code{\link{dynspec}}, 
+\code{\link{corspec}}, \code{\link{diffspec}}, \code{\link{simspec}}, \code{\link{fft}}.}
 
 \examples{
 data(orni)

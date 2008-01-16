@@ -47,12 +47,12 @@ numeric data corresponding to the dominant frequency along the time wave.
 
 \examples{
 data(tico)
-dfreq(tico,f=22050,wl=512,ovlp=50,threshold=5)
+dfreq(tico,f=22050,ovlp=50,threshold=5)
 # overlay on spectrogram
-spectro(tico,f=22050,wl=512,ovlp=50,zp=16,scale=FALSE,
+spectro(tico,f=22050,ovlp=50,zp=16,scale=FALSE,
     collevels=seq(-40,0,1),palette=rev.terrain.colors)
 par(new=TRUE,las=1)
-dfreq(tico,f=22050,wl=512,ovlp=50,threshold=6,col="red",lwd=2,
+dfreq(tico,f=22050,ovlp=50,threshold=6,col="red",lwd=2,
     ann=FALSE,xaxs="i",yaxs="i")
 }
 

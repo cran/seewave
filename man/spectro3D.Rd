@@ -5,7 +5,7 @@
 \title{3D-spectrogram of a time wave}
 
 \description{
-This functions returns a three-dimension spectrographic representation of a
+This function returns a three-dimension spectrographic representation of a
 time wave. The function corresponds to short-term Fourier transform.
 }
 
@@ -56,16 +56,16 @@ Use \code{magt}, \code{magf} and \code{maga} to resize the plot.
 
 \value{
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
-corresponds to a Fourier transform of length \code{wl}.}
+corresponds to a Fourier transform of length \code{wl}/2.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\note{This function runs with \pkg{rgl} and is based on \code{\link{fft}}.
+\note{This function requires \pkg{rgl} and is based on \code{\link{fft}}.
 See examples of \code{\link{spectro}} for analysis arguments
 (\code{wl},\code{zp}, \code{ovlp}).}
 
-\seealso{\code{\link{spectro}}, \code{\link{fft}}.}
+\seealso{\code{\link{spectro}}, \code{\link{dynspec}}, \code{\link{fft}}.}
 
 \examples{
 data(tico)

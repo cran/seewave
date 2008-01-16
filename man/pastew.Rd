@@ -11,7 +11,7 @@ displayed in a three-frame oscillographic plot.
 }
 
 \usage{
-pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, Sample = FALSE,...)
+pastew(wave1, wave2, f, at = "end", plot = FALSE, marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
@@ -24,8 +24,8 @@ pastew(wave1, wave2, f, at = FALSE, plot = FALSE, marks = TRUE, Sample = FALSE,.
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[sound]{Sample}} object(s).}
-  \item{at}{\code{wave2} position in seconds
-    where \code{wave1} will be pasted into (by default at the end of \code{wave2}).}
+  \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
+    Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
   \code{wave1}, \code{wave2} and \code{wave1} + \code{wave2} (by default \code{FALSE}).}
   \item{marks}{logical, if \code{TRUE} shows where \code{wave1} has been pasted (by default \code{TRUE}).}
@@ -44,8 +44,9 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{cutw}}, \code{\link{deletew}}, \code{\link{mute}},
-\code{\link{revw}}, \code{\link{addsilw}}.}
+\seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
+\code{\link{deletew}},\code{\link{fadew}}, \code{\link{mutew}}
+,\code{\link{revw}}, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)
@@ -56,11 +57,7 @@ oscillo(a,f=22050)
 pastew(tico,tico,f=22050,plot=TRUE)
 # cut a section and then paste it at the beginning
 a<-cutw(tico, f=22050, from=0.5, to=0.9)
-pastew(a,tico,f=22050,plot=TRUE)
-# or paste it at the end
-pastew(tico,a,f=22050,plot=TRUE)
-# similar to
-pastew(a,tico,f=22050,at=nrow(tico)/22050,plot=TRUE)
+pastew(a,tico,f=22050,at="start",plot=TRUE)
 # or paste it at a specific location
 pastew(a,tico,f=22050,at=1.4,plot=TRUE)
 } 
