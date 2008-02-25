@@ -6,7 +6,8 @@
 
 \description{Add or insert a silence section to a time wave.}
 
-\usage{addsilw(wave, f, at = "end", d = FALSE, plot = FALSE, Sample = FALSE,...)}
+\usage{addsilw(wave, f, at = "end", d = FALSE,
+plot = FALSE, Sample = FALSE,...)}
 
 \arguments{
   \item{wave}{data describing a time wave

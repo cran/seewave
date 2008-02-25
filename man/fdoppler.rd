@@ -59,8 +59,9 @@ res<-matrix(numeric(lf*lv),ncol=lv)
 for(i in 1:lv) res[,i]<-fdoppler(f=f,vs=v[i])
 op<-par(bg="lightgrey")
 matplot(x=f,y=res,type="l",lty=1,las=1,col= spectro.colors(lv),
-  xlab="Source frequency (kHz)", ylab="Altered frequency (kHz)")
-legend("topleft",legend=paste(as.character(v),"m/s"),lty=1,col= spectro.colors(lv))
+xlab="Source frequency (kHz)", ylab="Altered frequency (kHz)")
+legend("topleft",legend=paste(as.character(v),"m/s"),
+lty=1,col= spectro.colors(lv))
 title(main="Doppler effect at different source speeds")
 par(op)
 }

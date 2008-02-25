@@ -1,0 +1,57 @@
+\name{setenv}
+
+\alias{setenv}
+
+\title{Set the amplitude envelope of a time wave to another one}
+
+\description{This function sets the amplitude envelope of a time wave
+to another one}
+
+\usage{setenv(wave1, wave2, f, smooth = NULL, ksmooth = NULL, plot = FALSE,
+listen = FALSE, Sample = FALSE, ...)
+}
+
+\arguments{
+  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound})
+  describing the time wave which amplitude envelope has to be changed.}
+  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
+  with \code{\link[sound]{loadSample}} (package \pkg{sound})
+  describing the time wave which envelop will be obtained and set to \code{wave1}.}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
+          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
+          \code{\link[sound]{Sample}} object(s).}
+  \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope of \code{wave2}
+      by floating average.}
+  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope of \code{wave2}
+      by applying a \code{\link{kernel}} smoothing.}
+  \item{plot}{if \code{TRUE} returns the oscillogram
+      of the new time wave (by default \code{FALSE}).}
+  \item{listen}{if \code{TRUE} the new sound is played back.}
+  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  returns an object of class \code{\link[sound]{Sample}}.}
+  \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
+}
+
+\details{\code{wave1} and \code{wave2} can have different duration (length)\cr
+Smoothing the envelope with \code{smooth} or \code{ksmooth} can significantly
+change the value returned.}
+
+\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
+or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+
+\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+
+\seealso{\code{\link{oscillo}}, \code{\link{synth}}}
+
+\examples{
+data(tico)
+a<-synth(d=1,f=22050,cf=1000)
+# apply 'tico' ammplitude envelope to 'a' that has a square amplitude envelope
+setenv(a,tico,f=22050,plot=TRUE)
+# the same but with smoothing the envelope
+setenv(a,tico,f=22050,ksmooth=kernel("daniell",50),plot=TRUE)
+}
+
+\keyword{datagen}
+\keyword{ts}

@@ -10,14 +10,17 @@ wave. The function corresponds to short-term Fourier transform.
 An amplitude contour plot can be overlaid.}
 
 \usage{
-spectro(wave, f, wl = 512, wn = "hanning", zp = 0, ovlp = 0, plot = TRUE,
+spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
+ovlp = 0, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = seq(-30, 0, 1), palette = spectro.colors,
-contlevels = seq(-30, 0, 10), colcont = "black", colbg = "white", colgrid = "black",
+contlevels = seq(-30, 0, 10), colcont = "black",
+colbg = "white", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
-scalefontlab = 1, scalecexlab =0.75, axisX = TRUE, axisY = TRUE, tlim = NULL,
+scalefontlab = 1, scalecexlab =0.75,
+axisX = TRUE, axisY = TRUE, tlim = NULL,
 flim = NULL, flimd = NULL, listen=FALSE,
 ...)
 }
@@ -81,8 +84,9 @@ and the temporal precision is obtained by calculating the reverse ratio
 adds 0 values on both sides of the analysis window. This increases frequency
 resolution without altering time resolution.\cr
 Any colour palette can be used. In particular, it is possible to use other
-palettes coming with \pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2}, 
-\code{rev.heat.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
+palettes coming with \pkg{seewave}: \code{rev.gray.colors.1},
+\code{rev.gray.colors.2}, \code{rev.heat.colors},
+\code{rev.terrain.colors}, \code{rev.topo.colors},
 \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
 \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
 Use \code{\link{locator}} to identify  points.
@@ -112,7 +116,7 @@ data(pellucens)
 spectro(tico,f=22050)
 spectro(tico,f=22050,osc=TRUE)
 spectro(tico,f=22050,scale=FALSE)
-spectro(tico,f=22050,osc=TRUE, scale=FALSE)
+spectro(tico,f=22050,osc=TRUE,scale=FALSE)
 # manipulating wl
 op<-par(mfrow=c(2,2))
 spectro(tico,f=22050,wl=256,scale=FALSE)

@@ -10,12 +10,15 @@ This basically corresponds to a short-term Fourier transform.
 }
 
 \usage{
-dynspec(wave, f, wl = 512, wn = "hanning", zp = 0, ovlp = 0, norm = FALSE,
-dB = FALSE, plot = TRUE, title = TRUE, osc = FALSE, flab = "Frequency (kHz)",
-alab = "Amplitude", alim = NULL, flim = c(0, f/2000), type = "l", from = FALSE,
-to = FALSE, env = FALSE, smooth = NULL, ksmooth = NULL, colspec = "black",
-coltitle = "black", colbg = "white", colline = "black", colaxis = "black",
-collab = "black", cexlab = 1, fontlab = 1, colwave = "black",
+dynspec(wave, f, wl = 512, wn = "hanning", zp = 0,
+ovlp = 0, norm = FALSE, dB = FALSE, plot = TRUE,
+title = TRUE, osc = FALSE, flab = "Frequency (kHz)",
+alab = "Amplitude", alim = NULL, flim = c(0, f/2000),
+type = "l", from = FALSE, to = FALSE, env = FALSE,
+smooth = NULL, ksmooth = NULL, colspec = "black",
+coltitle = "black", colbg = "white", colline = "black",
+colaxis = "black", collab = "black", cexlab = 1,
+fontlab = 1, colwave = "black",
 coly0 = "lightgrey", colcursor = "red", bty = "l")
 }
 

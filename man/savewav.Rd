@@ -39,8 +39,10 @@ a<-synth(f=8000,d=2,cf=2000,plot=FALSE)
 # the name of the file is automatically the name of the object
 # here: "a.wav"
 savewav(a,f=22050)
+unlink("a.wav")
 # if you wish to to change the name, use 'file' argument
 savewav(a,f=22050,file="b.wav")
+unlink("b.wav")
 }
 
 \keyword{IO}

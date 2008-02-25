@@ -8,7 +8,8 @@ This function selects and delete a section of data describing a time wave.
 Original section and section after deletion can be plotted as oscillograms for comparison. 
 }
 \usage{
-deletew(wave, f, from = FALSE, to = FALSE, plot = FALSE, marks = TRUE, Sample = FALSE,...)
+deletew(wave, f, from = FALSE, to = FALSE, plot = FALSE,
+marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{

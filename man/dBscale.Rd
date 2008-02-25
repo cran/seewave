@@ -36,9 +36,10 @@ Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function, based on \code{\link{filled.contour}} by Ross Ihaka,
 is not supposed to be used by itself but as a legend of \code{\link{spectro}}.\cr
-Any colour palette can be used. In particular, it is possible to use other palettes coming with
+Any colour palette can be used. In particular, it is possible
+to use other palettes coming with
 \pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2},
-\code{rev.heat.colors}, \code{rev.terrain.colors},\code{rev.topo.colors}, 
+\code{rev.heat.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors}, 
 \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
 \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.}
 
