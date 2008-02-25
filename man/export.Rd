@@ -35,6 +35,7 @@ Goldwave (\url{http://www.goldwave.com/}).
 \examples{
 a<-synth(f=8000,d=2,cf=2000,plot=FALSE)
 export(a,f=8000)
+unlink("a.txt")
 }
 
 \keyword{IO}

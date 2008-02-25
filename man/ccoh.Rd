@@ -14,7 +14,8 @@ An amplitude contour plot can be overlaid.}
 ccoh(wave1, wave2, f, wl = 512, ovlp = 0, plot = TRUE,
 grid = TRUE, scale = TRUE, cont = FALSE,
 collevels = seq(0, 1, 0.01), palette = rev.heat.colors,
-contlevels = seq(0, 1, 0.01), colcont = "black", colbg="white", colgrid = "black",
+contlevels = seq(0, 1, 0.01), colcont = "black",
+colbg="white", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Coherence",
@@ -66,14 +67,16 @@ flim = NULL, flimd = NULL,
     graphical parameters.}
 }
 
-\details{Coherence is a frequency domain function computed to show the degree of a relationship
-between two signals. The value of the coherence function ranges between zero and one,
+\details{Coherence is a frequency domain function computed to show the degree
+of a relationship between two signals.
+The value of the coherence function ranges between zero and one,
 where a value of zero indicates there is no causal relationship between the signals.
 A value of one indicates the existence of linear frequency response between the
 two signals. This can be used, for instance, to compare the input and output
 signals of a system.\cr
 Any colour palette can be used. In particular, it is possible to use other
-palettes coming with \pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2}, 
+palettes coming with \pkg{seewave}: \code{rev.gray.colors.1},
+\code{rev.gray.colors.2}, 
 \code{spectro.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
 \code{rev.cm.colors} corresponding to the reverse of  
 \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr

@@ -10,8 +10,9 @@ oscillogram in a two-frame plot. The envelope of the wave can also be shown.
 }
 
 \usage{
-oscilloST(wave1, wave2 = FALSE, f, from = FALSE, to = FALSE, env = FALSE,
-smooth = NULL, ksmooth = NULL, identify = FALSE, plot = TRUE, colwave1 = "black",
+oscilloST(wave1, wave2 = FALSE, f, from = FALSE, to = FALSE,
+env = FALSE,smooth = NULL, ksmooth = NULL, identify = FALSE,
+plot = TRUE, colwave1 = "black",
 colwave2 = "blue", colbg = "white", coltitle = "black",
 collab = "black", cexlab = 1, fontlab = 1, colaxis = "black",
 coly01 = "grey47", coly02 = "black", title = FALSE,

@@ -10,7 +10,8 @@ Original and cut sections can be plotted as oscillograms for comparison.
 }
 
 \usage{
-cutw(wave, f, from, to, plot = FALSE, marks = TRUE, Sample = FALSE,...)
+cutw(wave, f, from, to, plot = FALSE, marks = TRUE,
+Sample = FALSE,...)
 }
 
 \arguments{
@@ -23,7 +24,8 @@ cutw(wave, f, from, to, plot = FALSE, marks = TRUE, Sample = FALSE,...)
   \item{to}{end mark (in s).}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original
    and cut sections (by default \code{FALSE}).}
-  \item{marks}{logical, if \code{TRUE} shows the start and end mark on the plot (by default \code{TRUE}).}
+  \item{marks}{logical, if \code{TRUE} shows the start and end mark on the plot
+  (by default \code{TRUE}).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.  
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}

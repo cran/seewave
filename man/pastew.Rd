@@ -11,7 +11,8 @@ displayed in a three-frame oscillographic plot.
 }
 
 \usage{
-pastew(wave1, wave2, f, at = "end", plot = FALSE, marks = TRUE, Sample = FALSE,...)
+pastew(wave1, wave2, f, at = "end", plot = FALSE,
+marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
@@ -21,7 +22,7 @@ pastew(wave1, wave2, f, at = "end", plot = FALSE, marks = TRUE, Sample = FALSE,.
   \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
   with \code{\link[sound]{loadSample}} (package \pkg{sound})
   describing the time wave into which \code{wave1} will be pasted.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
+  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[sound]{Sample}} object(s).}
   \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
@@ -45,8 +46,8 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 \author{Jérôme Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
-\code{\link{deletew}},\code{\link{fadew}}, \code{\link{mutew}}
-,\code{\link{revw}}, \code{\link{zapsilw}}}
+\code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}
+, \code{\link{revw}}, \code{\link{repw}}, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)

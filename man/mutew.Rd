@@ -10,7 +10,8 @@ For a time wave describing a sound, this corresponds in muting the sound or a se
 }
 
 \usage{
-mutew(wave, f, from = FALSE, to = FALSE, plot = TRUE, Sample = FALSE,...)
+mutew(wave, f, from = FALSE, to = FALSE, plot = TRUE,
+Sample = FALSE,...)
 }
 
 \arguments{

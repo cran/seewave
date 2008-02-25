@@ -57,7 +57,8 @@ a<-noise(d=1,f=8000)
 enva<-oscillo(a,f=8000,env=TRUE,plot=FALSE)
 th(enva)
 # [1] 0.9683144
-# But be aware that the temporal entropy of a sustained sound also tends towards 1
+# But be aware that the temporal entropy
+# of a sustained sound also tends towards 1
 b<-synth(f=8000,d=1,cf=2000,plot=FALSE)
 envb<-oscillo(b,f=8000,env=TRUE,plot=FALSE)
 th(envb)

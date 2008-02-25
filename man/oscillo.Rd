@@ -10,10 +10,12 @@ multi-frame plot. The envelope of the wave can also be shown.
 }
 
 \usage{
-oscillo(wave, f, from = FALSE, to = FALSE, zoom = FALSE,
-k=1, j=1, labels = TRUE, byrow = TRUE, env = FALSE, smooth = NULL,
+oscillo(wave, f, from = FALSE, to = FALSE, scroll = NULL,
+zoom = FALSE, k=1, j=1, labels = TRUE, byrow = TRUE,
+env = FALSE, smooth = NULL,
 ksmooth = NULL, identify = FALSE, plot = TRUE, colwave = "black", 
-colbg = "white", coltitle = "black", cextitle = 1.2, fonttitle = 2, collab = "black",
+colbg = "white", coltitle = "black", cextitle = 1.2,
+fonttitle = 2, collab = "black",
 cexlab = 1, fontlab = 1, colline = "black", 
 colaxis = "black", coly0 = "lightgrey",
 title = FALSE, xaxt="s", yaxt="n", bty = "l")
@@ -27,6 +29,8 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
+  \item{scroll}{a numeric of length 1 allowing to move along the time wave using a slider panel.
+  This numeric corresponds to the number of successive windows dividing the time wave.}
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
   \item{k}{number of horizontal sections (by default =1).}
   \item{j}{number of vertical sections (by default =1).}
@@ -123,6 +127,8 @@ oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",colbg="grey",
 # change the title
 data(orni)
 oscillo(orni,f=22050,title="The song of a famous cicada")
+# move along the signal using scroll
+oscillo(tico,f=22050,scroll=8)
 }
 
 \keyword{dplot}

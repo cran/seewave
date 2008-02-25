@@ -8,9 +8,11 @@
  two frequency spectra.}
 
 \usage{
-simspec(spec1, spec2, f = NULL, plot = FALSE, type = "l", lty1 = 1, lty2 = 2,
+simspec(spec1, spec2, f = NULL, plot = FALSE, type = "l",
+lty1 = 1, lty2 = 2,
 lty3 = 3, col1 = 2, col2 = 4, col3 = 1, flab = "Frequency (kHz)",
-alab = "Amplitude (percentage)", flim = c(0, f/2000), alim = c(0, 100),
+alab = "Amplitude (percentage)", flim = c(0, f/2000),
+alim = c(0, 100),
 legend = TRUE, ...)
 }
 

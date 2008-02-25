@@ -8,8 +8,9 @@
 frequency detection.}
 
 \usage{
-ceps(wave, f, wl = 512, at = FALSE, from = FALSE, to = FALSE, tpeaks = FALSE,
-fpeaks = FALSE, tidentify = FALSE, fidentify = FALSE, col = "black", cex = 1,
+ceps(wave, f, wl = 512, at = FALSE, from = FALSE, to = FALSE,
+tpeaks = FALSE, fpeaks = FALSE, tidentify = FALSE,
+fidentify = FALSE, col = "black", cex = 1,
 colpeaks = "red", cexpeaks = 0.75, fontpeaks = 1, plot = TRUE,
 qlab = "Quefrency (bottom: s, up: Hz)", alab = "Amplitude",
 qlim = NULL, alim = NULL, type = "l", ...)

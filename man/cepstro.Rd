@@ -10,9 +10,10 @@ wave. The function corresponds to a short-term cepstral transform.
 An amplitude contour plot can be overlaid.}
 
 \usage{
-cepstro(wave, f, wl = 512, ovlp = 0, plot = TRUE, grid = TRUE, scale = TRUE,
-cont = FALSE, collevels = seq(0, 1, 0.01), palette = rev.heat.colors,
-contlevels = seq(0, 1, 0.01), colcont = "black", colbg="white", colgrid = "black",
+cepstro(wave, f, wl = 512, ovlp = 0, plot = TRUE, grid = TRUE,
+scale = TRUE, cont = FALSE, collevels = seq(0, 1, 0.01),
+palette = rev.heat.colors, contlevels = seq(0, 1, 0.01),
+colcont = "black", colbg="white", colgrid = "black",
 colaxis = "black", collab = "black",
 plot.title = title(main = "", xlab = "Time (s)", ylab = "Quefrency (ms)"),
 scalelab = "Amplitude", scalefontlab = 1, scalecexlab = 0.75,
@@ -24,7 +25,8 @@ axisX = TRUE, axisY = TRUE, ...)
   object generated loading a wav file with \code{\link[sound]{loadSample}}
   (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified
+  if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}

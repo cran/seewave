@@ -10,7 +10,8 @@ and/or frequency modulation (fm).
 }
 
 \usage{
-synth(f, d, cf, a = 1, shape = NULL, p = 0, am = c(0, 0), fm = c(0, 0, 0),
+synth(f, d, cf, a = 1, shape = NULL, p = 0,
+am = c(0, 0), fm = c(0, 0, 0),
 plot = FALSE, listen = FALSE, Sample = FALSE,...)
 }
 

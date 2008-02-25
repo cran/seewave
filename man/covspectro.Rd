@@ -10,7 +10,8 @@ their maximal covariance and the time shift related to it.
 }
 
 \usage{
-covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n, plot = TRUE, plotval = TRUE,
+covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n,
+plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red", cexval = 1,
 fontval = 1, xlab = "Time (s)",
 ylab = "Normalised covariance (cov)", type = "l", ...)

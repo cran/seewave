@@ -1,7 +1,6 @@
 ################################################################################
 # Seewave by Jérôme Sueur, Caroline Simonis & Thierry Aubin
 # Acknowledgements: Michel Baylac, Emmanuel Paradis, Martin Maechler
-# Requires R>=2.2.0, rgl, sound
 ################################################################################
 
 ################################################################################
@@ -464,7 +463,7 @@ axisY = TRUE,
 
 {
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-ifelse(wave==0,yes=1e-6,no=wave)
+wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
 n<-nrow(wave)
 p<-round(n/2)
@@ -1126,23 +1125,21 @@ type ="l",
 
 {
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+if (threshold) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
+wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
 n<-nrow(wave)
 step<-seq(1,n-wl,wl-(ovlp*wl/100))
-
-if (threshold) wave4<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
-  
-else wave4<-wave
-
-y1<-matrix(data=numeric(wl*length(step)),wl,length(step))
+N<-length(step)
+y1<-matrix(data=numeric(wl*N),wl,N)
 W<-ftwindow(wl=wl,wn=wn)
 for(i in step)
-{y1[,which(step==i)]<-Mod(fft(wave4[i:(wl+i-1),]*W))}
+{y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
 		
 y2<-y1[1:(wl/2),]				
 
-y3<-matrix(data=numeric(length(step)*2),length(step),2)
-for (i in 1:length(step))
+y3<-matrix(data=numeric(N*2),N,2)
+for (i in 1:N)
 # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
 # when there is no max value, this happens when the fft is totatally flat
 # (e. g. signal =0)
@@ -1153,10 +1150,10 @@ y<-ifelse(y3==f/(wl*1000), yes=NA, no=y3)
 
 if (plot==TRUE)
   {
-	x<-seq(0,n/f,length.out=length(step))
-	plot(x, y,
-	xaxs = "i", xlab = xlab,
-  yaxs = "i", ylab = ylab, ylim = ylim,
+	x<-seq(0,n/f,length.out=N)
+	plot(x=x, y=y,
+	xaxs="i", xlab = xlab,
+	yaxs="i", ylab = ylab, ylim = ylim,
   type = type,
   ...)
 	}
@@ -1494,7 +1491,8 @@ if(plot == TRUE)
     env = env, smooth = smooth, ksmooth = ksmooth,
     colbg = colbg, colwave = colwave, collab = collab,
     cexlab = cexlab, fontlab = fontlab, colline = colline,
-    colaxis = colaxis, coly0 = coly0, bty = bty)
+    colaxis = colaxis, coly0 = coly0, bty = bty, tickup=max(abs(wave),na.rm=TRUE),
+    ylim=c(-max(abs(wave)),max(abs(wave))))
     abline(v=poslabel[pos], col=colcursor)
     }
   }
@@ -1503,8 +1501,8 @@ if(plot == TRUE)
   }
 
 spec.panel <- rp.control("Position")
-rp.slider(spec.panel,pos,from=1,to=lstep,resolution=1,
-       title = "Position along the signal", action = plot.spec)
+rp.slider(spec.panel, pos, from=1, to=lstep, resolution=1,
+       title = "Position along the signal", action=plot.spec)
 }
 else return(z)
 }
@@ -1573,10 +1571,9 @@ filename = NULL,
 ...)
 
 {
+if(is.null(filename) == TRUE) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
 wave<-wave/(max(wave)*1.5) # this avoids overclipping problems
 n<-nrow(wave)
-if (is.null(filename) == TRUE)
-  filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")
 header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")
 write.table(x=wave, file=filename, row.names=FALSE, col.names=header, quote=FALSE, ...)
 }
@@ -1815,7 +1812,7 @@ wave2<-wave2-mean(wave2)
 wave2<-as.matrix(wave2)
 
 if(Sample == TRUE){wave2<-as.Sample(as.numeric(wave2), rate=f, bits=16)}
-if (listen == TRUE) {listen(wave2,f=f)}
+if(listen == TRUE) {listen(wave2,f=f)}
 return(wave2)
 }
 
@@ -1859,13 +1856,12 @@ ylim = c(0,f/2000),
 
 {
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-if (threshold) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
-ifelse(wave==0,yes=1e-6,no=wave)
+if (threshold) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
+wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
 n<-nrow(wave)
 p<-round(n/2)
 step<-seq(1,n-wl,wl-(ovlp*wl/100))
-
 N<-length(step)
 WL<-wl%/%2
 z1<-matrix(data=numeric(wl*N),wl,N)
@@ -1884,8 +1880,8 @@ if (plot == TRUE)
   {
   x<-seq(0,n/f,length.out=N)
   plot(x=x, y=ffund/1000,
-  xlab = xlab,
-  ylab = ylab, ylim = ylim,
+  xaxs="i", xlab = xlab,
+  yaxs="i", ylab = ylab, ylim = ylim,
   las =1,
   ...)
   }
@@ -1927,31 +1923,34 @@ return(z)
 
 listen<-function(
 wave,
-f,
+f = NULL,
 from = FALSE,
 to = FALSE
 )
 
 {
+if(is.null(f))
+  {
+  if(class(wave)=="Sample") {f<-wave$rate}
+  else stop("'f' is missng")
+  }
+
+if(class(wave)=="Sample") {wave<-as.numeric(wave$sound[1,])}
+if(class(wave)=="data.frame") {wave<-as.numeric(wave[,1])}
+if(class(wave)=="matrix") {wave<-as.numeric(wave[,1])}
+if(class(wave)=="vector") {wave<-as.numeric(wave)}
+
 if (from|to)
   {
   if (from > to) stop("'from' cannot be superior to 'to'")
-  if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
   if (from == 0) {a<-1; b<-round(to*f)}
   if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
   if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
   else {a<-round(from*f); b<-round(to*f)}
-  wave<-as.matrix(wave[a:b,])/(2*max(wave))
-  wave<-as.Sample(as.numeric(wave[,1]), rate=f, bits=16)
+  wave<-wave[a:b]
   }
-
-else
-  {
-  if (class(wave)=="matrix")     {wave<-as.Sample(as.numeric(wave[,1]/(2*max(wave))), rate=f, bits=16)}
-  if (class(wave)=="data.frame") {wave<-as.Sample(as.numeric(wave[,1]/(2*max(wave))), rate=f, bits=16)}
-  }
+wave<-as.Sample(wave/(2*max(wave)), rate=f, bits=16)
 play(wave)
-
 }
 
 
@@ -2324,12 +2323,14 @@ else
 noise<-function(
 f,
 d,
+listen = FALSE,
 Sample = FALSE
 )
 
 {
 wave<-as.matrix(runif(d*f,min=-1,max=1))
 if (Sample == TRUE){wave<-as.Sample(as.numeric(wave), rate=f, bits=16)}
+if (listen == TRUE) {listen(sound,f=f)}
 return(wave)
 }
 
@@ -2344,11 +2345,12 @@ wave,
 f,
 from = FALSE,
 to = FALSE,
+scroll = NULL,
 zoom = FALSE,
 k=1,
 j=1,
 labels = TRUE,
-byrow = TRUE, 
+byrow = TRUE,
 env = FALSE,
 smooth= NULL,
 ksmooth = NULL,
@@ -2375,7 +2377,7 @@ bty = "l"
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
 
 p<-k*j
-  
+
 if (from|to)
   {
   if (from > to) stop("'from' cannot be superior to 'to'")
@@ -2398,7 +2400,7 @@ if (env == TRUE)
     if (smooth == 0) stop("'smooth' cannot be equal to 0")
     z0<-abs(wave[0:n,])
     step<-seq(1,n-smooth,smooth)
-    z1<-numeric(length(step)) 
+    z1<-numeric(length(step))
     for(i in step)
       {z1[which(step==i)]<-mean(z0[i:(i+smooth)])}
     wave<-as.matrix(z1/max(z1))
@@ -2406,23 +2408,23 @@ if (env == TRUE)
     x<-n%/%p
     f<-f/smooth
     }
-    
+
     else
     {
       if (!is.null(ksmooth))
       {
-      z0<-abs(wave[0:n,])    
+      z0<-abs(wave[0:n,])
       z1<-kernapply(as.matrix(z0),ksmooth)
       wave<-as.matrix(z1/max(z1))
       n<-nrow(wave)
       x<-n%/%p
       f<-(f*n)/length(z0)
       }
-   
+
       else
       {wave<-as.matrix(abs(wave[0:n,])/max(abs(wave[0:n,])))}
     }
-    
+
     if (plot == FALSE) return (wave)
  }
 
@@ -2432,8 +2434,41 @@ alim<-max(abs(wave))
 # to get a single window view
 if (k == 1 & j == 1)
 {
+  if (!is.null(scroll))
+    {
+      if(!is.numeric(scroll)) stop("scroll has to a numeric")
+      if(length(scroll)>1) stop("length of scroll cannot be superior to 1")
+      if(zoom == TRUE) stop("zoom and scroll cannot be used together")
+      if(identify == TRUE) stop("identify and scroll cannot be used together")
+      require(rpanel)
+      require(tcltk)
+      step<-round(seq(0,n,length.out=scroll+1))
+      lstep<-length(step)
+      pos<-1:(lstep-1)
+      plot.dynosc<-function(panel)
+      {
+        with(panel,
+        {
+        soscillo(wave = wave, f = f, from = step[pos]/f,
+        to=step[pos+1]/f, env = FALSE, smooth = NULL, ksmooth = NULL,
+        colbg = colbg, colwave = colwave, collab = collab,
+        cexlab = cexlab, fontlab = fontlab, colline = colline,
+        colaxis = colaxis, coly0 = coly0, bty = bty,
+        tickup=max(abs(wave),na.rm=TRUE), ylim=c(-max(abs(wave)),max(abs(wave))))
+        title(main=pos,col.main=coltitle,cex.main=cextitle,font.main=fonttitle)
+        }
+        )
+        panel
+      }
+      osc.panel <- rp.control("Window")
+      rp.slider(osc.panel,pos,from=1,to=lstep-1,resolution=1,
+       title = "Window", action=plot.dynosc)
+    }
+
+  else
+  {
   if (zoom == TRUE)
-    {	
+    {
     par(tcl=0.5, bg=colbg, col.axis=colaxis, col=colline,las=0)
     plot(x=seq(from,to,length.out=n), y=wave,
           col=colwave, type="l",
@@ -2449,7 +2484,7 @@ if (k == 1 & j == 1)
 	   mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
 	   mtext("Amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=2.5)
 	   abline(h=0,col=coly0,lty=2)
-    
+
     cat("choose start and end positions on the wave")
     if (.Platform$OS.type == "windows") flush.console()
     coord<-locator(n=2)
@@ -2459,7 +2494,7 @@ if (k == 1 & j == 1)
     wave<-as.matrix(wave[c:d,1])
     n<-nrow(wave)
     }
-      
+
   par(tcl=0.5, bg=colbg, col.axis=colaxis, col=colline,las=0)
 	plot(x=seq(from,to,length.out=n), y=wave,
 		col=colwave, type="l",
@@ -2467,19 +2502,19 @@ if (k == 1 & j == 1)
 		xlab="", ylab="", ylim=c(-alim,alim),
 		xaxt=xaxt, yaxt=yaxt,
 		cex.lab=0.8, font.lab=2,
-    bty=bty		
+    bty=bty
     )
-	
+
   if (bty == "l" | bty == "o")
       {axis(side=1, col=colline,labels=FALSE)
       axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)}
-	
+
 	if (labels == TRUE)
-      { 
+      {
       mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
       mtext("Amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=3)
 	    }
-	    
+
   abline(h=0,col=coly0,lty=2)
 
   if(is.character(title)) title<-paste(title)
@@ -2497,15 +2532,15 @@ if (k == 1 & j == 1)
       abline(v=(id/f)+from,col="red")
       return (round((id/f)+from,3))
       }
+  }
 }
 
 # to get a multi-window view
 else
 {
-  if (zoom == TRUE)
-  stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
-  if (identify == TRUE)
-  stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
+  if (!is.null(scroll)) stop("scroll cannot be used with a multi-frame window")
+  if (zoom == TRUE) stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
+  if (identify == TRUE) stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
   x<-n%/%p
   def.par <- par(no.readonly = TRUE)
   on.exit(par(def.par))
@@ -2528,7 +2563,7 @@ else
         {axis(side=2, at=max(abs(wave)), col=colline,labels=FALSE)
         axis(side=1, col=colline,labels=FALSE)}
   abline(h=0,col=coly0,lty=2)
-  
+
 # title
 if(is.character(title)) title<-paste(title)
 if (title == FALSE) {title <- paste("")}
@@ -2548,7 +2583,7 @@ if (labels == TRUE)
 	mtext("Amplitude",col=collab, side=2, font=fontlab,cex=cexlab,
         line=0.4,outer=TRUE)
   }
-  
+
 # plots following windows
 for(i in 1:(p-1))
   {
@@ -2565,7 +2600,7 @@ for(i in 1:(p-1))
 	if (bty == "l" | bty == "o")
         {axis(side=2, at = max(abs(wave)), col=colline,labels=FALSE)
        	axis(side=1, col=colline,labels=FALSE)}
-  abline(h=0,col=coly0,lty=2)	
+  abline(h=0,col=coly0,lty=2)
   }
 }
 }
@@ -2797,6 +2832,33 @@ else return(Q)
 
 
 ################################################################################
+#                                REPW
+################################################################################
+
+repw<-function(
+wave,
+f,
+times = 2,
+plot = FALSE,
+Sample = FALSE,
+...
+)
+
+{
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+
+wave1<-as.matrix(rep(wave,times=times))
+
+if (plot == TRUE){oscillo(wave=wave1,f=f,...)}
+else
+    {
+    if (Sample == TRUE){wave1<-as.Sample(as.numeric(wave1), rate=f, bits=16)}
+    return(wave1)
+    }
+}
+
+
+################################################################################
 #                                REVW                                         
 ################################################################################
 
@@ -2890,6 +2952,46 @@ else
 
 
 ################################################################################
+#                               SETENV
+################################################################################
+
+setenv<-function
+(
+wave1,
+wave2,
+f,
+smooth = NULL,
+ksmooth = NULL,
+plot = FALSE,
+listen = FALSE,
+Sample = FALSE,
+...
+)
+
+{
+if(class(wave1)=="Sample") {f1<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
+if(class(wave2)=="Sample") {f2<-wave2$rate ; wave2<-as.matrix(wave2$sound[1,])}
+
+wave2.env<-oscillo(wave2,f=f,env=TRUE,smooth=smooth,ksmooth=ksmooth,plot=FALSE)
+wave2.env<-approx(wave2.env, n=nrow(wave1))$y
+wave3<-wave1*wave2.env
+wave3<-wave3/max(wave3)
+
+if(plot == TRUE)
+    {
+    oscillo(wave=wave3,f=f,...)
+    if(listen == TRUE) {listen(wave3,f=f)}
+    }
+else
+    {
+    if(Sample == TRUE){wave3<-as.Sample(as.numeric(wave3), rate=f, bits=16)}
+    if (listen == TRUE) {listen(wave3,f=f)}
+    return(wave3)
+    }
+}
+
+
+################################################################################
 #                               SFM                                        
 ################################################################################
 
@@ -2905,7 +3007,7 @@ if (length(spec) > 400)
 	step<-seq(1,length(spec),by=round(length(spec)/256))
 	spec<-spec[step]
 	} 
-ifelse(spec==0,yes=1e-5,no=spec)
+spec<-ifelse(spec==0,yes=1e-5,no=spec)
 # PMF multiplied by 10 to avoid values between 0 and 1 that will make gm=0
 spec<-spec/sum(spec)*100
 n<-length(spec)
@@ -3419,6 +3521,9 @@ X<-seq(0,n/f,length.out=length(step))
 if (is.null(flim)==TRUE)
   {
   Y<-seq(0,f/2000,length.out=nrow(z))
+# the following line is better
+# but in that case no perfect overlap with neither dfreq nor fund nor autoc
+#  Y<-seq(f/1000/wl,f/2000,length.out=nrow(z))
   }
 else
   {
@@ -3449,7 +3554,10 @@ if (plot==TRUE)
     dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
       cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
     par(mar=c(5,4.1,0,0),las=0,col="white",col=colaxis,col.lab=collab)
-    soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,colline=colaxis,...)
+
+    soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,
+    colline=colaxis,ylim=c(-max(abs(wave)),max(abs(wave))),
+    tickup=max(abs(wave),na.rm=TRUE),...)
     }
     
   if (osc==FALSE & scale==TRUE)
@@ -3474,7 +3582,8 @@ if (plot==TRUE)
     on.exit(par(def.par))
     layout(matrix(c(2,1), nr = 2, byrow=TRUE), heights=c(3,1))
     par(mar=c(5.1,4.1,0,2.1), las=0, bg=colbg)
-    soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,colline=colaxis,...)
+    soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,colline=colaxis,
+    tickup=max(abs(wave),na.rm=TRUE), ylim=c(-max(abs(wave)),max(abs(wave))),...)
     par(mar=c(0,4.1,2.1,2.1), las=1)
     filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
 			plot.title=plot.title, color.palette=palette, axisX=FALSE, axisY=axisY,
@@ -3514,54 +3623,49 @@ plot = TRUE,
 magt = 10,
 magf = 10,
 maga = 2,
-palette = rev.terrain.colors
-)
+palette = rev.terrain.colors)
 
 {
-require (rgl)
-
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
-n<-nrow(wave)
-step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
-
-# STFT
-z<-stft(wave=wave,wl=wl,zp=zp,step=step,wn=wn)	 		      
-	
-if (plot == FALSE)
-	return(z)
-else
-  {
-	X<-magt*(1:ncol(z))
-	Y<-magf*(1:nrow(z))
-	Z<-maga*z
-  
-  # x,y,z ticks positions (for 5 ticks)
-  Xat<-seq(magt,magt*ncol(z),by=(magt*ncol(z))/4)  
-  Yat<-seq(magf,magf*nrow(z),by=(magf*nrow(z))/4)     
-  Zat<-seq(min(Z),maga,by=abs(min(Z))/4)               
-  
-  # x,y,z, labels for 5 ticks
-  Xlab<-as.character(round(seq(0,n/f,by=n/(4*f)),1))    
-  Ylab<-as.character(round(seq((f/1000)/(wl+zp),f/2000,by=f/(4*2000)),1))
-  Zlab<-as.character(round(seq(min(Z)/maga,0,by=abs(min(Z))/(4*maga)),1))
-  
-  Zlim <- range(Z)
-  Zlen <- Zlim[2]-Zlim[1]+1
-  colorlut <- palette(Zlen)
-  col <- colorlut[Z-Zlim[1]+1] 
-  
-	rgl.clear()
-  	rgl.bbox(color="white", emission="gray8", specular="gray",
-    shininess=50, alpha=0.8,
-    xat = Yat, xlab = Ylab, xunit=0, 
-    yat = Zat, ylab = Zlab, yunit=0, 
-    zat = Xat, zlab = Xlab, zunit=0) 
-  rgl.surface(Y,X,Z,color=col, back = "line")
-  text3d(x=1,z=magt*ncol(Z)/2,y=min(Z),text="Time (s)",color="white")
-  text3d(z=1,x=magf*nrow(Z)/2,y=min(Z),text="Frequency (kHz)",color="white")
-  text3d(x=1,z=0,y=0,text="Amplitude (dB)",color="white")
-  }
+    require(rgl)
+    if (class(wave) == "Sample") {
+        f <- wave$rate
+        wave <- as.matrix(wave$sound[1, ])
+    }
+    n <- nrow(wave)
+    step <- seq(1, n - wl, wl - (ovlp * wl/100))
+    z <- stft(wave = wave, wl = wl, zp = zp, step = step, wn = wn)
+    if (plot == FALSE)
+        return(z)
+    else {
+        X <- magt * (1:ncol(z))
+        Y <- magf * (1:nrow(z))
+        Z <- maga * z
+        Xat <- seq(magt, magt * ncol(z), by = (magt * ncol(z))/4)
+        Yat <- seq(magf, magf * nrow(z), by = (magf * nrow(z))/4)
+        Zat <- seq(min(Z), maga, by = abs(min(Z))/4)
+        Xlab <- as.character(round(seq(0, n/f, by = n/(4 * f)),
+            1))
+        Ylab <- as.character(round(seq((f/1000)/(wl + zp), f/2000,
+            by = f/(4 * 2000)), 1))
+        Zlab <- as.character(round(seq(min(Z)/maga, 0, by = abs(min(Z))/(4 *
+            maga)), 1))
+        Zlim <- range(Z)
+        Zlen <- Zlim[2] - Zlim[1] + 1
+        colorlut <- palette(Zlen)
+        col <- colorlut[Z - Zlim[1] + 1]
+        rgl.clear()
+        rgl.bbox(color = "white", emission = "gray8", specular = "gray",
+            shininess = 50, alpha = 0.8, xat = Yat, xlab = Ylab,
+            xunit = 0, yat = Zat, ylab = Zlab, yunit = 0, zat = Xat,
+            zlab = Xlab, zunit = 0)
+        rgl.texts(x = 1, z = magt * ncol(Z)/2, y = min(Z), text = "Time (s)",
+            color = "white")
+        rgl.texts(z = 1, x = magf * nrow(Z)/2, y = min(Z), text = "Frequency (kHz)",
+            color = "white")
+        rgl.texts(x = 1, z = 0, y = 0, text = "Amplitude (dB)",
+            color = "white")
+        rgl.surface(Y, X, Z, color = col, back = "lines")
+        }
 }
 
 
@@ -3674,7 +3778,7 @@ timer<-function(
 wave,
 f,
 threshold,
-smooth=NULL,
+smooth = NULL,
 plot = TRUE,
 plotthreshold = TRUE,
 col = "black",
@@ -3690,7 +3794,7 @@ if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
 n<-nrow(wave)
 thres<-max(abs(wave))*(threshold/100)
 
-if (smooth)
+if (!is.null(smooth))
   {
   z0<-abs(wave[0:n,])
   step<-seq(1,n-smooth,smooth)
@@ -3701,7 +3805,8 @@ if (smooth)
   n<-nrow(data)
   thres<-max(data)*(threshold/100)
   f<-f/smooth
-  wave1<-ts(z1,start=0,end=n/f,freq=f)}
+  wave1<-ts(z1,start=0,end=n/f,freq=f)
+  }
 else
   wave1<-ts(abs(wave[0:n,]),start=0,end=n/f,freq=f)
 
@@ -3781,7 +3886,6 @@ else
   }
   
 }
-
 
 
 ################################################################################
@@ -4238,6 +4342,8 @@ soscillo<-function
 (
 wave,
 f,
+from = FALSE,
+to =FALSE,
 env = FALSE,
 smooth = NULL,
 colwave = "black",
@@ -4252,13 +4358,25 @@ fontlab = 1,
 title = FALSE,
 xaxt="s",
 yaxt="n",
+tickup = NULL,
 ... 
 )
 
 {
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
 
-n<-nrow(wave)
+if (from|to)
+  {
+  if (from > to) stop("'from' cannot be superior to 'to'")
+  if (from == 0) {a<-1; b<-round(to*f)}
+  if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
+  if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
+  else {a<-round(from*f); b<-round(to*f)}
+  wave<-as.matrix(wave[a:b,])
+  n<-nrow(wave)
+  }
+else {n<-nrow(wave) ; from<-0 ; to<-n/f}
+
 par(tcl=0.5, col.axis=colaxis, col=colline, col.lab=collab,las=0)
 
 if (env == TRUE)
@@ -4276,23 +4394,22 @@ if (env == TRUE)
     wave<-ts(z1,start=0,end=n/f,freq=f)
     }
     else
-    wave<-ts(abs(wave[0:n,]),start=0,end=n/f,freq=f)
+    wave<-ts(abs(wave[0:n,]),start=from,end=to,freq=f)
   }
 
 else
-  wave<-ts(wave[0:n,], start=0, end=n/f, freq=f)
+  wave<-ts(wave[0:n,], start=from, end=to, freq=f)
 
 plot(wave,
 		col=colwave, type="l",
 		xaxs="i", yaxs="i",
 		xlab="", ylab="",
-		ylim=c(-max(abs(wave)),max(abs(wave))),
-		xaxt=xaxt,yaxt=yaxt, bty="l",
+		xaxt=xaxt, yaxt=yaxt, bty="l",
 		...)
 axis(side=1, col=colline,labels=FALSE)
-axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)
+axis(side=2, at=tickup, col=colline,labels=FALSE)
 
-mtext("Time (s)",col=collab,font=fontlab,,cex=cexlab,side=1,line=3)
+mtext("Time (s)",col=collab,font=fontlab,cex=cexlab,side=1,line=3)
 mtext("Amplitude",col=collab,font=fontlab,cex=cexlab,side=2,line=3)
 
 abline(h=0,col=coly0,lty=2)

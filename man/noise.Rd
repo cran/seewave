@@ -9,12 +9,13 @@ This function generates noise.
 }
 
 \usage{
-noise(f, d, Sample = FALSE)
+noise(f, d, listen = FALSE, Sample = FALSE)
 }
 
 \arguments{
   \item{f}{sampling frequency of the signal to be generated (in Hz)}
   \item{d}{duration of the signal to be generated}
+  \item{listen}{if \code{TRUE} the new sound is played back.}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.
 }

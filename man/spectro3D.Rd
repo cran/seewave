@@ -10,8 +10,10 @@ time wave. The function corresponds to short-term Fourier transform.
 }
 
 \usage{
-spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0, ovlp = 0, plot = TRUE,
-magt = 10, magf = 10, maga = 2, palette = rev.terrain.colors)
+spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
+ovlp = 0, plot = TRUE,
+magt = 10, magf = 10, maga = 2,
+palette = rev.terrain.colors)
 }
 
 \arguments{
