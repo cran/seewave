@@ -17,7 +17,7 @@ Recording of a calling song section of the Mediterranean cicada
 Duration = 0.719 s. Sampling frequency = 22050 Hz.
 }
 \source{
-Recording by Jérôme Sueur.
+Recording by Jerome Sueur.
 }
 \examples{
 data(orni)

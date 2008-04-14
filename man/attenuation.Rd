@@ -42,7 +42,7 @@ experimental data collected in a real environment.}
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{convSPL}}, \code{\link{moredB}}}
 

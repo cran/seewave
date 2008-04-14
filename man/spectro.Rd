@@ -20,7 +20,7 @@ colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
 ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
 scalefontlab = 1, scalecexlab =0.75,
-axisX = TRUE, axisY = TRUE, tlim = NULL,
+axisX = TRUE, axisY = TRUE, tlim = NULL, trel = TRUE,
 flim = NULL, flimd = NULL, listen=FALSE,
 ...)
 }
@@ -63,7 +63,9 @@ flim = NULL, flimd = NULL, listen=FALSE,
   \item{scalecexlab}{cex of the amplitude scale label.}
   \item{axisX}{logical, if \code{TRUE} plots time X-axis (by default \code{TRUE}).}  
   \item{axisY}{logical, if \code{TRUE} plots frequency Y-axis (by default \code{TRUE}).}
-  \item{tlim}{modifications of the time X-axis limits.} 
+  \item{tlim}{modifications of the time X-axis limits.}
+  \item{trel}{time X-axis with a relative scale when \code{tlim} is not null,
+	\emph{i.e.} relative to \code{wave}.} 
   \item{flim}{modifications of the frequency Y-axis limits.} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
       and \code{ovlp} arguments are applied to increase time/frequency resolution.}    
@@ -84,7 +86,8 @@ and the temporal precision is obtained by calculating the reverse ratio
 adds 0 values on both sides of the analysis window. This increases frequency
 resolution without altering time resolution.\cr
 Any colour palette can be used. In particular, it is possible to use other
-palettes coming with \pkg{seewave}: \code{rev.gray.colors.1},
+palettes coming with \pkg{seewave}: \code{temp.colors}, 
+\code{rev.gray.colors.1},
 \code{rev.gray.colors.2}, \code{rev.heat.colors},
 \code{rev.terrain.colors}, \code{rev.topo.colors},
 \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
@@ -100,7 +103,7 @@ corresponds to a Fourier transform of length \code{wl}/2.}
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
@@ -140,6 +143,8 @@ spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
 spectro(pellu2,f=22050,ovlp=85,zp=16,
     palette=rev.gray.colors.1)
 # colour modifications
+data(sheep)
+spectro(sheep,f=8000,palette=temp.colors,collevels=seq(-115,0,1))
 spectro(pellu2,f=22050,ovlp=85,zp=16,
 palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,

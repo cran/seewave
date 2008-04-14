@@ -35,7 +35,7 @@ If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
   \item{p}{duration of pause periods in seconds}
   \item{r}{ratio between the signal periods and silence}.
 }
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 \seealso{\code{\link{oscillo}}, \code{\link{cutw}},  \code{\link{pastew}}.}
 \examples{
 data(tico)

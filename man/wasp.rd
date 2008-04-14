@@ -12,7 +12,7 @@ of a given frequency in air, fresh-water or sea-water.}
 
 \arguments{
   \item{f}{frequency (Hz).}
-  \item{t}{temperature (° Celcius).}
+  \item{t}{temperature (degree Celcius).}
   \item{c}{celerity (m/s) if a wavelength is to be found at a particular speed of sound.}
   \item{s}{salinity (parts per thousand) when \code{medium} is \code{"sea"}.}
   \item{d}{depth (m) when \code{medium} is \code{"sea"}.}
@@ -35,7 +35,7 @@ c = 1.402385e3+5.038813*t-(5.799136e-2)*t^2}
 +(2.787860e-9)*t^5}
 
 with \emph{t} = temperature in degrees Celsius;
-range of validity: 0-95°C at atmospheric pressure.\cr
+range of validity: 0-95Â°C at atmospheric pressure.\cr
 
 Speed of sound in sea-water is computed according to Mackenzie equation:\cr
 \deqn{c = 1448.96 + 4.591\times{t}- 5.304.10^{-2}\times{t^{2}}}{%
@@ -50,7 +50,7 @@ c = 1448.96+4.591*t-(5.304e-2)*t^2}
 with \emph{t} = temperature in degrees Celsius;
 \emph{s} = salinity in parts per thousand;
 \emph{d} = depth in meters;
-range of validity: temperature 2 to 30 °C, salinity 25 to 40 parts per thousand, depth 0 to 8000 m.\cr
+range of validity: temperature 2 to 30 Â°C, salinity 25 to 40 parts per thousand, depth 0 to 8000 m.\cr
 
 Wavelength is obtained following:\cr
 \deqn{\lambda = \frac{c}{f}}{% 
@@ -67,14 +67,14 @@ A list of two values is returned:
 
 \references{\url{http://resource.npl.co.uk}}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \examples{
-# wavelength (m) of a 2000 Hz air-borne sound at 20°C
+# wavelength (m) of a 2000 Hz air-borne sound at 20Â°C
 wasp(f=2000)$l
 # [1] 0.1717
 
-# sound speed in sea at 0 and -500 m for a respective temperature of 22°C and 11°C
+# sound speed in sea at 0 and -500 m for a respective temperature of 22Â°C and 11Â°C
 wasp(f=1000,s=30,d=c(0,500),t=c(22,11),medium="sea")$c
 # [1] 1521.246 1495.414
 
@@ -91,7 +91,7 @@ for(i in 1:nb) res[,i]<-wasp(a,t=b[i])$l
 matplot(x=a,y=res,type="l",lty=1,col= spectro.colors(nb),
   xlab="Frequency (Hz)",ylab="Wavelength (m)")
 title("Wavelength of air-borne sound at different temperatures")
-legend(x=15000,y=0.3,c("-20°C","-10°C","0°C","10°C","20°C","30°C","40°C"),
+legend(x=15000,y=0.3,c("-20Â°C","-10Â°C","0Â°C","10Â°C","20Â°C","30Â°C","40Â°C"),
   lty=1,col= spectro.colors(nb),bg="grey")
 par(op)
 }

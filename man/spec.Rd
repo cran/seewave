@@ -13,7 +13,7 @@ or dB data.
 \usage{
 spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE,
 PMF = FALSE, dB = FALSE,
-at = FALSE, from = FALSE, to = FALSE, peaks = FALSE,
+at = NULL, from = NULL, to = NULL, peaks = FALSE,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1, fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0, f/2000),
@@ -78,7 +78,7 @@ two elements:\cr
   \item{peaks }{the peaks value (in kHz).}
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}.}
 
 \note{This function is based on \code{\link{fft}}.} 

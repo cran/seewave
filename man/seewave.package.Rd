@@ -11,7 +11,7 @@ Time wave analysis and graphical representation
 }
 
 \description{
-seewave provides functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound). This package processes in particular time analysis (oscillograms and envelopes), spectral content, resonance quality factor, cross correlation and autocorrelation, zero-crossing, dominant frequency, 2D and 3D spectrograms.
+seewave provides functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound). This package processes in particular time analysis (oscillograms and envelopes), spectral content, resonance quality factor, cross correlation and autocorrelation, zero-crossing, frequency coherence, dominant frequency, analytic signal, 2D and 3D spectrograms.
 }
 
 \details{
@@ -19,20 +19,20 @@ seewave provides functions for analysing, manipulating, displaying, editing and 
 \tabular{ll}{
 Package: \tab seewave\cr
 Type: \tab Package\cr
-Version: \tab 1.4.7\cr
-Date: \tab 2008-02-25\cr
+Version: \tab 1.4.8\cr
+Date: \tab 2008-04-14\cr
 License: \tab GPL version 2 or newer\cr
-Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Martin Maechler,
-Arnold Fertin, Sandrine Pavoine \cr
+Contributors : \tab Jonathan Lees, Martin Maechler, Sandrine Pavoine\cr
+Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Arnold Fertin
 }
 }
 
 \author{
-Jérôme Sueur <sueur@mnhn.fr>\cr 
+Jerome Sueur <sueur@mnhn.fr>\cr 
 Thierry Aubin <thierry.aubin@u-psud.fr>\cr
 Caroline Simonis <csimonis@mnhn.fr>\cr
 
-Maintainer: Jérôme Sueur <sueur@mnhn.fr>\cr
+Maintainer: Jerome Sueur <sueur@mnhn.fr>\cr
 
 \url{http://sueur.jerome.neuf.fr/seewave.html}
 }

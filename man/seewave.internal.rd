@@ -19,6 +19,7 @@
 \alias{sspectro}
 \alias{spectro.colors}
 \alias{stft}
+\alias{temp.colors}
 
 \title{Internal Seewave Functions}
 

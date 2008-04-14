@@ -24,7 +24,7 @@ Duration = 2.47 s. Sampling frequency = 8000 hz.
 }
 
 \source{
-Recording by Frédéric Sebe.
+Recording by Frederic Sebe.
 }
 
 \examples{

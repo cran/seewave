@@ -10,8 +10,8 @@ Original and cut sections can be plotted as oscillograms for comparison.
 }
 
 \usage{
-cutw(wave, f, from, to, plot = FALSE, marks = TRUE,
-Sample = FALSE,...)
+cutw(wave, f, from = NULL, to = NULL, choose = FALSE,
+plot = FALSE, marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
@@ -22,6 +22,8 @@ Sample = FALSE,...)
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start mark (in s).}
   \item{to}{end mark (in s).}
+  \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
+		points can be graphically chosen with a cursor on the oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of original
    and cut sections (by default \code{FALSE}).}
   \item{marks}{logical, if \code{TRUE} shows the start and end mark on the plot
@@ -37,7 +39,7 @@ original and cut sections.}
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}},\code{\link{deletew}},
 \code{\link{fadew}},\code{\link{mutew}},\code{\link{pastew}},\code{\link{revw}},

@@ -27,7 +27,7 @@ wave.}
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{deletew}},
 \code{\link{fadew}}, \code{\link{pastew}}, \code{\link{mutew}}}

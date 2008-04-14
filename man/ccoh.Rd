@@ -75,7 +75,7 @@ A value of one indicates the existence of linear frequency response between the
 two signals. This can be used, for instance, to compare the input and output
 signals of a system.\cr
 Any colour palette can be used. In particular, it is possible to use other
-palettes coming with \pkg{seewave}: \code{rev.gray.colors.1},
+palettes coming with \pkg{seewave}: \code{temp.colors}, \code{rev.gray.colors.1},
 \code{rev.gray.colors.2}, 
 \code{spectro.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
 \code{rev.cm.colors} corresponding to the reverse of  
@@ -87,7 +87,7 @@ Use \code{\link{locator}} to identify  points.
 If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
 corresponds to a coherence function of length \code{wl}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} but this function is
+\author{Jerome Sueur \email{sueur@mnhn.fr} but this function is
 mainly based on \code{\link{spec.pgram}} by Martyn Plummer, Adrian Trapletti
 and B.D. Ripley}
 

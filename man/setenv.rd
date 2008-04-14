@@ -7,8 +7,8 @@
 \description{This function sets the amplitude envelope of a time wave
 to another one}
 
-\usage{setenv(wave1, wave2, f, smooth = NULL, ksmooth = NULL, plot = FALSE,
-listen = FALSE, Sample = FALSE, ...)
+\usage{setenv(wave1, wave2, f, envt="hil", msmooth = NULL, ksmooth = NULL,
+plot = FALSE, listen = FALSE, Sample = FALSE, ...)
 }
 
 \arguments{
@@ -21,10 +21,14 @@ listen = FALSE, Sample = FALSE, ...)
   \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[sound]{Sample}} object(s).}
-  \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope of \code{wave2}
-      by floating average.}
-  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope of \code{wave2}
-      by applying a \code{\link{kernel}} smoothing.}
+  \item{envt}{the type of envelope to be used for \code{wave2}: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope of \code{wave2} 
+    with a mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth via \code{\link{kernel}} to apply
+	to the amplitude envelope of\code{wave2}. See \code{\link{env}}.}
   \item{plot}{if \code{TRUE} returns the oscillogram
       of the new time wave (by default \code{FALSE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
@@ -40,9 +44,9 @@ change the value returned.}
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{oscillo}}, \code{\link{synth}}}
+\seealso{\code{\link{env}}, \code{\link{synth}}}
 
 \examples{
 data(tico)

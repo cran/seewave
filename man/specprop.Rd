@@ -39,7 +39,7 @@ A list of 15 values is returned
   \item{Q25}{first quartile (see \code{\link{quantile}})}
   \item{Q75}{third quartile (see \code{\link{quantile}})}
   \item{IQR}{interquartile range (see \code{\link{IQR}})}
-  \item{cent}{centroïd, see \code{note}}
+  \item{cent}{centroï¿½d, see \code{note}}
   \item{skewness}{skewness, a measure of asymmetry, see \code{note}}
   \item{kurtosis}{kurtosis, a measure of peakedness, see \code{note}}
   \item{sfm}{spectral flatness measure (see \code{\link{sfm}})}
@@ -48,7 +48,7 @@ A list of 15 values is returned
 }
 
 \note{
-Centroïd is computed according to:\cr
+Centroid is computed according to:\cr
     \deqn{C = \sum_{i = 1}^{N} x_i\times{y_i}}{%
     C = sum(x*y)}\cr
     with:\cr
@@ -73,7 +73,7 @@ Kurtosis is computed according to:\cr
     relative to normal distribution with the same mean and variance.
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \examples{

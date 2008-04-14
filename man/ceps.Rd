@@ -8,7 +8,7 @@
 frequency detection.}
 
 \usage{
-ceps(wave, f, wl = 512, at = FALSE, from = FALSE, to = FALSE,
+ceps(wave, f, wl = 512, at = NULL, from = NULL, to = NULL,
 tpeaks = FALSE, fpeaks = FALSE, tidentify = FALSE,
 fidentify = FALSE, col = "black", cex = 1,
 colpeaks = "red", cexpeaks = 0.75, fontpeaks = 1, plot = TRUE,
@@ -25,8 +25,8 @@ qlim = NULL, alim = NULL, type = "l", ...)
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{at}{position where to compute the cepstrum (in s).}
-  \item{from}{start mark where  to compute the cepstrum (in s).}
-  \item{to}{end mark where to compute the cepstrum (in s).}
+  \item{from}{start position where to compute the cepstrum (in s).}
+  \item{to}{end position to compute the cepstrum (in s).}
   \item{tpeaks}{returns peaks value for a given span
       according to time scale (s)(see \code{details}).}
   \item{fpeaks}{returns peaks value for a given span
@@ -69,14 +69,15 @@ just differ in the unit of the results.
 }
 
 \value{
-The cepstral profile is returned.
+When \code{plot} is \code{FALSE}, \code{ceps} returns the cesptral profile as a two-column matrix, the first column corresponding to quefrency (\emph{x}-axis) and the second
+corresponding to amplitude (\emph{y}-axis).
 }
 
 \references{Oppenheim, A.V. and Schafer, R.W. 2004. From frequency
 to quefrency: a history of the cepstrum. \emph{Signal Processing Magazine IEEE},
 21: 95-106.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}.}
 
 \note{Cepstral analysis is mainly used in speech processing.

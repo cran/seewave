@@ -10,11 +10,10 @@ multi-frame plot. The envelope of the wave can also be shown.
 }
 
 \usage{
-oscillo(wave, f, from = FALSE, to = FALSE, scroll = NULL,
+oscillo(wave, f, from = NULL, to = NULL, scroll = NULL,
 zoom = FALSE, k=1, j=1, labels = TRUE, byrow = TRUE,
-env = FALSE, smooth = NULL,
-ksmooth = NULL, identify = FALSE, plot = TRUE, colwave = "black", 
-colbg = "white", coltitle = "black", cextitle = 1.2,
+identify = FALSE, plot = TRUE, colwave = "black", 
+coltitle = "black", cextitle = 1.2,
 fonttitle = 2, collab = "black",
 cexlab = 1, fontlab = 1, colline = "black", 
 colaxis = "black", coly0 = "lightgrey",
@@ -37,18 +36,11 @@ title = FALSE, xaxt="s", yaxt="n", bty = "l")
   \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
   \item{byrow}{logical, if \code{TRUE}, the sections are filled by
           rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
-  \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
-      (by default \code{FALSE}).}
-  \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by floating average.}
-  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by applying a \code{\link{kernel}} smoothing.}
   \item{identify}{returns the time coordinate of points chosen  with a cursor
       on the oscillogram.}
    \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot
       of \code{wave}(by default \code{TRUE}).}
   \item{colwave}{colour of the oscillogram or of the envelope.}
-  \item{colbg}{background colour.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
   \item{cextitle}{character size for the title.}
   \item{fonttitle}{font for the title.}
@@ -83,7 +75,7 @@ points on the oscillogram.\cr
 } 
 
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{oscilloST}},\code{\link{cutw}}, \code{\link{pastew}},
@@ -106,24 +98,16 @@ oscillo(tico,f=22050,k=4,j=1)
 oscillo(tico,f=22050,k=4,j=4)
 oscillo(tico,f=22050,k=2,j=2,byrow=TRUE)
 oscillo(tico,f=22050,k=2,j=2,byrow=FALSE)
-# envelope representation without and with smoothing
-oscillo(tico,f=22050,env=TRUE)
-oscillo(tico,f=22050,env=TRUE,smooth=80)
-oscillo(tico,f=22050,env=TRUE,ksmooth=kernel("daniell",10))
-oscillo(tico,f=22050,env=TRUE,ksmooth=kernel("daniell",500))
-# overplot of oscillographic and envelope representation
-env<-oscillo(tico,f=22050,env=TRUE,plot=FALSE,smooth=40)
-ticonorm<-tico/max(tico)
-envnorm<-env/max(env)
-oscillo(ticonorm,f=22050)
+# overplot of oscillographic and envelope representations
+oscillo(tico,f=22050)
 par(new=TRUE)
-plot(envnorm,type="l",col="red",xaxs="i",yaxs="i",ann=FALSE,xaxt="n",yaxt="n",
-    ylim=range(ticonorm),bty="l",lwd=2)
-legend(x=4, y=1,"smoothed envelope", col="red",lty=1,lwd=2,bty="n",cex=0.75)
+env(tico,f=22050,colwave=2)
 # full colour modifications in a two-frame oscillogram
-oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",colbg="grey",
+op<-par(bg="grey")
+oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",
     coltitle="yellow",collab="red",colline="white",
     colaxis="blue",coly0="grey50")
+par(op)
 # change the title
 data(orni)
 oscillo(orni,f=22050,title="The song of a famous cicada")

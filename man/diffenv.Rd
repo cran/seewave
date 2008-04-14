@@ -8,9 +8,9 @@
 two amplitude envelopes.}
 
 \usage{
-diffenv(wave1, wave2, f, smooth = NULL, plot = FALSE,
-lty1 = 1, lty2 = 2, col1 = 2, col2 = 4, cold = 8, xlab = "Time (s)",
-ylab = "Amplitude", ylim = NULL, legend = TRUE, ...)
+diffenv(wave1, wave2, f, envt = "hil", msmooth = NULL, ksmooth = NULL,
+plot = FALSE, lty1 = 1, lty2 = 2, col1 = 2, col2 = 4, cold = 8,
+xlab = "Time (s)", ylab = "Amplitude", ylim = NULL, legend = TRUE, ...)
 }
 
 \arguments{
@@ -21,7 +21,13 @@ ylab = "Amplitude", ylim = NULL, legend = TRUE, ...)
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[Sound]{Sample}} object(s).}
-  \item{smooth}{smoothes both envelopes by floating average. See examples.}
+  \item{envt}{the type of envelope to be used: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{plot}{logical, if \code{TRUE} plots both envelopes and their surface
       difference (by default \code{FALSE}).}
   \item{lty1}{line type of the first envelope (envelope of \code{wave1}).}
@@ -49,34 +55,23 @@ When \code{plot} is \code{TRUE}, both envelopes and their difference surface are
 plotted on the same graph.
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}.}
+\author{Jerome Sueur \email{sueur@mnhn.fr}.}
 
 \note{This method can be used as a relative distance estimation
 between different envelopes.}
 
-\seealso{\code{\link{oscillo}}, \code{\link{corenv}}, \code{\link{diffspec}},
+\seealso{\code{\link{env}}, \code{\link{corenv}}, \code{\link{diffspec}},
 \code{\link{diffwave}}}
 
 \examples{
 data(tico)
 data(orni)
-# selection in tico to have two waves of similar duration (dim)
+# selection in tico of two waves with similar duration (dim)
 tico2<-as.matrix(tico[1:nrow(orni),1])
 diffenv(tico2,orni,f=22050,plot=TRUE)
-# [1] 0.7364
-# smoothing the envelope gives a better graph but changes the result
-diffenv(tico2,orni,f=22050,smooth=20,plot=TRUE)
-# [1] 0.6873974
-# smoothing can have actually dramatic effects
-# so always use the same smooth settings for comparisons
-a<-synth(d=0.5,f=8000,cf=1000,plot=FALSE)
-b<-synth(d=0.5,f=8000,cf=1100,plot=FALSE)
-diffenv(a,b,f=8000)
-# [1] 0.2727784
-diffenv(a,b,f=8000,smooth=50)
-# [1] 0.01012826
+# smoothing the envelope gives a better graph but slightly changes the result
+diffenv(tico2,orni,f=22050,msmooth=c(20,0),plot=TRUE)
 }
 
 \keyword{dplot}
 \keyword{ts}
-

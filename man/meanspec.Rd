@@ -12,7 +12,7 @@ or dB data.
 
 \usage{
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE,
-PMF = FALSE, dB = FALSE, from = FALSE, to = FALSE, peaks = FALSE,
+PMF = FALSE, dB = FALSE, from = NULL, to = NULL, peaks = FALSE,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1,  fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
@@ -75,7 +75,7 @@ two elements:\cr
   \item{peaks }{the peaks values (in kHz).} 
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 

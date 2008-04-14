@@ -11,7 +11,7 @@ displayed in a three-frame oscillographic plot.
 }
 
 \usage{
-pastew(wave1, wave2, f, at = "end", plot = FALSE,
+pastew(wave1, wave2, f, at = "end", choose = FALSE, plot = FALSE,
 marks = TRUE, Sample = FALSE,...)
 }
 
@@ -27,6 +27,8 @@ marks = TRUE, Sample = FALSE,...)
           \code{\link[sound]{Sample}} object(s).}
   \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
     Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
+  \item{choose}{logical, if \code{TRUE} the point where \code{wave1} will
+	be pasted into \code{wave2} (=\code{at}) can be graphically chosen with a cursor.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
   \code{wave1}, \code{wave2} and \code{wave1} + \code{wave2} (by default \code{FALSE}).}
   \item{marks}{logical, if \code{TRUE} shows where \code{wave1} has been pasted (by default \code{TRUE}).}
@@ -43,7 +45,7 @@ marks = TRUE, Sample = FALSE,...)
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
 \code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}

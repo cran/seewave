@@ -24,7 +24,7 @@ If \code{plot} is \code{FALSE}, \code{rmoffset} returns a one-column matrix
 describing the new wave with the same sampling frequency as the original wave.
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}}
 

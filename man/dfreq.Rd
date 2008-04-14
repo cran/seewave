@@ -8,7 +8,7 @@
 This function gives the dominant frequency (i. e. the frequency of highest amplitude) of a time wave.}
 
 \usage{
-dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = FALSE,
+dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), type ="l",...)
 }
@@ -35,11 +35,12 @@ ylim = c(0, f/2000), type ="l",...)
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{dfreq} function returns a vector of 
-numeric data corresponding to the dominant frequency along the time wave.
+When \code{plot} is \code{FALSE}, \code{dfreq} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding to 
+to dominant frequency in kHz (\emph{y}-axis).\cr
+NA corresponds to pause sections in \code{wave} (see \code{threshold}). 
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is based on \code{\link{fft}}.} 
 

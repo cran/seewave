@@ -23,7 +23,7 @@ Duration = 3.309 s. Sampling frequency = 11025 hz.
 }
 
 \source{
-Recording by Jérôme Sueur.
+Recording by Jerome Sueur.
 }
 
 \examples{

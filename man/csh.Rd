@@ -7,7 +7,7 @@
 \description{This function computes the continuous spectral entropy (H) of a time wave.}
 
 \usage{
-csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = FALSE,
+csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Spectral Entropy",
 ylim = c(0, 1.1), type = "l", ...)
 }
@@ -35,14 +35,16 @@ ylim = c(0, 1.1), type = "l", ...)
 
 \details{See \code{\link{sh}} for computing method.}
 
-\value{If \code{plot} is \code{FALSE}, \code{csh} function returns a vector of 
-numeric data corresponding to the spectral entropy along the time wave.}
+\value{When \code{plot} is \code{FALSE}, \code{csh} returns a two-column matrix, the
+first column being time in seconds (\emph{x}-axis) and the second column being the spectral entropy (\emph{y}-axis) computed along time.\cr
+NA corresponds to pause sections in \code{wave} (see \code{threshold}). 
+}
 
 \references{Toh, A. M., Togneri, R. & Nordholm, S. 2005 
 Spectral entropy as speech features for speech recognition.
 \emph{Proceedings of PEECS}, pp. 60-65.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{The spectral entropy of a noisy signal will tend towards 1 whereas
 the spectral entropy of a pure tone signal will tend towards 0.}

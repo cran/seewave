@@ -14,8 +14,8 @@ dynspec(wave, f, wl = 512, wn = "hanning", zp = 0,
 ovlp = 0, norm = FALSE, dB = FALSE, plot = TRUE,
 title = TRUE, osc = FALSE, flab = "Frequency (kHz)",
 alab = "Amplitude", alim = NULL, flim = c(0, f/2000),
-type = "l", from = FALSE, to = FALSE, env = FALSE,
-smooth = NULL, ksmooth = NULL, colspec = "black",
+type = "l", from = NULL, to = NULL, envt = NULL,
+msmooth = NULL, ksmooth = NULL, colspec = "black",
 coltitle = "black", colbg = "white", colline = "black",
 colaxis = "black", collab = "black", cexlab = 1,
 fontlab = 1, colwave = "black",
@@ -52,12 +52,16 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
       See \code{\link{plot}} for details (by default "l" for lines).}
   \item{from}{start mark where  to compute the sliding spectrum (in s).}
   \item{to}{end mark where to compute the sliding spectrum (in s).}
-  \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
-      (by default \code{FALSE}) (only when \code{osc} is \code{TRUE}).}
-  \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by floating average (only when \code{osc} is \code{TRUE}).}
-  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by applying a \code{\link{kernel}} smoothing (only when \code{osc} is \code{TRUE}).}
+  \item{envt}{the type of envelope to be plooted:
+	either "abs" for absolute amplitude envelope or "hil" for Hilbert amplitude envelope.
+	See \code{\link{env}}.}
+  \item{msmooth}{when \code{env} is not \code{NULL},
+	a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{when \code{env} is not \code{NULL},
+	kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{colspec}{colour of the sliding spectrum.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
   \item{colbg}{background colour.}
@@ -83,7 +87,7 @@ The function requires the package \pkg{rpanel} that is based on the package \pkg
 If \code{plot} is \code{FALSE}, this function returns a matrix which columns
 correspond to the spectra computed along the time wave.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function is very similar to a spectrogram. See the \code{Details} of

@@ -6,7 +6,7 @@
 
 \description{Play a sound wave}
 
-\usage{listen(wave, f, from, to)}
+\usage{listen(wave, f, from = NULL, to = NULL, choose = FALSE)}
 
 \arguments{
   \item{wave}{data describing a time wave or a \code{\link[sound]{Sample}}
@@ -16,9 +16,11 @@
   to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start of play (in s).}
   \item{to}{end of play (in s).}
+  \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
+		points can be graphically chosen with a cursor on the oscillogram.}
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} but the original
+\author{Jerome Sueur \email{sueur@mnhn.fr} but the original
 \code{\link[sound]{play}} function is by Matthias Heymann (package \pkg{sound}).}
 
 \note{This function is based on \code{\link[sound]{play}} but allows to read

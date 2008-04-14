@@ -39,7 +39,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \seealso{\code{\link{ffilter}}, \code{\link{spectro}}}

@@ -24,7 +24,7 @@ and \emph{N} = number of frequencies.
 \value{A single value varying between 0 and 1 is returned.
 The value has no unit.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The SFM of a noisy signal will tend towards 1 whereas

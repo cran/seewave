@@ -45,7 +45,7 @@ A list of two values is returned:
 
 \note{This function works for air-borne sound only.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \examples{
 # 1 kHz near field at 1 cm from the source

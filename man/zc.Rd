@@ -9,7 +9,7 @@ This function measures the period of a full oscillating cycle.
 }
 
 \usage{
-zc(wave, f, plot = TRUE, interpol = 1, threshold = FALSE,
+zc(wave, f, plot = TRUE, interpol = 1, threshold = NULL,
 xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
@@ -35,11 +35,10 @@ the instantaneous frequency.
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{zc} functions returns a vector of numeric data.
-Values corresponds to the instantaneous frequency of the time wave. \sQuote{NA}s 
-correspond either to pause periods (e. g. detected applying \code{threshold} or
-sections of the time wave not corrsing the zero line. To remove \sQuote{NA}s with 
-\code{\link{na.omit}} allows to get only instantaneous frequency values but
+If \code{plot} is \code{FALSE}, \code{zc} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding
+to the instantaneous frequency of the time wave in kHz (\emph{y}-axis). \cr
+\sQuote{NA}s correspond either to pause periods (e. g. detected applying
+\code{threshold} or sections of the time wave not crossing the zero line. To remove \sQuote{NA}s with \code{\link{na.omit}} allows to get only instantaneous frequency values but
 discards information about pause sections.}
 
 \note{\code{interpol} adds points to the time wave by linear interpolation
@@ -49,9 +48,11 @@ time process. Type argument of \code{plot} cannot be set to \dQuote{l}.}
 \references{Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998.
 \emph{Animal acoustic communication.} Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr},
+\author{Jerome Sueur \email{sueur@mnhn.fr},
 Caroline Simonis \email{csimonis@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@u-psud.fr}}
+
+\seealso{\code{\link{ifreq}}}
 
 \examples{
 data(pellucens)
@@ -62,7 +63,7 @@ zc(pellu1,f=22050,threshold=5,pch=20)
 zc(pellu1,f=22050,threshold=5,interpol=20,pch=20)
 # a way to plot with a line and to filter low frequencies
 pellu2<-zc(pellu1,f=22050,threshold=5,interpol=20,plot=FALSE)
-pellu3<-na.omit(pellu2)
+pellu3<-na.omit(pellu2[,2])
 pellu4<-pellu3[pellu3>3]
 plot(x=seq(0,nrow(pellu1)/22050,length.out=length(pellu4)),
     y=pellu4,type="l",xlab="Time(s)",ylab="Frequency(kHz)")
