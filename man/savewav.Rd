@@ -21,11 +21,11 @@ filename = NULL)
 }
 
 \details{
-This functions uses two functions from the package \pkg{sound}:
+This function uses two functions from the package \pkg{sound}:
 \code{\link[sound]{Sample}} and \code{\link[sound]{saveSample}}
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{The  file automatically owerwrites an existing file
 with the same name.
@@ -40,7 +40,7 @@ a<-synth(f=8000,d=2,cf=2000,plot=FALSE)
 # here: "a.wav"
 savewav(a,f=22050)
 unlink("a.wav")
-# if you wish to to change the name, use 'file' argument
+# if you wish to change the name, use 'file' argument
 savewav(a,f=22050,file="b.wav")
 unlink("b.wav")
 }

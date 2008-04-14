@@ -10,7 +10,7 @@ the product between envelope surface difference and frequency surface difference
 }
 
 \usage{
-diffwave(wave1, wave2, f, wl = 512, smooth = NULL)
+diffwave(wave1, wave2, f, wl = 512, envt = "hil", msmooth = NULL, ksmooth = NULL)
 }
 
 \arguments{
@@ -22,7 +22,13 @@ diffwave(wave1, wave2, f, wl = 512, smooth = NULL)
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[sound]{Sample}} object(s).}
   \item{wl}{window length for spectral analysis (even number of points).}  
-  \item{smooth}{envelope smoothing by floating average.}
+  \item{envt}{the type of envelope to be used: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
 }
 
 \details{
@@ -31,7 +37,7 @@ This function computes the product between the values obtained with
 This then gives a global (time and frequency) estimation of dissimilarity.\cr
 The frequency mean spectrum and the amplitude envelope needed for computing
 respectively \code{\link{diffspec}} and \code{\link{diffenv}} are automatically generated.
-They can be controlled through \code{wl} and  \code{smooth} arguments respectively.
+They can be controlled through \code{wl}, \code{msmooth} and \code{ksmooth} arguments respectively.\cr
 See examples below and examples in \code{\link{diffspec}} and \code{\link{diffenv}}
 for implications on the results.}
 
@@ -40,7 +46,7 @@ The value has no unit.}
 
 \references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S., in preparation.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{This method can be used as a relative distance estimation
 between different waves.}
@@ -53,13 +59,10 @@ data(orni)
 # selection in tico to have two waves of similar duration (length)
 tico<-as.matrix(tico[1:nrow(orni),1])
 diffwave(tico,orni,f=22050)
-# [1] 0.4027229
 # changing the frequency parameter (wl)
 diffwave(tico,orni,f=22050,wl=1024)
-# [1] 0.4335703
-# changing the temporal parameter (smooth)
-diffwave(tico,orni,f=22050,smooth=20)
-# [1] 0.3758508
+# changing the temporal parameter (msmooth)
+diffwave(tico,orni,f=22050,msmooth=c(20,0))
 }
 
 \keyword{ts}

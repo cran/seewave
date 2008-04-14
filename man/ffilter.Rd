@@ -42,7 +42,7 @@ amplitude modifications.
 \value{A new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
 

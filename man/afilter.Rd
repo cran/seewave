@@ -34,7 +34,7 @@ of \code{wave}. Signal inferior to this value is clipped.
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is used as an argument (\code{threshold}) in the 
 following functions: \code{\link{autoc}}, \code{\link{csh}},

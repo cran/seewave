@@ -37,7 +37,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic
 communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is based on a convolution (\code{\link{convolve}}) between the
 input wave and a pulse echo filter.}
@@ -51,7 +51,7 @@ a<-synth(f=11025,d=1,cf=2000,shape="tria",am=c(50,10),fm=c(1000,10,1000))
 # with respectively a relative amplitude of 0.8, 0.4, and 0.2
 # and with a delay of 1s, 2s, and 3s  from the beginning of the input wave
 aecho<-echo(a,f=11025,amp=c(0.8,0.4,0.2),delay=c(1,2,3))
-# oscillographic ooutput to see what we have generated
+# oscillographic output to see what we have generated
 op<-par(mfrow=c(2,1))
 oscillo(a,f=11025,title="Input signal")
 oscillo(aecho,f=11025,colwave="blue",title="Signal with echoes",coltitle="blue")

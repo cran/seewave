@@ -15,7 +15,7 @@ scale = TRUE, cont = FALSE, collevels = seq(0, 1, 0.01),
 palette = rev.heat.colors, contlevels = seq(0, 1, 0.01),
 colcont = "black", colbg="white", colgrid = "black",
 colaxis = "black", collab = "black",
-plot.title = title(main = "", xlab = "Time (s)", ylab = "Quefrency (ms)"),
+plot.title = title(main = "", xlab = "Time (s)", ylab = "Quefrency (kHz)"),
 scalelab = "Amplitude", scalefontlab = 1, scalecexlab = 0.75,
 axisX = TRUE, axisY = TRUE, ...)
 }
@@ -71,7 +71,7 @@ cepstral profiles computed along time.}
 to quefrency: a history of the cepstrum. \emph{Signal Processing Magazine IEEE},
 21: 95-106.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}.}
+\author{Jerome Sueur \email{sueur@mnhn.fr}.}
 
 \note{This function is based on \code{\link{ceps}}.} 
 

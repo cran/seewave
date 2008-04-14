@@ -47,7 +47,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{ffilter}},\code{\link{lfs}}, \code{\link{afilter}},
 \code{\link[signal]{fir1}}, \code{\link[sound]{fir2}}}

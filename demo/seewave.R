@@ -5,24 +5,24 @@ op1<-par(ask=TRUE)
 # different oscillograms of a tropical sparrow song
 oscillo(tico,f=22050)
 oscillo(tico,f=22050,k=2,j=2,byrow=TRUE)
-oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="green",colbg="grey",
+op<-par(bg="grey")
+oscillo(tico,f=22050,k=4,j=1,title=TRUE,colwave="black",
     coltitle="yellow",collab="red",colline="white",
     colaxis="blue",coly0="grey50")
+par(op)
 
 # overplot of oscillographic and envelope representation
-env<-oscillo(tico,f=22050,env=TRUE,plot=FALSE,smooth=40)
-ticonorm<-tico/max(tico)
-envnorm<-env/max(env)
-oscillo(ticonorm,f=22050)
-par(new=TRUE)
-plot(envnorm,type="l",col="red",xaxs="i",yaxs="i",ann=FALSE,xaxt="n",yaxt="n",
-    ylim=range(ticonorm),bty="l",lwd=2)
-legend(x=4, y=1,"smoothed envelope", col="red",lty=1,lwd=2,bty="n",cex=0.75)
+oscillo(tico,f=22050)
+env(tico,f=22050,colwave=2,new=TRUE)
 
 # temporal automatic measurements
 timer(orni,f=22050,threshold=5,smooth=40,
         bty="l",xaxs="i",colval="blue")
 title(main="Timer() for automatic time measurements",col="blue")
+
+# instantaneous frequency
+ifreq(tico,f=22050,threshold=5)
+title(main="Instantaneous frequency using Hilbert transform")
 
 # comparaison of a full spectrum and a mean spectrum of a cicada song
 op<-par(mfrow=c(2,1))

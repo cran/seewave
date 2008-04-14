@@ -60,7 +60,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr},
+\author{Jerome Sueur \email{sueur@mnhn.fr},
 Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 

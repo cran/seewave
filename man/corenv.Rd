@@ -9,7 +9,8 @@ This function tests the similarity between two time wave envelopes by returning
 their maximal correlation and the time shift related to it. 
 }
 \usage{
-corenv(wave1, wave2, f, smooth = 20, plot = TRUE, plotval = TRUE,
+corenv(wave1, wave2, f, envt="hil", msmooth = NULL, ksmooth = NULL,
+plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Time (s)",
 ylab = "Coefficient of correlation (r)", type = "l", ...)
@@ -23,8 +24,13 @@ ylab = "Coefficient of correlation (r)", type = "l", ...)
   \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
           Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
           \code{\link[Sound]{Sample}} object(s).}
-  \item{smooth}{smoothes the envelopes of \code{wave1} and \code{wave2}
-      by floating average.}
+  \item{envt}{the type of envelope to be used: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift
       (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value
@@ -66,17 +72,17 @@ If \code{plot} is \code{FALSE}, \code{corenv} returns a list containing four
   \item{t}{the time offset corresponding to \code{rmax}.}
 }
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{spec}},\code{\link{covspectro}},
-        \code{\link{cor}}, \code{\link{cor.test}}.}
+\seealso{\code{\link{env}},\code{\link{corspec}},\code{\link{covspectro}},
+        \code{\link{cor}},\code{\link{cor.test}}.}
 
 \examples{
 data(orni)
 # cross-correlation between two echemes of a cicada song
 wave1<-cutw(orni,f=22050,from=0.3,to=0.4,plot=FALSE)
 wave2<-cutw(orni,f=22050,from=0.58,to=0.68,plot=FALSE)
-corenv(wave1,wave2,f=22050,ylim=c(-0.7,1.1))
+corenv(wave1,wave2,f=22050)
 }
 
 \keyword{dplot}

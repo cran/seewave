@@ -10,10 +10,9 @@ oscillogram in a two-frame plot. The envelope of the wave can also be shown.
 }
 
 \usage{
-oscilloST(wave1, wave2 = FALSE, f, from = FALSE, to = FALSE,
-env = FALSE,smooth = NULL, ksmooth = NULL, identify = FALSE,
-plot = TRUE, colwave1 = "black",
-colwave2 = "blue", colbg = "white", coltitle = "black",
+oscilloST(wave1, wave2 = FALSE, f, from = NULL, to = NULL,
+identify = FALSE, plot = TRUE, colwave1 = "black",
+colwave2 = "blue", coltitle = "black",
 collab = "black", cexlab = 1, fontlab = 1, colaxis = "black",
 coly01 = "grey47", coly02 = "black", title = FALSE,
 bty = "l")
@@ -30,19 +29,12 @@ bty = "l")
           \code{\link[sound]{Sample}} object(s).}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
-  \item{env}{logical, if \code{TRUE} plots the envelope of the time wave instead 
-      (by default \code{FALSE}).}
-  \item{smooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by floating average.}
-  \item{ksmooth}{if \code{env} is \code{TRUE} then smoothes the envelope 
-      by applying a \code{\link{kernel}} smoothing.}
   \item{identify}{returns the time coordinate of points chosen  with a cursor 
       on the bottom oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot
       of \code{wave}(by default \code{TRUE}).}
   \item{colwave1}{colour of the oscillogram or of the envelope of \code{wave1}.}
   \item{colwave2}{colour of the oscillogram or of the envelope of \code{wave2}.}
-  \item{colbg}{background colour.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
   \item{collab}{colour of axes title.}  
   \item{cexlab}{character size for axes title.}
@@ -60,7 +52,7 @@ Data are returned as two-column matrix if \code{plot} is \code{FALSE}.
 \code{identify} returns a numeric object with the time coordinate 
 of points successively chosen on the bottom oscillogram.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \seealso{\code{\link{oscillo}}}

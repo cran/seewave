@@ -31,7 +31,7 @@ fontlab = 1, collab = "black", colaxis = "black",...)
   \item{\dots}{other \code{\link{axis}} arguments.}
 }    
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function, based on \code{\link{filled.contour}} by Ross Ihaka,

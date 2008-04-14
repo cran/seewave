@@ -40,10 +40,10 @@ signals of a system.
 }
 
 \value{
-If \code{plot} is \code{FALSE}, this function returns a two-column matrix, the
-first column being the frequency axis and the second column being the coherence.}
+When \code{plot} is \code{FALSE}, this \code{coh} returns a two-column matrix, the
+first column being the frequency axis in kHz (\emph{x}-axis) and the second column being the coherence (\emph{y}-axis).}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} but this function
+\author{Jerome Sueur \email{sueur@mnhn.fr} but this function
 is based on \code{\link{spec.pgram}}
 by Martyn Plummer, Adrian Trapletti and B.D. Ripley.}
 

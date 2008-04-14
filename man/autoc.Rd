@@ -11,7 +11,7 @@ after a time delay.
 }
 
 \usage{
-autoc(wave, f, wl = 512, fmax, threshold = FALSE, plot = TRUE,
+autoc(wave, f, wl = 512, fmax, threshold = NULL, plot = TRUE,
 xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
@@ -36,16 +36,16 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 \details{Autocorrelation process can be time consuming.}
 
 \value{
-If \code{plot} is \code{FALSE}, \code{autoc} returns a vector of numeric data 
-describing the fundamental frequency in kHz. NA corresponds 
-to pause sections in the signal (see \code{threshold}). 
+When \code{plot} is \code{FALSE}, \code{autoc} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding to 
+to fundamental frequency in kHz (\emph{y}-axis).\cr
+NA corresponds to pause sections in \code{wave} (see \code{threshold}). 
 }
 
 \references{
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr} and 
+\author{Jerome Sueur \email{sueur@mnhn.fr} and 
 Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \seealso{\code{\link{ceps}}}

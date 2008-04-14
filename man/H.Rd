@@ -8,7 +8,7 @@
 This function estimates the total entropy of a time wave.
 }
 
-\usage{H(wave, f, wl = 512, smooth = NULL)}
+\usage{H(wave, f, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)}
 
 \arguments{
   \item{wave}{data describing a time wave
@@ -18,7 +18,13 @@ This function estimates the total entropy of a time wave.
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{wl}{window length for spectral entropy analysis
     (even number of points). See \code{\link{sh}}.}
-  \item{smooth}{envelope smoothing by floating average. See \code{\link{th}}.}
+  \item{envt}{the type of envelope to be used: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%). See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
 }
 
 \details{
@@ -36,7 +42,7 @@ for implications on the results.
 
 \references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S., in preparation.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{
 The  entropy of a noisy signal will tend towards 1 whereas
@@ -47,13 +53,10 @@ the  entropy of a pure tone signal will tend towards 0.}
 \examples{
 data(orni)
 H(orni,f=22050)
-# [1] 0.766589
 # changing the spectral parameter (wl)
 H(orni,f=22050,wl=1024)
-# [1] 0.7785917
-# changing the temporal parameter (smooth)
-H(orni,f=22050,smooth=20)
-# [1] 0.7491108
+# changing the temporal parameter (msmooth)
+H(orni,f=22050,msmooth=c(20,0))
 }
 
 \keyword{ts}

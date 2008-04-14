@@ -36,7 +36,7 @@ with \emph{f} = original frequency produced by the source (in Hz or kHz),\cr
 
 \references{\url{http://www.kettering.edu/~drussell/Demos/doppler/doppler.html}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{You can use \code{\link{wasp}} to have exact values of \code{c}.
 See examples.}

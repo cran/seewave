@@ -10,7 +10,7 @@ For a time wave describing a sound, this corresponds in muting the sound or a se
 }
 
 \usage{
-mutew(wave, f, from = FALSE, to = FALSE, plot = TRUE,
+mutew(wave, f, from = NULL, to = NULL, choose = FALSE, plot = TRUE,
 Sample = FALSE,...)
 }
 
@@ -22,6 +22,8 @@ Sample = FALSE,...)
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
   \item{from}{start of the silence section (in s).}
   \item{to}{end of the silence section (in s).}
+  \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
+		points can be graphically chosen with a cursor on the oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot
       of \code{wave} with the new silence section (by default \code{TRUE}).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
@@ -30,14 +32,14 @@ Sample = FALSE,...)
 }
 
 \details{
-By default, \code{from} and \code{from} are \code{FALSE},
+By default, \code{from} and \code{from} are \code{NULL},
 this results in completely muting \code{wave}.  
 }
 
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
 \code{\link{deletew}},\code{\link{fadew}}, \code{\link{pastew}},

@@ -35,7 +35,7 @@ convSPL(x, d = 1, Iref = 10^-12, pref = 2*10^-5)
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
                 
 \note{
 \code{Iref} and \code{pref} correspond to a 1 kHz sound in air. 

@@ -7,7 +7,7 @@
 short-term cepstral transform.
 }
 
-\usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = FALSE,
+\usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), ...)}
 
@@ -30,14 +30,17 @@ ylim = c(0, f/2000), ...)}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
-\value{When \code{plot} is \code{FALSE}, a vector is returned with the 
-fundamental frequency track in kHz.}
+\value{
+When \code{plot} is \code{FALSE}, \code{fund} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding to 
+to fundamental frequency in kHz (\emph{y}-axis).\cr
+NA corresponds to pause sections in \code{wave} (see \code{threshold}). 
+}
 
 \references{Oppenheim, A.V. and Schafer, R.W. 2004. From frequency
 to quefrency: a history of the cepstrum. \emph{Signal Processing Magazine IEEE},
 21: 95-106.}
 
-\author{Jérôme Sueur \email{sueur@mnhn.fr}.}
+\author{Jerome Sueur \email{sueur@mnhn.fr}.}
 
 \note{This function is based on \code{\link{ceps}}.} 
 
