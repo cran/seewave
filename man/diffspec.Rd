@@ -48,8 +48,8 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
 \details{
 Both spectra are first transformed as probability mass functions (PMF).\cr
 Spectral difference is then computed according to:\cr
-\deqn{D = \sum{|spec1-spec2|}, with D \in [0,1].}{% 
-      D = sum(abs(spec1-spec2)), with 0 < D <1.}
+\deqn{D = \frac{\sum{|spec1-spec2|}}{2}, with D \in [0,1].}{% 
+      D = sum(abs(spec1-spec2))/2, with 0 < D <1.}
 }
 
 \value{

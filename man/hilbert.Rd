@@ -22,7 +22,7 @@ phase or frequency (see \code{\link{ifreq}}) of a time wave.}
 \value{\code{hilbert} returns the analytic signal as a complex matrix.
 The imaginary part of this matrix is the Hilbert transform.}
 
-\references{Mbu Nyamsi, R. G., Aubin, T. & Br�mond, J. C. 1994
+\references{Mbu Nyamsi, R. G., Aubin, T. & Bremond, J. C. 1994
 On the extraction of some time dependent parameters of an acoustic signal
 by means of the analytic signal concept.
 Its application to animal sound study. \emph{Bioacoustics}, 5: 187-203.}

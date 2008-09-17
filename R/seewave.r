@@ -1,11 +1,11 @@
 ################################################################################
-# Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
-# Contributors : Jonathan Fees, Martin Maechler, Sadrine Pavoine, 
-# Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin
+## Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
+## Contributors : Jonathan Fees, Martin Maechler, Sandrine Pavoine, Luis J. Villanueva-Rivera
+## Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
 ################################################################################
 
 ################################################################################
-#                                ADDSILW
+##                                ADDSILW
 ################################################################################
 
 addsilw<-function(
@@ -53,7 +53,7 @@ else
 }
 
 ################################################################################
-#                                AFILTER                                       
+##                                AFILTER                                       
 ################################################################################
 
 afilter<-function(
@@ -88,7 +88,7 @@ else
 }
 
 ################################################################################
-#                                AMA                                         
+##                                AMA                                         
 ################################################################################
 
 ama<-function(
@@ -110,7 +110,7 @@ meanspec(env, f=f, wl=wl, plot=plot, type=type,...)
 
 
 ################################################################################
-#                                ATTENUATION                                         
+##                                ATTENUATION                                         
 ################################################################################
 
 attenuation<-function
@@ -137,7 +137,7 @@ if(plot == FALSE) return(data)
 
 
 ################################################################################
-#                                AUTOC                                         
+##                                AUTOC                                         
 ################################################################################
 
 autoc<-function(
@@ -199,7 +199,7 @@ else return(cbind(x,y))
 
 
 ################################################################################
-#                                CCOH                                        
+##                                CCOH                                        
 ################################################################################
 
 ccoh<-function(
@@ -329,7 +329,7 @@ else return(z)
 
 
 ################################################################################
-#                                CEPS                                         
+##                                CEPS                                         
 ################################################################################
 
 ceps<-function(
@@ -456,7 +456,7 @@ else
 
 
 ################################################################################
-#                                   CEPSTRO                                    
+##                                   CEPSTRO                                    
 ################################################################################
 
 cepstro<-function(
@@ -549,7 +549,7 @@ else{return(Z)}
 
 
 ################################################################################
-#                                COH                                         
+##                                COH                                         
 ###############################################################################
 
 coh<-function(
@@ -588,7 +588,7 @@ else return(cbind(X,Y))
 
 
 ################################################################################
-#                                CONVSPL                                         
+##                                CONVSPL                                         
 ###############################################################################
 
 convSPL<-function
@@ -609,7 +609,7 @@ return(conv)
 
 
 ################################################################################
-#                                CORENV                                         
+##                                CORENV                                         
 ################################################################################
 
 corenv<-function(
@@ -699,7 +699,7 @@ else
 
 
 ################################################################################
-#                                CORSPEC                                         
+##                                CORSPEC                                         
 ################################################################################
 
 corspec<-function(
@@ -804,7 +804,7 @@ else
 
 
 ################################################################################
-#                                COVSPECTRO                                         
+##                                COVSPECTRO                                         
 ################################################################################
 
 
@@ -919,7 +919,7 @@ else
 
 
 ################################################################################
-#                                CSH                                         
+##                                CSH                                         
 ################################################################################
 
 
@@ -973,7 +973,7 @@ return(cbind(c,z4))
 
 
 ################################################################################
-#                                CUTW                                         
+##                                CUTW                                         
 ################################################################################
 
 cutw<-function(
@@ -1013,7 +1013,7 @@ else if(!is.null(from)|!is.null(to))
   }
 
 wavecut1<-as.matrix(wave[a:b,])
-wavecut<-wavecut1/max(wavecut1)
+wavecut<-wavecut1/max(abs(wavecut1))
   
 if (plot == TRUE)
   {
@@ -1039,7 +1039,7 @@ else
 
  
 ################################################################################
-#                                DBSCALE                                        
+##                                DBSCALE                                        
 ################################################################################
 
 dBscale<-function
@@ -1091,7 +1091,7 @@ if (side == 1  | side == 3)
 
 
 ################################################################################
-#                                DELETEW
+##                                DELETEW
 ################################################################################
 
 deletew<-function(
@@ -1155,7 +1155,7 @@ else
 
 
 ################################################################################
-#                                DFREQ                                         
+##                                DFREQ                                         
 ################################################################################
 
 dfreq<-function(
@@ -1198,9 +1198,10 @@ y3<-(f*y3[,1])/(1000*wl)
 # discards max results when signal = 0, i. e. when which.max = c(1,1)
 y<-ifelse(y3==f/(wl*1000), yes=NA, no=y3)
 
+x<-seq(0,n/f,length.out=N)
+
 if (plot==TRUE)
   {
-	x<-seq(0,n/f,length.out=N)
 	plot(x=x, y=y,
 	xaxs="i", xlab = xlab,
 	yaxs="i", ylab = ylab, ylim = ylim,
@@ -1213,7 +1214,7 @@ return(cbind(x,y))
 
 
 ################################################################################
-#                                DIFFENV                                         
+##                                DIFFENV                                         
 ################################################################################
 
 diffenv<-function(
@@ -1291,7 +1292,7 @@ return(denv)
 
 
 ################################################################################
-#                                DIFFSPEC                                         
+##                                DIFFSPEC                                         
 ################################################################################
 
 diffspec<-function(
@@ -1384,7 +1385,7 @@ return(dspec)
 
 
 ################################################################################
-#                               DIFFWAVE                                        
+##                               DIFFWAVE                                        
 ################################################################################
 
 diffwave<-function(
@@ -1417,7 +1418,70 @@ return(z)
 
 
 ################################################################################
-#                               DYNSPEC                                        
+##                                DRAWENV
+################################################################################
+
+drawenv<-function(
+wave,
+f,
+n=20,
+plot=FALSE,
+listen = FALSE,
+Sample = FALSE
+)
+
+{
+# input
+if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
+if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+wave<-wave/max(abs(wave))
+wave<-rmoffset(wave)
+
+# interactive graph
+oscillo(wave=wave,f=f)
+cat("choose points on the positive amplitude side of the wave\nto change the amplitude profile (amplitude envelope)\n")
+if (.Platform$OS.type == "windows") flush.console()
+coord<-locator(n=n,type="p",col=2)
+
+# coordinates ; ordered following x if positions are not localised in order along the x-time axis
+X<-coord$x ; x<-round(X[order(X)]*f)
+Y<-coord$y ; y<-Y[order(X)]
+if(any(X<0)) stop("point localization cannot be on the negative part of the time axis")
+if(any(X>(nrow(wave)/f))) stop("point localization cannot be outside the positive part of the time axis")
+if(any(Y<0)) stop("point localization cannot be on the negative part of the amplitude axis")
+
+# profile generation
+profile<-numeric(nrow(wave))
+profile[1:x[1]]<-seq(0,y[1],length.out=x[1])
+for(i in 1:(length(x)-1))
+	{
+	profile[x[i]:x[i+1]]<-seq(y[i],y[i+1],length.out=x[i+1]-x[i]+1)
+	}
+profile[x[length(x)]:length(profile)]<-seq(y[length(x)],0,length.out=length(profile)-x[length(x)]+1)
+
+# new wave generation
+wave2<-rmam(wave,f=f)
+wave2<-wave2/max(abs(wave2))
+wave3<-wave2[,1]*profile
+
+# output
+if(plot==TRUE)
+    {
+    x11()
+		oscillo(wave3,f=f)
+    if(listen == TRUE) {listen(wave3,f=f)}
+    }
+else
+    {
+    if (Sample == TRUE){wave2<-as.Sample(as.numeric(wave3), rate=f, bits=16)}
+    if(listen == TRUE) {listen(wave3,f=f)}
+    return(wave3)
+    }
+}
+
+
+################################################################################
+##                               DYNSPEC                                        
 ################################################################################
 
 dynspec<-function(
@@ -1580,7 +1644,7 @@ else return(z)
 
 
 ################################################################################
-#                               ECHO
+##                               ECHO
 ################################################################################
 
 echo<-function(
@@ -1601,7 +1665,7 @@ if (.Platform$OS.type == "windows") flush.console()
 if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
 if(class(wave) == "Sample") {f<-wave$rate ; wave <- as.matrix(wave$sound[1, ])}
 
-wave<-wave/max(wave)
+wave<-wave/max(abs(wave))
 n<-nrow(wave)
 namp<-length(amp)
 ndelay<-length(delay)
@@ -1633,7 +1697,7 @@ else
 
 
 ################################################################################
-#                               ENV                                        
+##                               ENV                                        
 ################################################################################
 
 
@@ -1666,14 +1730,14 @@ if(!is.null(msmooth))
   step<-seq(1,n-msmooth[1],msmooth[1]-(msmooth[2]*msmooth[1]/100))
   wave2<-numeric(length(step))
   for(i in step) {wave2[which(step==i)]<-mean(wave1[i:(i+msmooth[1])])}
-  wave1<-as.matrix(wave2/max(wave2))
+  wave1<-as.matrix(wave2/max(abs(wave2)))
 	f<-f*nrow(wave1)/n
 	}
 
 if(!is.null(ksmooth))
 	{
 	wave2<-kernapply(as.matrix(wave1),ksmooth)
-  wave1<-as.matrix(wave2/max(wave2))
+  wave1<-as.matrix(wave2/max(abs(wave2)))
 	f<-f*nrow(wave1)/n
   }
 
@@ -1683,7 +1747,7 @@ else return(as.matrix(wave1))
 
 
 ################################################################################
-#                               EXPORT                                        
+##                               EXPORT                                        
 ################################################################################
 
 export<-function(
@@ -1694,7 +1758,7 @@ filename = NULL,
 
 {
 if(is.null(filename) == TRUE) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
-wave<-wave/(max(wave)*1.5) # this avoids overclipping problems
+wave<-wave/(max(abs(wave))*1.5) # this avoids overclipping problems
 n<-nrow(wave)
 header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")
 write.table(x=wave, file=filename, row.names=FALSE, col.names=header, quote=FALSE, ...)
@@ -1702,7 +1766,7 @@ write.table(x=wave, file=filename, row.names=FALSE, col.names=header, quote=FALS
 
 
 ################################################################################
-#                                FADEW
+##                                FADEW
 ################################################################################
 
 fadew<-function(
@@ -1721,7 +1785,7 @@ Sample = FALSE,
 if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
 
-wave<-wave/max(wave)
+wave<-wave/max(abs(wave))
 n<-nrow(wave)
 ndin<-din*f
 ndout<-dout*f
@@ -1754,7 +1818,7 @@ MID<-rep(1,nrow(wave)-(length(IN)+length(OUT)))
 FADE<-c(IN,MID,rev(OUT))
 
 wave2<-wave*FADE
-wave2<-wave2/max(wave2)
+wave2<-wave2/max(abs(wave2))
 
 if(plot==TRUE)
     {
@@ -1771,7 +1835,7 @@ else
 
 
 ################################################################################
-#                                FDOPPLER                                       
+##                                FDOPPLER                                       
 ################################################################################
 
 fdoppler<-function(
@@ -1792,7 +1856,7 @@ return(F)
 }
 
 ################################################################################
-#                                FFILTER                                        
+#                                FFILTER
 ################################################################################
 
 ffilter<-function(
@@ -1801,6 +1865,7 @@ f,
 from = FALSE,
 to = FALSE,
 bandpass = TRUE,
+custom = NULL,
 wl = 512,
 wn="hanning",
 Sample = FALSE
@@ -1809,14 +1874,6 @@ Sample = FALSE
 {
 if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
-if (from == FALSE & to == FALSE)
-  stop("At least one of the 'from' and 'to' arguments has to be set")
-if (from == to)
-  stop("'from' and 'to' have to be different")
-        
-if (from == FALSE) from<-0
-if (to == FALSE) to<-f/2
 
 n<-nrow(wave)
 step<-seq(1,n-wl,wl)
@@ -1828,22 +1885,34 @@ W<-ftwindow(wl=wl,wn=wn)
 for(i in step) {z1[,which(step==i)]<-fft(wave[i:(wl+i-1),]*W)}
 z1a<-z1[1:(wl/2),]
 
-# frequency limits of the filter converted in row indeces
-F<-round(wl*(from/f))
-T<-round(wl*(to/f))
-
-# filter
-if (bandpass == TRUE) z1a[-c(F:T),]<-0
-if (bandpass == FALSE) z1a[F:T,]<-0
+if (!is.null(custom))
+  {
+  if(is.matrix(custom)==TRUE) custom<-custom[,2]
+  if((length(custom)) != wl/2) stop("custom filter length has to be equal to 'wl'/2")
+  z1a<-z1a*(custom/max(custom))
+  }
+else
+  {
+  if (from == FALSE & to == FALSE)
+  stop("At least one of the 'from' and 'to' arguments has to be set")
+  if (from == to)
+  stop("'from' and 'to' have to be different")
+  if (from == FALSE) from<-0
+  if (to == FALSE) to<-f/2
+  F<-round(wl*(from/f))
+  T<-round(wl*(to/f))
+  if (bandpass == TRUE) z1a[-c(F:T),]<-0
+  if (bandpass == FALSE) z1a[F:T,]<-0
+  }
 
 # generate the mirror part of the fft
 z1b<-z1a[nrow(z1a):1,]
 # combine both parts of the fft
 z2<-rbind(z1a,z1b)
-# calculate the Real Part of reverse of the fft
+# calculate the Real Part of the reverse fft
 z3<-matrix(data=numeric(wl*Lstep),wl,Lstep)
 for(i in 1:Lstep) {z3[,i]<-Re(fft(z2[,i],inverse=TRUE)/nrow(z2))}
-# manipulation to swith from a matrix to a single vector to be read as a signal
+# manipulation to switch from a matrix to a single vector to be read as a signal
 z4<-c(as.vector(z3),rep(0,n-(max(step)+wl-1)))
 if (Sample == TRUE){z5<-as.Sample(z4, rate=f, bits=16)}
 else z5<-as.matrix(z4)
@@ -1852,7 +1921,7 @@ return(z5)
 
 
 ################################################################################
-#                                FIELD
+##                                FIELD
 ################################################################################
 
 field<-function(f,d)
@@ -1873,7 +1942,7 @@ return(results)
 
 
 ################################################################################
-#                                FIR                                    
+##                                FIR                                    
 ################################################################################
 
 fir<-function(
@@ -1944,7 +2013,7 @@ return(wave2)
 
 
 ################################################################################
-#                                FTWINDOW                                    
+##                                FTWINDOW                                    
 ################################################################################
 
 ftwindow<-function(
@@ -1963,7 +2032,7 @@ return(w)
 }
 
 ################################################################################
-#                                   FUND                                   
+##                                   FUND                                   
 ################################################################################
 
 fund<-function(
@@ -2020,7 +2089,7 @@ else return(cbind(x,y))
 
 
 ################################################################################
-#                                   H                                    
+##                                   H                                    
 ################################################################################
 
 H<-function(
@@ -2051,7 +2120,7 @@ return(z)
 
 
 ################################################################################
-#                                HILBERT                                        
+##                                HILBERT                                        
 ################################################################################
 
 hilbert<-function(wave)
@@ -2069,7 +2138,7 @@ return(ht)
 
 
 ################################################################################
-#                                IFREQ                                        
+##                                IFREQ                                        
 ################################################################################
 
 ifreq<-function(
@@ -2096,6 +2165,9 @@ phi2<-unwrap(phi[,1])
 # instantaneous frequency
 ifreq<-numeric(length(phi2)-1)
 for(i in 1:(length(phi2)-1)){ifreq[i]<-(f/1000)*(abs(phi2[i+1]-phi2[i]))/(2*pi)}
+# because the lenghth of ifreq is n-1 (the last point cannot be computed)
+# we build the n point as equals to the n-1 point 
+ifreq<-c(ifreq,ifreq[length(ifreq)-1])
 
 if(!is.null(threshold))
   {
@@ -2104,7 +2176,7 @@ if(!is.null(threshold))
   ifreq[which(wavet[-n,1]==0)]<-"NA"
   }
 
-xf<-seq(0,n/f,length.out=n-1)
+xf<-seq(0,n/f,length.out=n)
 xp<-seq(0,n/f,length.out=n)
     
 if(plot == TRUE)
@@ -2134,7 +2206,7 @@ else return(list(f=cbind(xf,ifreq), p=cbind(xp,phi)))
 
 
 ################################################################################
-#                                LISTEN                                        
+##                                LISTEN                                        
 ################################################################################
 
 listen<-function(
@@ -2174,13 +2246,13 @@ else if(!is.null(from)|!is.null(to))
 	wave<-wave[a:b]
   }
 
-wave<-as.Sample(wave/(2*max(wave)), rate=f, bits=16)
+wave<-as.Sample(wave/(2*max(abs(wave))), rate=f, bits=16)
 play(wave)
 }
 
 
 ################################################################################
-#                                LFS
+##                                LFS
 ################################################################################
 
 lfs<-function(
@@ -2249,7 +2321,7 @@ return(z5)
 
 
 ################################################################################
-#                               MEANSPEC                                        
+##                               MEANSPEC                                        
 ################################################################################
 
 meanspec<-function(
@@ -2454,8 +2526,9 @@ if(plot == FALSE)
   }
 }
 
+
 ################################################################################
-#                                MEL                                        
+##                                MEL                                        
 ################################################################################
 
 mel<-function(
@@ -2470,9 +2543,8 @@ return(y)
 }
 
 
-
 ################################################################################
-#                                MOREDB                                        
+##                                MOREDB                                        
 ################################################################################
 
 moredB<-function(x)
@@ -2491,7 +2563,7 @@ return(data3)
 
 
 ################################################################################
-#                                MUTEW
+##                                MUTEW
 ################################################################################
 
 mutew<-function
@@ -2559,7 +2631,7 @@ else
 
 
 ################################################################################
-#                                NOISE                                        
+##                                NOISE                                        
 ################################################################################
 
 noise<-function(
@@ -2578,7 +2650,7 @@ return(wave)
 
 
 ################################################################################
-#                                OSCILLO                                        
+##                                OSCILLO                                        
 ################################################################################
 
 oscillo<-function
@@ -2813,7 +2885,7 @@ else return (wave)
 
 
 ################################################################################
-#                                OSCILLOST                                         
+##                                OSCILLOST                                         
 ################################################################################
 
 oscilloST<-function
@@ -2879,7 +2951,7 @@ else return (cbind(wave1,wave2))
 
 
 ################################################################################
-#                                PASTEW                                         
+##                                PASTEW                                         
 ################################################################################
 
 pastew<-function(
@@ -2949,7 +3021,7 @@ else
 
 
 ################################################################################
-#                                PULSE                                        
+##                                PULSE                                        
 ################################################################################
 
 pulse<-function(
@@ -2976,7 +3048,7 @@ else
 
 
 ################################################################################
-#                                Q                                         
+##                                Q                                         
 ################################################################################
 
 Q<-function(
@@ -3040,7 +3112,7 @@ return(Q)
 
 
 ################################################################################
-#                                REPW
+##                                REPW
 ################################################################################
 
 repw<-function(
@@ -3068,12 +3140,14 @@ else
 
 
 ################################################################################
-#                                REVW                                         
+##                                REVW                                         
 ################################################################################
 
 revw<-function(
 wave,
 f,
+env = TRUE,
+ifreq = TRUE,
 plot = FALSE,
 Sample = FALSE,
 ...)
@@ -3081,20 +3155,29 @@ Sample = FALSE,
 {
 if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
 if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+if(env == FALSE & ifreq == FALSE) stop ("Both arguments 'env' and 'ifreq' cannot be set to FALSE.")
 
-wave2<-as.matrix(rev(wave[,1]))
+if(env==TRUE & ifreq == TRUE) {wave2<-as.matrix(rev(wave[,1]))}
+else
+	{
+	wave.e<-env(wave[,1],f=f,plot=FALSE)
+	wave.p<-ifreq(wave[,1],f=f,plot=FALSE)$p[,2]
+	if(env==TRUE & ifreq== FALSE) {wave2<-as.matrix(rev(wave.e)*cos(wave.p))}
+	if(env==FALSE & ifreq == TRUE) {wave2<-as.matrix(wave.e*cos(rev(wave.p)))}
+	}
 
 if (plot == TRUE) {oscillo(wave=wave2,f=f,...)}
 else 
     {
-    if (Sample == TRUE){wave2<-as.Sample(as.numeric(wave2), rate=f, bits=16)}
+    if(Sample == TRUE){wave2<-as.Sample(as.numeric(wave2), rate=f, bits=16)}
     return(wave2)
     }
 }
 
 
+
 ################################################################################
-#                                RESAMP                                         
+##                                RESAMP                                         
 ################################################################################
 
 
@@ -3152,7 +3235,7 @@ else
 
 
 ################################################################################
-#                                RMOFFSET                                         
+##                                RMOFFSET                                         
 ################################################################################
 
 rmoffset<-function(
@@ -3186,7 +3269,7 @@ if (is.null(filename) == TRUE) filename <- paste(as.character(deparse(substitute
 if(class(wave)=="Sample") {saveSample(wave, filename=filename, overwrite=TRUE)}
 else
   {
-  wave<-wave/(max(wave)*1.5) # this avoids overclipping problems
+  wave<-wave/(max(abs(wave))*1.5) # this avoids overclipping problems
   wave<-as.Sample(as.numeric(wave), rate=f, bits=16)
    saveSample(wave, filename=filename, overwrite=TRUE)
   }
@@ -3194,7 +3277,7 @@ else
 
 
 ################################################################################
-#                               SETENV
+##                               SETENV
 ################################################################################
 
 setenv<-function
@@ -3217,10 +3300,16 @@ if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
 if(class(wave1)=="Sample") {f1<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
 if(class(wave2)=="Sample") {f2<-wave2$rate ; wave2<-as.matrix(wave2$sound[1,])}
 
+wave1<-rmoffset(wave1)
+wave1<-rmam(wave1)
+wave1<-wave1/max(abs(wave1))
+
+wave2<-rmoffset(wave2)
 wave2.env<-env(wave2,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
 wave2.env<-approx(wave2.env, n=nrow(wave1))$y
+
 wave3<-wave1*wave2.env
-wave3<-wave3/max(wave3)
+wave3<-wave3/max(abs(wave3))
 
 if(plot == TRUE)
     {
@@ -3237,7 +3326,7 @@ else
 
 
 ################################################################################
-#                               SFM                                        
+##                               SFM                                        
 ################################################################################
 
 sfm<-function(spec)
@@ -3289,7 +3378,7 @@ return(z)
 
 
 ################################################################################
-#                                SIMSPEC                                         
+##                                SIMSPEC                                         
 ################################################################################
 
 
@@ -3362,7 +3451,7 @@ return(S)
 }
 
 ################################################################################
-#                                SPEC                                         
+##                                SPEC                                         
 ################################################################################
 
 spec<-function(
@@ -3575,7 +3664,7 @@ if(plot == FALSE)
 
 
 ################################################################################
-#                                SPECPROP                                       
+##                                SPECPROP                                       
 ################################################################################
 
 specprop<-function(
@@ -3700,7 +3789,7 @@ if(plot==FALSE)
 
                     
 ################################################################################
-#                                SPECTRO                                        
+##                                SPECTRO                                        
 ################################################################################
 
 spectro<-function(
@@ -3855,7 +3944,7 @@ else return(z)
 }
 
 ################################################################################
-#                                SPECTRO3D                                        
+##                                SPECTRO3D                                        
 ################################################################################
 
 spectro3D<-function(
@@ -3909,7 +3998,7 @@ else {
 
 
 ################################################################################
-#                                SYNTH                                         
+##                                SYNTH                                         
 ################################################################################
 
 synth<-function(
@@ -3966,7 +4055,7 @@ if(!is.null(shape))
   sound<-S*sound
   }
 
-sound<-as.matrix(a*(sound/max(sound)))
+sound<-as.matrix(a*(sound/max(abs(sound))))
 
 
 if(plot == TRUE)
@@ -3985,7 +4074,7 @@ else
 
 
 ################################################################################
-#                                TH                                        
+##                                TH                                        
 ################################################################################
 
 th<-function(
@@ -4009,7 +4098,7 @@ return(z)
 
 
 ################################################################################
-#                                TIMER                                        
+##                                TIMER                                        
 ################################################################################
 
 timer<-function(
@@ -4088,7 +4177,7 @@ ratio<-sum(signal)/sum(pause)
 
 if (plot == TRUE)
   {
-  plot(wave1/max(wave1),xlab=xlab,ylab=ylab,yaxt="n",ylim=c(0,1+0.1),col=col,...)
+  plot(wave1/max(abs(wave1)),xlab=xlab,ylab=ylab,yaxt="n",ylim=c(0,1+0.1),col=col,...)
   if (plotthreshold == TRUE)
       {
       abline(h=thres, col=colval,lty=2)
@@ -4128,7 +4217,7 @@ else
 
 
 ################################################################################
-#                                WASP                                        
+##                                WASP                                        
 ################################################################################
 
 wasp<-function(
@@ -4177,7 +4266,34 @@ return(results)
 
 
 ################################################################################
-#                                ZAPSILW                                        
+##                                WAV2FLAC
+################################################################################
+
+wav2flac<-function(file, reverse=FALSE, overwrite=FALSE, exename=NULL, path2exe=NULL)
+{
+if(.Platform$OS.type == "unix")
+		{
+		if(missing(exename)) exename<-"flac"
+  	if(missing(path2exe)) {exe<-exename} else{exe<-paste(path2exe,exename,sep="/")}
+		e<-system(paste(exename, file),ignore.stderr = TRUE)
+		if(reverse==TRUE){e<-system(paste(exe, "-d", file),ignore.stderr = TRUE)}
+		}
+		
+if(.Platform$OS.type == "windows")
+		{
+		if(missing(exename)) exename<-"flac.exe"
+  	if(missing(path2exe)) {exe<-paste("c:/Program Files/FLAC/",exename,sep="")} else {exe<-paste(path2exe,exename,sep="/")}
+  	e<-system(paste(shQuote(exe),shQuote(file,type="cmd"), sep=" "),ignore.stderr = TRUE)
+  	if(reverse==TRUE){e<-system(paste(shQuote(exe),'-d',shQuote(file,type="cmd"),sep=" "),ignore.stderr = TRUE)}
+		}
+
+if(e>0) {stop("File not found or wrong format/encoding")}
+if(overwrite==TRUE){unlink(file)}
+}
+
+
+################################################################################
+##                                ZAPSILW                                        
 ################################################################################
 
 zapsilw<-function(
@@ -4213,7 +4329,7 @@ else
 
 
 ################################################################################
-#                                ZC                                        
+##                                ZC                                        
 ################################################################################
 
 zc<-function(
@@ -4291,7 +4407,7 @@ else return(cbind(x,y))
 
 
 ################################################################################
-#                                BARTLETT.W                                        
+##                                BARTLETT.W                                        
 ################################################################################ 
 
 bartlett.w<-function (n)
@@ -4306,7 +4422,7 @@ return(w)
           
 
 ################################################################################
-#                                BLACKMAN.W                                        
+##                                BLACKMAN.W                                        
 ################################################################################ 
 
 blackman.w<-function (n)
@@ -4319,7 +4435,7 @@ return(w)
 
 
 ################################################################################
-#                                FILLED.CONTOUR.MODIF2                                        
+##                                FILLED.CONTOUR.MODIF2                                        
 ################################################################################ 
 # modification of filled.contour in graphics by Ross Ihaka
 
@@ -4380,7 +4496,7 @@ filled.contour.modif2<-function (x = seq(0, 1, len = nrow(z)),
 
 
 ################################################################################
-#                                FLATTOP.W                                        
+##                                FLATTOP.W                                        
 ################################################################################ 
 
 flattop.w<-function (n)
@@ -4407,7 +4523,7 @@ return(w)
 
 
 ################################################################################
-#                                HANNING.W                                        
+##                                HANNING.W                                        
 ################################################################################ 
 
 hanning.w<-function (n)
@@ -4420,11 +4536,11 @@ return(w)
 
 
 ################################################################################
-#                         PEAKS, PEAKSIGN, CHECK.PCKS                                     
+##                         PEAKS, PEAKSIGN, CHECK.PCKS                                     
 ################################################################################
-# Author: Martin Maechler, Date: 25 Nov 2005
-# Martin Maechler <maechler@stat.math.ethz.ch>
-# Peaksign: return (-1 / 0 / 1) if series[i] is ( trough / "normal" / peak )
+## Author: Martin Maechler, Date: 25 Nov 2005
+## Martin Maechler <maechler@stat.math.ethz.ch>
+## Peaksign: return (-1 / 0 / 1) if series[i] is ( trough / "normal" / peak )
 
 peaks <- function(series, span = 3, do.pad = TRUE) {
     if((span <- as.integer(span)) %% 2 != 1) stop("'span' must be odd")
@@ -4460,7 +4576,7 @@ check.pks <- function(y, span = 3)
 
 
 ################################################################################
-#                                RECTANGLE.W                                        
+##                                RECTANGLE.W                                        
 ################################################################################ 
 
 rectangle.w<-function (n)
@@ -4472,10 +4588,10 @@ return(w)
 
 
 ################################################################################
-#                                REV.CM.COLORS                                       
+##                                REV.CM.COLORS                                       
 ################################################################################
-# rev.cm.colors, reversion of cm.colors in grDevices package
-# originally by R Development Core Team and contributors worldwide
+## rev.cm.colors, reversion of cm.colors in grDevices package
+## originally by R Development Core Team and contributors worldwide
 
 rev.cm.colors<-
 function (x)
@@ -4496,7 +4612,7 @@ function (x)
 
 
 ################################################################################
-#                                REV.GRAY.COLORS.1                                       
+##                                REV.GRAY.COLORS.1                                       
 ################################################################################ 
 rev.gray.colors.1<-
 function (x)
@@ -4505,7 +4621,7 @@ gray(seq(from = 1^1.7, to = 0, length = x)^(1/1.7))
 
 
 ################################################################################
-#                                REV.GRAY.COLORS.2                                       
+##                                REV.GRAY.COLORS.2                                       
 ################################################################################ 
 rev.gray.colors.2<-
 function (x)
@@ -4514,10 +4630,10 @@ gray(seq(from = 1, to = 0, length = x))
 
 
 ################################################################################
-#                                REV.HEAT.COLORS                                       
+##                                REV.HEAT.COLORS                                       
 ################################################################################
-# rev.heat.colors, reversion of heat.colors in grDevices package
-# originally by R Development Core Team and contributors worldwide 
+## rev.heat.colors, reversion of heat.colors in grDevices package
+## originally by R Development Core Team and contributors worldwide 
 
 rev.heat.colors<-
 function (x) 
@@ -4536,10 +4652,10 @@ function (x)
 
 
 ################################################################################
-#                                REV.TERRAIN.COLORS                                       
+##                                REV.TERRAIN.COLORS                                       
 ################################################################################
-# rev.terrain.colors, reversion of terrain.colors in grDevices package
-# originally by R Development Core Team and contributors worldwide 
+## rev.terrain.colors, reversion of terrain.colors in grDevices package
+## originally by R Development Core Team and contributors worldwide 
 
 rev.terrain.colors<-
 function (x)
@@ -4566,10 +4682,10 @@ function (x)
 
 
 ################################################################################
-#                                REV.TOPO.COLORS                                       
+##                                REV.TOPO.COLORS                                       
 ################################################################################
-# rev.topo.colors, reversion of topo.colors in grDevices package
-# originally by R Development Core Team and contributors worldwide 
+## rev.topo.colors, reversion of topo.colors in grDevices package
+## originally by R Development Core Team and contributors worldwide 
 
 rev.topo.colors<-
 function (x) 
@@ -4591,7 +4707,7 @@ function (x)
 
 
 ################################################################################
-#                                SOSCILLO                                        
+##                                SOSCILLO                                        
 ################################################################################
 
 soscillo<-function
@@ -4652,7 +4768,7 @@ abline(h=0,col=coly0,lty=2)
 
 
 ################################################################################
-#                                SSPECTRO                                        
+##                                SSPECTRO                                        
 ################################################################################
 
 sspectro <- function
@@ -4685,7 +4801,7 @@ return(z3)
 
 
 ################################################################################
-#                                SPECTRO.COLORS                                        
+##                                SPECTRO.COLORS                                        
 ################################################################################
 
 spectro.colors<-
@@ -4704,7 +4820,7 @@ else character(0)
 }
 
 ################################################################################
-#                                 STFT                                       
+##                                 STFT                                       
 ################################################################################
 
 stft<-function(
@@ -4744,8 +4860,9 @@ z<-20*log10(z4)[-1,]
 return(z)	
 }
 
+
 ################################################################################
-#                                 TEMP.COLORS                                       
+##                                 TEMP.COLORS                                       
 ################################################################################
 
 temp.colors<-function (n)

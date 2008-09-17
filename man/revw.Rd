@@ -6,7 +6,7 @@
 
 \description{Reverse the wave along the time axis.}
 
-\usage{revw(wave, f, plot = FALSE, Sample = FALSE, ...)}
+\usage{revw(wave, f, env = TRUE, ifreq = TRUE, plot = FALSE, Sample = FALSE, ...)}
 
 \arguments{
   \item{wave}{data describing a time wave
@@ -14,18 +14,26 @@
   with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
   Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of
+  \item{env}{logical, if \code{TRUE} the amplitude envelope is reversed.}
+	\item{ifreq}{logical, if \code{TRUE} the instantaneous frequency is reversed.}
+	\item{plot}{logical, if \code{TRUE} returns an oscillographic plot of
   the reversed wave (by default \code{FALSE}).}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  \item{Sample}{logical, if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.  
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
 \details{If \code{plot} is \code{TRUE} returns an oscillogram of the reversed
-wave.}
+wave. The amplitude and the instantaneous frequency can be independently reversed
+thanks to the arguments \code{env} and \code{ifreq}. See the examples.}
 
 \value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
 or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+
+\references{
+Beeman, K. 1998. Digital signal analysis, editing and synthesis \emph{in} 
+Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
+communication}, pp. 59-103. Springer, Berlin, Heidelberg.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
@@ -34,7 +42,12 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \examples{
 data(tico)
+# simple reverse
 revw(tico,f=22050,plot=TRUE)
+# envelope reverse only
+revw(tico,f=22050,ifreq=FALSE, plot=TRUE)
+# instantaneous frequency reverse only
+revw(tico,f=22050,env=FALSE, plot=TRUE)
 }
 
 \keyword{dplot}
