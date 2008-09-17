@@ -46,7 +46,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{env}}, \code{\link{synth}}}
+\seealso{\code{\link{drawenv}}, \code{\link{env}}, \code{\link{synth}}}
 
 \examples{
 data(tico)

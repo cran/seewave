@@ -10,7 +10,7 @@ or bandstop frequency filter).}
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-wl = 512, wn = "hanning", Sample = FALSE)
+custom = NULL, wl = 512, wn = "hanning", Sample = FALSE)
 }
 
 \arguments{
@@ -24,10 +24,13 @@ wl = 512, wn = "hanning", Sample = FALSE)
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
     \code{from} and  \code{to}, if \code{FALSE} a band-stop filter is applied
     between \code{from} and  \code{to} (by default \code{TRUE}).}
+  \item{custom}{a vector describing the frequency response of a custom filter.
+    This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
+    \code{wl} is no more required. See examples.}
   \item{wl}{window length for the analysis (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.  
+  returns an object of class \code{\link[sound]{Sample}}.}  
 }
 
 \details{
@@ -60,6 +63,10 @@ spectro(d,f=8000,wl=512)
 # band-stop
 e<-ffilter(a,f=8000,from=1500,to=2500,bandpass=FALSE)
 spectro(e,f=8000,wl=512)
+# custom
+myfilter1<-rep(c(rep(0,32),rep(1,32)),4)
+g<-fir(a,f=8000,custom=myfilter1)
+spectro(g,f=8000)
 }
 
 \keyword{ts}

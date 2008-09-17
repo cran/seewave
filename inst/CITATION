@@ -1,6 +1,6 @@
 citHeader("To cite 'seewave' in a publication please use:")
 
-citEntry(entry = "Manual",
+citEntry(entry = "ARTICLE",
         title = "Seewave: a free modular tool for sound analysis and synthesis",
         author = personList(as.person("J. Sueur"),as.person("T. Aubin"), as.person("C. Simonis")),
       	year = "2008",
