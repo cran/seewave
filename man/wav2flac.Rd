@@ -29,7 +29,8 @@
 \seealso{\code{\link{savewav}}}
 
 \examples{
-if(nzchar(Sys.which("flac")))
+if(nzchar(Sys.which("flac"))) # check that FLAC is installed on your system
+{
 # synthesis of a 1kHz sound
 a<-synth(d=10,f=8000,cf=1000)
 # save it as a .wav file in the default working directory
@@ -40,6 +41,7 @@ wav2flac("a.wav", overwrite=TRUE)
 wav2flac("a.flac", reverse=TRUE)
 # remove the files
 unlink(c("a.wav","a.flac"))
+}
 }
 
 \keyword{IO}
