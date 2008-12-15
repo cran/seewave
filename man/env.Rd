@@ -8,14 +8,15 @@
 amplitude envelope of a time wave.}
 
 \usage{env(wave, f, envt = "hil", msmooth = NULL,
-ksmooth = NULL, plot = TRUE, k = 1, j = 1, ...)}
+ksmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{envt}{the type of envelope to be returned: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See Details section.}
   \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
@@ -23,6 +24,8 @@ ksmooth = NULL, plot = TRUE, k = 1, j = 1, ...)}
     (in number of points). The second component is the overlap between
     successive windows (in \%). See examples.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See examples.}
+  \item{norm}{a logical, if \code{TRUE} the amplitude of the envelope
+		is normalised between 0 and 1.}
   \item{plot}{logical, if \code{TRUE} returns a plot
       of \code{wave} envelope (by default \code{TRUE}).}
   \item{k}{number of horizontal sections when \code{plot} is \code{TRUE}

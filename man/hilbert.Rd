@@ -7,12 +7,15 @@
 \description{This function returns the analytic signal of a time wave
 through Hilbert transform.}
 
-\usage{hilbert(wave)}
+\usage{hilbert(wave, f)}
 
 \arguments{
-  \item{wave}{data describing the time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
 }
 
 \details{The analytic signal is useful to get the amplitude envelope 
@@ -35,7 +38,7 @@ Its application to animal sound study. \emph{Bioacoustics}, 5: 187-203.}
 
 \examples{
 a<-synth(f=8000, d=1, cf=1000)
-aa<-hilbert(a)
+aa<-hilbert(a, f=8000)
 }
 
 \keyword{ts}

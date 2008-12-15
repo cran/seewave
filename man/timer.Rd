@@ -11,12 +11,12 @@ plotthreshold = TRUE, col = "black", colval = "red",
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{threshold}{amplitude threshold for signal detection (in \%).}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{smooth}{smoothes the envelope by averaging the number of points selected}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
       (by default \code{TRUE}).}

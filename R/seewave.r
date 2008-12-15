@@ -19,8 +19,7 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f); wave<-input$w; f<-input$f; rm(input)
 
 if(at=="start")  at<-0
 if(at=="middle") at<-nrow(wave)/(2*f)
@@ -62,13 +61,13 @@ f,
 threshold = 5,
 plot = TRUE,
 listen = FALSE,
-Sample=FALSE,
+Sample = FALSE,
 ...
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 t1<-max(abs(wave))*(threshold/100)
 wave1<-ifelse(abs(wave)<=t1,yes=0,no=1)
 wave2<-as.matrix(wave[,1]*wave1[,1])
@@ -88,7 +87,7 @@ else
 }
 
 ################################################################################
-##                                AMA                                         
+##                                AMA
 ################################################################################
 
 ama<-function(
@@ -101,16 +100,14 @@ type = "l",
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
-env<-env(wave, f=f, envt = envt, plot = FALSE)
-meanspec(env, f=f, wl=wl, plot=plot, type=type,...)
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; F<-input$f ; rm(input)
+enve<-env(wave=wave, f=f, envt = envt, plot = FALSE)
+meanspec(wave=enve, f=f, wl=wl, plot=plot, type=type,...)
 }
 
 
 ################################################################################
-##                                ATTENUATION                                         
+##                                ATTENUATION                                        
 ################################################################################
 
 attenuation<-function
@@ -156,8 +153,7 @@ ylim = c(0,f/2000),
 cat("Please wait...\n")
 if (.Platform$OS.type == "windows") flush.console()
 
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 n<-nrow(wave)
 step<-seq(1,n-wl,wl-(wl/100))
@@ -233,10 +229,8 @@ flimd = NULL,
 ...)
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 n1<-nrow(wave1)
 n2<-nrow(wave2)
@@ -339,8 +333,8 @@ wl = 512,
 at = NULL,
 from = NULL,
 to = NULL,
-tpeaks = FALSE,     # peaks in time (s)
-fpeaks = FALSE,     # peaks in frequency (Hz)
+tpeaks = NULL,     # peaks in time (s)
+fpeaks = NULL,     # peaks in frequency (Hz)
 tidentify = FALSE,   # identify in seconds
 fidentify = FALSE,   # identify in Hz
 col = "black",
@@ -357,8 +351,7 @@ type= "l",
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(!is.null(from)|!is.null(to))
   {
@@ -387,14 +380,14 @@ N<-round(n/2)
 z1<-Re(fft(log(abs(fft(wave[,1]))),inverse=TRUE))
 z<-z1[1:N]
 
-if (tpeaks)
+if(!is.null(tpeaks))
   {
   check.pks(z)
   p<-peaks(z,tpeaks)
   respeaks<-seq(z)[p]/f
   }
 
-if (fpeaks)
+if(!is.null(fpeaks))
   {
   check.pks(z)
   p<-peaks(z,fpeaks)
@@ -414,13 +407,13 @@ if (plot == TRUE)
   axis(side=1,at=X, labels=round(X,3))
   axis(side=3,at=X, labels=round(1/X,3))
 
-  if(tpeaks)
+	if(!is.null(tpeaks))
     {
     text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
       as.character(round((seq(z)[p]-1)/f,5)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
     }
 
-  if(fpeaks)
+	if(!is.null(fpeaks))
     {
     text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
       as.character(round(f/(seq(z)[p]-1),1)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
@@ -445,7 +438,7 @@ if (plot == TRUE)
 
 else
  {
-  if (tpeaks | fpeaks)
+  if(!is.null(tpeaks) | !is.null(fpeaks))
    {
    results<-list(ceps=c(x,z) ,peaks=respeaks)
    return(results)
@@ -487,8 +480,7 @@ axisY = TRUE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
 n<-nrow(wave)
@@ -565,10 +557,8 @@ type = "l",
 )
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 n1<-nrow(wave1)
 n2<-nrow(wave2)
@@ -632,10 +622,8 @@ type= "l",
 ...)
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 n<-nrow(wave1)
 
@@ -830,10 +818,8 @@ type ="l",
 )
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 if (n>21)
   {
@@ -919,7 +905,7 @@ else
 
 
 ################################################################################
-##                                CSH                                         
+##                                CSH
 ################################################################################
 
 
@@ -938,8 +924,7 @@ type = "l",
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 # threshold
 if(!is.null(threshold)) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
@@ -973,6 +958,44 @@ return(cbind(c,z4))
 
 
 ################################################################################
+##                                CUTSPEC                                       
+################################################################################
+
+cutspec<-function(
+spec,
+f=NULL,
+flim,
+norm=FALSE,
+PMF=FALSE
+)
+
+{
+if(norm==TRUE & PMF==TRUE) stop("'norm' and 'PMF' should not be both set to TRUE")
+
+if(is.vector(spec))
+	{
+	if(is.null(f)) stop("'f' is missing and is necessary when 'spec' is a vector")  
+	wl<-length(spec)*2
+	specut<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f)]
+	if(norm==TRUE) {specut<-specut/max(specut)}
+	if(PMF==TRUE)  {specut<-specut/sum(specut)}	
+	}
+
+else if(is.matrix(spec))
+	{
+	if(ncol(spec)>2){stop("'spec' should not have more than two columns")}
+	if(is.null(f)==TRUE) {f<-spec[nrow(spec),1]*2000}
+	wl<-nrow(spec)*2
+	specut<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f), ,drop=FALSE]
+	if(norm==TRUE) {specut[,2]<-specut[,2]/max(specut[,2])}
+	if(PMF==TRUE)  {specut[,2]<-specut[,2]/sum(specut[,2])}
+	}
+
+return(specut)
+}
+
+
+################################################################################
 ##                                CUTW                                         
 ################################################################################
 
@@ -988,8 +1011,7 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(choose==TRUE)
   { 
@@ -1106,8 +1128,7 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(choose==TRUE)
   { 
@@ -1173,8 +1194,8 @@ type ="l",
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 if(!is.null(threshold)) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
 wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
@@ -1214,7 +1235,7 @@ return(cbind(x,y))
 
 
 ################################################################################
-##                                DIFFENV                                         
+##                                DIFFENV                                        
 ################################################################################
 
 diffenv<-function(
@@ -1240,10 +1261,8 @@ legend = TRUE,
 {
 leg<-c(as.character(deparse(substitute(wave1))),as.character(deparse(substitute(wave2))))
 
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 env1<-env(wave=wave1,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
 env2<-env(wave=wave2,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
@@ -1399,10 +1418,8 @@ ksmooth = NULL
 )
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
 # spectral difference
 spec1<-meanspec(wave=wave1,f=f,wl=wl,PMF=TRUE,plot=FALSE)
@@ -1414,6 +1431,53 @@ DE<-diffenv(wave1=wave1,wave2=wave2,f=f,msmooth=msmooth,ksmooth=ksmooth,plot=FAL
 
 z<-DF*DE
 return(z)
+}
+
+
+################################################################################
+##                               DISCRETS                                        
+################################################################################
+
+discrets<-function(
+x,
+symb=5,
+collapse=TRUE
+)
+
+{
+if(symb!=3 && symb!=5) stop("'symb' should be set to 3 or 5")
+x<-inputw(wave = x,f = NULL)$w
+n<-length(x)
+
+if(symb==5)
+	{
+	# from the second point to the n-1 point
+	s<-character(n-2)
+	for (i in 1:(n-2))
+		{
+		if(x[i]<=x[i+1]   & x[i+1]<x[i+2])  s[i+1]<-"I"  # increase
+		if(x[i]<=x[i+2]   & x[i+2]<=x[i+1]) s[i+1]<-"P"  # peak
+		if(x[i+1]<x[i]    & x[i]<=x[i+2])   s[i+1]<-"T"  # trough
+		if(x[i+1]<x[i+2]  & x[i+2]<=x[i])   s[i+1]<-"T"  # trough
+		if(x[i+2]<x[i]    & x[i]<=x[i+1])   s[i+1]<-"P"  # peak
+		if(x[i+2]<=x[i+1] & x[i+1]<x[i])    s[i+1]<-"D"  # decrease
+		if(x[i]==x[i+1]   & x[i+1]==x[i+2]) s[i+1]<-"F"  # flat
+		}
+	}
+else if(symb==3)
+	{
+	s<-character(n-1)
+	# from the second point to the n point
+	for(i in 1:(n-1))
+		{
+		if(x[i]==x[i+1]) s[i+1]<-"F"
+		if(x[i]<x[i+1])  s[i+1]<-"I"
+		if(x[i]>x[i+1])  s[i+1]<-"D"
+		}
+	}
+s<-s[-1]
+if(collapse==TRUE) s<-paste(s,collapse="")
+return(s)  # length(s) = n-1 if symbols=3, length(s)=n-2 if symbols=5
 }
 
 
@@ -1432,8 +1496,8 @@ Sample = FALSE
 
 {
 # input
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 wave<-wave/max(abs(wave))
 wave<-rmoffset(wave)
 
@@ -1524,8 +1588,7 @@ bty = "l"
 require(rpanel)
 require(tcltk)
 
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(!is.null(from)|!is.null(to))
   {
@@ -1662,8 +1725,7 @@ Sample = FALSE,
 cat("Please wait...\n")
 if (.Platform$OS.type == "windows") flush.console()
 
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave) == "Sample") {f<-wave$rate ; wave <- as.matrix(wave$sound[1, ])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 wave<-wave/max(abs(wave))
 n<-nrow(wave)
@@ -1707,19 +1769,18 @@ wave,
 f,
 envt = "hil",
 msmooth = NULL,   
-ksmooth = NULL,	
+ksmooth = NULL,
+norm = FALSE,	
 plot = TRUE,
 k=1,
 j=1,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 n<-nrow(wave)
 
-if(envt=="hil"){wave1<-Mod(hilbert(wave))}
+if(envt=="hil"){wave1<-Mod(hilbert(wave,f=f))}
 if(envt=="abs"){wave1<-abs(wave)}
 
 if(!is.null(msmooth))
@@ -1730,37 +1791,50 @@ if(!is.null(msmooth))
   step<-seq(1,n-msmooth[1],msmooth[1]-(msmooth[2]*msmooth[1]/100))
   wave2<-numeric(length(step))
   for(i in step) {wave2[which(step==i)]<-mean(wave1[i:(i+msmooth[1])])}
-  wave1<-as.matrix(wave2/max(abs(wave2)))
+  wave1<-as.matrix(wave2)
 	f<-f*nrow(wave1)/n
 	}
 
 if(!is.null(ksmooth))
 	{
 	wave2<-kernapply(as.matrix(wave1),ksmooth)
-  wave1<-as.matrix(wave2/max(abs(wave2)))
+  wave1<-as.matrix(wave2)
 	f<-f*nrow(wave1)/n
   }
 
 if(plot==TRUE) {oscillo(wave=wave1,f=f,k=k,j=j,...)}
-else return(as.matrix(wave1))
+else
+	{
+	if(norm==TRUE) wave1<-wave1/max(abs(wave1))
+	return(as.matrix(wave1))
+	}
 }
 
 
 ################################################################################
-##                               EXPORT                                        
+##                               EXPORT
 ################################################################################
 
 export<-function(
 wave,
 f,
 filename = NULL,
+header = TRUE, 
 ...)
 
 {
 if(is.null(filename) == TRUE) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
+
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 wave<-wave/(max(abs(wave))*1.5) # this avoids overclipping problems
 n<-nrow(wave)
-header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")
+if(header==TRUE) {header<-paste("[ASCII ",f,"Hz, Channels: 1, Samples: ",n,", Flags: 0]", sep="")}
+else 
+	{
+	if(header==FALSE) header<-FALSE
+	if(is.character(header)) header<-header
+	}
 write.table(x=wave, file=filename, row.names=FALSE, col.names=header, quote=FALSE, ...)
 }
 
@@ -1782,8 +1856,7 @@ Sample = FALSE,
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 wave<-wave/max(abs(wave))
 n<-nrow(wave)
@@ -1835,7 +1908,7 @@ else
 
 
 ################################################################################
-##                                FDOPPLER                                       
+##                                FDOPPLER
 ################################################################################
 
 fdoppler<-function(
@@ -1856,7 +1929,7 @@ return(F)
 }
 
 ################################################################################
-#                                FFILTER
+##                                FFILTER
 ################################################################################
 
 ffilter<-function(
@@ -1872,8 +1945,7 @@ Sample = FALSE
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 n<-nrow(wave)
 step<-seq(1,n-wl,wl)
@@ -1942,7 +2014,7 @@ return(results)
 
 
 ################################################################################
-##                                FIR                                    
+##                                FIR
 ################################################################################
 
 fir<-function(
@@ -1960,8 +2032,7 @@ Sample = FALSE
 
 {
 # input
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave) == "Sample") {f<-wave$rate ; wave <- as.matrix(wave$sound[1, ])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 # frequency limits of the filter
 if (from == FALSE) from <- 0
@@ -2011,9 +2082,26 @@ return(wave2)
 }
 
 
+################################################################################
+##                                FMA
+################################################################################
+
+fma<-function(
+wave,
+f,
+threshold = NULL,
+plot = TRUE,
+...)
+
+{
+ifreq<-ifreq(wave, f=f, threshold=threshold, plot = FALSE)$f
+ifreq<-na.omit(ifreq)
+spec(ifreq[,2],f=f,plot=plot,...)
+}
+
 
 ################################################################################
-##                                FTWINDOW                                    
+##                                FTWINDOW
 ################################################################################
 
 ftwindow<-function(
@@ -2032,7 +2120,7 @@ return(w)
 }
 
 ################################################################################
-##                                   FUND                                   
+##                                   FUND
 ################################################################################
 
 fund<-function(
@@ -2049,8 +2137,7 @@ ylim = c(0,f/2000),
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 if(!is.null(threshold)) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
 wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
@@ -2089,7 +2176,7 @@ else return(cbind(x,y))
 
 
 ################################################################################
-##                                   H                                    
+##                                   H
 ################################################################################
 
 H<-function(
@@ -2102,16 +2189,14 @@ ksmooth = NULL
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 # spectral entropy
 spec<-meanspec(wave=wave,f=f,wl=wl,plot=FALSE)
 SH<-sh(spec)
 
 # temporal entropy
-env<-env(wave=wave,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
-TH<-th(env)
+enve<-env(wave=wave,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
+TH<-th(enve)
 
 z<-SH*TH
 return(z)
@@ -2120,13 +2205,12 @@ return(z)
 
 
 ################################################################################
-##                                HILBERT                                        
+##                                HILBERT
 ################################################################################
 
-hilbert<-function(wave)
+hilbert<-function(wave, f)
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {wave<-as.matrix(wave$sound[1,])}
+wave<-inputw(wave=wave,f=f)$w
 n<-nrow(wave)
 ff<-fft(wave)
 h<-rep(0,n)
@@ -2138,7 +2222,7 @@ return(ht)
 
 
 ################################################################################
-##                                IFREQ                                        
+##                                IFREQ
 ################################################################################
 
 ifreq<-function(
@@ -2156,7 +2240,7 @@ type = "l",
 
 {
 require(signal)
-wave<-hilbert(wave)
+wave<-hilbert(wave,f=f)
 n<-nrow(wave)
 # instantaneous phase
 phi<-Arg(wave)
@@ -2206,7 +2290,7 @@ else return(list(f=cbind(xf,ifreq), p=cbind(xp,phi)))
 
 
 ################################################################################
-##                                LISTEN                                        
+##                                LISTEN
 ################################################################################
 
 listen<-function(
@@ -2218,10 +2302,7 @@ choose = FALSE
 )
 
 {
-if(class(wave)=="Sample") {f<-wave$rate; wave<-as.numeric(wave$sound[1,])}
-if(class(wave)=="data.frame") {wave<-as.numeric(wave[,1])}
-if(class(wave)=="matrix") {wave<-as.numeric(wave[,1])}
-if(class(wave)=="vector") {wave<-as.numeric(wave)}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(choose==TRUE)
   { 
@@ -2243,10 +2324,10 @@ else if(!is.null(from)|!is.null(to))
 		if(from==0) {a<-1} else a<-round(from*f)
 		b<-round(to*f)
 		}
-	wave<-wave[a:b]
+	wave<-as.matrix(wave[a:b])
   }
 
-wave<-as.Sample(wave/(2*max(abs(wave))), rate=f, bits=16)
+wave<-as.Sample(wave[,1]/(2*max(abs(wave[,1]))), rate=f, bits=16)
 play(wave)
 }
 
@@ -2265,9 +2346,7 @@ Sample = FALSE
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
-
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 n<-nrow(wave)
 
 # alerts concerning the chose of the frequency shift
@@ -2321,7 +2400,7 @@ return(z5)
 
 
 ################################################################################
-##                               MEANSPEC                                        
+##                               MEANSPEC
 ################################################################################
 
 meanspec<-function(
@@ -2335,7 +2414,7 @@ PMF = FALSE,
 dB = FALSE,
 from = NULL,
 to = NULL,
-peaks = FALSE,
+peaks = NULL,
 identify = FALSE,
 col = "black",
 cex = 1,
@@ -2351,8 +2430,7 @@ type ="l",
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if (dB == TRUE & PMF == TRUE) stop("PMF cannot be in dB")
 
@@ -2385,11 +2463,11 @@ y5<-y4/max(y4)
 # replaces 0 values in spectra that can't be processed by the following log10())
 y<-ifelse(y5==0,yes=1e-6,no=y5)
 
-if (PSD == TRUE) y<-y^2
+if(PSD == TRUE) y<-y^2
 
-if (PMF == TRUE) y<-y/sum(y)
+if(PMF == TRUE) y<-y/sum(y)
 
-if (peaks)
+if(!is.null(peaks))
   {
   check.pks(y)
   p<-peaks(y,peaks)
@@ -2398,7 +2476,7 @@ if (peaks)
 
 x<-seq(f/1000/wl,f/2000,length.out=N/2)  
 
-if (is.null(alim) == TRUE)
+if(is.null(alim) == TRUE)
   {
   if (dB == FALSE) alim<-c(0,1.1)
   if (dB == TRUE)  alim<-c(min(20*log10(y)),20)
@@ -2446,7 +2524,7 @@ if(plot == 1) # plots x-y graph with Frequency as X-axis
     return(coord)
     }     	
     
-    if(peaks)                              
+    if(!is.null(peaks))                              
     {
     if (dB == TRUE)
     text(seq(y)[p]*f/N/1000, y[p]+5,
@@ -2500,7 +2578,7 @@ if(plot == 2) # plots x-y graph with Frequency as Y-axis
     return(coord)
     }    
     		
-    if(peaks)
+    if(!is.null(peaks))
     {
     if (dB == TRUE)
     text(y[p]+10, seq(y)[p]*f/N/1000,
@@ -2517,7 +2595,7 @@ if(plot == FALSE)
   {
   if(dB == TRUE) y<-20*log10(y)
   spec<-cbind(x,y[1:length(y)])	
-  if (peaks)
+  if(!is.null(peaks))
       {
       results<-list(spec = spec ,peaks = respeaks)
       return(results)
@@ -2528,7 +2606,7 @@ if(plot == FALSE)
 
 
 ################################################################################
-##                                MEL                                        
+##                                MEL
 ################################################################################
 
 mel<-function(
@@ -2544,11 +2622,25 @@ return(y)
 
 
 ################################################################################
-##                                MOREDB                                        
+##                                MICSENS
+################################################################################
+
+micsens<-function(x,sref=1,inverse=FALSE){
+if(inverse==FALSE)
+	{
+	s<-x/1000
+	S<-20*log10(s/sref)
+	}
+else {S<-1000*sref*10^(x/20)}
+return(S)
+}
+
+
+################################################################################
+##                                MOREDB
 ################################################################################
 
 moredB<-function(x)
-
 {
 if (is.matrix(x)==TRUE) n<-nrow(x)
 if (is.vector(x)==TRUE) n<-length(x)
@@ -2566,8 +2658,8 @@ return(data3)
 ##                                MUTEW
 ################################################################################
 
-mutew<-function
-(wave,
+mutew<-function(
+wave,
 f,
 from = NULL,
 to = NULL,
@@ -2578,8 +2670,7 @@ Sample = FALSE,
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 n<-nrow(wave)
 #wave.muted<-as.matrix(rep(0,n))
@@ -2631,18 +2722,20 @@ else
 
 
 ################################################################################
-##                                NOISE                                        
+##                                NOISE
 ################################################################################
 
 noise<-function(
 f,
 d,
+type = "unif",
 listen = FALSE,
 Sample = FALSE
 )
 
 {
-wave<-as.matrix(runif(d*f,min=-1,max=1))
+if(type=="unif") wave<-as.matrix(runif(d*f,min=-1,max=1))
+if(type=="gaussian") wave<-as.matrix(rnorm(d*f))
 if (Sample == TRUE){wave<-as.Sample(as.numeric(wave), rate=f, bits=16)}
 if (listen == TRUE) {listen(sound,f=f)}
 return(wave)
@@ -2650,7 +2743,7 @@ return(wave)
 
 
 ################################################################################
-##                                OSCILLO                                        
+##                                OSCILLO
 ################################################################################
 
 oscillo<-function
@@ -2684,8 +2777,7 @@ bty = "l"
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 p<-k*j
 
@@ -2885,13 +2977,13 @@ else return (wave)
 
 
 ################################################################################
-##                                OSCILLOST                                         
+##                                OSCILLOST
 ################################################################################
 
 oscilloST<-function
 (
 wave1,
-wave2 = FALSE,
+wave2 = NULL,
 f,
 from = NULL,
 to = NULL,
@@ -2911,6 +3003,10 @@ bty = "l"
 )
 
 {
+input1<-inputw(wave1,f=f,channel=1) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+if(is.Sample(wave1)$test==TRUE && channels(wave1)==2) {wave2<-inputw(wave1,channel=2)$w}
+else wave2<-inputw(wave2,f=f,channel=1)$w
+
 if(class(wave1)=="Sample" | class(wave2)=="Sample")
   {
   if(channels(wave1)==2)
@@ -2951,7 +3047,7 @@ else return (cbind(wave1,wave2))
 
 
 ################################################################################
-##                                PASTEW                                         
+##                                PASTEW
 ################################################################################
 
 pastew<-function(
@@ -2966,13 +3062,9 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
-wave1<-as.matrix(wave1)
-wave2<-as.matrix(wave2)
 n<-nrow(wave2)
 
 if(choose==TRUE)
@@ -3021,7 +3113,7 @@ else
 
 
 ################################################################################
-##                                PULSE                                        
+##                                PULSE
 ################################################################################
 
 pulse<-function(
@@ -3048,7 +3140,7 @@ else
 
 
 ################################################################################
-##                                Q                                         
+##                                Q
 ################################################################################
 
 Q<-function(
@@ -3125,8 +3217,7 @@ Sample = FALSE,
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 wave1<-as.matrix(rep(wave,times=times))
 
@@ -3140,7 +3231,7 @@ else
 
 
 ################################################################################
-##                                REVW                                         
+##                                REVW
 ################################################################################
 
 revw<-function(
@@ -3153,8 +3244,8 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 if(env == FALSE & ifreq == FALSE) stop ("Both arguments 'env' and 'ifreq' cannot be set to FALSE.")
 
 if(env==TRUE & ifreq == TRUE) {wave2<-as.matrix(rev(wave[,1]))}
@@ -3177,7 +3268,7 @@ else
 
 
 ################################################################################
-##                                RESAMP                                         
+##                                RESAMP
 ################################################################################
 
 
@@ -3189,8 +3280,7 @@ Sample = FALSE
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)$w
 
 n<-nrow(wave)
 if (g==f) stop ("'f' and 'g' must be different")
@@ -3205,7 +3295,7 @@ return(wave1)
 
 
 ################################################################################
-#                                RMAM                                         
+##                                RMAM
 ################################################################################
 
 rmam<-function(
@@ -3218,7 +3308,7 @@ Sample = FALSE,
 )
 
 {
-wave<-as.matrix(wave/Mod(hilbert(wave)))
+wave<-as.matrix(wave/Mod(hilbert(wave,f=f)))
 
 if(plot==TRUE)
     {
@@ -3235,7 +3325,7 @@ else
 
 
 ################################################################################
-##                                RMOFFSET                                         
+##                                RMOFFSET
 ################################################################################
 
 rmoffset<-function(
@@ -3246,8 +3336,7 @@ plot = FALSE,
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 wave2<-wave-mean(wave)
 if (plot==TRUE) oscillo(wave=wave2,f=f,...)
 else return(wave2)
@@ -3255,7 +3344,7 @@ else return(wave2)
 
 
 ################################################################################
-#                               SAVEWAV                                        
+##                               SAVEWAV
 ################################################################################
 
 savewav<-function(
@@ -3295,16 +3384,14 @@ Sample = FALSE,
 )
 
 {
-if(is.vector(wave1)==TRUE | is.numeric(wave1)==TRUE) {wave1<-as.matrix(wave1)}
-if(is.vector(wave2)==TRUE | is.numeric(wave2)==TRUE) {wave2<-as.matrix(wave2)}
-if(class(wave1)=="Sample") {f1<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])}
-if(class(wave2)=="Sample") {f2<-wave2$rate ; wave2<-as.matrix(wave2$sound[1,])}
+input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+wave2<-inputw(wave=wave2,f=f)$w
 
-wave1<-rmoffset(wave1)
-wave1<-rmam(wave1)
+wave1<-rmoffset(wave1,f=f)
+wave1<-rmam(wave1,f=f)
 wave1<-wave1/max(abs(wave1))
 
-wave2<-rmoffset(wave2)
+wave2<-rmoffset(wave2,f=f)
 wave2.env<-env(wave2,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
 wave2.env<-approx(wave2.env, n=nrow(wave1))$y
 
@@ -3326,13 +3413,13 @@ else
 
 
 ################################################################################
-##                               SFM                                        
+##                               SFM
 ################################################################################
 
 sfm<-function(spec)
 
 {
-if (is.matrix(spec) == TRUE) spec <- spec[, 2]
+if(is.matrix(spec) == TRUE) spec <- spec[, 2]
 if(any(spec<0)) stop("Data do not have to be in dB")
 if(sum(spec)==0) flat<-NA
 # undersample spec if too long because prod(spec) tends towards zero
@@ -3354,7 +3441,7 @@ return(flat)
 
 
 ################################################################################
-#                               SH                                        
+##                               SH
 ################################################################################
 
 sh<-function(
@@ -3371,14 +3458,14 @@ else
  spec[spec==0]<-1e-7
  # normalisation tel que la somme des valeurs du spectre = 1
  specn<-spec/sum(spec)
- z<--sum(specn*log2(specn))/log2(N)
+ z<- -sum(specn*log2(specn))/log2(N)
  }
 return(z)
 }
 
 
 ################################################################################
-##                                SIMSPEC                                         
+##                                SIMSPEC
 ################################################################################
 
 
@@ -3451,7 +3538,7 @@ return(S)
 }
 
 ################################################################################
-##                                SPEC                                         
+##                                SPEC
 ################################################################################
 
 spec<-function(
@@ -3465,7 +3552,7 @@ dB = FALSE,
 at = NULL,
 from = NULL,
 to = NULL,
-peaks = FALSE,
+peaks = NULL,
 identify = FALSE,
 col = "black",
 cex = 1,
@@ -3483,8 +3570,7 @@ type ="l",
 {
 if (dB == TRUE & PMF == TRUE) stop("PMF cannot be in dB")
 
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(!is.null(from)|!is.null(to))
   {
@@ -3515,11 +3601,11 @@ y2<-y11/max(y11)
 # replaces 0 values in spectra that can't be processed by the following log10()
 y<-ifelse(y2==0,yes=1e-6,no=y2)
 
-if (PSD == TRUE) y<-y^2
+if(PSD == TRUE) y<-y^2
 
-if (PMF == TRUE) y<-y/sum(y)
+if(PMF == TRUE) y<-y/sum(y)
 
-if (peaks)
+if(!is.null(peaks))
   {
   check.pks(y)
   p<-peaks(y,peaks)
@@ -3529,7 +3615,7 @@ if (peaks)
 if(!is.null(at)) x<-seq(f/1000/wl,f/2000,length.out=n%/%2)
 else x<-seq(f/1000/n,f/2000,length.out=n%/%2)
 
-if (is.null(alim) == TRUE)
+if(is.null(alim) == TRUE)
   {
   if (dB == FALSE) alim<-c(0,1.1)
   if (dB == TRUE)  alim<-c(min(20*log10(y)),20)
@@ -3579,7 +3665,7 @@ if(plot == 1) # plots x-y graph with Frequency as X-axis
     return(coord)
     }
 
-    if(peaks)
+    if(!is.null(peaks))
     {
     if (dB == TRUE)
     text(seq(y)[p]*f/n/1000, y[p]+5,
@@ -3636,7 +3722,7 @@ if(plot == 2) # plots x-y graph with Frequency as Y-axis
     return(coord)
     }
 
-    if(peaks)
+    if(!is.null(peaks))
     {
     if (dB == TRUE)
     text(y[p]+10, seq(y)[p]*f/n/1000,
@@ -3653,7 +3739,7 @@ if(plot == FALSE)
   {
   if(dB == TRUE) y<-20*log10(y)
   spec<-cbind(x,y[1:length(y)])
-  if (peaks)
+  if(!is.null(peaks))
       {
       results<-list(spec = spec ,peaks = respeaks)
       return(results)
@@ -3664,13 +3750,14 @@ if(plot == FALSE)
 
 
 ################################################################################
-##                                SPECPROP                                       
+##                                SPECPROP
 ################################################################################
 
 specprop<-function(
 spec,
 f = NULL,
 str=FALSE,
+flim=NULL,
 plot=FALSE,
 type="l",
 ...)
@@ -3685,8 +3772,15 @@ if(is.null(f)==TRUE)
 if(is.matrix(spec)==TRUE) spec<-spec[,2]  
 L<-length(spec)
 wl<-L*2
-if(any(spec<0)) stop("The frequency spectrum to be analysed does not have to be in dB")
-if(f/wl<0.5) stop("Frequency resolution is to high (<0.5 hz)")
+if(any(spec<0)) stop("The frequency spectrum to be analysed should not be in dB")
+if(f/wl<0.5)    stop("Frequency resolution is to high (<0.5 hz)")
+
+# modifcation of the frequency limits
+if(!is.null(flim))
+	{
+	spec<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f)]
+	L<-length(spec)
+	}
 
 # to get all spectrum values >1 
 # it is necessary to multiply the PMF spectrum by a factor of 10
@@ -3694,28 +3788,36 @@ s<-spec/sum(spec)
 MS<-min(s) 
 if(diff(range(s))<0.01)
     {
-    if(1e-2<MS & MS<1e-1) S<-round(s*1e5)
-    if(1e-3<MS & MS<1e-2) S<-round(s*1e6)
-    if(1e-4<MS & MS<1e-3) S<-round(s*1e7)
-    if(1e-5<MS & MS<1e-4) S<-round(s*1e8)
-    if(1e-6<MS & MS<1e-5) S<-round(s*1e9)
-    if(1e-7<MS & MS<1e-6) S<-round(s*1e10)
-    if(1e-8<MS & MS<1e-7) S<-round(s*1e12)
+    if(1e-2<MS & MS<1e-1)   S<-round(s*1e5)
+    if(1e-3<MS & MS<1e-2)   S<-round(s*1e6)
+    if(1e-4<MS & MS<1e-3)   S<-round(s*1e7)
+    if(1e-5<MS & MS<1e-4)   S<-round(s*1e8)
+    if(1e-6<MS & MS<1e-5)   S<-round(s*1e9)
+    if(1e-7<MS & MS<1e-6)   S<-round(s*1e10)
+    if(1e-8<MS & MS<1e-7)   S<-round(s*1e12)
+    if(1e-9<MS & MS<1e-8)   S<-round(s*1e13)
+    if(1e-10<MS & MS<1e-9)  S<-round(s*1e14)
+    if(1e-11<MS & MS<1e-10) S<-round(s*1e15)
+    if(1e-12<MS & MS<1e-11) S<-round(s*1e16)
     }
 else
     {
-    if(1e-2<MS & MS<1e-1) S<-round(s*1e2)
-    if(1e-3<MS & MS<1e-2) S<-round(s*1e3)
-    if(1e-4<MS & MS<1e-3) S<-round(s*1e4)
-    if(1e-5<MS & MS<1e-4) S<-round(s*1e5)
-    if(1e-6<MS & MS<1e-5) S<-round(s*1e6)
-    if(1e-7<MS & MS<1e-6) S<-round(s*1e7)
-    if(1e-8<MS & MS<1e-7) S<-round(s*1e8)
+    if(1e-2<MS & MS<1e-1)   S<-round(s*1e2)
+    if(1e-3<MS & MS<1e-2)   S<-round(s*1e3)
+    if(1e-4<MS & MS<1e-3)   S<-round(s*1e4)
+    if(1e-5<MS & MS<1e-4)   S<-round(s*1e5)
+    if(1e-6<MS & MS<1e-5)   S<-round(s*1e6)
+    if(1e-7<MS & MS<1e-6)   S<-round(s*1e7)
+    if(1e-8<MS & MS<1e-7)   S<-round(s*1e8)
+    if(1e-9<MS & MS<1e-8)   S<-round(s*1e9)
+    if(1e-10<MS & MS<1e-9)  S<-round(s*1e10)
+    if(1e-11<MS & MS<1e-10) S<-round(s*1e11)
+    if(1e-12<MS & MS<1e-11) S<-round(s*1e12)
     }
 
-
 # generate the frequency vector in Hz to avoid values <1
-X<-round(seq(from=f/wl,to=f/2,length.out=L))
+if(is.null(flim)) {X<-round(seq(from=f/wl,to=f/2,length.out=L))}
+else {X<-round(seq(from=flim[1]*1000,to=flim[2]*1000,length.out=L))}
 
 # generate the variable from the distribution function
 V<-rep(X,S)
@@ -3761,7 +3863,7 @@ if(plot==2)
   C<-cumsum(s)
   plot(x=X/1000,y=C,type=type,
   xlab="Frequency (kHz)", xaxs="i",
-  ylab="Cumulative probability",yaxs="i",
+  ylab="Cumulated probability",yaxs="i",
   las=1,
   ...)
   segments(x0=mode/1000, y0=0, x1=mode/1000, y1=C[which(X==mode)], col=4)
@@ -3787,9 +3889,9 @@ if(plot==FALSE)
   }
 }
 
-                    
+
 ################################################################################
-##                                SPECTRO                                        
+##                                SPECTRO
 ################################################################################
 
 spectro<-function(
@@ -3828,8 +3930,7 @@ listen = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])
 
@@ -3852,7 +3953,7 @@ n<-nrow(wave)
 step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
 
 # STFT
-z<-stft(wave=wave,wl=wl,zp=zp,step=step,wn=wn)	  
+z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn)	  
 
 # X axis settings
 if(!is.null(tlim) && trel==TRUE) {X<-seq(tlim[1],tlim[2],length.out=length(step))}
@@ -3944,7 +4045,7 @@ else return(z)
 }
 
 ################################################################################
-##                                SPECTRO3D                                        
+##                                SPECTRO3D
 ################################################################################
 
 spectro3D<-function(
@@ -3962,11 +4063,10 @@ palette = rev.terrain.colors)
 
 {
 require(rgl)
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if (class(wave) == "Sample") {f <- wave$rate; wave<-as.matrix(wave$sound[1, ])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 n <- nrow(wave)
 step <- seq(1, n - wl, wl - (ovlp * wl/100))
-z <- stft(wave = wave, wl = wl, zp = zp, step = step, wn = wn)
+z <- stft(wave = wave, f =f, wl = wl, zp = zp, step = step, wn = wn)
 if (plot == FALSE)
 return(z)
 else {
@@ -3996,9 +4096,97 @@ else {
 }
 
 
+################################################################################
+##                                SYMBA
+################################################################################
+symba<-function(
+x,
+y = NULL,
+symb = 5,
+collapse = TRUE,
+entropy = "abs",
+plot = FALSE,
+type = "l",
+lty1 = 1,
+lty2 = 2,
+col1 = 2,
+col2 = 4,
+cex1 = 0.75,
+cex2 = 0.75,
+xlab = "index",
+ylab = "Amplitude",
+legend = "TRUE",
+...)
+
+{
+# input x
+s1<-discrets(x=x, symb=symb, collapse=FALSE)
+# frequency of each symbols
+freq1a<-table(s1,dnn="symbol frequency in the sequence")
+# entropy of the sequence
+freq1b<-as.vector(freq1a)
+freq1c<-freq1b/sum(freq1b)
+if(entropy=="abs") h1<- -sum(freq1c*log2(freq1c))
+else if(entropy=="rel") h1<- -sum(freq1c*log2(freq1c))/log2(length(freq1c))
+
+if(is.null(y))
+	{
+	if(plot==TRUE)
+		{
+		if(symb==3) {s1<-c(NA,s1)} else if(symb==5) {s1<-c(NA,s1,NA)}
+		plot(x,type=type,lty=lty1,xlab=xlab,ylab=ylab,...)
+		text(x=x,labels=s1,col=col1, cex=cex1)
+		}
+	else 
+		{
+		if(collapse==TRUE) s1<-paste(s1,collapse="")
+		return(list(s1=s1,freq1=freq1c, h1=h1))
+		}
+	}
+
+if(!is.null(y))
+	{
+	if(length(x)!=length(y)) {stop("x and y should have the same length")}
+	# input y
+	y<-inputw(wave = y,f = NULL)$w
+	s2<-discrets(y, symb=symb, collapse=FALSE)
+	# frequency of each symbols
+	freq2a<-table(s2,dnn="symbol frequency in the sequence")
+	# entropy of the sequence
+	freq2b<-as.vector(freq2a)
+	freq2c<-freq1b/sum(freq2b)
+	if(entropy=="abs") h2<- -sum(freq2c*log2(freq2c))
+	else if(entropy=="rel") h2<- -sum(freq2c*log2(freq2c))/log2(length(freq2c))
+	# joint entropy
+	# frequency of each pair of symbols
+	freq12<-table(paste(s1,s2,sep=""))
+	freq12<-as.vector(freq12)
+	freq12<-freq12/sum(freq12)
+	# joint entropy
+	if(entropy=="abs") h12<- -sum(freq12*log2(freq12))
+	else if(entropy=="rel") h12<- -sum(freq12*log2(freq12))/log2(length(freq12))
+	# mutual information
+	I<-h1+h2-h12
+	if(plot==TRUE)
+		{
+		if(symb==3) {s1<-c(NA,s1);s2<-c(NA,s2)} else {s1<-c(NA,s1,NA);s2<-c(s2,NA)}
+		plot(x,type=type, col=col1, lty=lty1,ylim=c(min(c(x,y)),max(c(x,y))),xlab=xlab,ylab=ylab,...)
+		text(x=x,labels=s1, col=col1, cex=cex1)
+		lines(y,type=type, col=col2,lty=lty2)
+		text(x=y,labels=s2, col=col2, cex=cex2)
+		if(legend==TRUE) legend("topright",c("x","y"), col=c(col1,col2),lty=c(lty1,lty2))
+		}
+	else
+		{
+		if(collapse==TRUE) {s1<-paste(s1,collapse=""); s2<-paste(s2,collapse="")} 
+		return(list(s1=s1,freq1=freq1c, h1=h1, s1=s2,freq2=freq2c, h2=h2, I=I))
+		}
+	}
+}
+
 
 ################################################################################
-##                                SYNTH                                         
+##                                SYNTH
 ################################################################################
 
 synth<-function(
@@ -4066,7 +4254,7 @@ if(plot == TRUE)
 else
     {
     if(Sample == TRUE){sound<-as.Sample(as.numeric(sound), rate=f, bits=16)}
-    if (listen == TRUE) {listen(sound,f=f)}
+    if(listen == TRUE) {listen(sound,f=f)}
     return(sound)
     }
 }
@@ -4074,7 +4262,7 @@ else
 
 
 ################################################################################
-##                                TH                                        
+##                                TH
 ################################################################################
 
 th<-function(
@@ -4098,7 +4286,7 @@ return(z)
 
 
 ################################################################################
-##                                TIMER                                        
+##                                TIMER
 ################################################################################
 
 timer<-function(
@@ -4116,8 +4304,7 @@ ylab = "Amplitude",
 
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 n<-nrow(wave)
 thres<-max(abs(wave))*(threshold/100)
@@ -4217,7 +4404,7 @@ else
 
 
 ################################################################################
-##                                WASP                                        
+##                                WASP
 ################################################################################
 
 wasp<-function(
@@ -4293,7 +4480,7 @@ if(overwrite==TRUE){unlink(file)}
 
 
 ################################################################################
-##                                ZAPSILW                                        
+##                                ZAPSILW
 ################################################################################
 
 zapsilw<-function(
@@ -4305,8 +4492,8 @@ Sample = FALSE,
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 wave1<-afilter(wave,f=f,threshold=threshold,plot=FALSE)
 wave2<-as.matrix(wave1[wave1!=0])
 
@@ -4329,7 +4516,7 @@ else
 
 
 ################################################################################
-##                                ZC                                        
+##                                ZC
 ################################################################################
 
 zc<-function(
@@ -4344,8 +4531,7 @@ ylim = c(0,f/2000),
 ...)
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if (interpol > 5)
   {
@@ -4407,7 +4593,7 @@ else return(cbind(x,y))
 
 
 ################################################################################
-##                                BARTLETT.W                                        
+##                                BARTLETT.W
 ################################################################################ 
 
 bartlett.w<-function (n)
@@ -4418,11 +4604,11 @@ n<-n-1
 m<-n%/%2
 w<-c((2*(0:(m-1)))/n, 2-((2*(m:n))/n))
 return(w)
-}  
-          
+}
+
 
 ################################################################################
-##                                BLACKMAN.W                                        
+##                                BLACKMAN.W
 ################################################################################ 
 
 blackman.w<-function (n)
@@ -4435,7 +4621,7 @@ return(w)
 
 
 ################################################################################
-##                                FILLED.CONTOUR.MODIF2                                        
+##                       FILLED.CONTOUR.MODIF2
 ################################################################################ 
 # modification of filled.contour in graphics by Ross Ihaka
 
@@ -4496,7 +4682,7 @@ filled.contour.modif2<-function (x = seq(0, 1, len = nrow(z)),
 
 
 ################################################################################
-##                                FLATTOP.W                                        
+##                                FLATTOP.W
 ################################################################################ 
 
 flattop.w<-function (n)
@@ -4510,7 +4696,7 @@ return(w)
 
 
 ################################################################################
-#                                HAMMING.W                                        
+##                                HAMMING.W
 ################################################################################ 
 
 hamming.w<-function (n)
@@ -4523,7 +4709,7 @@ return(w)
 
 
 ################################################################################
-##                                HANNING.W                                        
+##                                HANNING.W
 ################################################################################ 
 
 hanning.w<-function (n)
@@ -4536,7 +4722,29 @@ return(w)
 
 
 ################################################################################
-##                         PEAKS, PEAKSIGN, CHECK.PCKS                                     
+##                                INPUTW
+################################################################################ 
+
+inputw<-function(wave, f, channel=1)
+{
+if(is.vector(wave))      {f<-f ; wave <- as.matrix(wave)}
+# mts objects are matrix by default, there is then a conflict between is.matrix and is.mts
+if(is.matrix(wave) && !is.mts(wave)) {f<-f ; wave <- wave[,channel,drop=FALSE]}  
+if(is.ts(wave))          {f<-frequency(wave) ; wave <- as.matrix(wave)} 
+if(is.mts(wave))         {f<-frequency(wave) ; wave <- as.matrix(wave[, channel])} 
+if(is.Sample(wave)$test) {f<-wave$rate ; wave <- as.matrix(wave$sound[channel, ])}
+if(class(wave)=="Wave")
+  {
+  f <- wave@samp.rate  
+  if(channel==1) {wave <- as.matrix(wave@left)}   
+  if(channel==2) {wave <- as.matrix(wave@right)}     
+  }
+return(list(w=wave,f=f))
+}
+
+
+################################################################################
+##                         PEAKS, PEAKSIGN, CHECK.PCKS
 ################################################################################
 ## Author: Martin Maechler, Date: 25 Nov 2005
 ## Martin Maechler <maechler@stat.math.ethz.ch>
@@ -4576,7 +4784,7 @@ check.pks <- function(y, span = 3)
 
 
 ################################################################################
-##                                RECTANGLE.W                                        
+##                                RECTANGLE.W
 ################################################################################ 
 
 rectangle.w<-function (n)
@@ -4588,7 +4796,7 @@ return(w)
 
 
 ################################################################################
-##                                REV.CM.COLORS                                       
+##                                REV.CM.COLORS
 ################################################################################
 ## rev.cm.colors, reversion of cm.colors in grDevices package
 ## originally by R Development Core Team and contributors worldwide
@@ -4612,7 +4820,7 @@ function (x)
 
 
 ################################################################################
-##                                REV.GRAY.COLORS.1                                       
+##                                REV.GRAY.COLORS.1
 ################################################################################ 
 rev.gray.colors.1<-
 function (x)
@@ -4621,7 +4829,7 @@ gray(seq(from = 1^1.7, to = 0, length = x)^(1/1.7))
 
 
 ################################################################################
-##                                REV.GRAY.COLORS.2                                       
+##                                REV.GRAY.COLORS.2
 ################################################################################ 
 rev.gray.colors.2<-
 function (x)
@@ -4630,7 +4838,7 @@ gray(seq(from = 1, to = 0, length = x))
 
 
 ################################################################################
-##                                REV.HEAT.COLORS                                       
+##                                REV.HEAT.COLORS
 ################################################################################
 ## rev.heat.colors, reversion of heat.colors in grDevices package
 ## originally by R Development Core Team and contributors worldwide 
@@ -4652,7 +4860,7 @@ function (x)
 
 
 ################################################################################
-##                                REV.TERRAIN.COLORS                                       
+##                        REV.TERRAIN.COLORS
 ################################################################################
 ## rev.terrain.colors, reversion of terrain.colors in grDevices package
 ## originally by R Development Core Team and contributors worldwide 
@@ -4682,7 +4890,7 @@ function (x)
 
 
 ################################################################################
-##                                REV.TOPO.COLORS                                       
+##                                REV.TOPO.COLORS
 ################################################################################
 ## rev.topo.colors, reversion of topo.colors in grDevices package
 ## originally by R Development Core Team and contributors worldwide 
@@ -4707,7 +4915,7 @@ function (x)
 
 
 ################################################################################
-##                                SOSCILLO                                        
+##                                SOSCILLO
 ################################################################################
 
 soscillo<-function
@@ -4732,8 +4940,7 @@ tickup = NULL,
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
 if (from|to)
   {
@@ -4768,7 +4975,7 @@ abline(h=0,col=coly0,lty=2)
 
 
 ################################################################################
-##                                SSPECTRO                                        
+##                                SSPECTRO
 ################################################################################
 
 sspectro <- function
@@ -4780,8 +4987,8 @@ wn="hanning"
 )
 
 {
-if(is.vector(wave)==TRUE | is.numeric(wave)==TRUE) {wave<-as.matrix(wave)}
-if(class(wave)=="Sample") {f<-wave$rate ; wave<-as.matrix(wave$sound[1,])}
+input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
 n<-nrow(wave)
 step<-seq(1,n-wl,wl)		# FT windows
 
@@ -4801,7 +5008,7 @@ return(z3)
 
 
 ################################################################################
-##                                SPECTRO.COLORS                                        
+##                                SPECTRO.COLORS
 ################################################################################
 
 spectro.colors<-
@@ -4820,11 +5027,12 @@ else character(0)
 }
 
 ################################################################################
-##                                 STFT                                       
+##                                 STFT
 ################################################################################
 
 stft<-function(
 wave,
+f,
 wl,
 zp,
 step,
@@ -4832,6 +5040,8 @@ wn
 )
 
 {
+wave<-inputw(wave=wave,f=f)$w
+
 z1<-matrix(data=numeric((wl+(zp))*length(step)),wl+zp,length(step))
 zpl<-zp%/%2
 if(zpl==0)
@@ -4862,7 +5072,7 @@ return(z)
 
 
 ################################################################################
-##                                 TEMP.COLORS                                       
+##                                 TEMP.COLORS
 ################################################################################
 
 temp.colors<-function (n)

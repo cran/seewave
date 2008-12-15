@@ -12,18 +12,19 @@ or dB data.
 
 \usage{
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE,
-PMF = FALSE, dB = FALSE, from = NULL, to = NULL, peaks = FALSE,
+PMF = FALSE, dB = FALSE, from = NULL, to = NULL, peaks = NULL,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1,  fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}
@@ -35,7 +36,7 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
       (by default \code{FALSE}).}
   \item{from}{start mark where to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
-  \item{peaks}{to return peaks values.}
+  \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
   \item{identify}{to identify frequency and amplitude values on the plot
       with the help of a cursor.}
   \item{col}{colour of the spectrum.}
@@ -47,7 +48,7 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
   frequency on y-axis, (by default \code{1}).}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
-  \item{flim}{range of frequency axis.}
+  \item{flim}{range of frequency axis (in kHz).}
   \item{alim}{range of amplitude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
       See \code{\link{plot}} for details (by default "l" for lines).}
@@ -57,8 +58,8 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 \details{
 If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
 computes the mean spectrum of the whole signal.\cr
-\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.\cr
-When using \code{identify}, press \sQuote{stop} tools bar button to return values in the console.  
+\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
+See examples of \code{\link{spec}}.\cr
 }
 
 \value{
@@ -69,7 +70,7 @@ If \code{identify} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
-If \code{peaks} is \code{TRUE}, \code{spec} returns a list with
+If \code{peaks} is not \code{NULL}, \code{spec} returns a list with
 two elements:\cr 
   \item{spec}{the spectrum computed} of length \code{wl}/2,\cr 
   \item{peaks }{the peaks values (in kHz).} 

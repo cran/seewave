@@ -13,12 +13,12 @@ marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{from}{start position (in s).}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{from}{start position (in s).}
   \item{to}{end position (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
 		points can be graphically chosen with a cursor on the oscillogram.}

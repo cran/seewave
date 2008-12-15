@@ -12,15 +12,16 @@ plot = FALSE, listen = FALSE, Sample = FALSE, ...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound})
-  describing the time wave which amplitude envelope has to be changed.}
-  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound})
-  describing the time wave which envelop will be obtained and set to \code{wave1}.}
+	\item{wave1}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
+	\item{wave2}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel) describing the time wave
+	which envelope will be used to set \code{wave1} envelope.}
   \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
-          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[sound]{Sample}} object(s).}
+  Does not need to be specified if \code{wave1} and/or \code{wave2} are/is
+	of class \code{ts}, \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{envt}{the type of envelope to be used for \code{wave2}: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
   \item{msmooth}{a vector of length 2 to smooth the amplitude envelope of \code{wave2} 

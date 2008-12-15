@@ -13,7 +13,7 @@ or dB data.
 \usage{
 spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE,
 PMF = FALSE, dB = FALSE,
-at = NULL, from = NULL, to = NULL, peaks = FALSE,
+at = NULL, from = NULL, to = NULL, peaks = NULL,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1, fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0, f/2000),
@@ -21,12 +21,12 @@ alim = NULL, type="l",...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave or a \code{\link[sound]{Sample}}
-      object generated loading a wav file with \code{\link[sound]{loadSample}}
-     (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-     Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{wl}{if \code{at} is not null, length of the window for the analysis
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
@@ -38,7 +38,7 @@ alim = NULL, type="l",...)
   \item{at}{position where to compute the spectrum (in s).}
   \item{from}{start mark where  to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
-  \item{peaks}{returns peaks value for a given span (see \code{details}).}
+  \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
   \item{identify}{to identify frequency and amplitude values on the plot
       with the help of a cursor.}
   \item{col}{colour of the spectrum.}
@@ -60,9 +60,8 @@ alim = NULL, type="l",...)
 \details{
 If \code{at}, \code{from} or \code{to} are \code{FALSE} then \code{spec} 
 computes the spectrum of the whole signal.\cr
-\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.\cr 
-When using \code{identify}, press \sQuote{stop} tools bar button to return values in the console.
-}
+\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
+See examples.}
 
 \value{
 This function returns  a two-column matrix,
@@ -72,7 +71,7 @@ If \code{identify} is \code{TRUE}, \code{spec} returns a list with
 two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
-If \code{peaks} is \code{TRUE}, \code{spec} returns a list with
+If \code{peaks} is nt \code{NULL}, \code{spec} returns a list with
 two elements:\cr 
   \item{spec}{the spectrum computed} of length \code{wl}/2, \cr 
   \item{peaks }{the peaks value (in kHz).}

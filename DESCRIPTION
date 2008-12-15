@@ -1,19 +1,19 @@
 Package: seewave
 Type: Package
 Title: Time wave analysis and graphical representation 
-Version: 1.5.0
-Date: 2008-09-17
+Version: 1.5.1
+Date: 2008-12-15
 Author: Jerome Sueur <sueur@mnhn.fr>, 
         Thierry Aubin <thierry.aubin@u-psud.fr>,
         Caroline Simonis <csimonis@mnhn.fr>
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
 Webpage: http://sueur.jerome.neuf.fr/seewave.html
-Depends: R(>= 2.2.0), sound
+Depends: R(>= 2.2.0)
 Encoding: latin1
 SystemRequirements: FLAC
-Suggests: rgl, rpanel, tcltk, signal
+Suggests: sound, rgl, rpanel, tcltk, signal, tuneR
 ZipData: no
 Description: seewave provides functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
 URL: http://sueur.jerome.neuf.fr/seewave.html
-Packaged: Fri Sep 26 09:16:22 2008; root
+Packaged: Wed Dec 17 16:55:17 2008; root

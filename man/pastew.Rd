@@ -16,15 +16,15 @@ marks = TRUE, Sample = FALSE,...)
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound})
-  describing the time wave to be pasted.}
-  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound})
-  describing the time wave into which \code{wave1} will be pasted.}
+	\item{wave1}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel) to be pasted to \code{wave2}.}
+	\item{wave2}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
-          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[sound]{Sample}} object(s).}
+  Does not need to be specified if \code{wave1} and/or \code{wave2} are/is
+	of class \code{ts}, \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
     Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
   \item{choose}{logical, if \code{TRUE} the point where \code{wave1} will

@@ -15,9 +15,12 @@ filename = NULL)
 
 
 \arguments{
-  \item{wave}{data describing the time wave to be exported.}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
-  \item{filename}{name of the new file. (by default the name of \code{wave}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
+  \item{f}{sampling frequency of \code{wave} (in Hz).
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{filename}{name of the new file. (by default the name of \code{wave}).}
 }
 
 \details{

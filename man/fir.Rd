@@ -14,11 +14,12 @@ wl = 512, wn = "hanning", listen = FALSE, Sample= FALSE)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object created generated a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between

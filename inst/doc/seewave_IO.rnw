@@ -1,0 +1,340 @@
+\documentclass[a4paper]{article}
+%\VignetteIndexEntry{seewave_IO}
+%\VignettePackage{seewave}
+%\VignetteKeyword{sound}
+%\VignetteKeyword{time-series}
+%\VignetteDepends{tuneR,sound}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=2.5cm,vmargin=3cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    %pdftoolbar=false,        % show Acrobat’s toolbar?
+    %pdfmenubar=false,        % show Acrobat’s menu?
+    pdffitwindow=true,      % page fit to window when opened
+    pdftitle={seewave_IO},    % title
+    pdfauthor={Jerome SUEUR},     % author
+    pdfsubject={seewave_IO},   % subject of the document
+    pdfnewwindow=true,      % links in new window
+    %pdfkeywords={keywords}, % list of keywords
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links
+    %citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=blue           % color of external links
+} 
+\usepackage{Sweave}
+\setlength{\parindent}{0pt}
+\newcommand{\pkg}{\textsf}
+\newcommand{\seewave}{\pkg{seewave}}
+\newcommand{\sound}{\pkg{sound}}
+\newcommand{\tuneR}{\pkg{tuneR}}
+\author{Jérôme Sueur
+\footnote{Muséum national d'Histoire naturelle, Paris, France --
+\href{http://sueur.jerome.neuf.fr}{http://sueur.jerome.neuf.fr}
+}}
+
+\title{I\slash O of sound with R}
+
+\begin{document}
+\maketitle
+This document shortly details how to import and export sound with \texttt{R} using the packages \seewave, \sound, and \tuneR.
+
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%
+%% IN
+%%%%%%%%%%%%%%%%%%%%
+
+\section{In}
+The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave} and \texttt{Sample}). 
+
+\subsection{Non specific classes}
+\subsubsection{Vector}
+Any muneric vector can be treated as a sound if a sampling frequency is provided in the \texttt{f} argument of \seewave functions. For instance, a 440 Hz sine sound (A note) sampled at 8000 Hz during one second can be generated and plot following:
+<<fig=FALSE>>=
+s1<-sin(2*pi*440*seq(0,1,length.out=8000))
+is.vector(s1)
+mode(s1)
+library(seewave)
+oscillo(s1,f=8000)
+@
+
+\subsubsection{Matrix}
+Any single column matrix can be read but the sampling frequency has to be specified in the \seewave functions. 
+<<fig=FALSE>>=
+s2<-as.matrix(s1)
+is.matrix(s2)
+dim(s2)
+oscillo(s2,f=8000)
+@
+If the matrix has more than one column, then the first column only will be considered.
+<<fig=FALSE>>=
+x<-rnorm(8000)
+s3<-cbind(s2,x)
+is.matrix(s3)
+dim(s3)
+oscillo(s3,f=8000)
+@
+
+
+\subsection{Time series}
+The class \texttt{ts} and the related functions \texttt{ts}, \texttt{as.ts}, \texttt{is.ts} can be used also for sound. Here follows the command to similarly generate a time series corresponding to a 440 Hz sine sound sampled at 8000 Hz during one second:
+<<>>=
+s4<-ts(data=s1, start=0, frequency=8000)
+str(s4)
+@
+To generate a 0.5 second random noise:
+<<>>=
+s5<-ts(data=runif(4000), start=0, end=0.5, frequency=8000)
+str(s5)
+@
+The length of \texttt{s4} is not 4000 but 4001. Data are actually recycled, \texttt{s5[4001]} being the same as \texttt{s5[1]}.  \par
+The functions \texttt{frequency} and or \texttt{deltat} return the samlping frequency ($f$) and the time resolution ($\Delta t$) respectively:
+<<>>=
+frequency(s4)
+deltat(s4)
+@
+As the frequency is embedded in \texttt{ts} objects, there is no need to specify it when using \seewave functions:
+<<fig=FALSE>>=
+oscillo(s4)
+@
+
+In the case of multiple time series, \seewave functions will consider the first series only:
+<<fig=FALSE>>=
+s5<-ts(data=s3,f=8000)
+class(s5)
+oscillo(s5)
+@
+
+
+\subsection{Specific sound classes}
+There are two object classes corresponding to the binary \texttt{wav} format: (\emph{i}) the class \texttt{Wave} of the package \tuneR, (\emph{ii}) the class \texttt{Sample} of the package \sound. There is currently no other way to import sound files. In particular, there is no function to read \texttt{.mp3} or \texttt{.aiff} files.
+
+\subsubsection{Wave class (package tuneR)}
+The class \texttt{Wave} comes with the package \tuneR managed by Uwe Ligges.
+This S4 class includes different slots with the data (left or right channel), the sampling frequency (or rate), the number of bits (8 \slash 16 \slash 24 \slash 32) and the type of sound (mono \slash stereo). High sampled sound (\emph{i.e.} > 44100 Hz) can be read. \par
+The function to import \texttt{.wav} files from the hard-disk is \texttt{readWave}:
+<<echo=false,quiet=true>>=
+mysong<-synth(d=60,f=8000,cf=1000,Sample=TRUE)
+savewav(mysong)
+@
+
+<<>>=
+library(tuneR)
+s6<-readWave("mysong.wav")
+s6
+@
+The other advantage of using \texttt{readWave} is for reading part of long files. It is indeed possible to import only a section of the \texttt{.wav} file using the arguments \texttt{from} and \texttt{to} and by specifying the time units with the arguments \texttt{units}. The units can be turned to "samples", "minutes" or "hours". For instance, to read only the section starting at 1s and ending at 5s of the file "mysong.wav" :
+<<>>=
+s7<-readWave("mysong.wav", from = 1, to = 5, units = "seconds")
+s7
+@
+To get information regarding the object (sampling frequency, number of bits, mono \slash stereo), it is necessary to use the indexing of S4 object classes:
+<<>>=
+s7@samp.rate
+s7@bit
+s7@stereo
+@
+
+\subsubsection{Sample class ( sound)}
+The class \texttt{Sample} and the related \texttt{as.Sample} and \texttt{is.Sample} functions belong to the package \sound written by Matthias Heymann. Like \texttt{Wave}, the \texttt{Sample} class is a list containing information regarding data, sampling frequency, bits and the type of sound (mono\slash stereo).\par
+To read a \texttt{.wav} file stored on the hard-disk using \texttt{loadSample}:
+<<>>=
+s8<-loadSample("mysong.wav")
+s8
+@
+All kinds of wav files are supported: mono, stereo, 8 or 16 bits per sample, at any sampling frequency above 1000 Hz. The duration and the sampling frequency of a \texttt{Sample} object can be obtained using dedicated functions or list indexing:
+<<>>=
+rate(s8)
+s8$rate
+duration(s8)
+s8$duration
+@
+\seewave functions which return a value describing a sound have a special argument named \texttt{Sample}. When this argument is set to \texttt{TRUE}, the object returned by the function is of class \texttt{Sample} and not \texttt{matrix}. This can be useful for latter analyses as there is no more need to specify the sampling frequency \texttt{f}.
+<<>>=
+s9<-repw(s2,f=8000,times=2,Sample=TRUE)
+oscillo(s9)
+@
+
+However, matrix objects are easier to handle and can be used with functions not dedicated to sound. It might be then better to let the argument \texttt{Sample} set to \texttt{FALSE} and to store the sampling frequency \texttt{f} in an object:
+<<>>=
+f<-8000
+oscillo(s2,f)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%% OUT
+%%%%%%%%%%%%%%%%%%%%%%
+\section{Out}
+\subsection{.txt format}
+For a maximal compatibility with other sound softwares, it can be useful to save a sound as a simple \texttt{.txt} file. This can be done using the function \texttt{export} with the argument \texttt{header=FALSE}. By default, the name of the object is used to name the \texttt{.txt} file. The following commands will write a file "tico.txt" on the hard-disk. \par
+<<>>=
+data(tico)
+export(tico, f=22050, header=FALSE)
+@
+
+For Windows users, the software \href{http://www.goldwave.com/}{Goldwave~\copyright} can be helpful when handling long sound files or large number of files. To export a sound as a \texttt{.txt} file that can be directly read by \href{http://www.goldwave.com/}{Goldwave~\copyright}, the same function can be used but with the default argument \texttt{header=TRUE}. \seewave will automatically add the header needed. Hereafter the name of the exported file is changed using the argument \texttt{filename}: \par
+<<>>=
+export(tico, f=22050, filename="tico_Gold.txt")
+@
+
+Any header can be specified for a connection with other softwares. For instance, if an external software needs the header "f=sampling frequency; ch=left":
+<<>>=
+export(tico, f=22050, filename="tico_ext.txt",
+header="f=22050; ch=left")
+@
+
+
+\subsection{.wav format}
+The function \texttt{savewav}, which is based on \texttt{saveSample}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
+<<>>=
+savewav(tico, f=22050)
+@
+
+As seen before, if the object to be saved is of class \texttt{ts}, \texttt{Sample} or \texttt{Wave}, there is no need to specify the argument \texttt{f}. Here we use the argument \texttt{filename} to change the name of the \texttt{wav} file:
+<<>>=
+ticofirst<-cutw(tico,f=22050, to=0.5, Sample=TRUE)
+savewav(ticofirst, filename = "tico_firstnote.wav")
+@
+
+\subsection{.flac format}
+Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent. See the flac webpage for details \href{http://flac.sourceforge.net/}.\par
+\texttt{.flac} format cannot be used as such with \texttt{R}. However, the function \texttt{wav2flac} allows to call FLAC software directly from the console. FLAC has therefore to be installed on your OS. If you have a \texttt{.wav} file you wish to compress into \texttt{.flac}, call:
+\begin{Sinput}
+> wav2flac("tico_firstnote.wav", overwrite=TRUE)
+\end{Sinput} 
+To compress a \texttt{.wav} file into \texttt{.flac}, the argument \texttt{reverse} has to be set to \texttt{TRUE}:
+\begin{Sinput}
+> wav2flac("tico_firstnote.flac", reverse=TRUE)
+\end{Sinput}
+
+
+%%%%%%%%%%%%%%%%%
+%% MONO AND STEREO
+%%%%%%%%%%%%%%%%%
+\section{Mono and stereo}
+Both \texttt{Wave} and \texttt{Sample} classes can handle stereo files. There are some specific functions regarding mono\slash stereo type. Both libraries include functions with the same name. To avoid a conflict between functions, one of the two  has to be detached:
+<<>>=
+detach(package: sound)
+@
+ 
+\subsection{Wave class}
+To generate a stereo sound, two mono sounds are first created using \texttt{sine}, a function that returns a \texttt{Wave} object, and then combined using \texttt{stereo}:
+<<>>=
+left<-sine(440, bit = 16)
+right<-sine(2000, bit = 16)
+s10<-stereo(left,right)
+s10
+@
+To go back to a mono file taking the left channel only:
+<<>>=
+s11<-mono(s10,"left")
+@
+The function \texttt{channel} do roughly the same as it extracts one or more channels. To get this time the right channel:
+<<>>=
+s12<-channel(s10,"right")
+@
+And eventually, the S4 indexing can be used to do it "manually". In this particular case, the returned object will be of class \texttt{vector}.
+<<>>=
+s11<-s10@left
+is.vector(s11)
+s12<-s10@right
+is.vector(s12)
+@
+
+\subsection{Sample class}
+<<echo=false,quiet=true>>=
+detach(package: tuneR)
+library(sound)
+@
+
+With the \texttt{Sample} objects, the syntax is almost similar. To generate stereo sound, the function \texttt{synth} with the argument \texttt{Sample=TRUE} is called twice:
+<<>>=
+left<-synth(cf=440,d=5,f=8000,Sample=T)
+right<-synth(cf=2000,d=5,f=8000,Sample=T)
+s13<-stereo(left,right)
+s13
+@
+To get either the left or right channel:
+<<>>=
+s14<-left(s13)
+s14
+s15<-right(s13)
+s15
+@
+List indexing allows extracting manually the data:
+<<>>=
+s16<-s13$sound[1, ]
+is.vector(s16)
+s17<-s13$sound[2, ]
+is.vector(s17)
+@
+The \texttt{mirror} function interchanges left and right channels and \texttt{panorama} control the panaroma through a \texttt{pan} argument which varies between -50 and +50.
+<<>>=
+s13<-mirror(s13)
+s14<-panorama(s13, pan=30)
+@
+
+%%%%%%%%%%%%%%%%%
+%% LISTEN
+%%%%%%%%%%%%%%%%%
+
+\section{Play sound}
+\subsection{Specific functions}
+\subsubsection{Wave class}
+\texttt{Wave} objects can be played with \texttt{play} of \tuneR:
+\begin{Sinput}
+> play(s6)
+\end{Sinput}
+It may happen that the default players of the function \texttt{play} are not installed on the OS. Three functions can help in setting the media player: \texttt{findWavPlayer} returns the most common system commands on the OS, \texttt{WavPlayer} returns the command that is currently used by \texttt{play}, \texttt{setWavPlayer} is used to define the command to be used by \texttt{play}. For instance, if \href{http://audacious-media-player.org}{Audacious} is the player to use (Linux OS):
+\begin{Sinput}
+> setWavPlayer("audacious") 
+\end{Sinput}
+
+\subsubsection{Sample class}
+For the class \texttt{Sample} of the package \tuneR the functions are basically the same. The function \texttt{play}:
+\begin{Sinput}
+> play(ticofirst)
+> play("mysong.wav")
+\end{Sinput}
+and the functions \texttt{WavPlayer}, \texttt{setWavPlayer}, \texttt{getWavPlayer} to set the sound player of your OS.
+ 
+\subsubsection{Other classes}
+The package \seewave includes listen a function based on \texttt{play} of \texttt{soundR} but accepting all specific and non-specific classes and with two arguments (\texttt{from} and \texttt{to}) to listen only a section of a sound object:
+\begin{Sinput}
+> listen(s1, f=8000, from=0.3, to=7)
+> listen(s13, from=0.3, to=4)
+\end{Sinput}
+
+\subsection{System command}
+The call of an external sound player can also be achieved using directly \texttt{system} that allows invoking directly the system command. For instance, to play a sound with \href{http://audacity.sourceforge.net}{Audacity} (Linux OS):
+\begin{Sinput}
+> system("audacity mysong.wav")
+\end{Sinput}
+
+To run a sound player with Windows is slightly more tricky as the complete path to the .exe file has to be specified and paster has to be invoked to combine both program and file names:
+\begin{Sinput}
+> system(paste('"C:/Program Files/GoldWave/GoldWave.exe"', 'mysong.wav'))
+\end{Sinput}
+
+%%%%%%%%%%%%%%%%%
+%% SUMMARY
+%%%%%%%%%%%%%%%%%
+
+\section{Summary}
+Here is a temptative of summary of main \texttt{R} functions used for sound input and output:\par
+\vspace{0.75cm}
+\begin{tabular}{cccccp{3cm}}
+\hline 
+&  \textbf{Input} & \textbf{Output} & \textbf{Mono}\slash \textbf{Stereo} & \textbf{Play} & \textbf{Object}\\ 
+\hline
+\textbf{tuneR} & readWave & writeWave & mono, stereo & play & \texttt{Wave} \\ 
+\textbf{sound} & loadSample & saveSample & mono, stereo & play & \texttt{Sample} \\ 
+\textbf{seewave} & -- & export, savewav & -- & listen & \texttt{vector}, \texttt{matrix}, \texttt{ts}, \texttt{mts}, \texttt{Wave}, \texttt{Sample} \\ 
+\hline 
+\end{tabular} 
+\end{document}

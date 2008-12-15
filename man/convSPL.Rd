@@ -5,7 +5,7 @@
 \title{Convert sound pressure level in other units}
 
 \description{
-This functions converts sound pressure level (in dB)
+This function converts sound pressure level (in dB)
 in sound power (Watt), intensity (Watt/m2) and pressure (Pa). By default, these
 conversions are applied to air-borne sound.}
 
@@ -21,9 +21,6 @@ convSPL(x, d = 1, Iref = 10^-12, pref = 2*10^-5)
   \item{pref}{reference pressure (in Pa) (by default = 2.10e-5)}
 }
 
-\details{
-  ~~ If necessary, more details than the description above ~~
-}
 
 \value{
   \code{convSPL} returns a list containing three components:

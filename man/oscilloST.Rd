@@ -10,7 +10,7 @@ oscillogram in a two-frame plot. The envelope of the wave can also be shown.
 }
 
 \usage{
-oscilloST(wave1, wave2 = FALSE, f, from = NULL, to = NULL,
+oscilloST(wave1, wave2 = NULL, f, from = NULL, to = NULL,
 identify = FALSE, plot = TRUE, colwave1 = "black",
 colwave2 = "blue", coltitle = "black",
 collab = "black", cexlab = 1, fontlab = 1, colaxis = "black",
@@ -19,14 +19,15 @@ bty = "l")
 }
 
 \arguments{
-  \item{wave1}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a first time wave.
-  This can be also a 2 channels \code{\link[sound]{Sample}} object.}
-  \item{wave2}{data or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}) describing a second time wave.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave1} (in Hz).
-          Does not need to be specified if \code{wave1} and/or \code{wave2} are/is (a)
-          \code{\link[sound]{Sample}} object(s).}
+	\item{wave1}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
+	\item{wave2}{a \code{vector}, a \code{matrix} (second column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (right channel),
+	or \code{\link[tuneR]{Wave}} (right channel).}
+  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
+  Does not need to be specified if \code{wave1} and/or \code{wave2} are/is
+	of class \code{ts}, \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{identify}{returns the time coordinate of points chosen  with a cursor 
