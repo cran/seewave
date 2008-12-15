@@ -10,11 +10,12 @@ corresponds to a sampling frequency change.}
 \usage{resamp(wave, f, g, Sample = FALSE)}
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{g}{new sampling frequency of \code{wave} (in Hz).}
   \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.

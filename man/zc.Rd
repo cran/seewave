@@ -14,12 +14,12 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
   the time wave(by default \code{TRUE}).}
   \item{interpol}{interpolation factor.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}

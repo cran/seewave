@@ -13,7 +13,8 @@ par(op)
 
 # overplot of oscillographic and envelope representation
 oscillo(tico,f=22050)
-env(tico,f=22050,colwave=2,new=TRUE)
+par(new=TRUE)
+env(tico,f=22050,colwave=2)
 
 # temporal automatic measurements
 timer(orni,f=22050,threshold=5,smooth=40,

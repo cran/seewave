@@ -7,13 +7,14 @@
 \description{
 This function returns a list of statistical properties of a frequency spectrum.}
 
-\usage{specprop(spec, f, str = FALSE, plot = FALSE, type = "l", ...)}
+\usage{specprop(spec, f, str = FALSE, flim=NULL, plot = FALSE, type = "l", ...)}
 
 \arguments{
   \item{spec}{a data set resulting of a spectral analysis obtained
       with \code{\link{spec}} or \code{\link{meanspec}} (not in dB).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).}
+  \item{f}{sampling frequency of \code{spec} (in Hz).}
   \item{str}{logical, if \code{TRUE} returns the results in a structured table.}
+	\item{flim}{a vector of length 2 to specifgy the frequency limits of the analysis (in kHz)}
   \item{plot}{if \code{1} returns the spectrum , if \code{2} returns 
       the cumulative spectrum, both of them with the first quartile, the third quartile,
       the median and the mode plotted (by default \code{FALSE}).}
@@ -84,6 +85,8 @@ specprop(a,f=22050)
 specprop(a,f=22050)$mode
 # to get the results structured
 specprop(a,f=22050,str=TRUE)
+# to limit the analysis between 4 and 6 kHz
+specprop(a,f=22050,flim=c(4,6),str=TRUE)
 # plots
 specprop(a,f=22050,plot=1)
 specprop(a,f=22050,plot=2)

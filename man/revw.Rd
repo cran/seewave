@@ -9,11 +9,12 @@
 \usage{revw(wave, f, env = TRUE, ifreq = TRUE, plot = FALSE, Sample = FALSE, ...)}
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{env}{logical, if \code{TRUE} the amplitude envelope is reversed.}
 	\item{ifreq}{logical, if \code{TRUE} the instantaneous frequency is reversed.}
 	\item{plot}{logical, if \code{TRUE} returns an oscillographic plot of

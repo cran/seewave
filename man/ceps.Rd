@@ -9,7 +9,7 @@ frequency detection.}
 
 \usage{
 ceps(wave, f, wl = 512, at = NULL, from = NULL, to = NULL,
-tpeaks = FALSE, fpeaks = FALSE, tidentify = FALSE,
+tpeaks = NULL, fpeaks = NULL, tidentify = FALSE,
 fidentify = FALSE, col = "black", cex = 1,
 colpeaks = "red", cexpeaks = 0.75, fontpeaks = 1, plot = TRUE,
 qlab = "Quefrency (bottom: s, up: Hz)", alab = "Amplitude",
@@ -17,11 +17,12 @@ qlim = NULL, alim = NULL, type = "l", ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave or a \code{\link[sound]{Sample}}
-  object generated loading a wav file with \code{\link[sound]{loadSample}}
-  (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{at}{position where to compute the cepstrum (in s).}
@@ -51,7 +52,7 @@ qlim = NULL, alim = NULL, type = "l", ...)
 \details{
 The cepstrum of a time wave is the Fourier transform of the logarithm
 of the Fourier transform. The cepstrum of a wave \emph{s} is then calcuated as follows:\cr
-\deqn{C(s) = Re[FFT^{-1}(\log{|FFT(s)|)]}}{% 
+\deqn{C(s) = Re[FFT^{-1}(\log{(|FFT(s)|)]}}{% 
       C(s) = Re(invfft(log(abs(fft(s)))))}\cr
 
 The independent variable of a cepstral graph is called the quefrency.

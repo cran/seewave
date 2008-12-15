@@ -15,12 +15,12 @@ ama(wave, f, envt = "hil", wl = 512, plot = TRUE, type = "l", ...)
 }
 
 \arguments{
-  \item{wave}{data describing the time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-	Does not need to be specified if \code{wave} is a
-	\code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{envt}{the type of envelope to be used: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope.}
   \item{wl}{length of the window for the analysis (even number of points,
@@ -31,18 +31,19 @@ ama(wave, f, envt = "hil", wl = 512, plot = TRUE, type = "l", ...)
       See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{meanspec}} parameters.}
 }
+
 \details{
 This function is based on \code{env} and \code{meanspec}.\cr 
 The envelope of \code{wave} is first computed and the spectrum of this envelope
-is then processed. All \code{spec} and \code{meanspec} arguments can be
+is then processed. All \code{env} and \code{meanspec} arguments can be
 set up. Be sure to set up \code{wl} large enough if you want to detect low amplitude
 modulation periodicity.
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{ama} returns  a vector of numeric
-data corresponding to the computed spectrum.
-If \code{peaks} is \code{TRUE}, \code{ama} returns a list with
+If \code{plot} is \code{FALSE}, \code{ama} returns a numeric
+vector corresponding to the computed spectrum.
+If \code{peaks} is not \code{NULL}, \code{ama} returns a list with
 two elements:
   \item{spec}{the spectrum computed}
   \item{peaks }{the peaks values (in kHz).}
@@ -50,7 +51,7 @@ two elements:
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{env}}}
+\seealso{\code{\link{env}}, \code{\link{fma}}, \code{\link{meanspec}}}
 
 \examples{
 data(orni)

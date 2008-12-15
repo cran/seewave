@@ -6,6 +6,6 @@ citEntry(entry = "ARTICLE",
       	year = "2008",
         journal = "Bioacoustics",
         volume = "18", 
-        pages = "in press",
-        textVersion = "Sueur J., Aubin T., Simonis C. (2008). Seewave: a free modular tool for sound analysis and synthesis. Bioacoustics, 18: in press"
+        pages = "213-226",
+        textVersion = "Sueur J., Aubin T., Simonis C. (2008). Seewave: a free modular tool for sound analysis and synthesis. Bioacoustics, 18: 213-226"
 )

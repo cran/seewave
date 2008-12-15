@@ -16,11 +16,12 @@ ylim = NULL, type = "l", ...)
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-  or a \code{\link[sound]{Sample}} object generated loading a wav file
-  with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
   \item{phase}{if \code{TRUE} and  \code{plot} is also \code{TRUE}
   plots the instantaneous phase instead of the instantaneous frequency.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
@@ -60,7 +61,7 @@ Its application to animal sound study. \emph{Bioacoustics}, 5: 187-203.}
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{This function is based on the analytic signal obtained with the 
-Hilbert transform (see\code{\link{hilbert}}).\cr
+Hilbert transform (see \code{\link{hilbert}}).\cr
 The function requires the package \pkg{signal}.\cr
 The matrix describing the instantaneous phase has one more row than the
 one describing the instantaneous frequency.

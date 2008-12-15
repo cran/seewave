@@ -26,12 +26,12 @@ flim = NULL, flimd = NULL, listen=FALSE,
 }
 
 \arguments{
-  \item{wave}{data describing a time wave
-     or a \code{\link[sound]{Sample}} object generated loading a wav file
-     with \code{\link[sound]{loadSample}} (package \pkg{sound}).}
+	\item{wave}{a \code{vector}, a \code{matrix} (first column),
+	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+	or \code{\link[tuneR]{Wave}} (left channel).}
   \item{f}{sampling frequency of \code{wave} (in Hz).
-     Does not need to be specified if \code{wave} is a \code{\link[sound]{Sample}} object.}
-  \item{wl}{window length for the analysis
+  Does not need to be specified if \code{wave} is an object of class \code{ts},
+	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{wl}{window length for the analysis
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}

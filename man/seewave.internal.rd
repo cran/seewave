@@ -5,6 +5,7 @@
 \alias{flattop.w}
 \alias{hamming.w}
 \alias{hanning.w}
+\alias{inputw}
 \alias{peaks}
 \alias{check.pks}
 \alias{peaksign}

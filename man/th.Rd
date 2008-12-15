@@ -9,7 +9,7 @@
 \usage{th(env)}
 
 \arguments{\item{env}{a data set resulting of an envelope obtained
-      using \code{\link{oscillo}} with the argument env = TRUE.}}
+      using \code{\link{env}}}}
 
 \details{
 Temporal entropy is calculated according to:\cr
