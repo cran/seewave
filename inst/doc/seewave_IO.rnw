@@ -50,11 +50,11 @@ This document shortly details how to import and export sound with \texttt{R} usi
 %%%%%%%%%%%%%%%%%%%%
 
 \section{In}
-The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave} and \texttt{Sample}). 
+The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, numeric \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave} and \texttt{Sample}). 
 
 \subsection{Non specific classes}
 \subsubsection{Vector}
-Any muneric vector can be treated as a sound if a sampling frequency is provided in the \texttt{f} argument of \seewave functions. For instance, a 440 Hz sine sound (A note) sampled at 8000 Hz during one second can be generated and plot following:
+Any muneric vector can be treated as a sound if a sampling frequency is provided in the \texttt{f} argument of \seewave ~functions. For instance, a 440 Hz sine sound (A note) sampled at 8000 Hz during one second can be generated and plot following:
 <<fig=FALSE>>=
 s1<-sin(2*pi*440*seq(0,1,length.out=8000))
 is.vector(s1)
@@ -89,11 +89,11 @@ str(s4)
 @
 To generate a 0.5 second random noise:
 <<>>=
-s5<-ts(data=runif(4000), start=0, end=0.5, frequency=8000)
-str(s5)
+s4<-ts(data=runif(4000), start=0, end=0.5, frequency=8000)
+str(s4)
 @
-The length of \texttt{s4} is not 4000 but 4001. Data are actually recycled, \texttt{s5[4001]} being the same as \texttt{s5[1]}.  \par
-The functions \texttt{frequency} and or \texttt{deltat} return the samlping frequency ($f$) and the time resolution ($\Delta t$) respectively:
+The length of \texttt{s4} is not 4000 but 4001. Data are actually recycled, \texttt{s4[4001]} being the same as \texttt{s4[1]}.  \par
+The functions \texttt{frequency} and or \texttt{deltat} return the sampling frequency ($f$) and the time resolution ($\Delta t$) respectively:
 <<>>=
 frequency(s4)
 deltat(s4)
@@ -103,7 +103,7 @@ As the frequency is embedded in \texttt{ts} objects, there is no need to specify
 oscillo(s4)
 @
 
-In the case of multiple time series, \seewave functions will consider the first series only:
+In the case of multiple time series, \seewave~functions will consider the first series only:
 <<fig=FALSE>>=
 s5<-ts(data=s3,f=8000)
 class(s5)
@@ -140,7 +140,7 @@ s7@bit
 s7@stereo
 @
 
-\subsubsection{Sample class ( sound)}
+\subsubsection{Sample class (package sound)}
 The class \texttt{Sample} and the related \texttt{as.Sample} and \texttt{is.Sample} functions belong to the package \sound written by Matthias Heymann. Like \texttt{Wave}, the \texttt{Sample} class is a list containing information regarding data, sampling frequency, bits and the type of sound (mono\slash stereo).\par
 To read a \texttt{.wav} file stored on the hard-disk using \texttt{loadSample}:
 <<>>=

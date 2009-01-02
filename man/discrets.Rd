@@ -20,18 +20,16 @@
 \details{The function partitions the numeric (time) series into a sequence of finite number of symbols.
 This symbols result of the comparaison of each series value with its temporal neighbours.\cr
 They are two discretisations available:\cr
-when \code{symb} is set to 3, each value will be replaced by either:
-	\item \emph{I} if the series is \emph{I}ncreasing,
-	\item \emph{D} if the series is \emph{D}ecreasing,
-	\item \emph{F} if the series remains \emph{F}lat,
-\cr
-\cr
-when \code{symb} is set to 5, each value will be replaced by either:
-	\item \emph{I} if the series is \emph{I}ncreasing,
-	\item \emph{D} if the series is \emph{D}ecreasing,
-	\item \emph{F} if the series remains \emph{F}lat,
-	\item \emph{P} if the series shows a \emph{P}eak,
-	\item \emph{T} if the series shows  a \emph{T}rough. 
+when \code{symb} is set to 3, each value will be replaced by either:\cr
+	- \emph{I} if the series is \emph{I}ncreasing,\cr
+	- \emph{D} if the series is \emph{D}ecreasing,\cr
+	- \emph{F} if the series remains \emph{F}lat,\cr
+when \code{symb} is set to 5, each value will be replaced by either:\cr
+	- \emph{I} if the series is \emph{I}ncreasing,\cr
+	- \emph{D} if the series is \emph{D}ecreasing,\cr
+	- \emph{F} if the series remains \emph{F}lat,\cr
+	- \emph{P} if the series shows a \emph{P}eak,\cr
+	- \emph{T} if the series shows  a \emph{T}rough. 
 }
 
 \value{A character string of length 1 if \code{collapse} is \code{TRUE}.
