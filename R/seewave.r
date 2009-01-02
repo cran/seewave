@@ -1545,7 +1545,7 @@ else
 
 
 ################################################################################
-##                               DYNSPEC                                        
+##                               DYNSPEC
 ################################################################################
 
 dynspec<-function(
@@ -3354,6 +3354,7 @@ filename = NULL
 )
 
 {
+try(library(sound))
 if (is.null(filename) == TRUE) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
 if(class(wave)=="Sample") {saveSample(wave, filename=filename, overwrite=TRUE)}
 else
@@ -4727,6 +4728,7 @@ return(w)
 
 inputw<-function(wave, f, channel=1)
 {
+try(library(sound)) 
 if(is.vector(wave))      {f<-f ; wave <- as.matrix(wave)}
 # mts objects are matrix by default, there is then a conflict between is.matrix and is.mts
 if(is.matrix(wave) && !is.mts(wave)) {f<-f ; wave <- wave[,channel,drop=FALSE]}  
