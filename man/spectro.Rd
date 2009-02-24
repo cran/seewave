@@ -109,7 +109,7 @@ Caroline Simonis \email{csimonis@mnhn.fr}.}
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
 \code{\link{filled.contour}}}
 
-\seealso{\code{\link{spectro3D}}, \code{\link{dynspec}}, 
+\seealso{\code{\link{spectro3D}}, \code{\link{dynspec}}, \code{\link{wf}}, 
 \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{

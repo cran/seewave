@@ -41,7 +41,7 @@ for implications on the results.
 
 \value{A single value varying between 0 and 1 is returned. The value has no unit.}
 
-\references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S., in preparation.}
+\references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S. (2008) - Rapid acoustic survey for biodiversity appraisal. \emph{PLoS ONE}, 3(12): e4065.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

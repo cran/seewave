@@ -60,8 +60,9 @@ plotted on the same graph.
 }
 
 \references{
-Sueur, J., Pavoine, S., Hamerlynck, O. and Duvail, S. (in press).
-Rapid acoustic survey for biodiversity appraisal. PLoS One, in press.}
+Sueur, J., Pavoine, S., Hamerlynck, O. and Duvail, S. (2008).
+Rapid acoustic survey for biodiversity appraisal. \emph{PLoS One},
+3(12): e4065.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}
 and Sandrine Pavoine \email{pavoine@mnhn.fr}.}

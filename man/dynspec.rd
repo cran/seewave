@@ -94,7 +94,7 @@ Caroline Simonis \email{csimonis@mnhn.fr}.}
 \code{\link{spectro}} for some information regarding the short term Fourier 
 transform.}
 
-\seealso{\code{\link{spectro}}, \code{\link{spectro3D}}, \code{\link{spec}},
+\seealso{\code{\link{spectro}}, \code{\link{spectro3D}}, \code{\link{wf}}, \code{\link{spec}},
 \code{\link{fft}}, \code{\link{oscillo}}.}
 
 \examples{

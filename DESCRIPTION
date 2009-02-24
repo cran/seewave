@@ -1,19 +1,26 @@
 Package: seewave
 Type: Package
-Title: Time wave analysis and graphical representation 
-Version: 1.5.2
-Date: 2009-01-02
-Author: Jerome Sueur <sueur@mnhn.fr>, 
-        Thierry Aubin <thierry.aubin@u-psud.fr>,
-        Caroline Simonis <csimonis@mnhn.fr>
+Title: Time wave analysis and graphical representation
+Version: 1.5.4
+Date: 2009-2-24
+Author: Jerome Sueur <sueur@mnhn.fr>, Thierry Aubin
+        <thierry.aubin@u-psud.fr>, Caroline Simonis <csimonis@mnhn.fr>
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
-Webpage: http://sueur.jerome.neuf.fr/seewave.html
-Depends: R(>= 2.2.0)
+Webpage: http://sueur.jerome.perso.neuf.fr/seewave.html
+Depends: R(>= 2.2.0), sound
 Encoding: latin1
 SystemRequirements: FLAC
-Suggests: sound, rgl, rpanel, tcltk, signal, tuneR
+Suggests: rgl, rpanel, tcltk, signal, tuneR, audio
 ZipData: no
-Description: seewave provides functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
+Description: seewave provides functions for analysing, manipulating,
+        displaying, editing and synthesizing time waves (particularly
+        sound).  This package processes time analysis (oscillograms and
+        envelopes), spectral content, resonance quality factor,
+        entropy, cross correlation and autocorrelation, zero-crossing,
+        dominant frequency, analytic signal, frequency coherence, 2D
+        and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
-URL: http://sueur.jerome.neuf.fr/seewave.html
-Packaged: Fri Jan  2 20:48:05 2009; root
+URL: http://sueur.jerome.perso.neuf.fr/seewave.html
+Packaged: Thu Mar 26 14:07:33 2009; root
+Repository: CRAN
+Date/Publication: 2009-03-27 10:44:23

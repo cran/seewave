@@ -75,7 +75,7 @@ Symbolic dynamics for identifying similarity between rhythms of ecological time 
 \note{
 It might be useful to round the values of the input series (see examples).\cr
 The mutual information (\emph{I}) should increase with the similarity
-between the series to compare (\code{x} and \code{y})..
+between the series to compare (\code{x} and \code{y}).
 }
 
 \seealso{\code{\link{discrets}}}

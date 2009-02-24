@@ -31,16 +31,17 @@
 \newcommand{\seewave}{\pkg{seewave}}
 \newcommand{\sound}{\pkg{sound}}
 \newcommand{\tuneR}{\pkg{tuneR}}
+\newcommand{\audio}{\pkg{audio}}
 \author{Jérôme Sueur
 \footnote{Muséum national d'Histoire naturelle, Paris, France --
-\href{http://sueur.jerome.neuf.fr}{http://sueur.jerome.neuf.fr}
+\href{http://sueur.jerome.perso.neuf.fr}{http://sueur.jerome.perso.neuf.fr}
 }}
 
 \title{I\slash O of sound with R}
 
 \begin{document}
 \maketitle
-This document shortly details how to import and export sound with \texttt{R} using the packages \seewave, \sound, and \tuneR.
+This document shortly details how to import and export sound with \texttt{R} using the packages \seewave, \sound, \tuneR~and \audio.
 
 \tableofcontents
 \newpage
@@ -50,7 +51,7 @@ This document shortly details how to import and export sound with \texttt{R} usi
 %%%%%%%%%%%%%%%%%%%%
 
 \section{In}
-The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, numeric \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave} and \texttt{Sample}). 
+The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, numeric \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave}, \texttt{Sample}, \texttt{audioSample}). 
 
 \subsection{Non specific classes}
 \subsubsection{Vector}
@@ -64,7 +65,7 @@ oscillo(s1,f=8000)
 @
 
 \subsubsection{Matrix}
-Any single column matrix can be read but the sampling frequency has to be specified in the \seewave functions. 
+Any single column matrix can be read but the sampling frequency has to be specified in the \seewave~functions. 
 <<fig=FALSE>>=
 s2<-as.matrix(s1)
 is.matrix(s2)
@@ -98,7 +99,7 @@ The functions \texttt{frequency} and or \texttt{deltat} return the sampling freq
 frequency(s4)
 deltat(s4)
 @
-As the frequency is embedded in \texttt{ts} objects, there is no need to specify it when using \seewave functions:
+As the frequency is embedded in \texttt{ts} objects, there is no need to specify it when using \seewave~functions:
 <<fig=FALSE>>=
 oscillo(s4)
 @
@@ -154,7 +155,7 @@ s8$rate
 duration(s8)
 s8$duration
 @
-\seewave functions which return a value describing a sound have a special argument named \texttt{Sample}. When this argument is set to \texttt{TRUE}, the object returned by the function is of class \texttt{Sample} and not \texttt{matrix}. This can be useful for latter analyses as there is no more need to specify the sampling frequency \texttt{f}.
+\seewave~functions which return a value describing a sound have a special argument named \texttt{Sample}. When this argument is set to \texttt{TRUE}, the object returned by the function is of class \texttt{Sample} and not \texttt{matrix}. This can be useful for latter analyses as there is no more need to specify the sampling frequency \texttt{f}.
 <<>>=
 s9<-repw(s2,f=8000,times=2,Sample=TRUE)
 oscillo(s9)
@@ -166,8 +167,30 @@ f<-8000
 oscillo(s2,f)
 @
 
+\subsubsection{audioSample class (package audio)}
+The package \audio, developed by Simon Urbanek, is another option to handle \texttt{.wav} files. Sound can be imported using the function \texttt{load.wave}. The class of the resulting object is \texttt{audioSample} which is essentially a numeric vector (for mono) or numeric matrix with two rows (for stereo). The sampling frequency and the resolution can be called as attributes :
+<<>>=
+library(audio)
+s10<-load.wave("mysong.wav")
+head(s10)
+s10$rate
+s10$bits
+@ 
+
+The main advantage of the package \audio~is that sound can be directly acquired within an \texttt{R} session. This is achieved by first preparing a vector of \texttt{NA} and then using the function \texttt{record}. For instance, to get a mono sound of 5 seconds sampled at 16 kHz :
+<<eval=FALSE>>=
+s11 <- rep(NA_real_, 16000*5)
+record(s11, 16000, 1)
+@ 
+A recording session can be controled using three complementary functions : \texttt{pause}, \texttt{rewind}, and \texttt{resume} (see~\ref{playaudioSample}). See the documentation of \audio~for details regarding the control of audio drivers: \href{http://www.rforge.net/audio/}{http://www.rforge.net/audio/}.
+
+<<echo=false,quiet=true>>=
+detach(package: audio)
+@
+
+
 %%%%%%%%%%%%%%%%%%%%%%
-%%%% OUT
+%%%% Out
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Out}
 \subsection{.txt format}
@@ -190,7 +213,7 @@ header="f=22050; ch=left")
 
 
 \subsection{.wav format}
-The function \texttt{savewav}, which is based on \texttt{saveSample}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
+\tuneR, \sound and \audio have each funcion to write \texttt{.wav} files: \texttt{writeWave}, \texttt{saveSample}, and \texttt{save.wave} respectively.  Within \seewave The function \texttt{savewav}, which is based on \texttt{saveSample}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
 <<>>=
 savewav(tico, f=22050)
 @
@@ -227,23 +250,23 @@ To generate a stereo sound, two mono sounds are first created using \texttt{sine
 <<>>=
 left<-sine(440, bit = 16)
 right<-sine(2000, bit = 16)
-s10<-stereo(left,right)
-s10
+s12<-stereo(left,right)
+s12
 @
 To go back to a mono file taking the left channel only:
 <<>>=
-s11<-mono(s10,"left")
+s13<-mono(s12,"left")
 @
 The function \texttt{channel} do roughly the same as it extracts one or more channels. To get this time the right channel:
 <<>>=
-s12<-channel(s10,"right")
+s14<-channel(s12,"right")
 @
 And eventually, the S4 indexing can be used to do it "manually". In this particular case, the returned object will be of class \texttt{vector}.
 <<>>=
-s11<-s10@left
-is.vector(s11)
-s12<-s10@right
-is.vector(s12)
+s13<-s12@left
+is.vector(s13)
+s14<-s12@right
+is.vector(s14)
 @
 
 \subsection{Sample class}
@@ -296,13 +319,23 @@ It may happen that the default players of the function \texttt{play} are not ins
 \end{Sinput}
 
 \subsubsection{Sample class}
-For the class \texttt{Sample} of the package \tuneR the functions are basically the same. The function \texttt{play}:
+For the class \texttt{Sample} of the package \tuneR~the functions are basically the same. The function \texttt{play}:
 \begin{Sinput}
 > play(ticofirst)
 > play("mysong.wav")
 \end{Sinput}
 and the functions \texttt{WavPlayer}, \texttt{setWavPlayer}, \texttt{getWavPlayer} to set the sound player of your OS.
- 
+
+\subsubsection{audioSample class}
+\label{playaudioSample}
+The package \audio~has similarly a function \texttt{play} but also have three useful functions to control recording and playback  :
+\begin{itemize}
+\item \texttt{pause} that stops audio recording or playback,
+\item \texttt{rewind} that rewinds audio recording or playback, \textit{i.e.}, makes the beginning of the source (or target) object the current audio position,
+\item \texttt{resume} that resumes previously paused audio recording or playback.
+\end{itemize}
+
+
 \subsubsection{Other classes}
 The package \seewave includes listen a function based on \texttt{play} of \texttt{soundR} but accepting all specific and non-specific classes and with two arguments (\texttt{from} and \texttt{to}) to listen only a section of a sound object:
 \begin{Sinput}
@@ -334,7 +367,11 @@ Here is a temptative of summary of main \texttt{R} functions used for sound inpu
 \hline
 \textbf{tuneR} & readWave & writeWave & mono, stereo & play & \texttt{Wave} \\ 
 \textbf{sound} & loadSample & saveSample & mono, stereo & play & \texttt{Sample} \\ 
-\textbf{seewave} & -- & export, savewav & -- & listen & \texttt{vector}, \texttt{matrix}, \texttt{ts}, \texttt{mts}, \texttt{Wave}, \texttt{Sample} \\ 
+\textbf{audio} & load.wave, record & save.wave& mono, stereo & play, pause, & \texttt{audioSample} \\ 
+ &  & &  & resume, rewind &  \\ 
+\textbf{seewave} & -- & export, savewav & -- & listen & \texttt{vector}, \texttt{matrix}, \\ 
+ & & & & &  \texttt{ts}, \texttt{mts}, \texttt{Wave},\\ 
+ & & & & &  \texttt{Sample}, \texttt{audioSample}\\ 
 \hline 
 \end{tabular} 
 \end{document}

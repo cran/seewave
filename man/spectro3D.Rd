@@ -67,7 +67,8 @@ Caroline Simonis \email{csimonis@mnhn.fr}.}
 See examples of \code{\link{spectro}} for analysis arguments
 (\code{wl},\code{zp}, \code{ovlp}).}
 
-\seealso{\code{\link{spectro}}, \code{\link{dynspec}}, \code{\link{fft}}.}
+\seealso{\code{\link{spectro}}, \code{\link{dynspec}},
+  \code{\link{wf}}, \code{\link{fft}}.}
 
 \examples{
 data(tico)
