@@ -19,10 +19,11 @@ seewave provides functions for analysing, manipulating, displaying, editing and 
 \tabular{ll}{
 Package: \tab seewave\cr
 Type: \tab Package\cr
-Version: \tab 1.5.1\cr
-Date: \tab 2008-12-15\cr
+Version: \tab 1.5.4\cr
+Date: \tab 2009-02-24\cr
 License: \tab GPL version 2 or newer\cr
-Contributors : \tab Jonathan Lees, Martin Maechler, Sandrine Pavoine, Luis J. Villanueva-Rivera\cr
+Contributors : \tab Jonathan Lees, Martin Maechler, Sandrine Pavoine,
+Luis J. Villanueva-Rivera, Carl G. Witthoft\cr
 Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
 }
 }
@@ -34,7 +35,7 @@ Caroline Simonis <csimonis@mnhn.fr>\cr
 
 Maintainer: Jerome Sueur <sueur@mnhn.fr>\cr
 
-\url{http://sueur.jerome.neuf.fr/seewave.html}
+\url{http://sueur.jerome.perso.neuf.fr/seewave.html}
 }
 
 \keyword{dplot}

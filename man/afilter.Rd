@@ -21,7 +21,7 @@ listen = FALSE, Sample = FALSE,...)}
   \item{plot}{logical, if \code{TRUE} plots the new oscillogram
       (by default \code{TRUE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
+  \item{Sample}{a logical, if \code{TRUE} and \code{plot} is \code{FALSE}
   returns an object of class \code{\link[sound]{Sample}}}.      
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }

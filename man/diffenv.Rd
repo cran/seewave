@@ -57,9 +57,9 @@ When \code{plot} is \code{TRUE}, both envelopes and their difference surface are
 plotted on the same graph.
 }
 
-\references{
-Sueur, J., Pavoine, S., Hamerlynck, O. and Duvail, S. (in press).
-Rapid acoustic survey for biodiversity appraisal. PLoS One, in press.}
+\references{Sueur, J., Pavoine, S., Hamerlynck, O. & Duvail, S. (2008) -
+Rapid acoustic survey for biodiversity appraisal. \emph{PLoS ONE},
+3(12): e4065.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}.}
 
