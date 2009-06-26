@@ -923,6 +923,33 @@ covspectro<-function(
 
 
 ################################################################################
+##                               CREST
+################################################################################
+
+crest <- function(
+                  wave,
+                  f,
+                  plot = FALSE,
+                  col = 2,
+                  cex = 3,
+                  symbol = "*",
+                  ...
+                  )
+{
+  max <- max(abs(wave))
+  loc.max <- which(wave == max(wave))/f
+  c <- max/rms(wave)
+  if(plot==TRUE)
+    {
+      if(which.max(abs(range(wave)))==1) {max2 <- -max} else {max2 <- max}# when the max is actually a negative value
+      oscillo(wave=wave, f=f,...)
+      text(x=loc.max, y=max2, labels=symbol, cex=cex, col=col)
+    }
+  return(list(C=c, val=max, loc=loc.max))
+}
+
+
+################################################################################
 ##                                CSH
 ################################################################################
 
@@ -1130,6 +1157,40 @@ dBscale<-function
       if (side == 3) axis(3,pos=0.95,col=colaxis,col.axis=colaxis,...)
     }    
 }    
+
+
+################################################################################
+##                                DBWEIGHT
+################################################################################
+
+dBweight<-function(f, dBref=NULL)
+{
+                                        # dBA
+  num <- (12200^2*f^4)
+  den <- (f^2 + 20.6^2)* sqrt((f^2 + 107.7^2)*(f^2 + 737.9^2))*(f^2 + 12200^2)
+  A <- 2 + 20*log10(num/den)
+
+                                        # dBB
+  num <- (12200^2*f^3);
+  den <- (f^2 + 20.6^2)*sqrt((f^2 + 158.5^2))*(f^2 + 12200^2)
+  B <- 0.17 + 20*log10(num/den)
+
+                                        #dBC
+  num <- (12200^2*f^2);
+  den <- (f^2 + 20.6^2)*(f^2 + 12200^2)
+  C <- 0.06 + 20*log10(num/den)
+
+                                        #dBD
+  a <- f/(6.8966888496476*10^-5);
+  h <- ((1037918.48 - f^2)^2 + (1080768.16*f^2))/((9837328 - f^2)^2 + (11723776*f^2))
+  b <- sqrt(h/((f^2 + 79919.29)*(f^2 + 1345600)))
+  D <- 20*log10(a*b)
+
+                                        # result
+  result <- list(A=A, B=B, C=C, D=D)
+  if(!is.null(dBref)) result <- list(A=dBref+A, B=dBref+B, C=dBref+C, D=dBref+D)
+  return(result)
+}
 
 
 ################################################################################
@@ -2447,7 +2508,8 @@ meanspec<-function(
                    ovlp = 0,
                    PSD =  FALSE,
                    PMF = FALSE,
-                   dB = FALSE,
+                   dB = NULL,
+                   dBref = NULL,
                    from = NULL,
                    to = NULL,
                    peaks = NULL,
@@ -2466,10 +2528,18 @@ meanspec<-function(
                    ...)
 
 {
+                                        # STOP MESSAGES  
+  if(!is.null(dB) & PMF == TRUE) stop("PMF cannot be in dB")
+  if(is.null(dB) & !is.null(dBref)) stop("'dB' cannot be NULL  when 'dBref' is not NULL")
+  if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
+  if(!is.null(dB) && any(dB!=c("max0","A","B","C","D")))
+    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+
+                                        # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if (dB == TRUE & PMF == TRUE) stop("PMF cannot be in dB")
 
+                                        # FROM-TO SELECTION
   if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
@@ -2483,26 +2553,26 @@ meanspec<-function(
       wave<-as.matrix(wave[a:b,])
     }
 
+                                        # FFT
   n<-nrow(wave)
   N<-wl
-  step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
+  step<-seq(1,n-wl,wl-(ovlp*wl/100))		
   y1<-matrix(data=numeric((wl)*length(step)),wl,length(step))
   W<-ftwindow(wl=wl,wn=wn)
   for(i in step)
     {y1[,which(step==i)]<-
        Mod(fft(c(wave[i:(wl+i-1),])*W))}
-  
-  y2<-y1[1:(wl/2),]	# to keep only the relevant frequencies (half of the FT)
-  y3<-y2/max(y2)					      # to get only values between 0 and 1
-  y4<-apply(y3,MARGIN=1,mean)   # mean computation (by rows)
-  y5<-y4/max(y4)
-                                        # replaces 0 values in spectra that can't be processed by the following log10())
-  y<-ifelse(y5==0,yes=1e-6,no=y5)
+  y2<-y1[1:(wl/2),]	          # to keep only the relevant frequencies (half of the FT)
+  y3<-y2/max(y2)		  # to get only values between 0 and 1
+  y4<-apply(y3,MARGIN=1,mean)     # mean computation (by rows)
+  y5<-y4/max(y4)                               
+  y<-ifelse(y5==0,yes=1e-6,no=y5) # replaces 0 values in spectra that cannott be processed by log10())
 
+                                        # PSD and PMF OPTIONS
   if(PSD == TRUE) y<-y^2
-
   if(PMF == TRUE) y<-y/sum(y)
 
+                                        # PEAK DETECTION
   if(!is.null(peaks))
     {
       check.pks(y)
@@ -2510,21 +2580,33 @@ meanspec<-function(
       respeaks<-seq(y)[p]*f/N/1000
     }
 
+                                        # FREQUENCY DATA 
   x<-seq(f/1000/wl,f/2000,length.out=N/2)  
 
+                                        # DB
+  if(!is.null(dB))
+    {
+      if(is.null(dBref)) y<-20*log10(y) else y<-20*log10(y/dBref)
+      if(dB == "max0") y <- y
+      if(dB == "A") y <- dBweight(x*1000, dBref = y)$A 
+      if(dB == "B") y <- dBweight(x*1000, dBref = y)$B 
+      if(dB == "C") y <- dBweight(x*1000, dBref = y)$C 
+      if(dB == "D") y <- dBweight(x*1000, dBref = y)$D
+    }
+  
+                                        # LIMITS OF THE AMPLITUDE AXIS
   if(is.null(alim) == TRUE)
     {
-      if (dB == FALSE) alim<-c(0,1.1)
-      if (dB == TRUE)  alim<-c(min(20*log10(y)),20)
+      if (is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
       if (PMF == TRUE) alim<-c(0,max(y))
     }
 
-  if(plot == 1) # plots x-y graph with Frequency as X-axis
+                                        # HORIZONTAL PLOT
+  if(plot == 1)
     {
-      if(dB == TRUE)
+      if(!is.null(dB))
         {
-          y<-20*log10(y)	
-	  plot(x,y,
+          plot(x,y,
                xaxs = "i", xlab = flab, xlim = flim,
                yaxs = "i", yaxt = "s", ylab = alab, ylim = alim,
                cex = cex, col = col,
@@ -2560,9 +2642,9 @@ meanspec<-function(
           return(coord)
         }     	
       
-      if(!is.null(peaks))                              
+      if(!is.null(peaks))
         {
-          if(dB == TRUE)
+          if(!is.null(dB))
             text(seq(y)[p]*f/N/1000, y[p]+5,
                  as.character(round(seq(y)[p]*f/N/1000,3)),
                  col = colpeaks, cex = cexpeaks, font = fontpeaks)
@@ -2573,12 +2655,12 @@ meanspec<-function(
         }
     }
 
-  if(plot == 2) # plots x-y graph with Frequency as Y-axis
+                                        # VERTICAL PLOT
+  if(plot == 2)
     {
-      if(dB == TRUE)
+      if(!is.null(dB))
         {
-          y<-20*log10(y)	
-	  plot(y,x,
+          plot(y,x,
                xaxs = "i", xlab = alab, xlim = alim,
                yaxs = "i", yaxt = "s", ylab = flab, ylim = flim,
                cex = cex, col = col,
@@ -2596,7 +2678,7 @@ meanspec<-function(
               xaxt<-"s"
               xlab<-" "
             }
-          plot(y,x,
+          plot(x = y, y = x,
                xaxs = "i", xaxt = xaxt, xlab = xlab, xlim = alim,
                yaxs = "i", ylab = flab, ylim = flim,
                cex = cex, col = col,
@@ -2616,7 +2698,7 @@ meanspec<-function(
       
       if(!is.null(peaks))
         {
-          if (dB == TRUE)
+          if (!is.null(dB))
             text(y[p]+10, seq(y)[p]*f/N/1000,
                  as.character(round(seq(y)[p]*f/N/1000,3)),
                  col = colpeaks, cex = cexpeaks)
@@ -2625,13 +2707,11 @@ meanspec<-function(
                  as.character(round(seq(y)[p]*f/N/1000,3)),
                  col = colpeaks, cex = cexpeaks)
         }
-      if(dB == TRUE) y<-20*log10(y)
     }
 
-  
+                                        # INVISIBLE RETURN DATA  
   if(plot == 1 | plot == 2)
     {
-      if(dB == TRUE) y<-20*log10(y)
       spec<-cbind(x,y)	
       if(!is.null(peaks))
         {
@@ -2640,10 +2720,9 @@ meanspec<-function(
         }
       else invisible(spec)
     }
-  
+                                        # DATA RETURN WHEN NO PLOT  
   else if(plot == FALSE) 
     {
-      if(dB == TRUE) y<-20*log10(y)
       spec<-cbind(x,y)	
       if(!is.null(peaks))
         {
@@ -3445,6 +3524,20 @@ rmnoise<-function(
 
 
 ################################################################################
+##                               RMS
+################################################################################
+
+rms <- function(
+                x,
+                ...
+                )
+  {
+    x <- sqrt(mean(x^2, ...))
+    return(x)
+  }
+
+
+################################################################################
 ##                               SAVEWAV
 ################################################################################
 
@@ -3549,15 +3642,20 @@ sh<-function(
 
 {
   if(is.matrix(spec)==TRUE) spec<-spec[,2]
-  if(any(spec<0)) stop("Data do not have to be in dB")
-  N<-length(spec)
-  if (sum(spec)==0) z<-NA 
+  options(warn=-1)  # to ignore warning messages
+  if(is.na(spec)) {options(warn=-1) ; z <- 0 ; options(warn=0)}  # options(warn) to ignore temporarely warning messages
   else
     {
-      spec[spec==0]<-1e-7
-                                        # normalisation tel que la somme des valeurs du spectre = 1
-      specn<-spec/sum(spec)
-      z<- -sum(specn*log2(specn))/log2(N)
+      options(warn=0)  # to authorize warning messages
+      if(any(spec<0, na.rm=TRUE)) stop("Data do not have to be in dB")
+      if(sum(spec)==0) {warning("Caution! This is a null spectrum. The spectral entropy is null!", call.=FALSE) ; z <- 0}
+      else
+        {
+          N<-length(spec)
+          spec[spec==0]<-1e-7
+          specn<-spec/sum(spec)  # PMF
+          z<- -sum(specn*log2(specn))/log2(N)
+        }
     }
   return(z)
 }
@@ -3647,7 +3745,8 @@ spec<-function(
                wn = "hanning",
                PSD = FALSE,
                PMF = FALSE,
-               dB = FALSE,
+               dB = NULL,         
+               dBref = NULL,
                at = NULL,
                from = NULL,
                to = NULL,
@@ -3667,10 +3766,18 @@ spec<-function(
                ...)
 
 {
-  if (dB == TRUE & PMF == TRUE) stop("PMF cannot be in dB")
+                                        # STOP MESSAGES  
+  if(!is.null(dB) & PMF == TRUE) stop("PMF cannot be in dB")
+  if(is.null(dB) & !is.null(dBref)) stop("'dB' cannot be NULL  when 'dBref' is not NULL")
+  if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
+  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
+    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
 
+
+                                        # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
+                                        # FROM-TO SELECTION
   if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
@@ -3684,26 +3791,28 @@ spec<-function(
       wave<-as.matrix(wave[a:b,])
     }
 
+                                        # AT SELECTION
   if(!is.null(at))
     {
       c<-round(at*f)
       wl2<-wl%/%2
       wave<-as.matrix(wave[(c-wl2):(c+wl2),])
     }
-  
+
+                                        # FFT
   n<-nrow(wave)
   W<-ftwindow(n,wn=wn)
   wave<-wave*W
   y1<-Mod(fft(wave[,1]))
   y11<-y1[1:(n%/%2)]
-  y2<-y11/max(y11)
-                                        # replaces 0 values in spectra that can't be processed by the following log10()
-  y<-ifelse(y2==0,yes=1e-6,no=y2)
+  y2<-y11/max(y11)       
+  y<-ifelse(y2==0,yes=1e-6,no=y2)  # replaces 0 values in spectra that cannott be processed by log10()
 
+                                        # PSD and PMF OPTIONS
   if(PSD == TRUE) y<-y^2
-
   if(PMF == TRUE) y<-y/sum(y)
 
+                                        # PEAK DETECTION
   if(!is.null(peaks))
     {
       check.pks(y)
@@ -3711,22 +3820,34 @@ spec<-function(
       respeaks<-seq(y)[p]*f/n/1000
     }
 
+                                        # FREQUENCY DATA
   if(!is.null(at)) x<-seq(f/1000/wl,f/2000,length.out=n%/%2)
   else x<-seq(f/1000/n,f/2000,length.out=n%/%2)
 
+                                        # DB
+  if(!is.null(dB))
+    {
+      if(is.null(dBref)) y<-20*log10(y) else y<-20*log10(y/dBref)
+      if(dB == "max0") y <- y
+      if(dB == "A") y <- dBweight(x*1000, dBref = y)$A 
+      if(dB == "B") y <- dBweight(x*1000, dBref = y)$B 
+      if(dB == "C") y <- dBweight(x*1000, dBref = y)$C 
+      if(dB == "D") y <- dBweight(x*1000, dBref = y)$D
+    }
+  
+                                        # LIMITS OF THE AMPLITUDE AXIS
   if(is.null(alim) == TRUE)
     {
-      if (dB == FALSE) alim<-c(0,1.1)
-      if (dB == TRUE)  alim<-c(min(20*log10(y)),20)
+      if (is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
       if (PMF == TRUE) alim<-c(0,max(y))
     }
 
-  if(plot == 1) # plots x-y graph with Frequency as X-axis
+                                        # HORIZONTAL PLOT
+  if(plot == 1)
     {
-      if(dB == TRUE)
+      if(!is.null(dB))
         {
-          y<-20*log10(y)
-	  plot(x=x,y=y,
+          plot(x=x,y=y,
                xaxs = "i", xlab = flab, xlim = flim,
                yaxs = "i", yaxt = "s", ylab = alab, ylim = alim,
                col = col, cex = cex,
@@ -3766,7 +3887,7 @@ spec<-function(
 
       if(!is.null(peaks))
         {
-          if (dB == TRUE)
+          if (!is.null(dB))
             text(seq(y)[p]*f/n/1000, y[p]+5,
                  as.character(round(seq(y)[p]*f/n/1000,3)),
                  col = colpeaks, cex = cexpeaks, font = fontpeaks)
@@ -3775,15 +3896,14 @@ spec<-function(
                  as.character(round(seq(y)[p]*f/n/1000,3)),
                  col = colpeaks, cex = cexpeaks, font = fontpeaks)
         }
-      if(dB == TRUE) y<-20*log10(y)
     }
 
-  if(plot == 2) # plots x-y graph with Frequency as Y-axis
+                                        # VERTICAL PLOT
+  if(plot == 2)
     {
-      if(dB == TRUE)
+      if(!is.null(dB))
         {
-          y<-20*log10(y)
-	  plot(x=y,y=x,
+          plot(x=y,y=x,
                xaxs = "i", xlab = alab, xlim = alim,
                yaxs = "i", yaxt = "s", ylab = flab, ylim = flim,
                col = col, cex = cex,
@@ -3810,7 +3930,6 @@ spec<-function(
                ...)
         }
 
-
       if(identify == TRUE)
         {
           cat("choose points on the spectrum\n")
@@ -3824,7 +3943,7 @@ spec<-function(
 
       if(!is.null(peaks))
         {
-          if (dB == TRUE)
+          if(!is.null(dB))
             text(y[p]+10, seq(y)[p]*f/n/1000,
                  as.character(round(seq(y)[p]*f/n/1000,3)),
                  col = colpeaks, cex = cexpeaks, font= fontpeaks)
@@ -3833,12 +3952,11 @@ spec<-function(
                  as.character(round(seq(y)[p]*f/n/1000,3)),
                  col = colpeaks, cex = cexpeaks, font= fontpeaks)
         }
-      if(dB == TRUE) y<-20*log10(y)
     }
-  
+
+                                        # INVISIBLE RETURN DATA
   if(plot == 1 | plot == 2)
     {
-      if(dB == TRUE) y<-20*log10(y)
       spec<-cbind(x,y)	
       if(!is.null(peaks))
         {
@@ -3847,10 +3965,9 @@ spec<-function(
         }
       else invisible(spec)
     }
-  
+                                        # DATA RETURN WHEN NO PLOT
   else if(plot == FALSE) 
     {
-      if(dB == TRUE) y<-20*log10(y)
       spec<-cbind(x,y)	
       if(!is.null(peaks))
         {
@@ -3860,6 +3977,7 @@ spec<-function(
       else return(spec)
     }
 }
+
 
 
 ################################################################################
@@ -4016,14 +4134,16 @@ spectro<-function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
+                  dB = "max0",
+                  dBref = NULL,
                   plot = TRUE,
                   grid = TRUE,
                   osc = FALSE,
                   scale = TRUE,
                   cont = FALSE,
-                  collevels = seq(-30,0,1),
+                  collevels = NULL,
                   palette = spectro.colors,
-                  contlevels = seq (-30,0,10),
+                  contlevels = NULL,
                   colcont = "black",
                   colbg = "white", 
                   colgrid = "black",
@@ -4045,37 +4165,38 @@ spectro<-function(
                   ...)
 
 {
+
+                                        # STOP MESSAGES
+  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
+    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+
+                                        # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])
-
-                                        # n<-nrow(wave)
-
-                                        # dynamic vertical zoom (modifications of analysis parameters)
-  if (!is.null(flimd))
-    {
-                                        # zoom magnification
-      mag<-round((f/2000)/(flimd[2]-flimd[1]))
-                                        # new parameters
-      wl<-wl*mag
+                                        # TIME AND FREQUENCY LIMITS
+  if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
+  if (!is.null(flimd))                        # dynamic vertical zoom (modifications of analysis parameters)
+    {                                     
+      mag<-round((f/2000)/(flimd[2]-flimd[1]))# zoom magnification                                   
+      wl<-wl*mag                              # new parameters
       if (ovlp==0) ovlp<-100
-      ovlp<-100-round(ovlp/mag)
-                                        # use of normal flim for following axis modifications
-      flim<-flimd
+      ovlp<-100-round(ovlp/mag)                                       
+      flim<-flimd                             # use of normal flim to follow axis modifications
     }
   
-  n<-nrow(wave)
-  step<-seq(1,n-wl,wl-(ovlp*wl/100))		# FT windows
 
                                         # STFT
-  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn)	  
+  n<-nrow(wave)
+  step<-seq(1,n-wl,wl-(ovlp*wl/100))
+  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,dBref=dBref)
 
                                         # X axis settings
   if(!is.null(tlim) && trel==TRUE) {X<-seq(tlim[1],tlim[2],length.out=length(step))}
   else {X<-seq(0,n/f,length.out=length(step))}
 
-                                        # vertical zoom
-  if(is.null(flim)==TRUE) {Y<-seq(0,f/2000,length.out=nrow(z))}
+                                        # Y axis settings
+
+  if(is.null(flim)==TRUE) {Y<-seq((f/1000)/(wl + zp),f/2000,length.out=nrow(z))}
   else
     {
       fl1<-flim[1]*nrow(z)*2000/f
@@ -4083,11 +4204,21 @@ spectro<-function(
       z<-z[fl1:fl2,]
       Y<-seq(flim[1],flim[2],length.out=nrow(z))
     }
+
+                                        # dB weights
+  if(dB == "max0") z <- z
+  if(dB == "A") z <- dBweight(Y*1000, dBref = z)$A 
+  if(dB == "B") z <- dBweight(Y*1000, dBref = z)$B 
+  if(dB == "C") z <- dBweight(Y*1000, dBref = z)$C 
+  if(dB == "D") z <- dBweight(Y*1000, dBref = z)$D
   
   Z<-t(z)
   
   if (plot==TRUE)
     {
+      maxz <- round(max(z))
+      if(is.null(collevels)) collevels <- seq(maxz-30,maxz,1)
+      if(is.null(contlevels)) contlevels <- seq(maxz-30,maxz,10)
       Zlim<-range(Z, finite = TRUE) 
       if (osc==TRUE & scale==TRUE)
         {
@@ -4171,6 +4302,8 @@ spectro3D<-function(
                     wn = "hanning",
                     zp = 0,
                     ovlp = 0,
+                    dB = "max0",
+                    dBref = NULL,
                     plot = TRUE,
                     magt = 10,
                     magf = 10,
@@ -4179,10 +4312,25 @@ spectro3D<-function(
 
 {
   require(rgl)
+                                        # STOP MESSAGES
+  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
+    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+
+                                        # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+                                        # STFT
   n <- nrow(wave)
   step <- seq(1, n - wl, wl - (ovlp * wl/100))
-  z <- stft(wave = wave, f =f, wl = wl, zp = zp, step = step, wn = wn)
+  z <- stft(wave = wave, f =f, wl = wl, zp = zp, step = step, wn = wn, dBref=dBref)
+
+                                        # dB WEIGHTS
+  F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(z))
+  if(dB == "max0") z <- z
+  if(dB == "A") z <- dBweight(F*1000, dBref = z)$A 
+  if(dB == "B") z <- dBweight(F*1000, dBref = z)$B 
+  if(dB == "C") z <- dBweight(F*1000, dBref = z)$C 
+  if(dB == "D") z <- dBweight(F*1000, dBref = z)$D
+  
   if (plot == FALSE)
     return(z)
   else {
@@ -4193,7 +4341,7 @@ spectro3D<-function(
     Yat <- seq(magf, magf * nrow(z), by = (magf * nrow(z))/4)
     Zat <- seq(min(Z), maga, by = abs(min(Z))/4)
     Xlab <- as.character(round(seq(0, n/f, by = n/(4 * f)),1))
-    Ylab <- as.character(round(seq((f/1000)/(wl + zp), f/2000,by = f/(4*2000)), 1))
+    Ylab <- as.character(round(seq((f/1000)/(wl + zp), f/2000, by = f/(4*2000)), 1))
     Zlab <- as.character(round(seq(min(Z)/maga, 0, by = abs(min(Z))/(4*maga)), 1))
     Zlim <- range(Z)
     Zlen <- Zlim[2] - Zlim[1] + 1
@@ -4384,17 +4532,26 @@ th<-function(
              )
 
 {
-  N<-length(env)
-
-  if (sum(env)==0) stop ("Caution! There is no signal in this data set! The temporal entropy is null!")
-  if (sum(env)/(N*env[1]) == 1 | sum(env)/N == 1) stop("Caution! This is a square signal. The temporal entropy is null!")
-  if (any(env<0))  stop ("data must be an envelope obtained using oscillo()")
-
-  env[env==0]<-1e-7
-                                        # normalisation tel que la somme des valeurs de l'enveloppe = 1
-  envn<-env/sum(env)
-  z<--sum(envn*log2(envn))/log2(N)
-
+  options(warn=-1)  # to ignore warning messages
+  if(is.na(env)) z <- 0 
+  else{
+    options(warn=0) # to authorize warning messages
+    if (any(env<0, na.rm=TRUE))  stop ("data must be an envelope, i. e. a vector including positive values only.")
+    N<-length(env)
+    if (sum(env)==0) 
+      {
+        warning("Caution! There is no signal in this data set! The temporal entropy is null!", call.=FALSE)
+        return(0)
+      }
+    if (sum(env)/(N*env[1]) == 1 | sum(env)/N == 1)
+      {
+        warning("Caution! This is a square signal. The temporal entropy is null!", call.=FALSE)
+        return(0)
+      }
+    env[env==0]<-1e-7
+    envn<-env/sum(env) # PMF
+    z<--sum(envn*log2(envn))/log2(N)
+  }
   return(z)
 }
 
@@ -4605,6 +4762,8 @@ wf <- function(
                wl = 512,
                zp = 0,
                ovlp = 0,
+               dB = "max0",
+               dBref = NULL,
                wn = "hanning",
                x = NULL,
                hoff = 1,
@@ -4620,16 +4779,17 @@ wf <- function(
                ...)
 
 {
-                                        # error messages
+                                        # STOP MESSAGES
   if(missing(wave) && is.null(x)) stop("'wave' or 'x' has to be set up")
   if(!missing(wave) && !is.null(x)) stop("'wave' or 'x' has to set up, not both of them!")
-
   if(lines==TRUE && !is.null(border)) stop("when 'lines' is TRUE, changing 'border' has no effect")
   if(lines==TRUE && !is.null(density)) stop("when 'lines' is TRUE, changing 'density' has no effect")
   if(hoff < 0) stop("'hoff' cannot be negative")
   if(voff < 0) stop("'voff' cannot be negative")
+  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
+    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
 
-                                        # input
+                                        # INPUT
   if(is.null(x))
     {
       input <- inputw(wave = wave, f = f)
@@ -4639,7 +4799,14 @@ wf <- function(
       n <- nrow(wave)
       step <- seq(1, n - wl, wl - (ovlp * wl/100))
       data <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, 
-                   wn = wn)
+                   wn = wn, dBref = dBref)
+                                        # dB WEIGHTS
+      F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(data))
+      if(dB == "max0") data <- data
+      if(dB == "A") data <- dBweight(F*1000, dBref = data)$A 
+      if(dB == "B") data <- dBweight(F*1000, dBref = data)$B 
+      if(dB == "C") data <- dBweight(F*1000, dBref = data)$C 
+      if(dB == "D") data <- dBweight(F*1000, dBref = data)$D
     }
   else
     {
@@ -5279,7 +5446,8 @@ stft<-function(
                wl,
                zp,
                step,
-               wn
+               wn,
+               dBref
                )
 
 {
@@ -5309,7 +5477,8 @@ stft<-function(
                                         # replaces 0 values in spectra (that can't be processed by the following log10())
   z4<-ifelse(z3==0,yes=1e-6,no=z3)
                                         # to get dB values
-  z<-20*log10(z4)[-1,]
+  if(!is.null(dBref)) {z<-20*log10(z4/dBref)[-1,]}   else {z<-20*log10(z4)[-1,]}
+
   return(z)	
 }
 

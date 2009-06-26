@@ -11,10 +11,10 @@ An amplitude contour plot can be overlaid.}
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, plot = TRUE,
+ovlp = 0, dB = "max0", dBref = NULL, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
-collevels = seq(-30, 0, 1), palette = spectro.colors,
-contlevels = seq(-30, 0, 10), colcont = "black",
+collevels = NULL, palette = spectro.colors,
+contlevels = NULL, colcont = "black",
 colbg = "white", colgrid = "black",
 colaxis = "black", collab="black",
 plot.title = title(main = "", xlab = "Time (s)", 
@@ -35,6 +35,10 @@ flim = NULL, flimd = NULL, listen=FALSE,
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{dB}{a character string specifying the type dB to return: "max0"
+	(default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+  \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
+	but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
         (by default \code{TRUE}).}
@@ -61,14 +65,14 @@ flim = NULL, flimd = NULL, listen=FALSE,
   \item{scalelab}{amplitude scale label.}
   \item{scalefontlab}{font of the amplitude scale label.}
   \item{scalecexlab}{cex of the amplitude scale label.}
-  \item{axisX}{logical, if \code{TRUE} plots time X-axis (by default \code{TRUE}).}  
+  \item{axisX}{logical, if \code{TRUE} plots time X-axis (by default \code{TRUE}).}
   \item{axisY}{logical, if \code{TRUE} plots frequency Y-axis (by default \code{TRUE}).}
   \item{tlim}{modifications of the time X-axis limits.}
   \item{trel}{time X-axis with a relative scale when \code{tlim} is not null,
 	\emph{i.e.} relative to \code{wave}.} 
   \item{flim}{modifications of the frequency Y-axis limits.} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
-      and \code{ovlp} arguments are applied to increase time/frequency resolution.}    
+      and \code{ovlp} arguments are applied to increase time/frequency resolution.}
   \item{listen}{if \code{TRUE} the sound is played back (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
@@ -120,6 +124,7 @@ spectro(tico,f=22050)
 spectro(tico,f=22050,osc=TRUE)
 spectro(tico,f=22050,scale=FALSE)
 spectro(tico,f=22050,osc=TRUE,scale=FALSE)
+# change the dB scale by setting a different dB reference value (20 microPa)spectro(tico,f=22050, dBref=2*10e-5)
 # manipulating wl
 op<-par(mfrow=c(2,2))
 spectro(tico,f=22050,wl=256,scale=FALSE)

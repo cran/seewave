@@ -3,7 +3,7 @@
 %\VignettePackage{seewave}
 %\VignetteKeyword{sound}
 %\VignetteKeyword{time-series}
-%\VignetteDepends{tuneR,sound}
+%\VignetteDepends{tuneR,sound,audio}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
@@ -140,6 +140,10 @@ s7@samp.rate
 s7@bit
 s7@stereo
 @
+A property not apparent in these call is that \texttt{readWave} does not normalise the sound. Values describing the sound will be included between $\pm 2^{bit-1}$:
+<<rangereadWave>>=
+range(s7@left)
+@ 
 
 \subsubsection{Sample class (package sound)}
 The class \texttt{Sample} and the related \texttt{as.Sample} and \texttt{is.Sample} functions belong to the package \sound written by Matthias Heymann. Like \texttt{Wave}, the \texttt{Sample} class is a list containing information regarding data, sampling frequency, bits and the type of sound (mono\slash stereo).\par
@@ -155,6 +159,11 @@ s8$rate
 duration(s8)
 s8$duration
 @
+Unlike \texttt{readWave}, \texttt{loadSample} changes the limits of the sound between $\pm 1$:
+<<rangeSample>>=
+range(s8$sound[1,])
+@ 
+
 \seewave~functions which return a value describing a sound have a special argument named \texttt{Sample}. When this argument is set to \texttt{TRUE}, the object returned by the function is of class \texttt{Sample} and not \texttt{matrix}. This can be useful for latter analyses as there is no more need to specify the sampling frequency \texttt{f}.
 <<>>=
 s9<-repw(s2,f=8000,times=2,Sample=TRUE)
@@ -169,6 +178,9 @@ oscillo(s2,f)
 
 \subsubsection{audioSample class (package audio)}
 The package \audio, developed by Simon Urbanek, is another option to handle \texttt{.wav} files. Sound can be imported using the function \texttt{load.wave}. The class of the resulting object is \texttt{audioSample} which is essentially a numeric vector (for mono) or numeric matrix with two rows (for stereo). The sampling frequency and the resolution can be called as attributes :
+<<echo=false,quiet=true>>=
+detach(package: tuneR)
+@
 <<>>=
 library(audio)
 s10<-load.wave("mysong.wav")
@@ -242,7 +254,8 @@ To compress a \texttt{.wav} file into \texttt{.flac}, the argument \texttt{rever
 \section{Mono and stereo}
 Both \texttt{Wave} and \texttt{Sample} classes can handle stereo files. There are some specific functions regarding mono\slash stereo type. Both libraries include functions with the same name. To avoid a conflict between functions, one of the two  has to be detached:
 <<>>=
-detach(package: sound)
+detach(package: seewave)
+library(tuneR)
 @
  
 \subsection{Wave class}
@@ -272,11 +285,11 @@ is.vector(s14)
 \subsection{Sample class}
 <<echo=false,quiet=true>>=
 detach(package: tuneR)
-library(sound)
 @
 
 With the \texttt{Sample} objects, the syntax is almost similar. To generate stereo sound, the function \texttt{synth} with the argument \texttt{Sample=TRUE} is called twice:
 <<>>=
+library(seewave)
 left<-synth(cf=440,d=5,f=8000,Sample=T)
 right<-synth(cf=2000,d=5,f=8000,Sample=T)
 s13<-stereo(left,right)

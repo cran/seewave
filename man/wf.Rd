@@ -8,7 +8,7 @@
 a short-term Fourier transform or of any matrix.}
 
 \usage{
-wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, wn = "hanning", 
+wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, dB = "max0", dBref = NULL, wn = "hanning", 
 x = NULL, hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)", xaxis = TRUE, yaxis =
 TRUE, density = NULL, border = NULL, lines = FALSE, ...)
@@ -25,6 +25,10 @@ TRUE, density = NULL, border = NULL, lines = FALSE, ...)
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{dB}{a character string specifying the type dB to return: "max0" for a
+	maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+  \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
+	but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{x}{a matrix if \code{wave} is not provided.}
   \item{hoff}{horizontal 'offset' which shifts actual x-values slightly

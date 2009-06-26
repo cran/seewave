@@ -19,12 +19,13 @@ seewave provides functions for analysing, manipulating, displaying, editing and 
 \tabular{ll}{
 Package: \tab seewave\cr
 Type: \tab Package\cr
-Version: \tab 1.5.4\cr
-Date: \tab 2009-02-24\cr
+Version: \tab 1.5.5\cr
+Date: \tab 2009-6-26\cr
 License: \tab GPL version 2 or newer\cr
 Contributors : \tab Jonathan Lees, Martin Maechler, Sandrine Pavoine,
-Luis J. Villanueva-Rivera, Carl G. Witthoft\cr
-Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
+Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
+Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Arnold Fertin,
+Kurt Hornik, Uwe Ligges
 }
 }
 

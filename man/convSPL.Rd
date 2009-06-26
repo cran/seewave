@@ -38,7 +38,7 @@ Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 \code{Iref} and \code{pref} correspond to a 1 kHz sound in air. 
 }
 
-\seealso{\code{\link{moredB}}, \code{\link{attenuation}}}
+\seealso{\code{\link{moredB}}, \code{\link{dBweight}}, \code{\link{attenuation}}}
 
 \examples{
 # conversion of two SPL measurements taken at 0.5 m from the source

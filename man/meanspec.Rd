@@ -12,7 +12,7 @@ or dB data.
 
 \usage{
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE,
-PMF = FALSE, dB = FALSE, from = NULL, to = NULL, peaks = NULL,
+PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, peaks = NULL,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1,  fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
@@ -32,8 +32,10 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
       \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
       \emph{i. e.} the probability distribution of frequencie.}  
-  \item{dB}{logical, if \code{TRUE} returns the spectrum in dB 
-      (by default \code{FALSE}).}
+  \item{dB}{a character string specifying the type dB to return: "max0" for a
+	maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+  \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default
+	but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
   \item{from}{start mark where to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
   \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
