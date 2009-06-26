@@ -12,7 +12,7 @@ or dB data.
 
 \usage{
 spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE,
-PMF = FALSE, dB = FALSE,
+PMF = FALSE, dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL, peaks = NULL,
 identify = FALSE, col = "black", cex = 1, colpeaks = "red",
 cexpeaks = 1, fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
@@ -33,8 +33,10 @@ alim = NULL, type="l",...)
       \emph{i. e.} the square of the spectra.}  
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
       \emph{i. e.} the probability distribution of frequencie.}    
-  \item{dB}{logical, if \code{TRUE} returns the spectrum in dB 
-      (by default \code{FALSE}).}
+  \item{dB}{a character string specifying the type dB to return: "max0" for a
+	maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+  \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default
+	but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
   \item{at}{position where to compute the spectrum (in s).}
   \item{from}{start mark where  to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
@@ -92,8 +94,8 @@ data(tico)
 op<-par(mfrow=c(2,2))
 spec(tico,f=22050)
 spec(tico,f=22050,col="red",plot=2)
-spec(tico,f=22050,dB=TRUE,col="blue")
-spec(tico,f=22050,dB=TRUE,col="green",plot=2)
+spec(tico,f=22050,dB="max0",col="blue")
+spec(tico,f=22050,dB="max0",col="green",plot=2)
 par(op)
 # spectra computed at specific locations with peak value
 op<-par(mfrow=c(2,2))

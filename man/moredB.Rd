@@ -27,6 +27,8 @@ Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
+\seealso{\code{\link{convSPL}}, \code{\link{dBweight}}}
+
 \examples{
 # two sources of 60 dB give an intensity or pressure level of 63 dB
 moredB(c(60,60))

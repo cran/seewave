@@ -11,7 +11,7 @@ time wave. The function corresponds to short-term Fourier transform.
 
 \usage{
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, plot = TRUE,
+ovlp = 0, dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
 palette = rev.terrain.colors)
 }
@@ -27,6 +27,10 @@ palette = rev.terrain.colors)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
+  \item{dB}{a character string specifying the type dB to return:
+      "max0" for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
+	but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
         (by default \code{TRUE}).}
   \item{magt}{magnification of the time axis.}
