@@ -12,12 +12,8 @@
 \usage{crest(wave, f, plot = FALSE, col = 2, cex = 3, symbol = "*", ...)}
 
 \arguments{
-  \item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+\item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{plot}{if \code{TRUE} plots the oscillograme of \code{wave} and
   indicates the location of the crest(s)}
   \item{col}{color of the symbol indicating the localisation of the crest(s)}

@@ -5,9 +5,9 @@
 \title{Mean frequency spectrum of a time wave}
 
 \description{
-This function returns the mean frequency spectrum (i.e. the mean relative amplitude of the
-frequency distribution) of a time wave. Results can be expressed either in absolute 
-or dB data.
+  This function returns the mean frequency spectrum (i.e. the mean relative amplitude of the
+  frequency distribution) of a time wave. Results can be expressed either in absolute 
+  or dB data.
 }
 
 \usage{
@@ -19,72 +19,68 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
-      \emph{i. e.} the square of the spectra.}   
+    \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
-      \emph{i. e.} the probability distribution of frequencie.}  
+    \emph{i. e.} the probability distribution of frequencie.}  
   \item{dB}{a character string specifying the type dB to return: "max0" for a
-	maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default
-	but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
+    but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
   \item{from}{start mark where to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
   \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
   \item{identify}{to identify frequency and amplitude values on the plot
-      with the help of a cursor.}
+    with the help of a cursor.}
   \item{col}{colour of the spectrum.}
   \item{cex}{pitch size.}
   \item{colpeaks}{colour of peaks value plotted on the spectrum.}
   \item{cexpeaks}{character size of peaks value plotted on the spectrum.}
   \item{fontpeaks}{font of peaks value plotted on the spectrum.}
   \item{plot}{if \code{1} returns frequency on x-axis, if \code{2} returns 
-  frequency on y-axis, (by default \code{1}).}
+    frequency on y-axis, (by default \code{1}).}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
   \item{flim}{range of frequency axis (in kHz).}
   \item{alim}{range of amplitude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
-      See \code{\link{plot}} for details (by default "l" for lines).}
+    See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
 \details{
-If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
-computes the mean spectrum of the whole signal.\cr
-\code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
-See examples of \code{\link{spec}}.\cr
+  If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
+  computes the mean spectrum of the whole signal.\cr
+  \code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
+  See examples of \code{\link{spec}}.\cr
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{meanspec} returns  a two columns matrix,
-the first column corresponding to the frequency axis, the second column
-corresponding to the amplitude axis.\cr 
-If \code{identify} is \code{TRUE}, \code{spec} returns a list with
-two elements:\cr 
+  If \code{plot} is \code{FALSE}, \code{meanspec} returns  a two columns matrix,
+  the first column corresponding to the frequency axis, the second column
+  corresponding to the amplitude axis.\cr 
+  If \code{identify} is \code{TRUE}, \code{spec} returns a list with
+  two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
-If \code{peaks} is not \code{NULL}, \code{spec} returns a list with
-two elements:\cr 
+  If \code{peaks} is not \code{NULL}, \code{spec} returns a list with
+  two elements:\cr 
   \item{spec}{the spectrum computed} of length \code{wl}/2,\cr 
   \item{peaks }{the peaks values (in kHz).} 
 }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr} and 
-Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
+  Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
 
 \seealso{\code{\link{spec}}, \code{\link{dynspec}}, 
-\code{\link{corspec}}, \code{\link{diffspec}}, \code{\link{simspec}}, \code{\link{fft}}.}
+  \code{\link{corspec}}, \code{\link{diffspec}}, \code{\link{simspec}}, \code{\link{fft}}.}
 
 \examples{
 data(orni)

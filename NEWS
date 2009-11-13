@@ -2,13 +2,44 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
-		CHANGES IN SEEWAVE VERSION 1.5.5 [XX-XX-2009]
+
+		CHANGES IN SEEWAVE VERSION 1.5.6 [13-November-2009]
 
 
 NEW FEATURES
-	o crest() : a new function that returns the crest factor and shows crest(s).
+	o meandB(): a new function to compute the mean of dB values.
+	o seedata(): a new function to get a quick look at quantitative data.
+	o dynspec(): a new argument (dB) to specify the dB weight to apply ("max0", "A", "B", "C", "D").
+	  	     a new argument (dBref)to set a dB reference value (for instance 20 microPa for SPL).
+	o oscillo(): a new argument 'cexaxis' to control the magnification of axes annotation.
+	  	     a new argument 'tcl' to control tick length.
+	o spectro(): a new argument 'cexaxis' to control the magnification of axes annotation.
+	  	     a new argument 'widths' to control the relative widths of the layout columns.
+	  	     a new argument 'heights' to control the relative heights of the layout rows.
+		     4 new arguments, 'tlab', 'flab', 'alab' and 'main', to replace the 'plot.title'.
+	o timer() has four new arguments: 'envt' to set the type of envelope used, 'ksmooth' and 'msmooth' to smooth the envelope, and 'power' to apply a power factor the envelope potentially reducing low amplitude background noise.
+	o wf(): a new argument 'lwd' to set line width.
+ 
+
+OTHER CHANGES
+	o IMPORTANT: the package dependency has moved from sound to tuneR. This change is mainly due to problems araising during daily CRAN checks.
+	o all functions that return an object describing a time wave have a new argument named 'output'. This allows to set the class of the returned object. This replaces the former argument 'Sample'.
+	o spectro(), spectro3D(), ccoh() and cesptro(): the class of the value has changed to a list. The object returned is now made of three items related to the three dimensions of the plot.
+	o noise() has been renamed noisew() to avoid any conflict with the function noise() of the package tuneR.
+	o meanspec(): a small bug affecting the 'dB' argument has been fixed (thanks to Zev Ross!).
+	o specprop(): a small bug has been fixed.
+	o ccoh() and cepstro(): the argument 'plot.title' has been replaced by 'xlab', 'ylab' and 'main'.
+	o the vignette has been updated.
+	o A NAMESPACE has been added.
+
+
+		CHANGES IN SEEWAVE VERSION 1.5.5 [26-June-2009]
+
+
+NEW FEATURES
+	o crest(): a new function that returns the crest factor and shows crest(s).
 	o dBweight(): a new function that returns the common dB weights (A, B, C, D).
-	o meanspec() spec(), spectro(), spectro3D() and wf() have a new argument (dBref) to set a dB reference value (for instance 20 microPa for SPL).
+	o meanspec() spec(), spectro(), spectro3D(), wf() :  a new argument (dBref) to set a dB reference value (for instance 20 microPa for SPL).
 	o meanspec() and spec(): the argument dB is no more a logical but a character string for the different dB weights to apply ("max0", "A", "B", "C", "D").
 	o spectro(), spectro3D() and wf() have a new argument (dB) to specify the dB weight to apply ("max0", "A", "B", "C", "D").
 	o rms(): a new function that computes the root mean square.
@@ -94,7 +125,6 @@ BUG FIXES
 
 OTHER CHANGES
 	o autoc(), ceps(), coh(), csh(), dfreq(), fund(), ifreq(), zc(): the value returned is now a two-column matrix. The first column is time, and the second one is result of the analysis (frequency, entropy...).
-	o cepstro(): the y-axis scale is now in kHz instead of seconds (more intuitive).
 	o oscilloST(): arguments 'env', 'smooth', 'ksmooth' have been removed.
 	o oscillo(): the arguments regarding amplitude envelope have been withdrawn (env, smooth, ksmooth). A new function dedicated to envelope computation only (env()) is now available.
 

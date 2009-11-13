@@ -5,11 +5,11 @@
 \title{Generate rectangle pulse}
 
 \description{
-This function generates a rectangle pulse.
+  This function generates a rectangle pulse.
 }
 
 \usage{
-pulse(dbefore, dpulse, dafter, f, plot = FALSE, Sample =FALSE, ...)
+pulse(dbefore, dpulse, dafter, f, plot = FALSE, output = "matrix", ...)
 }
 
 \arguments{
@@ -18,18 +18,18 @@ pulse(dbefore, dpulse, dafter, f, plot = FALSE, Sample =FALSE, ...)
   \item{dafter}{duration of silent period after the pulse}
   \item{f}{sampling frequency of the signal to be generated (in Hz)}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the 
-  pulse generated (by default \code{FALSE}).}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.
+    pulse generated (by default \code{FALSE}).}
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{plot}} parameters.}
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{synth}}, \code{\link{noise}}}
+\seealso{\code{\link{synth}}, \code{\link{noisew}}}
 
 \examples{
 pulse(dbefore=0.5,dpulse=0.1,dafter=0.3,f=8000,plot=TRUE)

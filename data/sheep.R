@@ -1,3 +1,2 @@
-library(sound)
-sheep<-loadSample("sheep.wav")
-sheep<-as.matrix(sheep$sound[1,])
+library(tuneR)
+sheep <- as.matrix(readWave("sheep.wav")@left)

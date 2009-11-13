@@ -6,9 +6,7 @@
 
 \title{Sheep bleat}
 
-\description{
-Recording of a sheep bleat.
-}
+\description{Recording of a sheep bleat.}
 
 \usage{data(sheep)}
 
@@ -20,12 +18,10 @@ Recording of a sheep bleat.
 }
 
 \details{
-Duration = 2.47 s. Sampling frequency = 8000 hz.
+  Duration = 2.47 s. Sampling frequency = 8000 hz.
 }
 
-\source{
-Recording by Frederic Sebe.
-}
+\source{Recording by Frederic Sebe.}
 
 \examples{
 data(sheep)

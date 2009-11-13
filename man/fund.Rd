@@ -4,7 +4,7 @@
 \title{Fundamental frequency track}
 
 \description{This function tracks the fundamental frequency through a
-short-term cepstral transform.
+  short-term cepstral transform.
 }
 
 \usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
@@ -12,12 +12,8 @@ plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), ...)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}

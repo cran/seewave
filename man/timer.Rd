@@ -1,53 +1,70 @@
 \name{timer}
+
 \alias{timer}
+
 \title{Time measurements of a time wave}
+
 \description{
-This function computes and shows the duration of signal periods, 
-pause periods and their ratio.
+  This function computes and shows the duration of signal periods, 
+  pause periods and their ratio.
 }
+
 \usage{
-timer(wave, f, threshold, smooth = NULL, plot = TRUE,
-plotthreshold = TRUE, col = "black", colval = "red", 
+timer(wave, f, threshold = 5, envt="abs", power = 1, msmooth = NULL, ksmooth = NULL,
+plot = TRUE, plotthreshold = TRUE, col = "black", colval = "red", 
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
+
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{threshold}{amplitude threshold for signal detection (in \%).}
-  \item{smooth}{smoothes the envelope by averaging the number of points selected}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{threshold}{amplitude threshold for signal detection (in \%).}
+  \item{envt}{the type of envelope to be used: either "abs" for absolute
+    amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
+  \item{power}{a power factor applied to the amplitude
+    envelope. Increasing \code{power} will reduce low amplitude
+    modulations and increase high amplide modulations. This can be used
+    to reduce background noise (by default equals to 1, \emph{i.e.} no change.}
+  \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 
+    mean sliding window. The first component is the window length
+    (in number of points). The second component is the overlap between
+    successive windows (in \%).  See \code{\link{env}}.}
+  \item{ksmooth}{kernel smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
-      (by default \code{TRUE}).}
+    (by default \code{TRUE}).}
   \item{plotthreshold}{logical, if \code{TRUE} plots the threshold
-      as an horizontal line on the graph (by default \code{TRUE}).}  
+    as an horizontal line on the graph (by default \code{TRUE}).}  
   \item{col}{colour of the envelope.}
   \item{colval}{colour of plotted measurements.}
   \item{xlab}{title of the x-axis.}
   \item{ylab}{title of the y-axis.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
+
 \value{
-If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
-     components:
+  If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
+  components:
   \item{s}{duration of signal periods in seconds}
   \item{p}{duration of pause periods in seconds}
   \item{r}{ratio between the signal periods and silence}.
 }
+
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
-\seealso{\code{\link{oscillo}}, \code{\link{cutw}},  \code{\link{pastew}}.}
+
+\seealso{\code{\link{env}}, \code{\link{cutw}},  \code{\link{pastew}}.}
+
 \examples{
 data(tico)
-timer(tico,f=22050,threshold=5,smooth=50)
+timer(tico,f=22050,threshold=5,msmooth=c(50,0))
 # to compare with an oscillographic representation
 data(orni)
 op<-par(mfrow=c(2,1))
-timer(orni,f=22050,threshold=5,smooth=40,tck=0.05,
-        bty="l",xaxs="i",colval="blue")
+timer(orni,f=22050,threshold=5,msmooth=c(40,0),tck=0.05,
+        bty="l",colval="blue")
 title(main="A cicada song made of five echemes",col="blue")
 oscillo(orni,f=22050,k=1,j=1)
 par(op)
 }
+
 \keyword{dplot}
 \keyword{ts}

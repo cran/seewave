@@ -5,23 +5,16 @@
 \title{Set the amplitude envelope of a time wave to another one}
 
 \description{This function sets the amplitude envelope of a time wave
-to another one}
+  to another one}
 
 \usage{setenv(wave1, wave2, f, envt="hil", msmooth = NULL, ksmooth = NULL,
-plot = FALSE, listen = FALSE, Sample = FALSE, ...)
+plot = FALSE, listen = FALSE, output = "matrix", ...)
 }
 
 \arguments{
-	\item{wave1}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-	\item{wave2}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel) describing the time wave
-	which envelope will be used to set \code{wave1} envelope.}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
-  Does not need to be specified if \code{wave1} and/or \code{wave2} are/is
-	of class \code{ts}, \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave1}{a first R object.}     
+  \item{wave2}{a second R object.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{envt}{the type of envelope to be used for \code{wave2}: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
   \item{msmooth}{a vector of length 2 to smooth the amplitude envelope of \code{wave2} 
@@ -29,21 +22,21 @@ plot = FALSE, listen = FALSE, Sample = FALSE, ...)
     (in number of points). The second component is the overlap between
     successive windows (in \%). See \code{\link{env}}.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}} to apply
-	to the amplitude envelope of\code{wave2}. See \code{\link{env}}.}
+    to the amplitude envelope of\code{wave2}. See \code{\link{env}}.}
   \item{plot}{if \code{TRUE} returns the oscillogram
-      of the new time wave (by default \code{FALSE}).}
+    of the new time wave (by default \code{FALSE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}.}
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
 \details{\code{wave1} and \code{wave2} can have different duration (length)\cr
-Smoothing the envelope with \code{smooth} or \code{ksmooth} can significantly
-change the value returned.}
+  Smoothing the envelope with \code{smooth} or \code{ksmooth} can significantly
+  change the value returned.}
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

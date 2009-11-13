@@ -5,9 +5,9 @@
 \title{2D-spectrogram of a time wave}
 
 \description{
-This function returns a two-dimension spectrographic representation of a time
-wave. The function corresponds to short-term Fourier transform.
-An amplitude contour plot can be overlaid.}
+  This function returns a two-dimension spectrographic representation of a time
+  wave. The function corresponds to short-term Fourier transform.
+  An amplitude contour plot can be overlaid.}
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
@@ -17,104 +17,117 @@ collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
 colbg = "white", colgrid = "black",
 colaxis = "black", collab="black",
-plot.title = title(main = "", xlab = "Time (s)", 
-ylab = "Frequency (kHz)"), scalelab = "Amplitude\n(dB)",
+tlab = "Time (s)",
+flab = "Frequency (kHz)",
+alab = "Amplitude",
+scalelab = "Amplitude\n(dB)",
+main=NULL,
 scalefontlab = 1, scalecexlab =0.75,
 axisX = TRUE, axisY = TRUE, tlim = NULL, trel = TRUE,
-flim = NULL, flimd = NULL, listen=FALSE,
+flim = NULL, flimd = NULL,
+widths = c(6,1), heights = c(3,1),
+listen=FALSE,
 ...)
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{wl}{window length for the analysis
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{wl}{window length for the analysis
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{dB}{a character string specifying the type dB to return: "max0"
-	(default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    (default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
-	but should be set to 2*10e-5 for a 20 microPa reference.}
+    but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
-        (by default \code{TRUE}).}
+    (by default \code{TRUE}).}
   \item{grid}{logical, if \code{TRUE} plots a y-axis grid
-        (by default \code{TRUE}).}
+    (by default \code{TRUE}).}
   \item{osc}{logical, if \code{TRUE} plots an oscillogram beneath
-      the spectrogram (by default \code{FALSE}).}
+    the spectrogram (by default \code{FALSE}).}
   \item{scale}{logical, if \code{TRUE} plots a dB colour scale on the right
-      side of the spectrogram (by default \code{TRUE}).}
+    side of the spectrogram (by default \code{TRUE}).}
   \item{cont}{logical, if \code{TRUE} overplots contour lines on the spectrogram
-      (by default \code{FALSE}).}
+    (by default \code{FALSE}).}
   \item{collevels}{a set of levels which are used to partition
-      the amplitude range of the spectrogram (in dB).}
+    the amplitude range of the spectrogram (in dB).}
   \item{palette}{a color palette function to be used to assign colors in
-      the plot, see \code{Details}.}
+    the plot, see \code{Details}.}
   \item{contlevels}{a set of levels which are used to partition
-      the amplitude range for contour overplot (in dB).}
+    the amplitude range for contour overplot (in dB).}
   \item{colcont}{colour for \code{cont} plotting.}
   \item{colbg}{background colour.}
   \item{colgrid}{colour for \code{grid} plotting.}
   \item{colaxis}{color of the axes.}
-  \item{collab}{color of the labels.}  
-  \item{plot.title}{statements which add titles to the plot.}
+  \item{collab}{color of the labels.}
+  \item{tlab}{label of the time axis.}
+  \item{flab}{label of the frequency axis.}
+  \item{alab}{label of the amplitude axis.}
   \item{scalelab}{amplitude scale label.}
+  \item{main}{label of the main title.}
   \item{scalefontlab}{font of the amplitude scale label.}
   \item{scalecexlab}{cex of the amplitude scale label.}
   \item{axisX}{logical, if \code{TRUE} plots time X-axis (by default \code{TRUE}).}
   \item{axisY}{logical, if \code{TRUE} plots frequency Y-axis (by default \code{TRUE}).}
   \item{tlim}{modifications of the time X-axis limits.}
   \item{trel}{time X-axis with a relative scale when \code{tlim} is not null,
-	\emph{i.e.} relative to \code{wave}.} 
+    \emph{i.e.} relative to \code{wave}.} 
   \item{flim}{modifications of the frequency Y-axis limits.} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
-      and \code{ovlp} arguments are applied to increase time/frequency resolution.}
-  \item{listen}{if \code{TRUE} the sound is played back (by default \code{FALSE}).}
+    and \code{ovlp} arguments are applied to increase time/frequency resolution.}
+  \item{widths}{a vector of length 2 to control the relative widths of columns on
+  the device when \code{scale} is \code{TRUE}.}
+  \item{heights}{a vector of length 2 to control the relative heights of rows on
+  the device when \code{osc} is \code{TRUE}.}
+\item{listen}{if \code{TRUE} the sound is played back (by default \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }
 
 \details{
-Following Heisenberg uncertainty principle, the short-term Fourier transform
-cannot be precised in both time and frequency. The temporal and frequency
-precisions of the function are actually dependent of the \code{wl} value.
-Choosing a high \code{wl} value will increase the frequency resolution but
-reduce the temporal one, and \emph{vice versa}. The frequency precision is
-obtained by calculating the ratio \code{f}/\code{wl},
-and the temporal precision is obtained by calculating the reverse ratio
-\code{wl}/\code{f}. This problem can be reduced in some way with \code{zp} that
-adds 0 values on both sides of the analysis window. This increases frequency
-resolution without altering time resolution.\cr
-Any colour palette can be used. In particular, it is possible to use other
-palettes coming with \pkg{seewave}: \code{temp.colors}, 
-\code{rev.gray.colors.1},
-\code{rev.gray.colors.2}, \code{rev.heat.colors},
-\code{rev.terrain.colors}, \code{rev.topo.colors},
-\code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
-\code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
-Use \code{\link{locator}} to identify  points.
+  Following Heisenberg uncertainty principle, the short-term Fourier transform
+  cannot be precised in both time and frequency. The temporal and frequency
+  precisions of the function are actually dependent of the \code{wl} value.
+  Choosing a high \code{wl} value will increase the frequency resolution but
+  reduce the temporal one, and \emph{vice versa}. The frequency precision is
+  obtained by calculating the ratio \code{f}/\code{wl},
+  and the temporal precision is obtained by calculating the reverse ratio
+  \code{wl}/\code{f}. This problem can be reduced in some way with \code{zp} that
+  adds 0 values on both sides of the analysis window. This increases frequency
+  resolution without altering time resolution.\cr
+  Any colour palette can be used. In particular, it is possible to use other
+  palettes coming with \pkg{seewave}: \code{temp.colors}, 
+  \code{rev.gray.colors.1},
+  \code{rev.gray.colors.2}, \code{rev.heat.colors},
+  \code{rev.terrain.colors}, \code{rev.topo.colors},
+  \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
+  \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
+  Use \code{\link{locator}} to identify  points.
 }
 
 \value{
-If \code{plot} is \code{FALSE}, this function returns a matrix. Each column
-corresponds to a Fourier transform of length \code{wl}/2.}
+  This function returns a list of three items:
+  \item{time}{a numeric vector corresponding to the time axis.}
+  \item{freq}{a numeric vector corresponding to the frequency axis.}
+  \item{amp}{a numeric matrix corresponding to the amplitude values.
+   Each column is a Fourier transform of length \code{wl}.}
+}
 
 \references{
-Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
-communication}. Springer, Berlin, Heidelberg.}
+  Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
+    communication}. Springer, Berlin, Heidelberg.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr} and 
-Caroline Simonis \email{csimonis@mnhn.fr}.}
+  Caroline Simonis \email{csimonis@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
-\code{\link{filled.contour}}}
+  \code{\link{filled.contour}}}
 
 \seealso{\code{\link{spectro3D}}, \code{\link{dynspec}}, \code{\link{wf}}, 
-\code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
+  \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{
 data(tico)

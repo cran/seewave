@@ -6,24 +6,20 @@
 \description{This function generate echoes of a time wave.}
 
 \usage{echo(wave, f, amp, delay, plot = FALSE,
-listen = FALSE, Sample = FALSE, ...)}
+listen = FALSE, output = "matrix", ...)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+\item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{amp}{a vector describing the relative amplitude
-    of the successive echoes. Each value of the vector should in [0,1]}
+    of the successive echoes. Each value of the vector should be in [0,1]}
   \item{delay}{a vector describing the time delays of the successive echoes
     from the beginning of \code{wave} (in s.)}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the wave
     modified (by default \code{FALSE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-    returns an object of class \code{\link[sound]{Sample}}}.
+  \item{output}{character string, the class of the object to return, either
+  \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
@@ -31,8 +27,8 @@ listen = FALSE, Sample = FALSE, ...)}
 \code{amp} and \code{delay} should strictly have the same length corresponding
 to the number of desired echoes.}
 
-\value{When \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+of the returned object is set with the argument \code{output}.}
 
 \references{Stoddard, P. K. (1998). Application of filters in bioacoustics.
 \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic

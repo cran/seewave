@@ -5,14 +5,14 @@
 \title{Synthesis of time wave}
 
 \description{
-This functions synthesize pure tone sound with amplitude modulation (am)
-and/or frequency modulation (fm).
+  This functions synthesize pure tone sound with amplitude modulation (am)
+  and/or frequency modulation (fm).
 }
 
 \usage{
 synth(f, d, cf, a = 1, shape = NULL, p = 0,
 am = c(0, 0), fm = c(0, 0, 0),
-plot = FALSE, listen = FALSE, Sample = FALSE,...)
+plot = FALSE, listen = FALSE, output = "matrix",...)
 }
 
 \arguments{
@@ -21,50 +21,50 @@ plot = FALSE, listen = FALSE, Sample = FALSE,...)
   \item{cf}{carrier frequency (in Hz).}
   \item{a}{amplitude (linear scale, relative when adding different waves).}
   \item{shape}{modification of the whole amplitude shape of the wave.
-  See \code{details}).}
+    See \code{details}).}
   \item{p}{phase (in radians).}
   \item{am}{a vector of length 2 describing amplitude modulation parameters,
-      see \code{details}.}
+    see \code{details}.}
   \item{fm}{a vector of length 3 describing frequency modulation parameters,
-      see \code{details}.}
+    see \code{details}.}
   \item{plot}{if \code{TRUE} returns the spectrogram
-      of the synthezised sound (by default \code{FALSE}).}
+    of the synthezised sound (by default \code{FALSE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{spectro}} graphical parameters.}
 }
-                                   
+
 \details{
-\code{shape} allows to modify the whole amplitude shape of the wave. There
-are four options to be given as as character string:
-(i) "incr" : linear increase  
-(ii) "decr" : linear decrease  
-(iii) "sine" : sinusoid-like shape
-(iv) "tria" : triangular shape
+  \code{shape} allows to modify the whole amplitude shape of the wave. There
+  are four options to be given as as character string:
+  (i) "incr" : linear increase  
+  (ii) "decr" : linear decrease  
+  (iii) "sine" : sinusoid-like shape
+  (iv) "tria" : triangular shape
 
-\code{am} is a vector of length 2 including:\cr
-(1) the amplitude modulation
-depth (in \%),\cr
-(2) the frequency of the amplitude modulation.\cr
+  \code{am} is a vector of length 2 including:\cr
+  (1) the amplitude modulation
+  depth (in \%),\cr
+  (2) the frequency of the amplitude modulation.\cr
 
-\code{fm} is a vector of length 3 including:\cr 
-(1) the maximum excursion of a sinusoidal frequency modulation (in Hz),\cr
-(2) the frequency of a sinusoidal frequency modulation,\cr
-(3) the maximum excursion of a linear frequency modulation (in Hz).
+  \code{fm} is a vector of length 3 including:\cr 
+  (1) the maximum excursion of a sinusoidal frequency modulation (in Hz),\cr
+  (2) the frequency of a sinusoidal frequency modulation,\cr
+  (3) the maximum excursion of a linear frequency modulation (in Hz).
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \references{
-Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
+  Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr},
-Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
-Caroline Simonis \email{csimonis@mnhn.fr}.}
+  Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
+  Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{noise}}, \code{\link{pulse}}, \code{\link{echo}}}
+\seealso{\code{\link{noisew}}, \code{\link{pulse}}, \code{\link{echo}}}
 
 \examples{
 # pure tone

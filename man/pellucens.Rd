@@ -7,7 +7,7 @@
 \title{Calling song of the tree cricket Oecanthus pellucens}
 
 \description{
-Recording of a calling song section emitted by the European tree cricket \emph{Oecanthus pellucens}.}
+  Recording of a calling song section emitted by the European tree cricket \emph{Oecanthus pellucens}.}
 
 \usage{data(pellucens)}
 
@@ -19,11 +19,11 @@ Recording of a calling song section emitted by the European tree cricket \emph{O
 }
 
 \details{
-Duration = 3.309 s. Sampling frequency = 11025 hz.
+  Duration = 3.309 s. Sampling frequency = 11025 hz.
 }
 
 \source{
-Recording by Jerome Sueur.
+  Recording by Jerome Sueur.
 }
 
 \examples{

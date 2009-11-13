@@ -1,43 +1,35 @@
 \name{savewav}
+
 \alias{savewav}
 
+\title{Save a .wav file}
 
-\title{Save .wav file}
+\description{Save sound data as .wav file}
 
-\description{
-Save sound data as .wav file
-}
-
-\usage{
-savewav(wave, f,
-filename = NULL)
-}
+\usage{savewav(wave, f, filename = NULL)}
 
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{filename}{name of the new file. (by default the name of \code{wave}).}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+\item{filename}{name of the new file. (by default the name of \code{wave}).}
 }
 
 \details{
-This function uses two functions from the package \pkg{sound}:
-\code{\link[sound]{Sample}} and \code{\link[sound]{saveSample}}
+This function uses three functions from the package \pkg{tuneR}:
+\code{\link[tuneR]{Wave}}, \code{\link[tuneR]{normalize}} and \code{\link[tuneR]{writeWave}}.
 }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{The  file automatically owerwrites an existing file
-with the same name.
-}
+with the same name.}
 
 \seealso{\code{\link[sound]{as.Sample}},
 \code{\link[sound]{saveSample}}, \code{\link{export}}.}
 
 \examples{
+require(tuneR)
 a<-synth(f=8000,d=2,cf=2000,plot=FALSE)
 # the name of the file is automatically the name of the object
 # here: "a.wav"

@@ -1,3 +1,2 @@
-library(sound)
-orni<-loadSample("orni.wav")
-orni<-as.matrix(orni$sound[1,])
+library(tuneR)
+orni<-as.matrix(readWave("orni.wav")@left)

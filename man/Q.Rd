@@ -5,8 +5,8 @@
 \title{Resonance quality factor of a frequency spectrum}
 
 \description{
-This function estimates the frequency pureness of a time wave by returning the resonant
-quality factor Q at a specific dB level.}
+  This function estimates the frequency pureness of a time wave by returning the resonant
+  quality factor Q at a specific dB level.}
 
 \usage{
 Q(spec, f = NULL, level = -3, plot = TRUE, colval = "red",
@@ -20,19 +20,19 @@ alab = "Relative amplitude (dB)", type = "l", ...)
     This can be either a two-column matrix (col1 = frequency, col2 = amplitude)
     or a vector (amplitude).}
   \item{f}{sampling frequency of the wave used to obtain \code{spec}
-      (in Hz). Not necessary if \code{spec} is a two columns matrix obtained
-      with \code{\link{spec}} or \code{\link{meanspec}}.}
+    (in Hz). Not necessary if \code{spec} is a two columns matrix obtained
+    with \code{\link{spec}} or \code{\link{meanspec}}.}
   \item{level}{frequency bandwidth set by an amplitude value relative
-      to \code{spectrum} (in dB).}
+    to \code{spectrum} (in dB).}
   \item{plot}{logical, if \code{TRUE} returns the spectrum 
-      with Q plotted (by default \code{TRUE}).}
+    with Q plotted (by default \code{TRUE}).}
   \item{colval}{colour of plotting Q.}
   \item{cexval}{character size of plotting Q.}
   \item{fontval}{font of plotting Q.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the ampltiude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
-      See \code{\link{plot}} for details (by default "l" for lines).}
+    See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -45,7 +45,7 @@ alab = "Relative amplitude (dB)", type = "l", ...)
 \note{This function is based on \code{\link{fft}}.} 
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
-\code{\link{fft}}.}
+  \code{\link{fft}}.}
 
 \examples{
 # bird song

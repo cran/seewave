@@ -1,3 +1,2 @@
-library(sound)
-tico<-loadSample("tico.wav")
-tico<-as.matrix(tico$sound[1,])
+library(tuneR)
+tico<-as.matrix(readWave("tico.wav")@left)

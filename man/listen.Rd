@@ -9,39 +9,36 @@
 \usage{listen(wave, f, from = NULL, to = NULL, choose = FALSE)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start of play (in s).}
   \item{to}{end of play (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
-		points can be graphically chosen with a cursor on the oscillogram.}
+    points can be graphically chosen with a cursor on the oscillogram.}
 }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr} but the original
-\code{\link[sound]{play}} function is by Matthias Heymann (package \pkg{sound}).}
+  \code{\link[tuneR]{play}} function is by Uwe Ligges (package \pkg{tuneR}).}
 
-\note{This function is based on \code{\link[sound]{play}} but allows to read
-one-colum matrix, data.frame and Sample objects.}
+\note{This function is based on \code{\link[tuneR]{play}} but allows to read
+  one-colum matrix, data.frame, time-series and Sample objects.}
 
-\seealso{\code{\link[sound]{play}}}
+\seealso{\code{\link[tuneR]{play}}}
 
 \examples{
-data(tico)
-listen(tico,f=22050)
-listen(tico,f=22050,from=0.5,to=1.5)
-listen(noise(d=1,f=8000,Sample=TRUE))
-# change f to play the sound a different speed
-data(sheep)
-# normal
-listen(sheep,f=8000)
-# two times faster
-listen(sheep,f=8000*2)
-# two times slower
-listen(sheep,f=8000/2)
+## NOT RUN
+# data(tico)
+# listen(tico,f=22050)
+# listen(tico,f=22050,from=0.5,to=1.5)
+# listen(noise(d=1,f=8000,Wave=TRUE))
+## change f to play the sound a different speed
+# data(sheep)
+## normal
+# listen(sheep,f=8000)
+## two times faster
+# listen(sheep,f=8000*2)
+## two times slower
+# listen(sheep,f=8000/2)
 }
 
 \keyword{ts}

@@ -6,6 +6,7 @@
 \alias{hamming.w}
 \alias{hanning.w}
 \alias{inputw}
+\alias{outputw}
 \alias{peaks}
 \alias{check.pks}
 \alias{peaksign}
@@ -21,6 +22,7 @@
 \alias{spectro.colors}
 \alias{stft}
 \alias{temp.colors}
+\alias{unwrap}
 
 \title{Internal Seewave Functions}
 

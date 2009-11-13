@@ -6,24 +6,20 @@
 
 \description{This function removes the offset of a time wave.}
 
-\usage{rmoffset(wave, f, plot = FALSE, ...)}
+\usage{rmoffset(wave, f, plot = FALSE, output = "matrix", ...)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the wave
-  after removing the offset (by default \code{FALSE}).}
+    after removing the offset (by default \code{FALSE}).}
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
-\value{
-If \code{plot} is \code{FALSE}, \code{rmoffset} returns a one-column matrix
-describing the new wave with the same sampling frequency as the original wave.
-}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

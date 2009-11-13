@@ -5,17 +5,13 @@
 \title{Hilbert transform and analytic signal}
 
 \description{This function returns the analytic signal of a time wave
-through Hilbert transform.}
+  through Hilbert transform.}
 
 \usage{hilbert(wave, f)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
 }
 
 \details{The analytic signal is useful to get the amplitude envelope 
