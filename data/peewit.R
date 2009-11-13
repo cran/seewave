@@ -1,3 +1,2 @@
-library(sound)
-peewit<-loadSample("peewit.wav")
-peewit<-as.matrix(peewit$sound[1,])
+library(tuneR)
+peewit <- as.matrix(readWave("peewit.wav")@left)

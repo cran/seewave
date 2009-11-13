@@ -5,21 +5,17 @@
 \title{Frequency filter}
 
 \description{This function filters out a selected frequency section
-of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass
-or bandstop frequency filter).}
+  of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass
+  or bandstop frequency filter).}
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-custom = NULL, wl = 512, wn = "hanning", Sample = FALSE)
+custom = NULL, wl = 512, wn = "hanning", output="matrix")
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
@@ -30,28 +26,29 @@ custom = NULL, wl = 512, wn = "hanning", Sample = FALSE)
     \code{wl} is no more required. See examples.}
   \item{wl}{window length for the analysis (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}.}  
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
+    \code{"audioSample"} or \code{"ts"}.}
 }
 
 \details{
-A short-term Fourier transform is first applied to the signal
-(see \code{\link{spectro}}), then the frequency filter is applied and the new
-signal is eventually generated using the reverse of the Fourier Transform
-(\code{\link{fft}}).\cr
-There is therefore neither temporal modifications nor 
-amplitude modifications.
+  A short-term Fourier transform is first applied to the signal
+  (see \code{\link{spectro}}), then the frequency filter is applied and the new
+  signal is eventually generated using the reverse of the Fourier Transform
+  (\code{\link{fft}}).\cr
+  There is therefore neither temporal modifications nor 
+  amplitude modifications.
 }
 
-\value{A new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
 
 \examples{
-a<-noise(f=8000,d=1)
+a<-noisew(f=8000,d=1)
 # low-pass
 b<-ffilter(a,f=8000,to=1500)
 spectro(b,f=8000,wl=512)

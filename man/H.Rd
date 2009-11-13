@@ -11,12 +11,8 @@ This function estimates the total entropy of a time wave.
 \usage{H(wave, f, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{window length for spectral entropy analysis
     (even number of points). See \code{\link{sh}}.}
   \item{envt}{the type of envelope to be used: either "abs" for absolute

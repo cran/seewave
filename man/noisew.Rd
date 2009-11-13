@@ -1,15 +1,15 @@
-\name{noise}
+\name{noisew}
 
-\alias{noise}
+\alias{noisew}
 
 \title{Generate noise}
 
 \description{
-This function generates noise.
+  This function generates noise.
 }
 
 \usage{
-noise(f, d, type="unif", listen = FALSE, Sample = FALSE)
+noisew(f, d, type="unif", listen = FALSE, output = "matrix")
 }
 
 \arguments{
@@ -17,16 +17,16 @@ noise(f, d, type="unif", listen = FALSE, Sample = FALSE)
   \item{d}{duration of the signal to be generated.}
   \item{type}{a character string to specify the type of noise, either "unif" or "gaussian".}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
 }
 
 \details{
-Uniform noise is generated using \code{\link{runif}} and gaussian noise is based on \code{\link{rnorm}} 
+  Uniform noise is generated using \code{\link{runif}} and gaussian noise is based on \code{\link{rnorm}} 
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
@@ -34,7 +34,7 @@ or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
 
 \examples{
 # add noise to a synthetic signal
-a<-noise(d=1,f=8000)
+a<-noisew(d=1,f=8000)
 b<-synth(f=8000,d=1,cf=2000,plot=FALSE)
 c<-a+b
 spectro(c,f=8000)

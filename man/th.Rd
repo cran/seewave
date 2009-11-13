@@ -9,31 +9,31 @@
 \usage{th(env)}
 
 \arguments{\item{env}{a data set resulting of an envelope obtained
-      using \code{\link{env}}}}
+    using \code{\link{env}}}}
 
 \details{
-Temporal entropy is calculated according to:\cr
-\deqn{S = -\frac{\sum_{i = 1}^{N} y_i log_2(y_i)}{log_2(N)}}{% 
-      S = -sum(ylogy)/log(N)}
-with:\cr
-\emph{y} = relative amplitude of the \emph{i} envelope point,\cr
-and
-\deqn{\sum_{i = 1}^{N} y_i = 1}{% 
-      sum(y) = 1}\cr 
-and \emph{N} = number of envelope points.
+  Temporal entropy is calculated according to:\cr
+  \deqn{S = -\frac{\sum_{i = 1}^{N} y_i log_2(y_i)}{log_2(N)}}{% 
+    S = -sum(ylogy)/log(N)}
+  with:\cr
+  \emph{y} = relative amplitude of the \emph{i} envelope point,\cr
+  and
+  \deqn{\sum_{i = 1}^{N} y_i = 1}{% 
+    sum(y) = 1}\cr 
+  and \emph{N} = number of envelope points.
 }
 
 \value{A single value varying between 0 and 1 is returned.
-The value has no unit.}
+  The value has no unit.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{
-The temporal entropy of a noisy signal with many amplitude modulations
-will tend towards 1 whereas the temporal entropy of quiet signal
-will tend towards 0. \cr
-Note, however, that a sustained sound with an almost
-flat envelope will also show a very high temporal entropy. See examples.}
+  The temporal entropy of a noisy signal with many amplitude modulations
+  will tend towards 1 whereas the temporal entropy of quiet signal
+  will tend towards 0. \cr
+  Note, however, that a sustained sound with an almost
+  flat envelope will also show a very high temporal entropy. See examples.}
 
 \seealso{\code{\link{sh}}, \code{\link{csh}}, \code{\link{H}}}
 

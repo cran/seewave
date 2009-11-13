@@ -5,7 +5,7 @@
 \alias{rms}
 
 \title{
-Root Mean Square
+  Root Mean Square
 }
 
 \description{This function computes the root mean square or quadratic mean.
@@ -23,7 +23,7 @@ rms(x, ...)
 \details{
   The Root Mean Square or quadratic mean is cimputed according to:\cr
   \deqn{RMS = \sqrt{\frac{1}{n} \times \sum_{i=1}^{N} x{_i}{^2}}}{% 
-      RMS = sqrt(mean(x^2))}
+    RMS = sqrt(mean(x^2))}
 }
 
 \value{A vector}

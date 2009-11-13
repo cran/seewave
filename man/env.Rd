@@ -11,12 +11,8 @@ amplitude envelope of a time wave.}
 ksmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{envt}{the type of envelope to be returned: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See Details section.}
   \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 

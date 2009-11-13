@@ -5,21 +5,17 @@
 \title{Finite Impulse Response filter}
 
 \description{This function is a FIR filter that filters out a selected frequency
-section of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass
-or bandstop frequency filter).}
+  section of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass
+  or bandstop frequency filter).}
 
 \usage{
 fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
-wl = 512, wn = "hanning", listen = FALSE, Sample= FALSE)
+wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
@@ -31,30 +27,29 @@ wl = 512, wn = "hanning", listen = FALSE, Sample= FALSE)
   \item{wl}{window length of the impulse filter (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.  
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
 }
 
 \details{
-This function is based on the reverse of the Fourier Transform
-(\code{\link{fft}}) and on a convolution (\code{\link{convolve}}) between the
-wave to be filtered and the impulse filter.
+  This function is based on the reverse of the Fourier Transform
+  (\code{\link{fft}}) and on a convolution (\code{\link{convolve}}) between the
+  wave to be filtered and the impulse filter.
 }
 
-\value{A new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \references{Stoddard, P. K. (1998). Application of filters in bioacoustics.
-\emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
-communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
+  \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
+    communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{ffilter}},\code{\link{lfs}}, \code{\link{afilter}},
-\code{\link[signal]{fir1}}, \code{\link[sound]{fir2}}}
+\seealso{\code{\link{ffilter}}, \code{\link{lfs}}, \code{\link{afilter}}}
 
 \examples{
-a<-noise(f=8000,d=1)
+a<-noisew(f=8000,d=1)
 # low-pass
 b<-fir(a,f=8000,to=1500)
 spectro(b,f=8000)
@@ -74,7 +69,7 @@ spectro(g,f=8000)
 # custom filter generated using spec()
 data(tico)
 myfilter2<-spec(tico,f=22050,at=0.7,wl=512,plot=FALSE)
-b<-noise(d=1,f=22050)
+b<-noisew(d=1,f=22050)
 h<-fir(b,f=22050,custom=myfilter2)
 spectro(h,f=22050)
 }

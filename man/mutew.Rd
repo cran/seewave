@@ -5,46 +5,42 @@
 \title{Replace time wave data by 0 values}
 
 \description{
-This functions replaces a time wave or a section of a time wave by 0 values.
-For a time wave describing a sound, this corresponds in muting the sound or a section of it. 
+  This functions replaces a time wave or a section of a time wave by 0 values.
+  For a time wave describing a sound, this corresponds in muting the sound or a section of it. 
 }
 
 \usage{
 mutew(wave, f, from = NULL, to = NULL, choose = FALSE, plot = TRUE,
-Sample = FALSE,...)
+output = "matrix", ...)
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start of the silence section (in s).}
   \item{to}{end of the silence section (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})
-		points can be graphically chosen with a cursor on the oscillogram.}
+    points can be graphically chosen with a cursor on the oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot
-      of \code{wave} with the new silence section (by default \code{TRUE}).}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.
+    of \code{wave} with the new silence section (by default \code{TRUE}).}
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
 }
 
 \details{
-By default, \code{from} and \code{from} are \code{NULL},
-this results in completely muting \code{wave}.  
+  By default, \code{from} and \code{from} are \code{NULL},
+  this results in completely muting \code{wave}.  
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
-\code{\link{deletew}},\code{\link{fadew}}, \code{\link{pastew}},
-\code{\link{revw}}, \code{\link{zapsilw}}}
+  \code{\link{deletew}},\code{\link{fadew}}, \code{\link{pastew}},
+  \code{\link{revw}}, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)

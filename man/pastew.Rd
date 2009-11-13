@@ -5,51 +5,46 @@
 \title{Paste a time wave to another one}
 
 \description{
-This function pastes a first time wave to a second one. The time wave to be 
-pasted, the time wave to be completed and the resulting time wave can be 
-displayed in a three-frame oscillographic plot.
+  This function pastes a first time wave to a second one. The time wave to be 
+  pasted, the time wave to be completed and the resulting time wave can be 
+  displayed in a three-frame oscillographic plot.
 }
 
 \usage{
 pastew(wave1, wave2, f, at = "end", choose = FALSE, plot = FALSE,
-marks = TRUE, Sample = FALSE,...)
+marks = TRUE, output = "matrix", ...)
 }
 
 \arguments{
-	\item{wave1}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel) to be pasted to \code{wave2}.}
-	\item{wave2}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave1} and \code{wave2} (in Hz).
-  Does not need to be specified if \code{wave1} and/or \code{wave2} are/is
-	of class \code{ts}, \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave1}{a first R object.}
+  \item{wave2}{a second R object.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
     Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
   \item{choose}{logical, if \code{TRUE} the point where \code{wave1} will
-	be pasted into \code{wave2} (=\code{at}) can be graphically chosen with a cursor.}
+    be pasted into \code{wave2} (=\code{at}) can be graphically chosen with a cursor.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
-  \code{wave1}, \code{wave2} and \code{wave1} + \code{wave2} (by default \code{FALSE}).}
-  \item{marks}{logical, if \code{TRUE} shows where \code{wave1} has been pasted (by default \code{TRUE}).}
-  \item{Sample}{if \code{TRUE} and \code{plot} is \code{FALSE}
-  returns an object of class \code{\link[sound]{Sample}}}.
+    \code{wave1}, \code{wave2} and \code{wave1} + \code{wave2} (by default \code{FALSE}).}
+  \item{marks}{logical, if \code{TRUE} shows where \code{wave1} has been
+    pasted (by default \code{TRUE}).}
+  \item{output}{character string, the class of the object to return, either
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
   \item{\dots}{other \code{\link{oscillo}} graphical parameters.}
-  }
+}
 
 \details{If \code{plot} is \code{TRUE} returns a two-frame plot with three waves:\cr 
-(1) the wave to be pasted (\code{wave1}),\cr
-(2) the wave to be completed (\code{wave2}),\cr
-(3) the resulting wave.}
- 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned as a one-column matrix
-or as a \code{\link[sound]{Sample}} object if \code{Sample} is \code{TRUE}.}
+  (1) the wave to be pasted (\code{wave1}),\cr
+  (2) the wave to be completed (\code{wave2}),\cr
+  (3) the resulting wave.}
+
+\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+  of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
-\code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}
-, \code{\link{revw}}, \code{\link{repw}}, \code{\link{zapsilw}}}
+  \code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}
+  , \code{\link{revw}}, \code{\link{repw}}, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)

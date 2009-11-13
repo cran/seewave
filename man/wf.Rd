@@ -5,54 +5,51 @@
 \title{Waterfall display}
 
 \description{This function returns a waterfall display of
-a short-term Fourier transform or of any matrix.}
+  a short-term Fourier transform or of any matrix.}
 
 \usage{
 wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, dB = "max0", dBref = NULL, wn = "hanning", 
 x = NULL, hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)", xaxis = TRUE, yaxis =
-TRUE, density = NULL, border = NULL, lines = FALSE, ...)
+TRUE, density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
 }
 
 \arguments{
-  \item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-  \code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{window length for the analysis
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{dB}{a character string specifying the type dB to return: "max0" for a
-	maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
-	but should be set to 2*10e-5 for a 20 microPa reference.}
+    but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{x}{a matrix if \code{wave} is not provided.}
   \item{hoff}{horizontal 'offset' which shifts actual x-values slightly
     per row for visibility. Fractional parts will be removed.}
   \item{voff}{vertical 'offset' which separates traces.}
   \item{col}{a color or a color palette function to be used to assign colors in
-      the plot}
+    the plot}
   \item{xlab}{title of the frequency x-axis.}
   \item{ylab}{title of the amplitude y-axis.}
   \item{xaxis}{a logical, if \code{TRUE} adds the frequency x-axis
     according to \code{f}.}
   \item{yaxis}{a logical, if \code{TRUE} adds the amplitude y-axis
     according.}
-\item{density}{argument of \code{\link[graphics]{polygon}}:
-          the density of shading lines, in lines per inch.  The default
-          value of 'NULL' means that no shading lines are drawn. A zero
-          value of 'density' means no shading nor filling whereas
-          negative values (and 'NA') suppress shading (and so allow
-          color filling).}
-	\item{border}{argument of \code{\link[graphics]{polygon}}:
-	  the color to draw the border.  The default, 'NULL', means to
-          use 'par("fg")'.  Use 'border = NA' to omit borders.}
+  \item{density}{argument of \code{\link[graphics]{polygon}}:
+    the density of shading lines, in lines per inch.  The default
+    value of 'NULL' means that no shading lines are drawn. A zero
+    value of 'density' means no shading nor filling whereas
+    negative values (and 'NA') suppress shading (and so allow
+    color filling).}
+  \item{border}{argument of \code{\link[graphics]{polygon}}:
+    the color to draw the border.  The default, 'NULL', means to
+    use 'par("fg")'.  Use 'border = NA' to omit borders.}
   \item{lines}{a logical, if \code{TRUE} plots lines instead of surfaces
-  (polygons).}
+    (polygons).}
+  \item{lwd}{line width.}
   \item{\dots}{other graphical arguments to passed to \code{\link{plot}}}
 }
 
@@ -64,7 +61,7 @@ TRUE, density = NULL, border = NULL, lines = FALSE, ...)
 \note{The function is well adapted to display short-term Fourier
   transform. However, any matrix can be called using the argument
   \code{x} instead of \code{wave}.} 
-  
+
 \author{Carl G. Witthoft and Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{spectro}}, \code{\link{spectro3D}}, \code{\link{dynspec}}}

@@ -12,8 +12,8 @@
   \item{file}{the .wav or .flac file to convert.}
   \item{reverse}{logical, if \code{TRUE} converts a .flac file into a .wav file.}
   \item{overwrite}{logical, if \code{TRUE} overwrites the file to convert.}
-	\item{exename}{a character string specifying the name of the FLAC binary file. If \code{NULL}, the dedault name "flac" will be used for Linux OS and "flac.exe" for Windows OS.}
-	\item{path2exe}{a character string giving the path to the FLAC binary file. If \code{NULL}, the dedault path "c:/Program Files/FLAC/" will be used for Windows OS.}
+  \item{exename}{a character string specifying the name of the FLAC binary file. If \code{NULL}, the dedault name "flac" will be used for Linux OS and "flac.exe" for Windows OS.}
+  \item{path2exe}{a character string giving the path to the FLAC binary file. If \code{NULL}, the dedault path "c:/Program Files/FLAC/" will be used for Windows OS.}
 }
 
 \details{The function runs FLAC. FLAC has then to be installed first: \url{http://flac.sourceforge.net/}, if not the function will not work.}

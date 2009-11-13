@@ -17,8 +17,8 @@ par(new=TRUE)
 env(tico,f=22050,colwave=2)
 
 # temporal automatic measurements
-timer(orni,f=22050,threshold=5,smooth=40,
-        bty="l",xaxs="i",colval="blue")
+timer(orni,f=22050,threshold=5,msmooth=c(40,0),
+        bty="l",colval="blue")
 title(main="Timer() for automatic time measurements",col="blue")
 
 # instantaneous frequency

@@ -5,7 +5,7 @@
 \title{Instantaneous frequency of a time wave by zero-crossing}
 
 \description{
-This function measures the period of a full oscillating cycle.
+  This function measures the period of a full oscillating cycle.
 }
 
 \usage{
@@ -14,13 +14,10 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
 \arguments{
-	\item{wave}{a \code{vector}, a \code{matrix} (first column),
-	an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
-	or \code{\link[tuneR]{Wave}} (left channel).}
-  \item{f}{sampling frequency of \code{wave} (in Hz).
-  Does not need to be specified if \code{wave} is an object of class \code{ts},
-	\code{\link[sound]{Sample}}, or \code{\link[tuneR]{Wave}}.}  \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
-  the time wave(by default \code{TRUE}).}
+  \item{wave}{an R object.}     
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
+    the time wave(by default \code{TRUE}).}
   \item{interpol}{interpolation factor.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{xlab}{title of the x axis.}
@@ -30,27 +27,27 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
 }
 
 \details{
-If \code{plot} is \code{FALSE}, \code{zc} returns a vector of numeric data with
-the instantaneous frequency. 
+  If \code{plot} is \code{FALSE}, \code{zc} returns a vector of numeric data with
+  the instantaneous frequency. 
 }
 
 \value{
-If \code{plot} is \code{FALSE}, \code{zc} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding
-to the instantaneous frequency of the time wave in kHz (\emph{y}-axis). \cr
-\sQuote{NA}s correspond either to pause periods (e. g. detected applying
-\code{threshold} or sections of the time wave not crossing the zero line. To remove \sQuote{NA}s with \code{\link{na.omit}} allows to get only instantaneous frequency values but
-discards information about pause sections.}
+  If \code{plot} is \code{FALSE}, \code{zc} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding
+  to the instantaneous frequency of the time wave in kHz (\emph{y}-axis). \cr
+  \sQuote{NA}s correspond either to pause periods (e. g. detected applying
+  \code{threshold}) or sections of the time wave not crossing the zero line. To remove \sQuote{NA}s with \code{\link{na.omit}} allows to get only instantaneous frequency values but
+  discards information about pause sections.}
 
 \note{\code{interpol} adds points to the time wave by linear interpolation
-(through \code{\link{approx}}). This increases measurement precision but as well
-time process. Type argument of \code{plot} cannot be set to \dQuote{l}.} 
+  (through \code{\link{approx}}). This increases measurement precision but as well
+  time process. Type argument of \code{plot} cannot be set to \dQuote{l}.} 
 
 \references{Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998.
-\emph{Animal acoustic communication.} Springer, Berlin, Heidelberg.}
+  \emph{Animal acoustic communication.} Springer, Berlin, Heidelberg.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr},
-Caroline Simonis \email{csimonis@mnhn.fr} and 
-Thierry Aubin \email{thierry.aubin@u-psud.fr}}
+  Caroline Simonis \email{csimonis@mnhn.fr} and 
+  Thierry Aubin \email{thierry.aubin@u-psud.fr}}
 
 \seealso{\code{\link{ifreq}}}
 
