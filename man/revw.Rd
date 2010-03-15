@@ -6,7 +6,8 @@
 
 \description{Reverse the wave along the time axis.}
 
-\usage{revw(wave, f, env = TRUE, ifreq = TRUE, plot = FALSE, output = "matrix", ...)}
+\usage{revw(wave, f, env = TRUE, ifreq = TRUE,
+plot = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     

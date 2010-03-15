@@ -6,7 +6,8 @@
 
 \description{This function converts .wav files into .flac files and reversely}
 
-\usage{wav2flac(file, reverse = FALSE, overwrite = FALSE, exename = NULL, path2exe = NULL)
+\usage{wav2flac(file, reverse = FALSE, overwrite = FALSE,
+exename = NULL, path2exe = NULL)
 }
 \arguments{
   \item{file}{the .wav or .flac file to convert.}

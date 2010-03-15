@@ -19,10 +19,9 @@
 
 \details{
   The sensitivity \emph{S} in dB is calculated according to:\cr
-  \deqn{S_{dB} = 20 \times log_{10}(\frac{s}{s_{ref}}), with \emph{s} the measured sensitivity in mv/Pa 
-    and \emph{sref} the reference sensitivity (by default 1 mV/Pa).}{% 
-    S = 20*log(s/sref)}
-  with \emph{s} the measured sensitivity in mv/Pa and \emph{sref} the reference sensitivity (by default 1 mV/Pa).
+  \deqn{S_{dB} = 20 \times log_{10}(\frac{s}{s_{ref}})}{% 
+    S = 20*log(s/sref)} with \emph{s} the measured sensitivity in mv/Pa 
+    and \emph{sref} the reference sensitivity (by default 1 mV/Pa).
 }
 
 \value{

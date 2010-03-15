@@ -1,6 +1,6 @@
 ################################################################################
 ## Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
-## Contributors : Jonathan Fees, Martin Maechler, Sandrine Pavoine,
+## Contributors : Jonathan Fees, Amandine Gasc, Martin Maechler, Sandrine Pavoine,
 ## Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft
 ## Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
 ################################################################################
@@ -341,15 +341,10 @@ ceps<-function(
                at = NULL,
                from = NULL,
                to = NULL,
-               tpeaks = NULL,     # peaks in time (s)
-               fpeaks = NULL,     # peaks in frequency (Hz)
                tidentify = FALSE,   # identify in seconds
                fidentify = FALSE,   # identify in Hz
                col = "black",
                cex = 1,
-               colpeaks = "red",
-               cexpeaks = 0.75,
-               fontpeaks = 1,
                plot = TRUE,
                qlab = "Quefrency (bottom: s, up: Hz)",
                alab = "Amplitude",
@@ -388,20 +383,6 @@ ceps<-function(
   z1<-Re(fft(log(abs(fft(wave[,1]))),inverse=TRUE))
   z<-z1[1:N]
 
-  if(!is.null(tpeaks))
-    {
-      check.pks(z)
-      p<-peaks(z,tpeaks)
-      respeaks<-seq(z)[p]/f
-    }
-
-  if(!is.null(fpeaks))
-    {
-      check.pks(z)
-      p<-peaks(z,fpeaks)
-      respeaks<-f/seq(z)[p]
-    }
-
   x<-seq(0,N/f,length.out=N)
 
   if (plot == TRUE)
@@ -414,18 +395,6 @@ ceps<-function(
       X<-seq(0,E,length.out=7)
       axis(side=1,at=X, labels=round(X,3))
       axis(side=3,at=X, labels=round(1/X,3))
-
-      if(!is.null(tpeaks))
-        {
-          text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
-               as.character(round((seq(z)[p]-1)/f,5)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
-        }
-
-      if(!is.null(fpeaks))
-        {
-          text(seq(z)[p]/f, z[p]+abs((max(z)-min(z))/30),
-               as.character(round(f/(seq(z)[p]-1),1)),col=colpeaks,cex=cexpeaks,font=fontpeaks)
-        }
 
       if(tidentify == TRUE)
         {
@@ -442,17 +411,14 @@ ceps<-function(
           id<-identify(x=x,y=z,labels=round(1/round(x,5),1),tolerance=0.15,col="red")
           return(round(1/round(x[id],5),1))
         }
-      invisible(cbind(x,z))
+      results <- cbind(x,z)
+      invisible(results)
     }
 
   else
     {
-      if(!is.null(tpeaks) | !is.null(fpeaks))
-        {
-          results<-list(ceps=c(x,z) ,peaks=respeaks)
-          return(results)
-        }
-      return(cbind(x,z))
+      results <- cbind(x,z)
+      return(results)
     }
 }
 
@@ -2003,6 +1969,69 @@ fadew<-function(
 
 
 ################################################################################
+##                                FBANDS
+################################################################################
+
+fbands <- function(spec, f = NULL, bands = 10, width = FALSE, plot=TRUE, xlab= "Frequency (kHz)", ylab = "Relative amplitude",...)
+  {
+                                        # stop messages
+    if(is.matrix(spec)==TRUE && ncol(spec)!=2){
+        stop("If 'spec' is a numeric matrix it should be a two-column matrix
+with the first colum describing the frequency x-axis
+and the second column describing the amplitude y-axis")}
+    
+    if(is.vector(spec))
+      {
+        if(is.null(f))
+          {
+            stop("If 'spec' is a numeric vector describing the amplitude only,
+the sampling frequency 'f' of the original signal should
+be provided (for instance (f = 44100)")
+          }
+        N <- length(spec)
+        spec <- cbind(seq(f/(N*2), f/2, length=N)/1000, spec)
+      }
+
+    if(is.null(bands)) stop("The argument 'bands' cannot be NULL.")
+    if(any(bands<0)==TRUE) stop("The argument 'bands' cannot include any negative value")
+       
+    n <- nrow(spec)
+    
+    if(length(bands)==1)     # a number of windows with a similar length
+      {
+        if(n/bands <= 2) {stop("Decrease the number of frequency bands")}
+        bands <- seq(spec[1,1], spec[nrow(spec),1], length.out=bands+1)
+      }
+
+    else{                    
+      if(bands[length(bands)] > spec[n,1]){stop("The upper limit of 'bands' cannot be higher than half the sampling frequency (f/2)")}
+    }
+    
+    k <- length(bands)
+    res <- names <- freq <- wid <- numeric(k-1)
+    for (i in 1:(k-1)){
+      tmp <- cutspec(spec, flim=c(bands[i],bands[i+1]))
+      # remove the last line to avoid overlap between successive bands
+      # except for the last band :   [0,1[  [1,2[ ... [n, f/2]
+      if(i < k-1) {tmp <- tmp[-nrow(tmp),]} 
+      res[i] <- sum(tmp[,2])
+      if (i==k-1) {names[i] <- paste("[", round(bands[i],1),"-", round(bands[i+1],1),"]",sep="")}
+      else {names[i] <- paste("[", round(bands[i],1),"-", round(bands[i+1],1),"[",sep="")}
+      freq[i] <- round(mean(c(bands[i],bands[i+1])),1)
+      if(width==TRUE) wid[i] <- bands[i+1]-bands[i] else wid <- 1
+    }
+    res <- cbind(freq, res/sum(res))
+    colnames(res) <- c("freq","height")
+    if(plot==TRUE){
+    barplot(height=res[,2], names.arg=names, width=wid , xlab=xlab, ylab=ylab,...)
+    
+    invisible(res)
+  }
+    else return(res)
+  }
+
+
+################################################################################
 ##                                FDOPPLER
 ################################################################################
 
@@ -2195,6 +2224,190 @@ fma<-function(
   spec(ifreq[,2],f=f,plot=plot,...)
 }
 
+
+################################################################################
+##                                FPEAKS
+################################################################################
+
+fpeaks <- function(spec,
+                   f = NULL,
+                   nmax = NULL,
+                   amp = NULL,
+                   freq = NULL,
+                   threshold = NULL,
+                   plot = TRUE,
+                   title = TRUE,
+                   xlab= "Frequency (kHz)",
+                   ylab = "Amplitude",
+                   labels = TRUE,
+                   legend = TRUE,
+                   collab = "red",
+                   ...)
+{
+                                        # stop messages
+  if(is.matrix(spec)){
+    if(ncol(spec)!=2) stop("If 'spec' is a numeric matrix it should be a two column matrix with the first colum describing the frequency x-axis and the second column describing the amplitude y-axis")
+    N <- nrow(spec)
+  }
+
+  if(is.vector(spec))
+    {
+      if(is.null(f)) stop("If 'spec' is a numeric vector describing the amplitude only, the sampling frequency 'f' of the original signal should be provided (for instance (f = 44100)")
+      N <- length(spec)
+      spec <- cbind(seq(f/(N*2), f/2, length=N)/1000, spec)
+    }
+  
+                                        # remove any flatness in the spec that would generate errors
+                                        # this is done by comparing successive points and if they have the same value a minor addition is operated
+  
+  flat <- round(N/20)     # the maximum number of sucessive points with the sampe amplitude (length of the flat part)
+  spec.tmp <- c(spec[,2], rep(NA,flat))
+  for(i in 1:(N-(flat+1)))
+    {
+      ref<-spec.tmp[i]
+      for(j in 1:flat)
+        {
+          if(spec.tmp[i+j]==ref)
+            {
+              spec.tmp[i+j]<-spec.tmp[i+j]+0.00001*spec.tmp[i+j]
+            }
+        }
+    }
+  
+  spec <- cbind(spec[,1],spec.tmp[1:N])
+
+                                        # discretisation
+  sym <- discrets(spec[,2], symb=5, collapse=FALSE)
+  if(sym[1]=="I") sym[1] <- "T"   # the sequence should start with a valley, otherwhise everything is shifted
+  if(sym[1]=="P") sym[1] <-"D"     # the sequence should not start with a peak
+  sym <- c(NA,sym,NA)  
+  peaks <- which(sym=="P")
+  valleys <- which(sym=="T")
+  n <- length(peaks)
+  
+  if(n==0) {res <- NA} # no peaks
+  
+  else{
+  if(!is.null(amp) | !is.null(nmax))    # left and right slope of the peak
+    {
+      diffvp <- diffpv <- numeric(n)
+      for (i in 1:n)
+        {
+          v <- spec[valleys[i],2]    # valley i
+          p <- spec[peaks[i],2]      # peak i
+          vv <- spec[valleys[i+1],2] # valley i+1
+          diffvp[i] <- p - v         # difference peaki - valleyi = left slope of the peak
+          diffpv[i] <- p - vv        # difference peaki - valleyi+1 = right slope of the peak
+        }
+    }
+
+  if(!is.null(nmax)){
+    if(!is.null(amp) | !is.null(freq) | !is.null(threshold)) {cat("Caution! The argument 'nmax' overrides the arguments 'amp', 'freq', and 'threshold'")}
+    if(n!=0 && n < nmax) {cat(paste("There are", n, "peaks only (< nmax ="), nmax,")")}
+    alt <- cbind(peaks, diffvp, diffpv)
+    leftorder <- alt[order(-alt[,2]), , drop=FALSE]    # data ordered following the left peak slope
+    rightorder <- alt[order(-alt[,3]), , drop=FALSE] # data ordered following the right peak slope
+    left <- leftorder[,1]     # left peak slopes ordered
+    right <- rightorder[,1]     # right peak slopes ordered                                       
+    l <- 0             
+    i <- 1
+    while(l[i] < nmax){                       # search matching between left and right peak slopes
+      comp <- left[1:i] %in% right[1:i]       # returns the lowest number of left and right slopes for which slopes are max
+      l <- c(l,length(comp[comp==TRUE]))
+      i <- i+1
+    }
+    peaks0 <- left[1:(i-1)]
+    # need to double check the number of peaks
+    # errors might occur as two peaks might appear for a single iteration of the while() loop
+    # for instance if you have:
+    # left : 18 8 38 27 22 32
+    # right 8 18 22 27 32 38
+    # the first iteration returns no peak: comp = FALSE
+    # the second iteration returns 2 peaks: comp = TRUE TRUE
+    # we then keep the right number of peaks
+    if(l[i] > nmax)
+      {
+       error <- l[i] - nmax
+       peaks0 <- peaks0[1:(length(peaks0)-error)]
+      }
+    peaks <- peaks0[comp]
+    res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a two-column matrix
+    colnames(res) <- c("freq","amp")
+ 
+  }
+  
+  else{
+                                        # amplitude parameter
+    if(!is.null(amp))  
+      {
+        if(length(amp)!=2) stop("The length of 'amp' should equal to 2.")
+        for(i in 1:n){
+          if(!is.na(diffvp[i]) && !is.na(diffpv[i])
+             && diffvp[i] > 0 && diffpv[i] > 0
+             && diffvp[i] >= amp[1] && diffpv[i] >= amp[2])
+            peaks[i] <- peaks[i]
+          else
+            peaks[i] <- NA
+        }
+      }
+
+                                        # frequency parameter
+    if(!is.null(freq))
+      {
+        freq <- freq/1000
+        diffpeak <- numeric(n-1)
+        for (i in 1:(n-1))
+          {
+            peak1 <- spec[peaks[i],1]
+            peak2 <- spec[peaks[i+1],1]
+            diffpeak[i] <- peak2 - peak1
+            if(!is.na(diffpeak[i]) && diffpeak[i] <= freq)
+              if(spec[peaks[i+1],2] > spec[peaks[i],2])
+                peaks[i] <- NA else peaks[i+1] <- NA
+          }
+      } 
+    res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a 2 column matrix
+    colnames(res) <- c("freq","amp")
+
+    if(!is.null(threshold)){
+      res <- res[res[,2]>threshold, ,drop=FALSE]      
+    }
+    
+  }
+}
+
+  if(plot==TRUE)
+    {
+      plot(spec, type="l", xlab = xlab, ylab = ylab, xaxs="i", yaxt="n", ...)
+      if(title==TRUE) {
+        if(nrow(res) == 1){text.title <- "peak detected"} else {text.title <- "peaks detected"}
+        title(main=paste(nrow(res), text.title))
+      }
+      points(res, col = collab)
+      if(labels == TRUE & nrow(res)!=0) text(res, labels=round(res[,1],2), pos=3, col=collab)
+      if(!is.null(threshold))
+        {
+          abline(h=threshold, col=collab, lty=2)
+          mtext(paste(threshold), side=2, line=0.5, at=threshold, las=1, col=collab)
+        }
+      if(legend==TRUE)
+        {
+          if(!is.null(nmax)){text.legend <- paste("nmax=",nmax,sep="")}
+          else {
+            if(is.null(amp)){amp[1] <- amp[2] <- "-"} else amp <- round(amp,2)
+            if(is.null(freq)){freq <- "-"}
+            if(is.null(threshold)){threshold <- "-"}
+            text.legend <- c(paste("amp=", amp[1], "/", amp[2], sep=""),
+                             paste("freq=", freq, sep=""),
+                             paste("threshold=", threshold, sep="")
+                             )
+          }
+          legend("topright", pch=NA, legend = text.legend, bty="n", text.col="darkgrey")
+        }
+      invisible(res)
+    }
+  else return(res)
+}
 
 ################################################################################
 ##                                FTWINDOW
@@ -2504,6 +2717,80 @@ lfs<-function(
 
 
 ################################################################################
+##                                LOCALPEAKS
+################################################################################
+
+localpeaks <- function(
+                       spec,
+                       f = NULL,
+                       bands = 10,
+                       plot = TRUE,
+                       xlab= "Frequency (kHz)",
+                       ylab = "Amplitude",
+                       labels = TRUE, ...)
+  
+  {
+
+    # stop messages
+    if(is.matrix(spec)==TRUE && ncol(spec)!=2){
+        stop("If 'spec' is a numeric matrix it should be a two-column matrix
+with the first colum describing the frequency x-axis
+and the second column describing the amplitude y-axis")}
+    
+    if(is.vector(spec))
+      {
+        if(is.null(f))
+          {
+            stop("If 'spec' is a numeric vector describing the amplitude only,
+the sampling frequency 'f' of the original signal should
+be provided (for instance (f = 44100)")
+          }
+        N <- length(spec)
+        spec <- cbind(seq(f/(N*2), f/2, length=N)/1000, spec)
+      }
+
+    if(is.null(bands)) stop("The argument 'bands' cannot be NULL.")
+    if(any(bands<0)==TRUE) stop("The argument 'bands' cannot include any negative value")
+       
+    n <- nrow(spec)
+
+    if(length(bands)==1)     # a number of windows with a similar length
+      {
+        if(n/bands <= 2) {stop("Decrease the number of frequency bands")}
+        bands <- seq(spec[1,1], spec[nrow(spec),1], length.out=bands+1)
+      }
+
+    else{                    
+      if(bands[length(bands)] > spec[n,1]){stop("The upper limit of 'bands' cannot be higher than half the sampling frequency (f/2)")}
+    }
+    
+    k <- length(bands)
+    res <- matrix(numeric((k-1)*2), nr=k-1, nc=2)
+    for(i in 1:(k-1))
+      {
+      tmp <- cutspec(spec, flim=c(bands[i],bands[i+1]))
+      # remove the last line to avoid overlap between successive bands
+      # except for the last band :   [0,1[  [1,2[ ... [n, f/2]
+      if(i < k-1) {tmp <- tmp[-nrow(tmp),]} 
+      res[i,] <- fpeaks(tmp, nmax=1, plot=FALSE)
+      }
+    
+    colnames(res) <- c("freq","amp")
+    
+    if(plot==TRUE)
+      {
+        plot(spec, type="l", xlab = xlab, ylab = ylab, xaxs="i", yaxt="n")
+        points(res, col = "red")
+        abline(v=bands, col="grey")
+        if(labels == TRUE) text(res, labels=round(res[,1],2), pos=3, col="red")
+        box()
+        invisible(res)
+      }
+    else {return(res)}
+  }
+
+
+################################################################################
 ##                                MEANDB
 ################################################################################
 
@@ -2529,13 +2816,9 @@ meanspec<-function(
                    dBref = NULL,
                    from = NULL,
                    to = NULL,
-                   peaks = NULL,
                    identify = FALSE,
                    col = "black",
                    cex = 1,
-                   colpeaks = "red",
-                   cexpeaks = 1,
-                   fontpeaks = 1,
                    plot = 1,
                    flab = "Frequency (kHz)",
                    alab = "Amplitude",
@@ -2588,14 +2871,6 @@ meanspec<-function(
                                         # PSD and PMF OPTIONS
   if(PSD == TRUE) y<-y^2
   if(PMF == TRUE) y<-y/sum(y)
-
-                                        # PEAK DETECTION
-  if(!is.null(peaks))
-    {
-      check.pks(y)
-      p<-peaks(y,peaks)
-      respeaks<-seq(y)[p]*f/N/1000
-    }
 
                                         # FREQUENCY DATA 
   x<-seq(f/1000/wl,f/2000,length.out=N/2)  
@@ -2658,18 +2933,6 @@ meanspec<-function(
           coord<-list(freq = id.freq ,amp = id.amp)
           return(coord)
         }     	
-      
-      if(!is.null(peaks))
-        {
-          if(!is.null(dB))
-            text(seq(y)[p]*f/N/1000, y[p]+5,
-                 as.character(round(seq(y)[p]*f/N/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font = fontpeaks)
-          else  
-            text(seq(y)[p]*f/N/1000, y[p]+0.05,
-                 as.character(round(seq(y)[p]*f/N/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font = fontpeaks)
-        }
     }
 
                                         # VERTICAL PLOT
@@ -2712,41 +2975,19 @@ meanspec<-function(
           coord<-list(freq = id.freq ,amp = id.amp)
           return(coord)
         }    
-      
-      if(!is.null(peaks))
-        {
-          if (!is.null(dB))
-            text(y[p]+10, seq(y)[p]*f/N/1000,
-                 as.character(round(seq(y)[p]*f/N/1000,3)),
-                 col = colpeaks, cex = cexpeaks)
-          else  
-            text(y[p]+0.1, seq(y)[p]*f/N/1000,
-                 as.character(round(seq(y)[p]*f/N/1000,3)),
-                 col = colpeaks, cex = cexpeaks)
-        }
     }
 
                                         # INVISIBLE RETURN DATA  
   if(plot == 1 | plot == 2)
     {
       spec<-cbind(x,y)	
-      if(!is.null(peaks))
-        {
-          results<-list(spec = spec ,peaks = respeaks)
-          invisible(results)
-        }
-      else invisible(spec)
+      invisible(spec)
     }
                                         # DATA RETURN WHEN NO PLOT  
   else if(plot == FALSE) 
     {
-      spec<-cbind(x,y)	
-      if(!is.null(peaks))
-        {
-          results<-list(spec = spec ,peaks = respeaks)
-          return(results)
-        }
-      else return(spec)
+      spec<-cbind(x,y)
+      return(spec)
     }
 }
 
@@ -2882,6 +3123,22 @@ noisew<-function(
   if(listen == TRUE) {listen(sound,f=f)}
   return(wave)
 }
+
+
+################################################################################
+##                                OCTAVES
+################################################################################
+
+octaves <- function(x, below=3, above=3)
+  {
+    y <- numeric(below)
+    z <- numeric(above)
+
+    for(i in 1:below)  {y[i] <- x/(2^i)}
+    for(i in 1:above)  {z[i] <- x*2^i}
+    res <- c(rev(y), x, z)
+    return(res)
+  }
 
 
 ################################################################################
@@ -3540,6 +3797,23 @@ rms <- function(
 
 
 ################################################################################
+##                               RUGO
+################################################################################
+
+rugo <- function(
+                x,
+                ...
+                )
+  {
+    n <- length(x)
+    y <- numeric(n-1)
+    for(i in 1:(n-1)) {y[i] <- (x[i+1]-x[i])^2 }
+    rug <- sqrt(mean(y, ...))
+    return(rug)
+  }
+
+
+################################################################################
 ##                               SAVEWAV
 ################################################################################
 
@@ -3822,13 +4096,9 @@ spec<-function(
                at = NULL,
                from = NULL,
                to = NULL,
-               peaks = NULL,
                identify = FALSE,
                col = "black",
                cex = 1,
-               colpeaks = "red",
-               cexpeaks = 1,
-               fontpeaks = 1,
                plot = 1,
                flab = "Frequency (kHz)",
                alab = "Amplitude",
@@ -3882,14 +4152,6 @@ spec<-function(
                                         # PSD and PMF OPTIONS
   if(PSD == TRUE) y<-y^2
   if(PMF == TRUE) y<-y/sum(y)
-
-                                        # PEAK DETECTION
-  if(!is.null(peaks))
-    {
-      check.pks(y)
-      p<-peaks(y,peaks)
-      respeaks<-seq(y)[p]*f/n/1000
-    }
 
                                         # FREQUENCY DATA
   if(!is.null(at)) x<-seq(f/1000/wl,f/2000,length.out=n%/%2)
@@ -3955,18 +4217,6 @@ spec<-function(
           coord<-list(freq = id.freq ,amp = id.amp)
           return(coord)
         }
-
-      if(!is.null(peaks))
-        {
-          if (!is.null(dB))
-            text(seq(y)[p]*f/n/1000, y[p]+5,
-                 as.character(round(seq(y)[p]*f/n/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font = fontpeaks)
-          else
-            text(seq(y)[p]*f/n/1000, y[p]+0.05,
-                 as.character(round(seq(y)[p]*f/n/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font = fontpeaks)
-        }
     }
 
                                         # VERTICAL PLOT
@@ -4011,41 +4261,19 @@ spec<-function(
           coord<-list(freq = id.freq ,amp = id.amp)
           return(coord)
         }
-
-      if(!is.null(peaks))
-        {
-          if(!is.null(dB))
-            text(y[p]+10, seq(y)[p]*f/n/1000,
-                 as.character(round(seq(y)[p]*f/n/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font= fontpeaks)
-          else
-            text(y[p]+0.1, seq(y)[p]*f/n/1000,
-                 as.character(round(seq(y)[p]*f/n/1000,3)),
-                 col = colpeaks, cex = cexpeaks, font= fontpeaks)
-        }
     }
 
                                         # INVISIBLE RETURN DATA
   if(plot == 1 | plot == 2)
     {
       spec<-cbind(x,y)	
-      if(!is.null(peaks))
-        {
-          results<-list(spec = spec ,peaks = respeaks)
-          invisible(results)
-        }
-      else invisible(spec)
+      invisible(spec)
     }
                                         # DATA RETURN WHEN NO PLOT
   else if(plot == FALSE) 
     {
       spec<-cbind(x,y)	
-      if(!is.null(peaks))
-        {
-          results<-list(spec = spec ,peaks = respeaks)
-          return(results)
-        }
-      else return(spec)
+      return(spec)
     }
 }
 
@@ -4058,10 +4286,10 @@ spec<-function(
 specprop<-function(
                    spec,
                    f = NULL,
-                   str=FALSE,
-                   flim=NULL,
-                   plot=FALSE,
-                   type="l",
+                   str = FALSE,
+                   flim = NULL,
+                   plot = FALSE,
+                   type = "l",
                    ...)
 
 {
@@ -5248,48 +5476,6 @@ outputw <- function(
     return(wave)
   }
 
-
-
-
-
-################################################################################
-##                         PEAKS, PEAKSIGN, CHECK.PCKS
-################################################################################
-## Author: Martin Maechler, Date: 25 Nov 2005
-## Martin Maechler <maechler@stat.math.ethz.ch>
-## Peaksign: return (-1 / 0 / 1) if series[i] is ( trough / "normal" / peak )
-
-peaks <- function(series, span = 3, do.pad = TRUE) {
-  if((span <- as.integer(span)) %% 2 != 1) stop("'span' must be odd")
-  s1 <- 1:1 + (s <- span %/% 2)
-  if(span == 1) return(rep.int(TRUE, length(series)))
-  z <- embed(series, span)
-  v <- apply(z[,s1] > z[, -s1, drop=FALSE], 1, all)
-  if(do.pad) {
-    pad <- rep.int(FALSE, s)
-    c(pad, v, pad)
-  } else v
-}
-
-peaksign <- function(series, span = 3, do.pad = TRUE)
-{
-  if((span <- as.integer(span)) %% 2 != 1 || span == 1)
-    stop("'span' must be odd and >= 3")
-  s1 <- 1:1 + (s <- span %/% 2)
-  z <- embed(series, span)
-  d <- z[,s1] - z[, -s1, drop=FALSE]
-  ans <- rep.int(0:0, nrow(d))
-  ans[apply(d > 0, 1, all)] <- as.integer(1)
-  ans[apply(d < 0, 1, all)] <- as.integer(-1)
-  if(do.pad) {
-    pad <- rep.int(0:0, s)
-    c(pad, ans, pad)
-  } else ans
-}
-
-check.pks <- function(y, span = 3)
-  stopifnot(identical(peaks( y, span), peaksign(y, span) ==  1),
-            identical(peaks(-y, span), peaksign(y, span) == -1))
 
 
 ################################################################################

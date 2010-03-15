@@ -25,8 +25,7 @@ This function uses three functions from the package \pkg{tuneR}:
 \note{The  file automatically owerwrites an existing file
 with the same name.}
 
-\seealso{\code{\link[sound]{as.Sample}},
-\code{\link[sound]{saveSample}}, \code{\link{export}}.}
+\seealso{\code{\link{export}}.}
 
 \examples{
 require(tuneR)

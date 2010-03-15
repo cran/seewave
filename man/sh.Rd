@@ -27,7 +27,7 @@
 \value{A single value varying between 0 and 1 is returned.
   The value has no unit.}
 
-\references{Nunes, R. R., Almeida de, M. P. & Sleigh, J. W. 2004
+\references{Nunes RR, Almeida de MP, Sleigh JW (2004) -
   Spectral entropy: a new method for anesthetic adequacy.
   \emph{Revista Brasileira de Anestesiologia}, \bold{54}, 413-422.}
 

@@ -8,10 +8,12 @@
   a short-term Fourier transform or of any matrix.}
 
 \usage{
-wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, dB = "max0", dBref = NULL, wn = "hanning", 
-x = NULL, hoff = 1, voff = 1, col = heat.colors,
-xlab = "Frequency (kHz)", ylab = "Amplitude (dB)", xaxis = TRUE, yaxis =
-TRUE, density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
+wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, dB = "max0",
+dBref = NULL, wn = "hanning", x = NULL,
+hoff = 1, voff = 1, col = heat.colors,
+xlab = "Frequency (kHz)", ylab = "Amplitude (dB)",
+xaxis = TRUE, yaxis = TRUE,
+density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
 }
 
 \arguments{

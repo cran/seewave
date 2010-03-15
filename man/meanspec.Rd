@@ -12,9 +12,8 @@
 
 \usage{
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE,
-PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, peaks = NULL,
-identify = FALSE, col = "black", cex = 1, colpeaks = "red",
-cexpeaks = 1,  fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
+PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, 
+identify = FALSE, col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 }
 
@@ -34,14 +33,10 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
     but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
   \item{from}{start mark where to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
-  \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
   \item{identify}{to identify frequency and amplitude values on the plot
     with the help of a cursor.}
   \item{col}{colour of the spectrum.}
   \item{cex}{pitch size.}
-  \item{colpeaks}{colour of peaks value plotted on the spectrum.}
-  \item{cexpeaks}{character size of peaks value plotted on the spectrum.}
-  \item{fontpeaks}{font of peaks value plotted on the spectrum.}
   \item{plot}{if \code{1} returns frequency on x-axis, if \code{2} returns 
     frequency on y-axis, (by default \code{1}).}
   \item{flab}{title of the frequency axis.}
@@ -55,9 +50,7 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 
 \details{
   If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
-  computes the mean spectrum of the whole signal.\cr
-  \code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
-  See examples of \code{\link{spec}}.\cr
+  computes the mean spectrum of the whole signal.
 }
 
 \value{
@@ -68,18 +61,18 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
   two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
-  If \code{peaks} is not \code{NULL}, \code{spec} returns a list with
-  two elements:\cr 
-  \item{spec}{the spectrum computed} of length \code{wl}/2,\cr 
-  \item{peaks }{the peaks values (in kHz).} 
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
 
-\seealso{\code{\link{spec}}, \code{\link{dynspec}}, 
+\section{Warning}{The argument \code{peaks} is no more available
+  (version > 1.5.6). See the function \code{\link{fpeaks}}
+  for peak(s) detection.} 
+
+\seealso{\code{\link{spec}},\code{\link{fpeaks}},
+  \code{\link{localpeaks}}, \code{\link{dynspec}}, 
   \code{\link{corspec}}, \code{\link{diffspec}}, \code{\link{simspec}}, \code{\link{fft}}.}
 
 \examples{

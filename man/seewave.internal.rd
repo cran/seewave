@@ -7,9 +7,6 @@
 \alias{hanning.w}
 \alias{inputw}
 \alias{outputw}
-\alias{peaks}
-\alias{check.pks}
-\alias{peaksign}
 \alias{rectangle.w}
 \alias{rev.cm.colors}
 \alias{rev.gray.colors.1}

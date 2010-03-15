@@ -41,13 +41,11 @@ cex1 = 0.75, cex2= 0.75, xlab = "index", ylab = "Amplitude", legend=TRUE, ...)
   If two numeric (time) series are provided (\code{x} and \code{y}) the absolute symbol
   frequencies and entropy of each series is returned. Besides the mutual information (\emph{I})
   is estimated according to:\cr
-  \deqn{I = H_{x} + H_{y} - H{xy}, with H_{x} the entropy of \code{x} symbol series,
-    H_{y} the entropy of \code{y} symbol series, and H_{xy} the joint entropy
-    of \code{x} and \code{y} symbol series.}{% 
+  \deqn{I = H_{x} + H_{y} - H{xy}}{% 
     I = Hx + Hy - Hxy}
-  with with Hx the entropy of \code{x} symbol sequence,
-  Hy the entropy of \code{y} symbol sequence, and Hxy the joint entropy
-  of \code{x} and \code{y} symbol sequences.
+  with \emph{Hx} the entropy of \code{x} symbol series,
+    \emph{Hy} the entropy of \code{y} symbol series, and \`emph{Hxy}$ the joint entropy
+    of \code{x} and \code{y} symbol series.
 }
 
 \value{

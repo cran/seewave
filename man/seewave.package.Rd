@@ -15,10 +15,10 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.5.6\cr
-    Date: \tab 2009-11-13\cr
+    Version: \tab 1.5.7\cr
+    Date: \tab 2010-15-03\cr
     License: \tab GPL version 2 or newer\cr
-    Contributors : \tab Jonathan Lees, Martin Maechler, Sandrine Pavoine,
+    Contributors : \tab Amandine Gasc, Jonathan Lees, Sandrine Pavoine,
     Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
     Acknowledgments: \tab Michel Baylac, Emmanuel Paradis, Arnold Fertin,
     Kurt Hornik, Uwe Ligges
@@ -32,7 +32,7 @@
 
   Maintainer: Jerome Sueur <sueur@mnhn.fr>\cr
 
-  \url{http://sueur.jerome.perso.neuf.fr/seewave.html}
+  \url{http://rug.mnhn.fr/seewave}
 }
 
 \keyword{dplot}
