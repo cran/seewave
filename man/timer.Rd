@@ -10,8 +10,10 @@
 }
 
 \usage{
-timer(wave, f, threshold = 5, envt="abs", power = 1, msmooth = NULL, ksmooth = NULL,
-plot = TRUE, plotthreshold = TRUE, col = "black", colval = "red", 
+timer(wave, f, threshold = 5, envt="abs",
+power = 1, msmooth = NULL, ksmooth = NULL,
+plot = TRUE, plotthreshold = TRUE,
+col = "black", colval = "red", 
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 

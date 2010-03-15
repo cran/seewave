@@ -25,7 +25,7 @@
 
 \details{
   The spectrum is converted in a probability mass function (PMF).\cr
-  If a selected value has to be selected with \$,
+  If a selected value has to be selected with $,
   the argument \code{str} has to be set to \code{FALSE}.
 }
 

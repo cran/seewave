@@ -9,9 +9,7 @@
 
 \usage{
 ceps(wave, f, wl = 512, at = NULL, from = NULL, to = NULL,
-tpeaks = NULL, fpeaks = NULL, tidentify = FALSE,
-fidentify = FALSE, col = "black", cex = 1,
-colpeaks = "red", cexpeaks = 0.75, fontpeaks = 1, plot = TRUE,
+tidentify = FALSE, fidentify = FALSE, col = "black", cex = 1, plot = TRUE,
 qlab = "Quefrency (bottom: s, up: Hz)", alab = "Amplitude",
 qlim = NULL, alim = NULL, type = "l", ...)
 }
@@ -24,17 +22,10 @@ qlim = NULL, alim = NULL, type = "l", ...)
   \item{at}{position where to compute the cepstrum (in s).}
   \item{from}{start position where to compute the cepstrum (in s).}
   \item{to}{end position to compute the cepstrum (in s).}
-  \item{tpeaks}{returns peaks value for a given span
-    according to time scale (s)(see \code{details}).}
-  \item{fpeaks}{returns peaks value for a given span
-    according to frequency scale (Hz)(see \code{details}).}
   \item{tidentify}{to identify time values on the plot with the help of a cursor.}
   \item{fidentify}{to identify frequency values on the plot with the help of a cursor.}
   \item{col}{colour of the cepstrum.}
   \item{cex}{pitch size of the cepstrum.}
-  \item{colpeaks}{colour of peaks value plotted on the cepstrum.}
-  \item{cexpeaks}{character size of peaks value plotted on the cepstrum.}
-  \item{fontpeaks}{font of peaks value plotted on the cepstrum.}
   \item{plot}{logical, if \code{TRUE} plots the cepstrum.}
   \item{qlab}{title of the quefrency axis.}
   \item{alab}{title of the amplitude axis.}
@@ -59,10 +50,8 @@ qlim = NULL, alim = NULL, type = "l", ...)
   This explain the two scales plotted when \code{plot} is \code{TRUE}. \cr
   If \code{at}, \code{from} or \code{to} are \code{FALSE} then \code{ceps} 
   computes the cepstrum of the whole signal.\cr
-  \code{tpeaks} and \code{fpeaks} setting corresponds to \code{dimension}
-  of \code{\link{embed}}.\cr  When using \code{tidentify} or \code{tidentify}, press \sQuote{stop}
-  tools bar button to return values in the console. \code{tpeaks} and \code{fpeaks} 
-  just differ in the unit of the results. 
+  When using \code{tidentify} or \code{tidentify}, press \sQuote{stop}
+  tools bar button to return values in the console.
 }
 
 \value{
@@ -74,22 +63,22 @@ qlim = NULL, alim = NULL, type = "l", ...)
   to quefrency: a history of the cepstrum. \emph{Signal Processing Magazine IEEE},
   21: 95-106.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}.}
+\author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{Cepstral analysis is mainly used in speech processing.
   This analysis allows to extract the fundamental frequency, see the examples.\cr
-  This function is based on \code{\link{fft}}.} 
+  This function is based on \code{\link{fft}}.}
+
+\section{Warning}{The argument \code{peaks} is no more available
+  (version > 1.5.6). See the function \code{\link{fpeaks}}
+  for peak(s) detection.} 
 
 \seealso{\code{\link{cepstro}}, \code{\link{fund}}, \code{\link{autoc}}}
 
 \examples{
 data(sheep)
 ceps(sheep,f=8000,at=0.4,wl=1024)
-# peaks detection in Hertz, the fundamental is at 160 Hz.
-ceps(sheep,f=8000,at=0.4,wl=1024,fpeaks=63)
 }
-
 
 \keyword{dplot}
 \keyword{ts}

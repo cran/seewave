@@ -13,9 +13,9 @@
 \usage{
 spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL,
-at = NULL, from = NULL, to = NULL, peaks = NULL,
-identify = FALSE, col = "black", cex = 1, colpeaks = "red",
-cexpeaks = 1, fontpeaks = 1, plot = 1, flab = "Frequency (kHz)",
+at = NULL, from = NULL, to = NULL,
+identify = FALSE, col = "black", cex = 1,
+plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = c(0, f/2000),
 alim = NULL, type="l",...)
 }
@@ -37,14 +37,10 @@ alim = NULL, type="l",...)
   \item{at}{position where to compute the spectrum (in s).}
   \item{from}{start mark where  to compute the spectrum (in s).}
   \item{to}{end mark where to compute the spectrum (in s).}
-  \item{peaks}{if not \code{NULL} returns peaks value for a given span (see \code{details}).}
   \item{identify}{to identify frequency and amplitude values on the plot
     with the help of a cursor.}
   \item{col}{colour of the spectrum.}
   \item{cex}{pitch size of the spectrum.}
-  \item{colpeaks}{colour of peaks value plotted on the spectrum.}
-  \item{cexpeaks}{character size of peaks value plotted on the spectrum.}
-  \item{fontpeaks}{font of peaks value plotted on the spectrum.}
   \item{plot}{if \code{1} returns frequency on x-axis, if \code{2} returns 
     frequency on y-axis, (by default \code{1}).}
   \item{flab}{title of the frequency axis.}
@@ -58,9 +54,7 @@ alim = NULL, type="l",...)
 
 \details{
   If \code{at}, \code{from} or \code{to} are \code{FALSE} then \code{spec} 
-  computes the spectrum of the whole signal.\cr
-  \code{peaks} setting corresponds to \code{dimension} of \code{\link{embed}}.
-  See examples.}
+  computes the spectrum of the whole signal.}
 
 \value{
   This function returns  a two-column matrix,
@@ -70,18 +64,18 @@ alim = NULL, type="l",...)
   two elements:\cr 
   \item{freq}{the frequency of the points chosen on the spectrum}\cr 
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
-  If \code{peaks} is nt \code{NULL}, \code{spec} returns a list with
-  two elements:\cr 
-  \item{spec}{the spectrum computed} of length \code{wl}/2, \cr 
-  \item{peaks }{the peaks value (in kHz).}
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Martin Maechler \email{maechler@stat.math.ethz.ch} for \code{peaks}.}
+\author{Jerome Sueur \email{sueur@mnhn.fr}.}
 
 \note{This function is based on \code{\link{fft}}.} 
 
-\seealso{\code{\link{meanspec}}, \code{\link{dynspec}}, 
+\section{Warning}{The argument \code{peaks} is no more available
+  (version > 1.5.6). See the function \code{\link{fpeaks}}
+  for peak(s) detection.} 
+
+\seealso{\code{\link{meanspec}}, \code{\link{fpeaks}},
+  \code{\link{localpeaks}}, \code{\link{dynspec}}, 
   \code{\link{corspec}}, \code{\link{fft}}.}
 
 \examples{
@@ -93,17 +87,6 @@ spec(tico,f=22050)
 spec(tico,f=22050,col="red",plot=2)
 spec(tico,f=22050,dB="max0",col="blue")
 spec(tico,f=22050,dB="max0",col="green",plot=2)
-par(op)
-# spectra computed at specific locations with peak value
-op<-par(mfrow=c(2,2))
-spec(tico,f=22050,wl=512,at=0.2,peak=175)
-title("Note A")
-spec(tico,f=22050,wl=512,at=0.7,peak=175)
-title("Note B")
-spec(tico,f=22050,wl=512,at=1.1,peak=175)
-title("Note C")
-spec(tico,f=22050,wl=512,at=1.6,peak=165)
-title("Note D")
 par(op)
 # an indirect way to compare spectra 
 a<-spec(tico,f=22050,wl=512,at=0.2,plot=FALSE)

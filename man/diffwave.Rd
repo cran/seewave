@@ -10,7 +10,8 @@
 }
 
 \usage{
-diffwave(wave1, wave2, f, wl = 512, envt = "hil", msmooth = NULL, ksmooth = NULL)
+diffwave(wave1, wave2, f, wl = 512, envt = "hil",
+msmooth = NULL, ksmooth = NULL)
 }
 
 \arguments{

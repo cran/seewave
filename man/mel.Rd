@@ -15,13 +15,13 @@
 
 \details{
   Hertz to mel conversion is computed according to:\cr
-  \deqn{m = 1127.01048 \times {\log{(1+(\frac{f}{700}))}}, with \emph{m} in Mel and \emph{f} in Hertz.}{% 
+  \deqn{m = 1127.01048 \times {\log{(1+(\frac{f}{700}))}}}{% 
     m = 1127.01048*log(1+(f/700))}
   with \emph{m} in Mel and \emph{f} in Hertz.
 
   Mel to Hertz conversion (when \code{inverse} is \code{TRUE}) 
   is therefore computed according to:\cr
-  \deqn{f = 700 \times{(e^{\frac{m}{1127.01048}}-1)}, with \emph{f} in Hertz and \emph{m} in Mel.}{% 
+  \deqn{f = 700 \times{(e^{\frac{m}{1127.01048}}-1)}}{% 
     f = 700*(exp(m/1127.01048)-1)}
   with \emph{f} in Hertz and \emph{m} in Mel.
 }
