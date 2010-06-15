@@ -1,2 +1,2 @@
 library(tuneR)
-sheep <- as.matrix(readWave("sheep.wav")@left)
+sheep <- readWave("sheep.wav")

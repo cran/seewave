@@ -34,19 +34,26 @@ title("meanspec()")
 par(op)
 
 # basic 2D spectrogram of a bird song
+op <- par(op)
 spectro(tico,f=22050,wl=512,ovlp=50,zp=16,collevels=seq(-40,0,0.5))
+par(op)
 
 # spectrogram and dominant frequency overlaid of a bird song
+op <- par(op)
 spectro(tico, f=22050, ovlp=50, palette=rev.gray.colors.2, scale=FALSE)
 par(new=T)
 dfreq(tico, f=22050, ovlp=50, threshold=6, col="red", ann=FALSE, xaxs="i", yaxs="i")
+par(op)
 
 # 2D spectrogram of a cricket song with colour modifications
+op <- par(op)
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
 spectro(pellu2,f=22050,wl=512,ovlp=85,collevels=seq(-25,0,1),osc=TRUE,palette=rev.heat.colors,
 colgrid="white", colwave="white",colaxis="white",collab="white", colbg="black")
+par(op)
 
 # sound synthesis
+op <- par(op)
 F1<-synth(f=22050,am=c(50,10),cf=2000,d=1,fm=c(500,5,0),plot=FALSE)
 F2<-synth(f=22050,a=0.8,cf=4000,am=c(50,10),d=1,fm=c(500,5,0),plot=FALSE)
 F3<-synth(f=22050,a=0.6,cf=6000,am=c(50,10),d=1,fm=c(500,5,2000),plot=FALSE)
@@ -54,6 +61,7 @@ F4<-synth(f=22050,a=0.4,cf=8000,am=c(50,10),d=1,fm=c(500,5,2000),plot=FALSE)
 final1<-F1+F2+F3+F4
 spectro(final1,f=22050,wl=512,ovlp=75,osc=TRUE)
 title(main="synthesis of a AM/FM sound")
+par(op)
 
 # 3D spectrogram of a tropical sparrow  song
 spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=2)

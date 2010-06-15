@@ -51,7 +51,12 @@ This document shortly details how to import and export sound with \texttt{R} usi
 %%%%%%%%%%%%%%%%%%%%
 
 \section{In}
-The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: (\emph{i}) usual classes (numeric \texttt{vector}, numeric \texttt{matrix}), (\emph{ii}) time series classes (\texttt{ts}, \texttt{mts}), and (\emph{iii}) sound-specific classes (\texttt{Wave}, \texttt{Sample}, \texttt{audioSample}). 
+The main functions of \texttt{seewave (>1.5.0)} can use different classes of objects to analyse sound: 
+\begin{itemize}
+\item usual classes (numeric \texttt{vector}, numeric \texttt{matrix}),
+\item time series classes (\texttt{ts}, \texttt{mts}),
+\item sound-specific classes (\texttt{Wave}, \texttt{Sample}, \texttt{audioSample}).   
+\end{itemize}
 
 \subsection{Non specific classes}
 \subsubsection{Vector}
@@ -113,7 +118,14 @@ oscillo(s5)
 
 
 \subsection{Specific sound classes}
-There are three object classes corresponding to the binary \texttt{wav} format: (\emph{i}) the class \texttt{Wave} of the package \tuneR, (\emph{ii}) the class \texttt{Sample} of the package \sound, and \emph{iii} the class \texttt{audioSample} of the package \audio. There is currently no other way to import sound files. In particular, there is no function to read \texttt{.mp3} or \texttt{.aiff} files.
+There are three object classes corresponding to the binary \texttt{wav} format or to the compressed \texttt{mp3} format:
+
+\begin{itemize}
+\item the class \texttt{Wave} of the package \tuneR,
+\item the class \texttt{Sample} of the package \sound,
+\item the class \texttt{audioSample} of the package \audio
+\end{itemize}
+
 
 \subsubsection{Wave class (package tuneR)}
 The class \texttt{Wave} comes with the package \tuneR managed by Uwe Ligges.
@@ -134,6 +146,9 @@ The other advantage of using \texttt{readWave} is for reading part of long files
 s7<-readWave("mysong.wav", from = 1, to = 5, units = "seconds")
 s7
 @
+
+Note that \texttt{.mp3} files can be imported as a \texttt{Wave} object with the function \texttt{readMP3}.
+
 To get information regarding the object (sampling frequency, number of bits, mono \slash stereo), it is necessary to use the indexing of S4 object classes:
 <<s7b>>=
 s7@samp.rate

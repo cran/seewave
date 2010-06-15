@@ -3,6 +3,23 @@
 		*****************************************
 
 
+		CHANGES IN SEEWAVE VERSION 1.5.8 [15-June-2010]
+
+NEW FEATURES
+	o dfreq(): a new argument 'at' to compute the dominant frequency at specific positions along the signal. 
+	  	   a new argument 'clip' to select dominant frequency values in reference to the stft maximum.
+	o spectro(): two new arguments to control the size of the labels (cexlab) and the size of the axes (cexaxis).
+	             it is now possible to do annotations on the spectrogram for any layout.
+
+OTHER CHANGES
+        o listen(): a bug fixed.
+        o seedata(): the Kolmogorov-Smirnov test has been withdrawn as the refinement of the test with estimated parameters (mean and sd) are not implemented yet in R (see ?ks.test).
+	o all accompanying data are now of class Wave.
+
+
+
+
+
 		CHANGES IN SEEWAVE VERSION 1.5.7 [15-March-2010]
 
 NEW FEATURES

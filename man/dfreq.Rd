@@ -8,9 +8,10 @@
   This function gives the dominant frequency (i. e. the frequency of highest amplitude) of a time wave.}
 
 \usage{
-dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = NULL,
+dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, at = NULL, threshold
+= NULL, clip = NULL, 
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
-ylim = c(0, f/2000), type ="l",...)
+ylim = c(0, f/2000),...)
 }
 
 \arguments{
@@ -21,14 +22,17 @@ ylim = c(0, f/2000), type ="l",...)
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \% ).}
+  \item{at}{time position where the dominant frequency has to be
+    computed (in s.).}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
+  \item{clip}{a numeric value to select dominant frequency values according to
+    their amplitude in reference to a maximal value of 1 for
+    the whole signal (has to be >0 & < 1).}
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency against time
     (by default \code{TRUE}).}
   \item{xlab}{title of the x axis.}
   \item{ylab}{title of the y axis.}
   \item{ylim}{the range of y values.}
-  \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
-    See \code{\link{plot}} for details (by default "l" for lines).}  
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
@@ -46,13 +50,25 @@ ylim = c(0, f/2000), type ="l",...)
 
 \examples{
 data(tico)
-dfreq(tico,f=22050,ovlp=50,threshold=5)
-# overlay on spectrogram
-spectro(tico,f=22050,ovlp=50,zp=16,scale=FALSE,
-    collevels=seq(-40,0,1),palette=rev.terrain.colors)
-par(new=TRUE,las=1)
-dfreq(tico,f=22050,ovlp=50,threshold=6,col="red",lwd=2,
-    ann=FALSE)
+f <- 22050
+# default
+dfreq(tico,f)
+# using the amplitude threshold and changing the graphical output
+dfreq(tico, f, ovlp=50,threshold=5, type="l", col=2)
+# using 'at' argument for specific positions along the time axis
+dfreq(tico, f, at=c(0.25, 0.75, 1.2, 1.6))
+dfreq(tico, f, at=seq(0.5, 1.4, by=0.005), threshold=5)
+# a specific number of measures on a single note
+dfreq(tico, f, at=seq(0.5, 0.9, len=100), threshold=5, xlim=c(0.5,0.9))
+# overlap on spectrogram
+# and use of 'clip' argument to better track the dominant frequency
+# in noisy conditions
+op <- par()
+ticon <- tico@left/max(tico@left) + noisew(d=length(tico@left)/f, f)
+spectro(ticon, f)
+res <- dfreq(tico, f, clip=0.2, plot=FALSE)
+points(res, col=2, pch =13)
+par(op)
 }
 
 \keyword{dplot}

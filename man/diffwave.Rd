@@ -53,10 +53,10 @@ msmooth = NULL, ksmooth = NULL)
 \seealso{\code{\link{diffspec}}, \code{\link{diffenv}}}
 
 \examples{
-data(tico)
-data(orni)
+data(tico) ; tico <- tico@left
+data(orni) ; orni <- orni@left
 # selection in tico to have two waves of similar duration (length)
-tico<-as.matrix(tico[1:nrow(orni),1])
+tico <- tico[1:length(orni)]
 diffwave(tico,orni,f=22050)
 # changing the frequency parameter (wl)
 diffwave(tico,orni,f=22050,wl=1024)
