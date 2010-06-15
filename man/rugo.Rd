@@ -39,11 +39,11 @@ The rugosity is then computed as following:
 \seealso{\code{\link{rms}}, \code{\link{sh}}, \code{\link{th}}, \code{\link{H}}.}
 
 \examples{
-data(tico)
+data(tico) ; tico <-tico@left
 # rugosity of the original recording
 rugo(tico/max(tico))
 # add artificially some background noise
-noise <- noisew(d=nrow(tico)/22050, f=22050)
+noise <- noisew(d=length(tico)/22050, f=22050)
 ticon1 <- tico/max(tico) + 0.5*noise
 # new rugosity (higher)
 rugo(ticon1/max(ticon1))

@@ -1,2 +1,2 @@
 library(tuneR)
-orni<-as.matrix(readWave("orni.wav")@left)
+orni <- readWave("orni.wav")

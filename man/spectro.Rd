@@ -17,6 +17,7 @@ collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
 colbg = "white", colgrid = "black",
 colaxis = "black", collab="black",
+cexlab = 1, cexaxis = 1, 
 tlab = "Time (s)",
 flab = "Frequency (kHz)",
 alab = "Amplitude",
@@ -63,6 +64,8 @@ listen=FALSE,
   \item{colgrid}{colour for \code{grid} plotting.}
   \item{colaxis}{color of the axes.}
   \item{collab}{color of the labels.}
+  \item{cexlab}{size of the labels.}
+  \item{cexaxis}{size of the axes.}
   \item{tlab}{label of the time axis.}
   \item{flab}{label of the frequency axis.}
   \item{alab}{label of the amplitude axis.}

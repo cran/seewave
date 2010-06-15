@@ -102,8 +102,6 @@ legend(8,0.8,c("Note A","Note B", "Note C", "Note D"),bty="o",
 op<-par(mfrow=c(2,1))
 oscillo(tico,f=22050)
 abline(v=c(0.5,0.9),col="red",lty=2)
-text(c("from 0.5 s","to 0.7 s"),
-    x=c(0.5,0.9),y=rep(max(tico/1.1),2),col="red",pos=4)
 spec(tico,f=22050,wl=512,from=0.5,to=0.9,col="red")
 title("Spectrum of the note B")
 par(op)

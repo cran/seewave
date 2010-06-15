@@ -1221,54 +1221,86 @@ deletew<-function(
 ##                                DFREQ                                         
 ################################################################################
 
-dfreq<-function(
+dfreq <- function(
                 wave,
                 f,
                 wl = 512,
                 wn = "hanning",
                 ovlp = 0,
+                at = NULL, 
                 threshold = NULL,
+                clip = NULL,  
                 plot = TRUE,
                 xlab = "Times (s)",
                 ylab = "Frequency (kHz)",
                 ylim = c(0,f/2000),
-                type ="l",
                 ...)
 
 {
+  # error messages
+  if(!is.null(at) && ovlp != 0) stop("The 'ovlp' argument cannot bue used in conjunction with the arguement 'at'.")
+  if(!is.null(clip)) {if(clip <=0 | clip >= 1) stop("'clip' value has to be superior to 0 and inferior to 1")}
+
+  # input
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
+  # amplitude threshold
   if(!is.null(threshold)) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
   wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
+  # Position(s)
   n<-nrow(wave)
-  step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  N<-length(step)
+  if(!is.null(at))
+       {
+       ## if(at[1]==0) {at[1] <- 1/f}  # first window
+       ## if(at[length(at)] == round(n/f,2)) {at[length(at)] <- n/f-(wl/(f*2))} # last window
+       step <- at*f
+       N <- length(step)
+       if(step[1]==0) {step[1] <- 1}
+       if(step[N] == n | step[N] == n+1 | step[N] == n-1) {step[N] <- n-wl}
+       x <- c(0, at, n/f)
+       }
+  else {
+       step <- seq(1,n-wl,wl-(ovlp*wl/100))
+       N <- length(step)
+       x <- seq(0, n/f, length.out=N)
+       }
+
+  # Fourier
+  step <- round(step)
   y1<-matrix(data=numeric(wl*N),wl,N)
   W<-ftwindow(wl=wl,wn=wn)
-  for(i in step)
-    {y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
+  for(i in step) {y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
+  y2<-y1[1:(wl/2), ,drop=FALSE]
+  y2 <- y2/max(y2)
   
-  y2<-y1[1:(wl/2),]				
-
-  y3<-matrix(data=numeric(N*2),N,2)
+  # Maximum search
+  # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
+  # when there is no max value, this happens when the fft is totatally flat
+  # (e.g. signal =0)
+  y3 <- matrix(data=numeric(N*2),N,2)
+  maxi <- numeric(N)
   for (i in 1:N)
-                                        # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
-                                        # when there is no max value, this happens when the fft is totatally flat
-                                        # (e. g. signal =0)
-    {y3[i,]<-as.numeric(which(y2==max(y2[,i]),arr.ind=TRUE)[1,1])}
-  y3<-(f*y3[,1])/(1000*wl)
-                                        # discards max results when signal = 0, i. e. when which.max = c(1,1)
-  y<-ifelse(y3==f/(wl*1000), yes=NA, no=y3)
-
-  x<-seq(0,n/f,length.out=N)
+    {
+    maxi[i] <- max(y2[,i])
+    y3[i,] <- as.numeric(which(y2==max(y2[,i]),arr.ind=TRUE)[1,1])
+    }
+  # discards pics with an amplitude lower thant the clip value
+  if(!is.null(clip))
+    {
+      y3[which(maxi < clip),] <- NA
+    }
+  y3 <- (f*y3[,1])/(1000*wl)
+  # discards max results when signal = 0, i. e. when which.max = c(1,1)
+  y <- ifelse(y3==f/(wl*1000), yes=NA, no=y3)
+  # add NA values at the begining and end to match with x length
+  if(!is.null(at)) {y <- c(NA, y, NA)}
 
   if (plot==TRUE)
     {
       plot(x=x, y=y,
            xaxs="i", xlab = xlab,
            yaxs="i", ylab = ylab, ylim = ylim,
-           type = type,
            ...)
       invisible(cbind(x,y))      
     }
@@ -2644,7 +2676,7 @@ listen<-function(
     }
 
   wave <- Wave(left=wave, samp.rate=f, bit=16)
-  wave <- normalize(wave, unit="16", level=max(wave@left))
+  wave <- normalize(wave, unit="16")
   play(wave)
 }
 
@@ -3884,18 +3916,13 @@ seedata <- function(
   shapiW <- round(shapi$statistic, 3)
   shapiP <- round(shapi$p.value, 3)
 
-  ks <- ks.test(data, "pnorm", mean(data), sd(data))
-  ksD <- round(ks$statistic, 3) 
-  ksP <- round(ks$p.value, 3)
-
   par(mar=rep(1,4))
   plot.new()
   text(x=0.5, y=0.5,
        paste(
-             "NORMALITY TESTS", 
+             "NORMALITY TEST", 
              "\nSample size: n=", n,
              "\nShapiro-Wilk test:  W=", as.character(shapiW), ", p=",as.character(shapiP),
-             "\nKolmogorov-Smirnov test: D=",as.character(ksD), ", p=",as.character(ksP),
              sep=""
              )
        )
@@ -4426,8 +4453,7 @@ specprop<-function(
 ##                                SPECTRO
 ################################################################################
 
-
-spectro<-function(
+spectro <- function(
                   wave,
                   f,
                   wl = 512,
@@ -4449,6 +4475,8 @@ spectro<-function(
                   colgrid = "black",
                   colaxis = "black",
                   collab = "black",
+                  cexlab = 1,
+                  cexaxis = 1,   
                   tlab = "Time (s)",
                   flab = "Frequency (kHz)",
                   alab = "Amplitude",
@@ -4530,61 +4558,68 @@ spectro<-function(
       # SPECTRO + OSC + SCALE
       if (osc==TRUE & scale==TRUE)
         {
-          def.par <- par(no.readonly = TRUE)
-          on.exit(par(def.par))
-          layout(matrix(c(1, 2 ,3, 0), nc = 2, byrow=TRUE), widths = widths, heights=heights) 
-          par(mar=c(0,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab="",ylab=flab), color.palette=palette,axisX=FALSE, axisY=axisY)
-          if(grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
-          if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
-          par(mar=c(0,1,4.5,3),las=0)
+          layout(matrix(c(3, 1 ,2, 0), nc = 2, byrow=TRUE), widths = widths, heights = heights)
+          par(las=0, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis)
+          # SCALE
+          par(mar=c(0,1,4.5,3))
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
-          par(mar=c(5,4.1,0,0),las=0,col="white",col=colaxis,col.lab=collab)
-
-          soscillo(wave=wave,f=f,bty="o",collab=collab,colaxis=colaxis,
+          # OSCILLO
+          par(mar=c(5,4.1,0,0))
+          soscillo(wave=wave,f=f,bty="u",collab=collab,colaxis=colaxis,
                    colline=colaxis,ylim=c(-max(abs(wave)),max(abs(wave))),
                    tickup=max(abs(wave),na.rm=TRUE),
                    tlab=tlab, alab=alab,
+                   cexlab=cexlab,
+                   cexaxis=cexaxis,
                    ...)
+          # SPECTRO
+          par(mar=c(0,4.1,1,0), las=1)
+          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+                                plot.title=title(main=main,xlab="",ylab=flab),
+                                color.palette=palette,
+                                axisX=FALSE, axisY=axisY
+                                )
+          if(grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(cont == TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
-      
+           
       # SPECTRO + SCALE
       if (osc==FALSE & scale==TRUE)
         {
-          def.par <- par(no.readonly = TRUE)
-          on.exit(par(def.par))
-          layout(matrix(c(1, 2), nc = 2, byrow=TRUE), widths = widths)   
-          par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab=tlab,ylab=flab), color.palette=palette,axisX=axisX, axisY=axisY)
-          if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-          if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
-          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          layout(matrix(c(2, 1), nc = 2, byrow=TRUE), widths = widths)
+          # SCALE
           par(mar=c(5,1,4.5,3),las=0)
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
+          # SPECTRO
+          par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg)
+          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
+                                plot.title=title(main=main,xlab=tlab,ylab=flab),
+                                color.palette=palette,
+                                axisX=axisX, axisY=axisY)
+          if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
         }
 
       # SPECTRO + OSCILLO
       if (osc==TRUE & scale==FALSE)
         {
-          def.par <- par(no.readonly = TRUE)
-          on.exit(par(def.par))
           layout(matrix(c(2,1), nr = 2, byrow=TRUE), heights=heights) 
           par(mar=c(5.1,4.1,0,2.1), las=0, bg=colbg)
-          soscillo(wave=wave,f=f,bty="o",
+          soscillo(wave=wave,f=f,bty="u",
                    collab=collab,colaxis=colaxis,colline=colaxis,
                    tickup=max(abs(wave),na.rm=TRUE),
                    ylim=c(-max(abs(wave)),max(abs(wave))),
                    tlab=tlab, alab=alab,
+                   cexlab=cexlab, cexaxis=cexaxis,
                    ...)
           par(mar=c(0,4.1,2.1,2.1), las=1)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab="",ylab=flab), color.palette=palette, axisX=FALSE, axisY=axisY,
-                                col.lab=collab,colaxis=colaxis)		
+                                col.lab=collab,colaxis=colaxis,...)		
           if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
           if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
           if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
@@ -4593,7 +4628,7 @@ spectro<-function(
       # SPECTRO ONLY
       if (osc==FALSE & scale==FALSE)
         {
-          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg,...)
+          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg, cex.lab=cexlab, cex.axis=cexaxis,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab), color.palette=palette, axisX=axisX, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis)		
@@ -4606,6 +4641,7 @@ spectro<-function(
     }
   else return(list(time=X, freq=Y, amp=z))
 }
+
 
 ################################################################################
 ##                                SPECTRO3D

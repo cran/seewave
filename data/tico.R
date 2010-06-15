@@ -1,2 +1,2 @@
 library(tuneR)
-tico<-as.matrix(readWave("tico.wav")@left)
+tico<-readWave("tico.wav")
