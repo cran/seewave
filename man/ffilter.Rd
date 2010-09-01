@@ -10,7 +10,7 @@
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-custom = NULL, wl = 512, wn = "hanning", output="matrix")
+custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix", pb = FALSE)
 }
 
 \arguments{
@@ -26,9 +26,12 @@ custom = NULL, wl = 512, wn = "hanning", output="matrix")
     \code{wl} is no more required. See examples.}
   \item{wl}{window length for the analysis (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
     \code{"audioSample"} or \code{"ts"}.}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

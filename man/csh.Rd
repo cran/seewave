@@ -7,9 +7,9 @@
 \description{This function computes the continuous spectral entropy (H) of a time wave.}
 
 \usage{
-csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, threshold = NULL,
+csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, threshold = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Spectral Entropy",
-ylim = c(0, 1.1), type = "l", ...)
+ylim = c(0, 1.1), type = "l", pb = FALSE, ...)
 }
 
 \arguments{
@@ -19,6 +19,8 @@ ylim = c(0, 1.1), type = "l", ...)
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the spectral entropy against time
     (by default \code{TRUE}).}
@@ -27,6 +29,7 @@ ylim = c(0, 1.1), type = "l", ...)
   \item{ylim}{the range of y values.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

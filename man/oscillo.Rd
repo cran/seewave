@@ -17,7 +17,7 @@ coltitle = "black", cextitle = 1.2,
 fonttitle = 2, collab = "black",
 cexlab = 1, fontlab = 1, colline = "black", 
 colaxis = "black", cexaxis = 1, coly0 = "lightgrey",
-tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", bty = "l")
+tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 }
 
 \arguments{
@@ -54,7 +54,10 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", bty = "l")
     \code{FALSE} to live it blanck,
     or a character string to add any desired title.}
   \item{xaxt}{equivalent to \code{xaxt} of \code{\link{par}} (by default =\code{"s"}).}    
-  \item{yaxt}{equivalent to \code{yaxt} of \code{\link{par}} (by default =\code{"n"}).}    
+  \item{yaxt}{equivalent to \code{yaxt} of \code{\link{par}} (by default
+    =\code{"n"}).}  
+  \item{type}{type of plot, by default \code{"l"}. Use \code{"n"} for no
+  plot.}
   \item{bty}{the type of box to be drawn around the oscillogram.} 
 }
 

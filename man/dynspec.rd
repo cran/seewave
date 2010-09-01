@@ -11,7 +11,7 @@
 
 \usage{
 dynspec(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, norm = FALSE, dB = NULL,  dBref = NULL, plot = TRUE,
+ovlp = 0, fftw = FALSE, norm = FALSE, dB = NULL,  dBref = NULL, plot = TRUE,
 title = TRUE, osc = FALSE, flab = "Frequency (kHz)",
 alab = "Amplitude", alim = NULL, flim = c(0, f/2000),
 type = "l", from = NULL, to = NULL, envt = NULL,
@@ -19,7 +19,7 @@ msmooth = NULL, ksmooth = NULL, colspec = "black",
 coltitle = "black", colbg = "white", colline = "black",
 colaxis = "black", collab = "black", cexlab = 1,
 fontlab = 1, colwave = "black",
-coly0 = "lightgrey", colcursor = "red", bty = "l")
+coly0 = "lightgrey", colcursor = "red", bty = "l", pb = FALSE)
 }
 
 \arguments{
@@ -30,6 +30,8 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{norm}{logical, if \code{TRUE} compute a normalised sliding spectrum.}
   \item{dB}{a character string specifying the type dB to return: "max0" for a
     maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
@@ -71,7 +73,9 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
   \item{colwave}{colour of the oscillogram or of the envelope (only when \code{osc} is \code{TRUE}).}
   \item{coly0}{colour of the y=0 line (only when \code{osc} is \code{TRUE}).}
   \item{colcursor}{colour of oscillogram cursor (only when \code{osc} is \code{TRUE}).}
-  \item{bty}{the type of box to be drawn around the oscillogram (only when \code{osc} is \code{TRUE}).} 
+  \item{bty}{the type of box to be drawn around the oscillogram (only
+    when \code{osc} is \code{TRUE}).} 
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

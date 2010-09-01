@@ -8,12 +8,12 @@
   a short-term Fourier transform or of any matrix.}
 
 \usage{
-wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, dB = "max0",
+wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, fftw= FALSE, dB = "max0",
 dBref = NULL, wn = "hanning", x = NULL,
 hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)",
 xaxis = TRUE, yaxis = TRUE,
-density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
+density = NULL, border = NULL, lines = FALSE, lwd=NULL, pb = FALSE, ...)
 }
 
 \arguments{
@@ -23,6 +23,8 @@ density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return: "max0" for a
     maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
@@ -52,6 +54,7 @@ density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
   \item{lines}{a logical, if \code{TRUE} plots lines instead of surfaces
     (polygons).}
   \item{lwd}{line width.}
+    \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other graphical arguments to passed to \code{\link{plot}}}
 }
 

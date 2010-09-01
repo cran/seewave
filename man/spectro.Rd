@@ -11,7 +11,7 @@
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
@@ -28,6 +28,7 @@ axisX = TRUE, axisY = TRUE, tlim = NULL, trel = TRUE,
 flim = NULL, flimd = NULL,
 widths = c(6,1), heights = c(3,1),
 listen=FALSE,
+pb = FALSE,
 ...)
 }
 
@@ -38,6 +39,8 @@ listen=FALSE,
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes.}
   \item{dB}{a character string specifying the type dB to return: "max0"
     (default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
@@ -85,7 +88,9 @@ listen=FALSE,
   the device when \code{scale} is \code{TRUE}.}
   \item{heights}{a vector of length 2 to control the relative heights of rows on
   the device when \code{osc} is \code{TRUE}.}
-\item{listen}{if \code{TRUE} the sound is played back (by default \code{FALSE}).}
+\item{listen}{if \code{TRUE} the sound is played back (by default
+  \code{FALSE}).}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }
@@ -110,6 +115,12 @@ listen=FALSE,
   \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.
 }
+
+\note{The argument \code{fftw} can be used to try to speed up process
+  time. When set to \code{TRUE}, the Fourier transform is computed
+  through the function \code{FFT} of the package {fftw}. This pacakge is a
+  wrapper around the fastest Fourier transform of the free C subroutine
+  library FFTW (\url{http://www.fftw.org/}). FFT should be then installed on your OS.} 
 
 \value{
   This function returns a list of three items:

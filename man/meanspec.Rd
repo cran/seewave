@@ -11,10 +11,11 @@
 }
 
 \usage{
-meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, PSD = FALSE,
+meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, 
 identify = FALSE, col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
-alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
+alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l", pb =
+FALSE, ...)
 }
 
 \arguments{
@@ -23,6 +24,8 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
   \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of \code{spectro}.}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
     \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
@@ -45,12 +48,12 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
   \item{alim}{range of amplitude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
 \details{
-  If \code{from} and \code{to} are \code{FALSE} then \code{spec} 
-  computes the mean spectrum of the whole signal.
+  See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.
 }
 
 \value{
@@ -65,7 +68,11 @@ alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l",...)
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\note{See examples of \code{\link{spec}}. This function is based on \code{\link{fft}}.} 
+\note{The argument \code{fftw} can be used to try to speed up process
+  time. When set to \code{TRUE}, the Fourier transform is computed
+  through the function \code{FFT} of the package {fftw}. This pacakge is a
+  wrapper around the fastest Fourier transform of the free C subroutine
+  library FFTW (\url{http://www.fftw.org/}). FFT should be then installed on your OS.} 
 
 \section{Warning}{The argument \code{peaks} is no more available
   (version > 1.5.6). See the function \code{\link{fpeaks}}

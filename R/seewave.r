@@ -1,8 +1,8 @@
 ################################################################################
-## Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
-## Contributors : Jonathan Fees, Amandine Gasc, Martin Maechler, Sandrine Pavoine,
-## Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft
-## Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
+##  Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
+##  Contributors : Jonathan Fees, Amandine Gasc, Martin Maechler, Sandrine Pavoine,
+##  Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft
+##  Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
 ################################################################################
 
 ################################################################################
@@ -147,43 +147,47 @@ autoc<-function(
                 wave,
                 f,
                 wl = 512,
-                fmax,
+                fmin = 1,
+                fmax = f/2,
                 threshold = NULL,
                 plot = TRUE,
                 xlab = "Time (s)",
                 ylab = "Frequency (kHz)",
                 ylim = c(0,f/2000),
+                pb = FALSE,
                 ...)
 
 {
-  cat("Please wait...\n")
-  if (.Platform$OS.type == "windows") flush.console()
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  if(!is.null(threshold)) wave <- afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
 
-  n<-nrow(wave)
-  step<-seq(1,n-wl,wl-(wl/100))
-  fmini<-round(wl*(fmax/(f/2)))
-
-  if(!is.null(threshold)) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
-
-                                        # discards the two last windows because of the lag
-  N<-length(step)-1  
-  R<-matrix(data=numeric(wl*N),wl,N)
-
-  for (j in 1:N)
+  lag.min <- round(wl*(fmin/(f/2)))
+  lag.max <- round(wl*(fmax/(f/2)))   # in that case we consider 2*fmax to be sure to get a result 
+  if(lag.max==wl) {lag.max <- lag.max-1}
+  n <- nrow(wave)
+  step <- seq(1,n-2*wl,wl)
+  N <- length(step) 
+  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=N, style = 3)}
+  R <- matrix(data=numeric((lag.max+1)*N), lag.max+1, N)
+  R[is.nan(R)] <- 0  # the use of 'threshold' can produce NaN
+  for (i in step)
     {
-      for (i in 1:wl)
-        {  
-          R[i,j]<-(1/(2*wl)+1)*sum(wave[step[j]:(step[j]+wl-1),1]
-                                   *wave[(step[j]+i):(step[j]+wl+i-1),1])
-        }
+      R[,which(step==i)] <- as.vector(acf(wave[i:(wl+i-1)], lag.max=lag.max, plot=FALSE)$acf)
     }
-
+  R[is.nan(R)] <- 0 # need to do it twice as acf() can produce NaN
   tfond<-numeric(N)
-  for (k in 1:N) {tfond[k]<-which.max(R[-c(fmini:wl),k])}
-  y0<-f/tfond/1000
-  y<-ifelse(y0==f/1000,yes=NA,no=y0)
+  excl <- 1:lag.min
+
+  for (i in 1:N)
+    {
+    tfond[i] <- fpeaks(R[-excl,i], f=NA, nmax=1)[1]
+    if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+    }
+#  for (k in 1:N) {tfond[k]<-which.max(R[-excl, k])}
+#  tfond <- ifelse(tfond==1 | tfond==nrow(R), yes=NA, no=tfond)
+  tfond <- tfond + length(excl)
+  y<-f/tfond/1000
 
   x<-seq(0,n/f,length.out=N)  
 
@@ -198,8 +202,8 @@ autoc<-function(
     }
 
   else return(cbind(x,y))
+  if(pb == TRUE) close(pbar)
 }
-
 
 ################################################################################
 ##                                CCOH                                        
@@ -595,6 +599,7 @@ corenv<-function(
                  xlab = "Time (s)",
                  ylab = "Coefficient of correlation (r)",
                  type= "l",
+                 pb = FALSE,
                  ...)
 
 {
@@ -620,8 +625,13 @@ corenv<-function(
   r1<-numeric(nx)
   r2<-numeric(nx)
 
-  for (i in 0:(nx-1)){r1[i+1]<-cor(x=x,y=c(y[(i+1):ny],rep(0,i)),method = method)}
-  for (i in 0:(nx-1)){r2[i+1]<-cor(x=x,y=c(rep(0,i),y[1:(ny-i)]),method = method)}
+  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=nx-1, style = 3)}
+  for (i in 0:(nx-1))
+    {
+    r1[i+1]<-cor(x=x,y=c(y[(i+1):ny],rep(0,i)),method = method)
+    r2[i+1]<-cor(x=x,y=c(rep(0,i),y[1:(ny-i)]),method = method)
+    if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+    }
 
   r2<-r2[-1]
   r<-c(rev(r1),r2)
@@ -658,7 +668,7 @@ corenv<-function(
     {
       return(corr)
     }
-
+ if(pb == TRUE) close(pbar)
 }
 
 
@@ -792,6 +802,7 @@ covspectro<-function(
                      xlab = "Time (s)",
                      ylab = "Normalised covariance (cov)",
                      type ="l",
+                     pb = FALSE,
                      ...
                      )
 
@@ -831,18 +842,16 @@ covspectro<-function(
                                         # spectrogram1/spectra2 with spectrogram2/spectra2 and so on
                                         # diagonal of the cov matrix and mean of this diagonal
                                         # one mean cov for comparaison between 2 spectrograms for(i in step2)
+  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=n2, style = 3)}
   for (i in step2)
     {
       spectro2a[,,which(step2==i)]<-sspectro(wave=as.matrix(c(wave2[i:n2],rep(0,i-1))),f=f,wl=wl,wn=wn)
       spectro2a<-ifelse(spectro2a=="NaN",yes=0,no=spectro2a)
       cov1[which(step2==i)]<-mean(diag(cov(x=spectro1,y=spectro2a[,,which(step2==i)],method = method)))
-    }
-
-  for (i in step2)
-    {
       spectro2b[,,which(step2==i)]<-sspectro(wave=as.matrix(c(rep(0,i),wave2[1:(n2-i)])),f=f,wl=wl,wn=wn)
       spectro2b<-ifelse(spectro2b=="NaN",yes=0,no=spectro2b)
       cov2[which(step2==i)]<-mean(diag(cov(x=spectro1,y=spectro2b[,,which(step2==i)],method = method)))
+      if(pb==TRUE) {setTxtProgressBar(pbar, i)}
     }
 
                                         # to normalise the covariance we need covmax that is the autocovariance of spectro1
@@ -879,6 +888,7 @@ covspectro<-function(
     {
       return(covar)
     }
+  if(pb == TRUE) close(pbar)
 
 }
 
@@ -924,12 +934,14 @@ csh<-function(
               wl = 512,
               wn = "hanning",
               ovlp = 0,
+              fftw = FALSE,
               threshold = NULL,
               plot = TRUE,
               xlab = "Times (s)",
               ylab = "Spectral Entropy",
               ylim = c(0,1.1),
               type = "l",
+              pb = FALSE,
               ...)
 
 {
@@ -941,14 +953,9 @@ csh<-function(
                                         # STFT (see function spectro())
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  z1<-matrix(data=numeric(wl*length(step)),wl,length(step))
-  W<-ftwindow(wl=wl,wn=wn)
-  for(i in step) {z1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
-  z2<-z1[1:(wl/2),]
-  z3<-z2/max(z2)
-
+  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
                                         # sh applied to the Fourier matrix
-  h<-apply(z3,MARGIN=2,FUN=sh)
+  h<-apply(z, MARGIN=2, FUN=sh)
 
   t<-seq(0,n/f,length.out=length(step))
 
@@ -1227,6 +1234,7 @@ dfreq <- function(
                 wl = 512,
                 wn = "hanning",
                 ovlp = 0,
+                fftw = FALSE,
                 at = NULL, 
                 threshold = NULL,
                 clip = NULL,  
@@ -1234,6 +1242,7 @@ dfreq <- function(
                 xlab = "Times (s)",
                 ylab = "Frequency (kHz)",
                 ylim = c(0,f/2000),
+                pb = FALSE,
                 ...)
 
 {
@@ -1269,14 +1278,15 @@ dfreq <- function(
   # Fourier
   step <- round(step)
   y1<-matrix(data=numeric(wl*N),wl,N)
-  W<-ftwindow(wl=wl,wn=wn)
-  for(i in step) {y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
-  y2<-y1[1:(wl/2), ,drop=FALSE]
-  y2 <- y2/max(y2)
+  y2 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
+  ## W<-ftwindow(wl=wl,wn=wn)
+  ## for(i in step) {y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
+  ## y2<-y1[1:(wl/2), ,drop=FALSE]
+  ## y2 <- y2/max(y2)
   
   # Maximum search
   # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
-  # when there is no max value, this happens when the fft is totatally flat
+  # when there is no max value, this happens when the fft is totally flat
   # (e.g. signal =0)
   y3 <- matrix(data=numeric(N*2),N,2)
   maxi <- numeric(N)
@@ -1632,6 +1642,7 @@ dynspec<-function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
+                  fftw = FALSE,
                   norm = FALSE,
                   dB = NULL,
                   dBref = NULL,
@@ -1659,7 +1670,8 @@ dynspec<-function(
                   colwave = "black",
                   coly0 = "lightgrey",
                   colcursor = "red",
-                  bty = "l"
+                  bty = "l",
+                  pb = FALSE
                   )
 
 {
@@ -1688,31 +1700,8 @@ dynspec<-function(
   step <- seq(1,n-wl,wl-(ovlp*wl/100))
   lstep <- length(step)
                                         # STFT
-  z1<-matrix(data=numeric((wl+(zp))*lstep),wl+zp,lstep)
-  zpl<-zp%/%2
-  if(zpl==0)
-    {
-      W<-ftwindow(wl=wl,wn=wn)
-      for(i in step)
-        {z1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
-    }
-  else
-    {
-      W<-ftwindow(wl=wl+zp,wn=wn)
-      for(i in step)
-        {z1[,which(step==i)]<-
-           Mod(fft(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W))}
-    }
-
-  z2<-z1[1:((wl+zp)/2),]
-
-  if (norm == TRUE)
-    {
-      z<-matrix(numeric(length(z2))); dim(z)<-dim(z2)
-      for(i in 1:ncol(z)) {z[,i]<-z2[,i]/max(z2[,i])}
-    }
-  else z<-z2/max(z2)
-
+  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, norm=norm, fftw=fftw, pb=pb)
+ 
                                         # DB
   if(!is.null(dB))
     {
@@ -1732,7 +1721,7 @@ dynspec<-function(
       if (is.null(alim) == TRUE)
         {
           alim<-c(0,max(z)+0.05)
-          if(norm == TRUE && dB == FALSE) alim<-c(0,1.1)
+          if(norm == TRUE && is.null(dB)) alim<-c(0,1.1)
           if(!is.null(dB)) alim<-c(min(z),10)
         }     
       pos<-1:lstep
@@ -1753,8 +1742,11 @@ dynspec<-function(
                       type = type, las = 1)
 
                  if(title==TRUE)
-                   title(main=paste(pos,"- Position along the signal =",poslabel[pos],"s",sep=" "),
-                         col.main=coltitle)
+                   {
+                     nc <- ncol(z)
+                     title(main=paste(pos, "/", nc, " - Position along the signal = ", poslabel[pos], "s", sep=""),
+                           col.main=coltitle)
+                   }
                  if(title==FALSE) title(main="")
                  if(is.character(title)) title(main = paste(title), col.main = coltitle)
 
@@ -2097,7 +2089,9 @@ ffilter<-function(
                   custom = NULL,
                   wl = 512,
                   wn="hanning",
-                  output = "matrix"
+                  fftw = FALSE,
+                  output = "matrix",
+                  pb = FALSE
                   )
 
 {
@@ -2107,11 +2101,8 @@ ffilter<-function(
   step<-seq(1,n-wl,wl)
   Lstep<-length(step)
 
-                                        # first perform a STFT (without overlap nor zero-padding)
-  z1<-matrix(data=numeric(wl*Lstep),wl,Lstep)
-  W<-ftwindow(wl=wl,wn=wn)
-  for(i in step) {z1[,which(step==i)]<-fft(wave[i:(wl+i-1),]*W)}
-  z1a<-z1[1:(wl/2),]
+                                        # STFT
+  z1a <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
 
   if (!is.null(custom))
     {
@@ -2262,36 +2253,47 @@ fma<-function(
 ################################################################################
 
 fpeaks <- function(spec,
-                   f = NULL,
-                   nmax = NULL,
-                   amp = NULL,
-                   freq = NULL,
-                   threshold = NULL,
-                   plot = TRUE,
-                   title = TRUE,
-                   xlab= "Frequency (kHz)",
-                   ylab = "Amplitude",
-                   labels = TRUE,
-                   legend = TRUE,
-                   collab = "red",
-                   ...)
+                       f = NULL,
+                       nmax = NULL,
+                       amp = NULL,
+                       freq = NULL,
+                       threshold = NULL,
+                       plot = TRUE,
+                       title = TRUE,
+                       xlab= "Frequency (kHz)",
+                       ylab = "Amplitude",
+                       labels = TRUE,
+                       legend = TRUE,
+                       collab = "red",
+                       ...)
 {
                                         # stop messages
-  if(is.matrix(spec)){
-    if(ncol(spec)!=2) stop("If 'spec' is a numeric matrix it should be a two column matrix with the first colum describing the frequency x-axis and the second column describing the amplitude y-axis")
-    N <- nrow(spec)
-  }
+  if(is.matrix(spec))
+    {
+      if(ncol(spec)!=2) stop("If 'spec' is a numeric matrix it should be a two column matrix with the first colum describing the frequency x-axis and the second column describing the amplitude y-axis")
+      N <- nrow(spec)
+    }
 
   if(is.vector(spec))
     {
-      if(is.null(f)) stop("If 'spec' is a numeric vector describing the amplitude only, the sampling frequency 'f' of the original signal should be provided (for instance (f = 44100)")
       N <- length(spec)
+      if(is.null(f))
+        {
+          stop("If 'spec' is a numeric vector describing the amplitude only, the sampling frequency 'f' of the original signal should be provided (for instance (f = 44100)")
+        }
+      if(!is.null(f) && !is.na(f))
+        {
       spec <- cbind(seq(f/(N*2), f/2, length=N)/1000, spec)
+    }
+      if(!is.null(f) && is.na(f))
+        {
+          spec <- cbind(1:N,spec)
+          plot <- FALSE                               
+        }
     }
   
                                         # remove any flatness in the spec that would generate errors
                                         # this is done by comparing successive points and if they have the same value a minor addition is operated
-  
   flat <- round(N/20)     # the maximum number of sucessive points with the sampe amplitude (length of the flat part)
   spec.tmp <- c(spec[,2], rep(NA,flat))
   for(i in 1:(N-(flat+1)))
@@ -2317,97 +2319,111 @@ fpeaks <- function(spec,
   valleys <- which(sym=="T")
   n <- length(peaks)
   
-  if(n==0) {res <- NA} # no peaks
-  
-  else{
-  if(!is.null(amp) | !is.null(nmax))    # left and right slope of the peak
+  if(n==0) # no peaks
     {
-      diffvp <- diffpv <- numeric(n)
-      for (i in 1:n)
-        {
-          v <- spec[valleys[i],2]    # valley i
-          p <- spec[peaks[i],2]      # peak i
-          vv <- spec[valleys[i+1],2] # valley i+1
-          diffvp[i] <- p - v         # difference peaki - valleyi = left slope of the peak
-          diffpv[i] <- p - vv        # difference peaki - valleyi+1 = right slope of the peak
-        }
-    }
-
-  if(!is.null(nmax)){
-    if(!is.null(amp) | !is.null(freq) | !is.null(threshold)) {cat("Caution! The argument 'nmax' overrides the arguments 'amp', 'freq', and 'threshold'")}
-    if(n!=0 && n < nmax) {cat(paste("There are", n, "peaks only (< nmax ="), nmax,")")}
-    alt <- cbind(peaks, diffvp, diffpv)
-    leftorder <- alt[order(-alt[,2]), , drop=FALSE]    # data ordered following the left peak slope
-    rightorder <- alt[order(-alt[,3]), , drop=FALSE] # data ordered following the right peak slope
-    left <- leftorder[,1]     # left peak slopes ordered
-    right <- rightorder[,1]     # right peak slopes ordered                                       
-    l <- 0             
-    i <- 1
-    while(l[i] < nmax){                       # search matching between left and right peak slopes
-      comp <- left[1:i] %in% right[1:i]       # returns the lowest number of left and right slopes for which slopes are max
-      l <- c(l,length(comp[comp==TRUE]))
-      i <- i+1
-    }
-    peaks0 <- left[1:(i-1)]
-    # need to double check the number of peaks
-    # errors might occur as two peaks might appear for a single iteration of the while() loop
-    # for instance if you have:
-    # left : 18 8 38 27 22 32
-    # right 8 18 22 27 32 38
-    # the first iteration returns no peak: comp = FALSE
-    # the second iteration returns 2 peaks: comp = TRUE TRUE
-    # we then keep the right number of peaks
-    if(l[i] > nmax)
-      {
-       error <- l[i] - nmax
-       peaks0 <- peaks0[1:(length(peaks0)-error)]
-      }
-    peaks <- peaks0[comp]
-    res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a two-column matrix
-    colnames(res) <- c("freq","amp")
- 
-  }
+      res <- NA
+      plot <- FALSE
+    } 
   
-  else{
-                                        # amplitude parameter
-    if(!is.null(amp))  
-      {
-        if(length(amp)!=2) stop("The length of 'amp' should equal to 2.")
-        for(i in 1:n){
-          if(!is.na(diffvp[i]) && !is.na(diffpv[i])
-             && diffvp[i] > 0 && diffpv[i] > 0
-             && diffvp[i] >= amp[1] && diffpv[i] >= amp[2])
-            peaks[i] <- peaks[i]
-          else
-            peaks[i] <- NA
+  else
+    {
+      if(!is.null(amp) | !is.null(nmax))    # left and right slope of the peak
+        {
+          diffvp <- diffpv <- numeric(n)
+          for (i in 1:n)
+            {
+              v <- spec[valleys[i],2]    # valley i
+              p <- spec[peaks[i],2]      # peak i
+              vv <- spec[valleys[i+1],2] # valley i+1
+              diffvp[i] <- p - v         # difference peaki - valleyi = left slope of the peak
+              diffpv[i] <- p - vv        # difference peaki - valleyi+1 = right slope of the peak
+            }
         }
-      }
+
+      if(!is.null(nmax) && n!=0)
+        {
+          if(!is.null(amp) | !is.null(freq) | !is.null(threshold)) {cat("Caution! The argument 'nmax' overrides the arguments 'amp', 'freq', and 'threshold'")}
+          if(n < nmax) {cat(paste("There are", n, "peaks only (< nmax ="), nmax,")")}
+          if(nmax==1)
+            {
+              tmp <- spec[peaks,, drop=FALSE]
+              res <- tmp[which.max(tmp[,2]), , drop=FALSE] 
+            }
+          else
+            {
+              alt <- cbind(peaks, diffvp, diffpv)
+              leftorder <- alt[order(-alt[,2]), , drop=FALSE]    # data ordered following the left peak slope
+              rightorder <- alt[order(-alt[,3]), , drop=FALSE] # data ordered following the right peak slope
+              left <- leftorder[,1]     # left peak slopes ordered
+              right <- rightorder[,1]     # right peak slopes ordered                                       
+              l <- 0             
+              i <- 1
+              while(l[i] < nmax)
+                {                       # search matching between left and right peak slopes
+                  comp <- left[1:i] %in% right[1:i]       # returns the lowest number of left and right slopes for which slopes are max
+                  l <- c(l,length(comp[comp==TRUE]))
+                  i <- i+1
+                }
+              peaks0 <- left[1:(i-1)]
+              if(l[i] > nmax)
+                {
+                  error <- l[i] - nmax
+                  peaks0 <- peaks0[1:(length(peaks0)-error)]
+                }
+              peaks <- peaks0[comp]
+              res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a two-column matrix
+              colnames(res) <- c("freq","amp")
+            }
+        }
+      
+      else
+        {
+                                        # amplitude parameter
+          if(!is.null(amp))  
+            {
+              if(length(amp)!=2) stop("The length of 'amp' should equal to 2.")
+              for(i in 1:n)
+                {
+                if(!is.na(diffvp[i]) && !is.na(diffpv[i])
+                   && diffvp[i] > 0 && diffpv[i] > 0
+                   && diffvp[i] >= amp[1] && diffpv[i] >= amp[2])
+                  peaks[i] <- peaks[i]
+                else
+                  peaks[i] <- NA
+                }
+            }
 
                                         # frequency parameter
-    if(!is.null(freq))
-      {
-        freq <- freq/1000
-        diffpeak <- numeric(n-1)
-        for (i in 1:(n-1))
-          {
-            peak1 <- spec[peaks[i],1]
-            peak2 <- spec[peaks[i+1],1]
-            diffpeak[i] <- peak2 - peak1
-            if(!is.na(diffpeak[i]) && diffpeak[i] <= freq)
-              if(spec[peaks[i+1],2] > spec[peaks[i],2])
-                peaks[i] <- NA else peaks[i+1] <- NA
-          }
-      } 
-    res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a 2 column matrix
-    colnames(res) <- c("freq","amp")
+          if(!is.null(freq))
+            {
+              freq <- freq/1000
+              diffpeak <- numeric(n-1)
+              for (i in 1:(n-1))
+                {
+                  peak1 <- spec[peaks[i],1]
+                  peak2 <- spec[peaks[i+1],1]
+                  diffpeak[i] <- peak2 - peak1
+                  if(!is.na(diffpeak[i]) && diffpeak[i] <= freq)
+                    if(spec[peaks[i+1],2] > spec[peaks[i],2])
+                      peaks[i] <- NA else peaks[i+1] <- NA
+                }
+            }
 
-    if(!is.null(threshold)){
-      res <- res[res[,2]>threshold, ,drop=FALSE]      
+          if(!is.null(f) && is.na(f)) {res <-  peaks}
+          else
+            {
+              res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a 2 column matrix
+              colnames(res) <- c("freq","amp")
+            }
+          if(!is.null(threshold))
+            {
+            res <- res[res[,2]>threshold, ,drop=FALSE]      
+            }
+        }
     }
-    
-  }
-}
 
+## PLOT
+  
   if(plot==TRUE)
     {
       plot(spec, type="l", xlab = xlab, ylab = ylab, xaxs="i", yaxt="n", ...)
@@ -2440,6 +2456,7 @@ fpeaks <- function(spec,
     }
   else return(res)
 }
+
 
 ################################################################################
 ##                                FTWINDOW
@@ -2475,6 +2492,7 @@ fund<-function(
                xlab = "Time (s)",
                ylab = "Frequency (kHz)",
                ylim = c(0,f/2000),
+               pb = FALSE,
                ...)
 
 {
@@ -2488,8 +2506,12 @@ fund<-function(
   N<-length(step)
   WL<-wl%/%2
   z1<-matrix(data=numeric(wl*N),wl,N)
+  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=n, style = 3)}
   for(i in step)
-    {z1[,which(step==i)]<-Re(fft(log(abs(fft(wave[i:(wl+i-1),]))),inverse=TRUE))}
+    {
+      z1[,which(step==i)]<-Re(fft(log(abs(fft(wave[i:(wl+i-1),]))),inverse=TRUE))
+      if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+    }
   z2<-z1[1:WL,]
   z<-ifelse(z2=="NaN"|z2=="-Inf",yes=0,no=z2)
 
@@ -2514,6 +2536,7 @@ fund<-function(
     }
 
   else return(cbind(x,y))
+  if(pb == TRUE) close(pbar)
 }
 
 
@@ -2691,7 +2714,9 @@ lfs<-function(
               shift,
               wl = 128,
               wn="hanning",
-              output = "matrix"
+              fftw = FALSE,
+              output = "matrix",
+              pb = FALSE
               )
 
 {
@@ -2709,11 +2734,12 @@ lfs<-function(
   Lstep<-length(step)
   FSH<-abs(shift)
 
-                                        # first perform a STFT (without overlap nor zero-padding)
-  z1<-matrix(data=numeric(wl*Lstep),wl,Lstep)
-  W<-ftwindow(wl=wl,wn=wn)
-  for(i in step) {z1[,which(step==i)]<-fft(wave[i:(wl+i-1),]*W)}
-  z1<-z1[1:(wl/2),]
+                                        # STFT
+  z1 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
+  ## z1<-matrix(data=numeric(wl*Lstep),wl,Lstep)
+  ## W<-ftwindow(wl=wl,wn=wn)
+  ## for(i in step) {z1[,which(step==i)]<-fft(wave[i:(wl+i-1),]*W)}
+  ## z1<-z1[1:(wl/2),]
 
   S<-round(wl*(FSH/f))
 
@@ -2837,27 +2863,29 @@ meandB<-function(x)
 ################################################################################
 
 meanspec<-function(
-                   wave,
-                   f,
-                   wl = 512,
-                   wn = "hanning",
-                   ovlp = 0,
-                   PSD =  FALSE,
-                   PMF = FALSE,
-                   dB = NULL,
-                   dBref = NULL,
-                   from = NULL,
-                   to = NULL,
-                   identify = FALSE,
-                   col = "black",
-                   cex = 1,
-                   plot = 1,
-                   flab = "Frequency (kHz)",
-                   alab = "Amplitude",
-                   flim = c(0,f/2000),
-                   alim = NULL,
-                   type ="l",
-                   ...)
+                    wave,
+                    f,
+                    wl = 512,
+                    wn = "hanning",
+                    ovlp = 0,
+                    fftw = FALSE,
+                    PSD =  FALSE,
+                    PMF = FALSE,
+                    dB = NULL,
+                    dBref = NULL,
+                    from = NULL,
+                    to = NULL,
+                    identify = FALSE,
+                    col = "black",
+                    cex = 1,
+                    plot = 1,
+                    flab = "Frequency (kHz)",
+                    alab = "Amplitude",
+                    flim = c(0,f/2000),
+                    alim = NULL,
+                    type ="l",
+                    pb = FALSE,
+                    ...)
 
 {
                                         # STOP MESSAGES  
@@ -2869,7 +2897,6 @@ meanspec<-function(
 
                                         # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-
 
                                         # FROM-TO SELECTION
   if(!is.null(from)|!is.null(to))
@@ -2887,25 +2914,18 @@ meanspec<-function(
 
                                         # FFT
   n<-nrow(wave)
-  N<-wl
-  step<-seq(1,n-wl,wl-(ovlp*wl/100))		
-  y1<-matrix(data=numeric((wl)*length(step)),wl,length(step))
-  W<-ftwindow(wl=wl,wn=wn)
-  for(i in step)
-    {y1[,which(step==i)]<-
-       Mod(fft(c(wave[i:(wl+i-1),])*W))}
-  y2<-y1[1:(wl/2),]	          # to keep only the relevant frequencies (half of the FT)
-  y3<-y2/max(y2)		  # to get only values between 0 and 1
-  y4<-apply(y3,MARGIN=1,mean)     # mean computation (by rows)
-  y5<-y4/max(y4)                               
-  y<-ifelse(y5==0,yes=1e-6,no=y5) # replaces 0 values in spectra that cannott be processed by log10())
+  step<-seq(1,n-wl,wl-(ovlp*wl/100))
+  y1<-stft(wave=wave,f=f,wl=wl,zp=0,step=step,wn=wn,fftw=fftw,pb=pb)
+  y2<-apply(y1,MARGIN=1,mean)     # mean computation (by rows)
+  y3<-y2/max(y2)                               
+  y<-ifelse(y3==0,yes=1e-6,no=y3) # replaces 0 values in spectra that cannot be processed by log10())
 
                                         # PSD and PMF OPTIONS
   if(PSD == TRUE) y<-y^2
   if(PMF == TRUE) y<-y/sum(y)
 
                                         # FREQUENCY DATA 
-  x<-seq(f/1000/wl,f/2000,length.out=N/2)  
+  x<-seq(f/1000/wl,f/2000,length.out=wl/2)  
 
                                         # DB
   if(!is.null(dB))
@@ -3206,6 +3226,7 @@ oscillo<-function
  title = FALSE,
  xaxt= "s",
  yaxt= "n",
+ type = "l",
  bty = "l"
  )
 
@@ -3267,7 +3288,7 @@ oscillo<-function
                 {
                   par(tcl=0.5, col.axis=colaxis, cex.axis = cexaxis, col=colline,las=0)
                   plot(x=seq(from,to,length.out=n), y=wave,
-                       col=colwave, type="l",
+                       col=colwave, type=type,
                        xaxs="i", yaxs="i",
                        xlab="", ylab="", ylim=c(-alim,alim),
                        xaxt=xaxt, yaxt=yaxt,
@@ -3294,7 +3315,7 @@ oscillo<-function
               op<-par(tcl=tcl, col.axis=colaxis, cex.axis = cexaxis, col=colline,las=0)
 
               plot(x=seq(from,to,length.out=n), y=wave,
-                   col=colwave, type="l",
+                   col=colwave, type=type,
                    xaxs="i", yaxs="i",
                    xlab="", ylab="", ylim=c(-alim,alim),
                    xaxt=xaxt, yaxt=yaxt,
@@ -3352,7 +3373,7 @@ oscillo<-function
                                         # plots the first window
           wave1<-as.matrix(wave[0:x,]); n1<-nrow(wave1)
           plot(x=seq(from,from+(x/f),length.out=n1), y=wave1,
-               col=colwave, type="l",
+               col=colwave, type=type,
                xaxs="i", yaxs="i",
                xlab="", ylab="", ylim=c(-alim,alim),
                xaxt=xaxt, yaxt=yaxt,
@@ -3390,7 +3411,7 @@ oscillo<-function
               yy<-((i+1)*n)%/%p
               wave2<-as.matrix(wave[xx:yy,]); n2<-nrow(wave2)
               plot(x=seq(from+(xx/f),from+(yy/f),length.out=n2), y=wave2,
-                   col=colwave, type="l",
+                   col=colwave, type=type,
                    xaxs="i", yaxs="i",
                    xlab="", ylab="", ylim=c(-alim,alim),
                    xaxt=xaxt, yaxt=yaxt,
@@ -4116,6 +4137,7 @@ spec<-function(
                f,
                wl = 512,
                wn = "hanning",
+               fftw = FALSE,
                PSD = FALSE,
                PMF = FALSE,
                dB = NULL,
@@ -4171,7 +4193,11 @@ spec<-function(
   n<-nrow(wave)
   W<-ftwindow(n,wn=wn)
   wave<-wave*W
-  y1<-Mod(fft(wave[,1]))
+  if(fftw == FALSE) {y1<-Mod(fft(wave[,1]))}
+  else {
+    p <- planFFT(n)
+    y1 <- Mod(FFT(wave[,1], plan=p))
+  }
   y11<-y1[1:(n%/%2)]
   y2<-y11/max(y11)       
   y<-ifelse(y2==0,yes=1e-6,no=y2)  # replaces 0 values in spectra that cannott be processed by log10()
@@ -4460,6 +4486,7 @@ spectro <- function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
+                  fftw= FALSE,
                   dB = "max0",
                   dBref = NULL,
                   plot = TRUE,
@@ -4493,6 +4520,7 @@ spectro <- function(
                   widths = c(6,1),
                   heights = c(3,1),
                   listen = FALSE,
+                  pb = FALSE,
                   ...)
 
 {
@@ -4523,7 +4551,7 @@ spectro <- function(
                                         # STFT
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,dBref=dBref)
+  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,pb=pb)
 
                                         # X axis settings
   if(!is.null(tlim) && trel==TRUE) {X<-seq(tlim[1],tlim[2],length.out=length(step))}
@@ -4541,11 +4569,15 @@ spectro <- function(
     }
 
                                         # dB weights
-  if(dB == "max0") z <- z
-  if(dB == "A") z <- dBweight(Y*1000, dBref = z)$A 
-  if(dB == "B") z <- dBweight(Y*1000, dBref = z)$B 
-  if(dB == "C") z <- dBweight(Y*1000, dBref = z)$C 
-  if(dB == "D") z <- dBweight(Y*1000, dBref = z)$D
+    if(!is.null(dB))
+    {
+      if(is.null(dBref)) z<-20*log10(z) else z<-20*log10(z/dBref)
+      if(dB == "max0") z <- z
+      if(dB == "A") z <- dBweight(Y*1000, dBref = z)$A 
+      if(dB == "B") z <- dBweight(Y*1000, dBref = z)$B 
+      if(dB == "C") z <- dBweight(Y*1000, dBref = z)$C 
+      if(dB == "D") z <- dBweight(Y*1000, dBref = z)$D
+    }
   
   Z<-t(z)
   
@@ -4654,13 +4686,15 @@ spectro3D<-function(
                     wn = "hanning",
                     zp = 0,
                     ovlp = 0,
+                    fftw = FALSE,
                     dB = "max0",
                     dBref = NULL,
                     plot = TRUE,
                     magt = 10,
                     magf = 10,
                     maga = 2,
-                    palette = rev.terrain.colors
+                    palette = rev.terrain.colors,
+                    pb = FALSE
                     )
 
 {
@@ -4673,16 +4707,20 @@ spectro3D<-function(
                                         # STFT
   n <- nrow(wave)
   step <- seq(1, n - wl, wl - (ovlp * wl/100))
-  z <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, dBref=dBref)
+  z <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw, pb=pb)
 
                                         # dB WEIGHTS
   F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(z))
-  if(dB == "max0") z <- z
-  if(dB == "A") z <- dBweight(F*1000, dBref = z)$A 
-  if(dB == "B") z <- dBweight(F*1000, dBref = z)$B 
-  if(dB == "C") z <- dBweight(F*1000, dBref = z)$C 
-  if(dB == "D") z <- dBweight(F*1000, dBref = z)$D
-  
+  if(!is.null(dB))
+    {
+      if(is.null(dBref)) z<-20*log10(z) else z<-20*log10(z/dBref)
+      if(dB == "max0") z <- z
+      if(dB == "A") z <- dBweight(F*1000, dBref = z)$A 
+      if(dB == "B") z <- dBweight(F*1000, dBref = z)$B 
+      if(dB == "C") z <- dBweight(F*1000, dBref = z)$C 
+      if(dB == "D") z <- dBweight(F*1000, dBref = z)$D
+    }
+ 
   if (plot == TRUE)
     {
       X <- magt * (1:ncol(z))
@@ -5103,6 +5141,7 @@ wf <- function(
                wl = 512,
                zp = 0,
                ovlp = 0,
+               fftw = FALSE,
                dB = "max0",
                dBref = NULL,
                wn = "hanning",
@@ -5117,7 +5156,8 @@ wf <- function(
                density = NULL,
                border = NULL,
                lines = FALSE,
-               lwd = NULL,          
+               lwd = NULL,
+               pb = FALSE,
                ...)
 
 {
@@ -5141,14 +5181,19 @@ wf <- function(
       n <- nrow(wave)
       step <- seq(1, n - wl, wl - (ovlp * wl/100))
       data <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, 
-                   wn = wn, dBref = dBref)
+                   wn = wn, fftw = fftw, pb = pb)
                                         # dB WEIGHTS
       F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(data))
+  if(!is.null(dB))
+    {
+      if(is.null(dBref)) data <- 20*log10(data) else data <-20*log10(data/dBref)
       if(dB == "max0") data <- data
       if(dB == "A") data <- dBweight(F*1000, dBref = data)$A 
       if(dB == "B") data <- dBweight(F*1000, dBref = data)$B 
       if(dB == "C") data <- dBweight(F*1000, dBref = data)$C 
       if(dB == "D") data <- dBweight(F*1000, dBref = data)$D
+    }
+
     }
   else
     {
@@ -5771,39 +5816,72 @@ stft<-function(
                zp,
                step,
                wn,
-               dBref
+               norm = FALSE,
+               fftw = FALSE,
+               pb = FALSE
                )
 
 {
-  wave<-inputw(wave=wave,f=f)$w
+  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=nrow(wave), style = 3)}
 
   z1<-matrix(data=numeric((wl+(zp))*length(step)),wl+zp,length(step))
   zpl<-zp%/%2
+
+  
   if(zpl==0)
     {
       W<-ftwindow(wl=wl,wn=wn)
-      for(i in step)
-        {z1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
-    }
+      if(fftw == TRUE)
+        {
+          p <- planFFT(wl)
+          for(i in step)
+            {
+              z1[,which(step==i)] <- Mod(FFT(wave[i:(wl+i-1)]*W, plan=p))
+              if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+            }
+        }
+      else
+        {
+          for(i in step)
+            {
+              z1[,which(step==i)] <- Mod(fft(wave[i:(wl+i-1),]*W))
+              if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+            }
+        }
 
+    }
+  
   else
     {
       W<-ftwindow(wl=wl+zp,wn=wn)
-      for(i in step)
-        {z1[,which(step==i)]<-
-           Mod(fft(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W))}
-    }	
+      if(fftw == TRUE)
+        {
+          p <- planFFT(wl+zp)
+          for(i in step)
+            {z1[,which(step==i)] <- Mod(FFT(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W, plan=p))}
+          if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+        }
+      else
+        {
+          
+          for(i in step)
+            {z1[,which(step==i)] <- Mod(fft(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W))}
+          if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+          
+        }
+    }
 
                                         # to keep only the relevant frequencies (half of the FT)
-  z2<-z1[1:((wl+zp)/2),]	
+  z2<-z1[1:((wl+zp)/2), , drop=FALSE]	
                                         # to get only values between 0 and 1
-  z3<-z2/max(z2)					
-                                        # replaces 0 values in spectra (that can't be processed by the following log10())
-  z4<-ifelse(z3==0,yes=1e-6,no=z3)
-                                        # to get dB values
-  if(!is.null(dBref)) {z<-20*log10(z4/dBref)[-1,]}   else {z<-20*log10(z4)[-1,]}
-
-  return(z)	
+  if (norm == TRUE)
+    {
+      z<-matrix(numeric(length(z2))); dim(z)<-dim(z2)
+      for(i in 1:ncol(z)) {z[,i]<-z2[,i]/max(z2[,i])}
+    }
+  else {z<-z2/max(z2)}
+  return(z)
+  if(pb == TRUE) close(pbar)
 }
 
 

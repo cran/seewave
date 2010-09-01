@@ -11,9 +11,9 @@
 
 \usage{
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
-palette = rev.terrain.colors)
+palette = rev.terrain.colors, pb=FALSE)
 }
 
 \arguments{
@@ -24,6 +24,8 @@ palette = rev.terrain.colors)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return:
     "max0" for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
@@ -35,6 +37,7 @@ palette = rev.terrain.colors)
   \item{maga}{magnification of the amplitude axis.}
   \item{palette}{a color palette function to be used to assign colors in
     the plot, see \code{Details}.}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{
