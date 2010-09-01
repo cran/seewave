@@ -8,10 +8,10 @@
   This function gives the dominant frequency (i. e. the frequency of highest amplitude) of a time wave.}
 
 \usage{
-dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, at = NULL, threshold
+dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw=  FALSE, at = NULL, threshold
 = NULL, clip = NULL, 
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
-ylim = c(0, f/2000),...)
+ylim = c(0, f/2000), pb = FALSE, ...)
 }
 
 \arguments{
@@ -22,6 +22,8 @@ ylim = c(0, f/2000),...)
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \% ).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{at}{time position where the dominant frequency has to be
     computed (in s.).}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
@@ -33,6 +35,7 @@ ylim = c(0, f/2000),...)
   \item{xlab}{title of the x axis.}
   \item{ylab}{title of the y axis.}
   \item{ylim}{the range of y values.}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

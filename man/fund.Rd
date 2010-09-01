@@ -9,7 +9,7 @@
 
 \usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
-ylim = c(0, f/2000), ...)}
+ylim = c(0, f/2000), pb = FALSE, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -24,6 +24,7 @@ ylim = c(0, f/2000), ...)}
   \item{xlab}{title of the time axis (s).}
   \item{ylab}{title of the frequency axis (Hz).}
   \item{ylim}{the range of frequency values.}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

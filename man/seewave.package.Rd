@@ -15,8 +15,8 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.5.8\cr
-    Date: \tab 2010-06-15\cr
+    Version: \tab 1.5.9\cr
+    Date: \tab 2010-09-01\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Amandine Gasc, Jonathan Lees, Sandrine Pavoine,
     Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr

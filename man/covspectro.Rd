@@ -14,7 +14,7 @@ covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n,
 plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red", cexval = 1,
 fontval = 1, xlab = "Time (s)",
-ylab = "Normalised covariance (cov)", type = "l", ...)
+ylab = "Normalised covariance (cov)", type = "l", pb = FALSE, ...)
 }
 
 \arguments{
@@ -41,6 +41,7 @@ ylab = "Normalised covariance (cov)", type = "l", ...)
   \item{ylab}{title of the r axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

@@ -8,16 +8,22 @@
   This function linearly shifts all the frequency content of a time wave. 
 }
 
-\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", output = "matrix")}
+\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", fftw = FALSE, output = "matrix",
+pb = FALSE)}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{shift}{positive or negative frequency shift to apply (in Hz).)}
   \item{wl}{window length for the analysis (even number of points, by default = 512).}
-  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default
+    \code{"hanning"}).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}
   \item{output}{character string, the class of the object to return, either
-    \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
+    \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
+    \code{"audioSample"} or \code{"ts"}.}
+  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

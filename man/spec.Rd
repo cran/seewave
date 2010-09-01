@@ -11,7 +11,7 @@
 }
 
 \usage{
-spec(wave, f, wl = 512, wn = "hanning", PSD = FALSE,
+spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL,
 identify = FALSE, col = "black", cex = 1,
@@ -25,7 +25,10 @@ alim = NULL, type="l",...)
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
-  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default
+    \code{"hanning"}).}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+  library \code{fftw}. See Notes of the \code{spectro}.}x
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
     \emph{i. e.} the square of the spectra.}  
   \item{PMF}{if \code{TRUE} return Probability Mass Function,

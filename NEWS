@@ -3,6 +3,18 @@
 		*****************************************
 
 
+		CHANGES IN SEEWAVE VERSION 1.5.9 [XX-XXXXX-2010]
+
+NEW FEATURES
+
+	o oscillo(): a new argument 'type' for controlling the type of plot. Actually useful for no plot (type='n').
+	o a new argument 'pb' to display a computing progress bar has been added to functions that can take some time to process.
+	o a new argument 'fftw' has been added to FFT functions. This argument can be used to try to speed up FFT process time. The Fourier transform is computed through the function FFT of the package fftw.
+
+OTHER CHANGES
+	o autoc(): the function is now based on acf() and is much faster. The minimum frequency to detect can be now controled by the new argument 'fmin'.
+
+
 		CHANGES IN SEEWAVE VERSION 1.5.8 [15-June-2010]
 
 NEW FEATURES
@@ -15,9 +27,6 @@ OTHER CHANGES
         o listen(): a bug fixed.
         o seedata(): the Kolmogorov-Smirnov test has been withdrawn as the refinement of the test with estimated parameters (mean and sd) are not implemented yet in R (see ?ks.test).
 	o all accompanying data are now of class Wave.
-
-
-
 
 
 		CHANGES IN SEEWAVE VERSION 1.5.7 [15-March-2010]
