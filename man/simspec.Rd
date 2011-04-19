@@ -68,7 +68,8 @@ legend = TRUE, ...)
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
-  \code{\link{diffspec}}, \code{\link{diffenv}}}
+  \code{\link{diffspec}}, \code{\link{diffenv}},  \code{\link{kl.dist}},
+   \code{\link{ks.dist}}}
 
 \examples{
 a<-noisew(f=8000,d=1)

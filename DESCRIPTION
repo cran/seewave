@@ -1,10 +1,9 @@
 Package: seewave
 Type: Package
 Title: Time wave analysis and graphical representation
-Version: 1.5.9
-Date: 2010-09-01
-Author: Jerome Sueur <sueur@mnhn.fr>, Thierry Aubin
-        <thierry.aubin@u-psud.fr>, Caroline Simonis <csimonis@mnhn.fr>
+Version: 1.6.0
+Date: 2011-04-19
+Author: Jerome Sueur <sueur@mnhn.fr>, Thierry Aubin, Caroline Simonis
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
 Webpage: http://rug.mnhn.fr/seewave
 Depends: R(>= 2.2.0)
@@ -22,6 +21,6 @@ Description: seewave provides functions for analysing, manipulating,
         and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
 URL: http://rug.mnhn.fr/seewave
-Packaged: 2010-09-01 10:10:19 UTC; jerome
+Packaged: 2011-05-02 12:40:28 UTC; root
 Repository: CRAN
-Date/Publication: 2010-09-01 17:52:52
+Date/Publication: 2011-05-02 13:25:05

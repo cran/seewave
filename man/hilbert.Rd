@@ -30,7 +30,7 @@ Its application to animal sound study. \emph{Bioacoustics}, 5: 187-203.}
 
 \note{To get the Hilbert component only, use \code{Im(Hilbert(wave))}.}
 
-\seealso{\code{\link{ifreq}}, argument \code{henv} of \code{\link{oscillo}}}
+\seealso{\code{\link{ifreq}}}
 
 \examples{
 a<-synth(f=8000, d=1, cf=1000)

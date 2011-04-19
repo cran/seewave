@@ -11,12 +11,7 @@
 
 \usage{data(pellucens)}
 
-\format{
-  A data frame with 36476 observations on the following variable.
-  \describe{
-    \item{\code{V1}}{a numeric vector}
-  }
-}
+\format{A Wave object.}
 
 \details{
   Duration = 3.309 s. Sampling frequency = 11025 hz.

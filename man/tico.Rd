@@ -13,12 +13,7 @@
 
 \usage{data(tico)}
 
-\format{
-  A data frame with 39578 observations on the following variable.
-  \describe{
-    \item{\code{V1}}{a numeric vector}
-  }
-}
+\format{A Wave object.}
 
 \details{Duration = 1.795 s. Sampling frequency = 22050 hz.}
 

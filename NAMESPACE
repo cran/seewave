@@ -1,2 +1,3 @@
-import("tuneR", "rgl", "rpanel", "tcltk")
+import("fftw", "tuneR", "rgl", "rpanel", "tcltk")
 exportPattern(".+")
+

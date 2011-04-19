@@ -13,7 +13,7 @@
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
 ovlp = 0, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
-palette = rev.terrain.colors, pb=FALSE)
+palette = rev.terrain.colors)
 }
 
 \arguments{
@@ -37,7 +37,6 @@ palette = rev.terrain.colors, pb=FALSE)
   \item{maga}{magnification of the amplitude axis.}
   \item{palette}{a color palette function to be used to assign colors in
     the plot, see \code{Details}.}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

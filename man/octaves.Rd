@@ -20,6 +20,8 @@
 
 \author{Jerome Sueur}
 
+\seealso{\code{\link{notefreq}}}
+
 \examples{
 names <- c("C","D","E","F","G","A","B")
 values <- c(261.63, 293.66, 329.64, 349.23, 392, 440, 493.88)

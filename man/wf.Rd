@@ -13,7 +13,7 @@ dBref = NULL, wn = "hanning", x = NULL,
 hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)",
 xaxis = TRUE, yaxis = TRUE,
-density = NULL, border = NULL, lines = FALSE, lwd=NULL, pb = FALSE, ...)
+density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
 }
 
 \arguments{
@@ -54,7 +54,6 @@ density = NULL, border = NULL, lines = FALSE, lwd=NULL, pb = FALSE, ...)
   \item{lines}{a logical, if \code{TRUE} plots lines instead of surfaces
     (polygons).}
   \item{lwd}{line width.}
-    \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other graphical arguments to passed to \code{\link{plot}}}
 }
 

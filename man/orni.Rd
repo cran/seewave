@@ -13,15 +13,9 @@
 
 \usage{data(orni)}
 
-\format{
-  A data frame with 15842 observations on the following variable.
-  \describe{
-    \item{\code{V1}}{a numeric vector}
-  }
-}
+\format{A Wave object.}
 
-\details{
-  Duration = 0.719 s. Sampling frequency = 22050 Hz.
+\details{Duration = 0.719 s. Sampling frequency = 22050 Hz.
 }
 
 \source{

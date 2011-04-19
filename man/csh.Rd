@@ -9,7 +9,7 @@
 \usage{
 csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, threshold = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Spectral Entropy",
-ylim = c(0, 1.1), type = "l", pb = FALSE, ...)
+ylim = c(0, 1.1), type = "l", ...)
 }
 
 \arguments{
@@ -29,7 +29,6 @@ ylim = c(0, 1.1), type = "l", pb = FALSE, ...)
   \item{ylim}{the range of y values.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
