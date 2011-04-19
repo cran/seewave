@@ -9,9 +9,9 @@
 
 \usage{
 dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw=  FALSE, at = NULL, threshold
-= NULL, clip = NULL, 
+= NULL, bandpass = NULL, clip = NULL, 
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
-ylim = c(0, f/2000), pb = FALSE, ...)
+ylim = c(0, f/2000), ...)
 }
 
 \arguments{
@@ -27,6 +27,8 @@ ylim = c(0, f/2000), pb = FALSE, ...)
   \item{at}{time position where the dominant frequency has to be
     computed (in s.).}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
+  \item{bandpass}{a numeric vector of length two, giving the lower and
+    upper limits of a frequancy bandpass filter (in Hz).}
   \item{clip}{a numeric value to select dominant frequency values according to
     their amplitude in reference to a maximal value of 1 for
     the whole signal (has to be >0 & < 1).}
@@ -35,7 +37,6 @@ ylim = c(0, f/2000), pb = FALSE, ...)
   \item{xlab}{title of the x axis.}
   \item{ylab}{title of the y axis.}
   \item{ylim}{the range of y values.}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

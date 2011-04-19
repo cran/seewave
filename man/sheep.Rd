@@ -10,12 +10,7 @@
 
 \usage{data(sheep)}
 
-\format{
-  A data frame with 19764 observations on the following variable.
-  \describe{
-    \item{\code{V1}}{a numeric vector}
-  }
-}
+\format{A Wave object.}
 
 \details{
   Duration = 2.47 s. Sampling frequency = 8000 hz.

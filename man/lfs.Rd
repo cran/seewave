@@ -8,8 +8,7 @@
   This function linearly shifts all the frequency content of a time wave. 
 }
 
-\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", fftw = FALSE, output = "matrix",
-pb = FALSE)}
+\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", fftw = FALSE, output = "matrix")}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -23,7 +22,6 @@ pb = FALSE)}
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
     \code{"audioSample"} or \code{"ts"}.}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

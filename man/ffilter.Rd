@@ -10,7 +10,7 @@
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix", pb = FALSE)
+custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix")
 }
 
 \arguments{
@@ -31,7 +31,6 @@ custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix", pb = FAL
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
     \code{"audioSample"} or \code{"ts"}.}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{

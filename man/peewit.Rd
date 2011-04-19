@@ -13,13 +13,7 @@
 
 \usage{data(peewit)}
 
-\format{
-  A data frame with 15561 observations on the following variable.
-
-  \describe{
-    \item{\code{V1}}{a numeric vector}
-  }
-}
+\format{A Wave object.}
 
 \details{
   Duration = 0.706 s. Sampling frequency = 22050 hz.

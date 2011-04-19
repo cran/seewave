@@ -22,16 +22,18 @@ addsilw<-function(
 {
   input<-inputw(wave=wave,f=f); wave<-input$w; f<-input$f; rm(input)
 
-  if(at=="start")  at<-0
-  if(at=="middle") at<-nrow(wave)/(2*f)
-  if(at=="end")    at<-nrow(wave)/f
-
+  switch(at,
+         start = {at<-0},
+         middle = {at<-nrow(wave)/(2*f)},
+         end = {at<-nrow(wave)/f}
+         )
+  
   if(is.null(d)) stop("silence duration has to be set with the argument 'd'")
 
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose position on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=1)
       at<-coord$x[1]; abline(v=at,col=2,lty=2)
@@ -46,7 +48,7 @@ addsilw<-function(
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
   
-  if (plot == TRUE)
+  if(plot)
     {
       oscillo(wave=wave3,f=f,...)
       invisible(wave3)
@@ -76,14 +78,14 @@ afilter<-function(
   wave2 <- wave[,1]*wave1[,1]
   wave2 <- outputw(wave=wave2, f=f, format=output)
 
-  if(plot==TRUE)
+  if(plot)
     {
       oscillo(wave=wave2,f=f,...)
       invisible(wave2)
     }
   else
     {
-      if(listen == TRUE) {listen(wave2,f=f)}
+      if(listen) {listen(wave2,f=f)}
       return(wave2)
     }
 }
@@ -102,7 +104,7 @@ ama<-function(
               ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; F<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
   enve<-env(wave=wave, f=f, envt = envt, plot = FALSE)
   meanspec(wave=enve, f=f, wl=wl, plot=plot, type=type,...)
 }
@@ -130,7 +132,7 @@ attenuation<-function
   step<-seq(dref,dstop,length.out=n)
   {for(i in step){data[which(step==i)]<-lref-(20*log10(i/dref))}}
 
-  if(plot==TRUE)
+  if(plot)
     {
       plot(x=step,y=data,xlab=xlab,ylab=ylab,type=type,...)
       invisible(data)
@@ -168,7 +170,7 @@ autoc<-function(
   n <- nrow(wave)
   step <- seq(1,n-2*wl,wl)
   N <- length(step) 
-  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=N, style = 3)}
+  if(pb) {pbar <- txtProgressBar(min=0, max=N, style = 3)}
   R <- matrix(data=numeric((lag.max+1)*N), lag.max+1, N)
   R[is.nan(R)] <- 0  # the use of 'threshold' can produce NaN
   for (i in step)
@@ -182,7 +184,7 @@ autoc<-function(
   for (i in 1:N)
     {
     tfond[i] <- fpeaks(R[-excl,i], f=NA, nmax=1)[1]
-    if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+    if(pb) {setTxtProgressBar(pbar, i)}
     }
 #  for (k in 1:N) {tfond[k]<-which.max(R[-excl, k])}
 #  tfond <- ifelse(tfond==1 | tfond==nrow(R), yes=NA, no=tfond)
@@ -191,7 +193,7 @@ autoc<-function(
 
   x<-seq(0,n/f,length.out=N)  
 
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x=x, y=y,
            xlab = xlab,
@@ -202,7 +204,7 @@ autoc<-function(
     }
 
   else return(cbind(x,y))
-  if(pb == TRUE) close(pbar)
+  if(pb) close(pbar)
 }
 
 ################################################################################
@@ -245,18 +247,18 @@ ccoh<-function(
 
   n1<-nrow(wave1)
   n2<-nrow(wave2)
-  if (n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
+  if(n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
   n<-n1
 
 
                                         # dynamic vertical zoom (modifications of analysis parameters)
-  if (!is.null(flimd))
+  if(!is.null(flimd))
     {
                                         # zoom magnification
       mag<-round((f/2000)/(flimd[2]-flimd[1]))
                                         # new parameters
       wl<-wl*mag
-      if (ovlp==0) ovlp<-100
+      if(ovlp==0) ovlp<-100
       ovlp<-100-round(ovlp/mag)
                                         # use of normal flim for following axis modifications
       flim<-flimd
@@ -278,7 +280,7 @@ ccoh<-function(
   X<-seq(0,n/f,length.out=length(step))
 
                                         # vertical zoom
-  if (is.null(flim)==TRUE)
+  if(is.null(flim))
     {
       Y<-seq(0,f/2000,length.out=nrow(z))
     }
@@ -292,11 +294,11 @@ ccoh<-function(
   
   Z<-t(z)
   
-  if (plot==TRUE)
+  if(plot)
     {
       Zlim<-range(Z, finite = TRUE) 
       
-      if (scale==TRUE)
+      if(scale)
         {
           def.par <- par(no.readonly = TRUE)
           on.exit(par(def.par))
@@ -304,24 +306,24 @@ ccoh<-function(
           par(mar=c(5,4.1,1,0),las=1,cex=1,bg=colbg,col=colaxis,col.axis=colaxis,col.lab=collab)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=xlab,ylab=ylab), color.palette=palette,axisX=axisX, axisY=axisY)
-          if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
           if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
           par(mar=c(5,1,4.5,3),las=0)
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
         }
       
-      if (scale==FALSE)
+      if(scale==FALSE)
         {
           par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,,bg=colbg,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=xlab,ylab=ylab), color.palette=palette, axisX=axisX, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis)		
-          if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
           if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
 
-      if (cont==TRUE) 
+      if(cont) 
         {
           contour(X,Y,Z,add=TRUE,
                   levels=contlevels,nlevels=5,col=colcont,...)
@@ -366,7 +368,7 @@ ceps<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -389,29 +391,29 @@ ceps<-function(
 
   x<-seq(0,N/f,length.out=N)
 
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x=x,y=z,
            xlab=qlab,xaxt="n",xaxs="i",
            ylab=alab,yaxt="n",yaxs="i",
            type=type,col=col,cex=cex,xlim=qlim,...)
-      if (!is.null(qlim)) E<-qlim[2] else E<-N/f
+      if(!is.null(qlim)) E<-qlim[2] else E<-N/f
       X<-seq(0,E,length.out=7)
       axis(side=1,at=X, labels=round(X,3))
       axis(side=3,at=X, labels=round(1/X,3))
 
-      if(tidentify == TRUE)
+      if(tidentify)
         {
           cat("time identification: choose points on the cepstrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=x,y=z,labels=round(x,5),tolerance=0.15,col="red")
           return(round(x[id],5))
         }
       
-      if(fidentify == TRUE)
+      if(fidentify)
         {
           cat("frequency identification: choose points on the cepstrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=x,y=z,labels=round(1/round(x,5),1),tolerance=0.15,col="red")
           return(round(1/round(x[id],5),1))
         }
@@ -475,12 +477,12 @@ cepstro<-function(
   z<-ifelse(z2=="NaN"|z2=="-Inf"|z2<=0,yes=0,no=z2)
   Z<-t(z/max(z))
 
-  if (plot == TRUE)
+  if(plot)
     {
       X<-seq(0,n/f,length.out=length(step))
       Y<-seq(0,WL/f,length.out=nrow(z))*1000
       Zlim<-range(Z, finite = TRUE)
-      if (scale==TRUE)
+      if(scale)
         {
           def.par <- par(no.readonly = TRUE)
           on.exit(par(def.par))
@@ -489,25 +491,25 @@ cepstro<-function(
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=xlab,ylab=ylab),
                                 color.palette=palette,axisX=axisX, axisY=axisY)
-          if(grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
           if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
           par(mar=c(5,1,4.5,3),las=0)
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
         }
 
-      if (scale==FALSE)
+      if(scale==FALSE)
         {
           par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=xlab,ylab=ylab),
                                 color.palette=palette, axisX=axisX, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis)
-          if (grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
           if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
 
-      if (cont==TRUE)
+      if(cont)
         {
           contour(X,Y,Z,add=TRUE,
                   levels=contlevels,nlevels=5,col=colcont,...)
@@ -542,13 +544,13 @@ coh<-function(
 
   n1<-nrow(wave1)
   n2<-nrow(wave2)
-  if (n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
+  if(n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
 
   Y<-spec.pgram(cbind(wave1, wave2), fast=FALSE, taper=FALSE,
                 spans = c(3,3),plot=FALSE)$coh
   X<-seq(0,f/2000,length.out=nrow(Y))
 
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x=X,y=Y,xlab=xlab,ylab=ylab,xlim=xlim,type=type,...)
       invisible(cbind(X,Y))
@@ -617,7 +619,7 @@ corenv<-function(
   nx<-nrow(x)
   ny<-nrow(y)
 
-  if (nx != ny) stop("'wave 1' and 'wave 2' must have the same length")
+  if(nx != ny) stop("'wave 1' and 'wave 2' must have the same length")
 
   meanx<-mean(x)
   meany<-mean(y)
@@ -625,12 +627,12 @@ corenv<-function(
   r1<-numeric(nx)
   r2<-numeric(nx)
 
-  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=nx-1, style = 3)}
+  if(pb) {pbar <- txtProgressBar(min=0, max=nx-1, style = 3)}
   for (i in 0:(nx-1))
     {
     r1[i+1]<-cor(x=x,y=c(y[(i+1):ny],rep(0,i)),method = method)
     r2[i+1]<-cor(x=x,y=c(rep(0,i),y[1:(ny-i)]),method = method)
-    if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+    if(pb) {setTxtProgressBar(pbar, i)}
     }
 
   r2<-r2[-1]
@@ -641,17 +643,17 @@ corenv<-function(
   if(!is.null(msmooth)|!is.null(ksmooth)) {F<-f*nx/n; offsett<-(offsetp-nx)/F}
   else{offsett<-(offsetp-n)/f}
 
-  if (offsetp < nx){p<-cor.test(x=x, y=c(y[(nx-offsetp+1):ny],rep(0,nx-offsetp)),method = method)}
+  if(offsetp < nx){p<-cor.test(x=x, y=c(y[(nx-offsetp+1):ny],rep(0,nx-offsetp)),method = method)}
   else {p<-cor.test(x=x, y=c(rep(0,offsetp-nx),y[1:(ny-(offsetp-nx))]), method = method)}
   p<-p$p.value
 
   X<-seq(-n/f,n/f,length.out=2*nx-1)
   corr<-list(r = cbind(X,r), rmax = rmax, p = p, t = offsett)
   
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x = X, y = r, xlab = xlab, ylab = ylab, col = col, type = type,...)
-      if (plotval==TRUE)
+      if(plotval)
         {
           mtext(paste(
                       "rmax = ", as.character(round(rmax,2)),
@@ -668,7 +670,7 @@ corenv<-function(
     {
       return(corr)
     }
- if(pb == TRUE) close(pbar)
+ if(pb) close(pbar)
 }
 
 
@@ -694,25 +696,25 @@ corspec<-function(
                   ...)
 
 {
-  if(is.null(f)==TRUE)
+  if(is.null(f))
     {
-      if(is.vector(spec1)==TRUE & is.vector(spec2)==TRUE) stop("'f' is missing")  
+      if(is.vector(spec1) & is.vector(spec2)) stop("'f' is missing")  
       else
         {
-          if(is.matrix(spec1)==TRUE) f<-spec1[nrow(spec1),1]*2000
-          else if(is.matrix(spec2)==TRUE) f<-spec2[nrow(spec2),1]*2000
+          if(is.matrix(spec1)) f<-spec1[nrow(spec1),1]*2000
+          else if(is.matrix(spec2)) f<-spec2[nrow(spec2),1]*2000
         }
     }
 
   range<-c(0,f/2000)
 
-  if(is.matrix(spec1)==TRUE && ncol(spec1)==2) spec1<-spec1[,2]
-  if(is.matrix(spec2)==TRUE && ncol(spec2)==2) spec2<-spec2[,2]
+  if(is.matrix(spec1) && ncol(spec1)==2) spec1<-spec1[,2]
+  if(is.matrix(spec2) && ncol(spec2)==2) spec2<-spec2[,2]
 
   n1<-length(spec1)
   n2<-length(spec2)
 
-  if (n1 != n2) stop("'spec1' and 'spec2' must have the same length")
+  if(n1 != n2) stop("'spec1' and 'spec2' must have the same length")
   if(any(spec1 < 0) | any(spec2 < 0)) stop("data does not have to be in dB")
   if(sum(spec1-spec2)==0) stop("'spec1' and 'spec2' are the same object")
   
@@ -737,10 +739,10 @@ corspec<-function(
 
   rmax<-max(r,na.rm=TRUE)
   offset<-which.max(r)
-  if (offset<=(length(r)/2)) {offsetp<-which.max(r)} else {offsetp<-which.max(r)-1}
+  if(offset<=(length(r)/2)) {offsetp<-which.max(r)} else {offsetp<-which.max(r)-1}
   offsetf<-((range[2]-range[1])*(offsetp-n1))/n1
 
-  if (offsetp < n1)
+  if(offsetp < n1)
     {
       p<-cor.test(x=spec1, y=c(spec2[(n1-offsetp+1):n2],rep(0,n1-offsetp)),
                   method = method)
@@ -755,10 +757,10 @@ corspec<-function(
   X<-seq(-range[2],range[2],length.out=2*n1-1)
   corr<-list(r = cbind(X,r), rmax = rmax, p = p, f = offsetf)
 
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x = X, y = r, xlab = xlab, ylab = ylab, col = col, type = type,...)
-      if (plotval==TRUE)
+      if(plotval)
         {
           mtext(paste(
                       "rmax = ", as.character(round(rmax,2)),
@@ -810,10 +812,10 @@ covspectro<-function(
   input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
   wave2<-inputw(wave=wave2,f=f)$w
 
-  if (n>21)
+  if(n>21)
     {
       cat("please wait...")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
     }
   
   if((n <- as.integer(n)) %% 2 != 1) stop("'n' must be odd")
@@ -823,7 +825,7 @@ covspectro<-function(
   n1<-nrow(wave1)
   n2<-nrow(wave2)
 
-  if (n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
+  if(n1 != n2) stop("'wave 1' and 'wave 2' must have the same length")
 
   step1<-seq(1,n1-wl,wl); lstep1<-length(step1)
   step2<-round(seq(1,n2,length.out=n))
@@ -842,7 +844,7 @@ covspectro<-function(
                                         # spectrogram1/spectra2 with spectrogram2/spectra2 and so on
                                         # diagonal of the cov matrix and mean of this diagonal
                                         # one mean cov for comparaison between 2 spectrograms for(i in step2)
-  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=n2, style = 3)}
+  if(pb) {pbar <- txtProgressBar(min=0, max=n2, style = 3)}
   for (i in step2)
     {
       spectro2a[,,which(step2==i)]<-sspectro(wave=as.matrix(c(wave2[i:n2],rep(0,i-1))),f=f,wl=wl,wn=wn)
@@ -851,7 +853,7 @@ covspectro<-function(
       spectro2b[,,which(step2==i)]<-sspectro(wave=as.matrix(c(rep(0,i),wave2[1:(n2-i)])),f=f,wl=wl,wn=wn)
       spectro2b<-ifelse(spectro2b=="NaN",yes=0,no=spectro2b)
       cov2[which(step2==i)]<-mean(diag(cov(x=spectro1,y=spectro2b[,,which(step2==i)],method = method)))
-      if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+      if(pb) {setTxtProgressBar(pbar, i)}
     }
 
                                         # to normalise the covariance we need covmax that is the autocovariance of spectro1
@@ -867,11 +869,11 @@ covspectro<-function(
   offsett<-(((offsetp*n1)/n)-n1)/f
   covar<-list(cov = cov4, covmax = cov4max, t = offsett)
 
-  if (plot == TRUE)
+  if(plot)
     {
       x<-seq(-n1/f,n1/f,length.out=(2*n)-1)
       plot(x = x, y = cov4, xlab = xlab, ylab = ylab, col = col, type = type,...)
-      if (plotval == TRUE)
+      if(plotval)
         {
           mtext(paste(
                       "covmax = ", as.character(round(cov4max,2)),
@@ -888,7 +890,7 @@ covspectro<-function(
     {
       return(covar)
     }
-  if(pb == TRUE) close(pbar)
+  if(pb) close(pbar)
 
 }
 
@@ -913,7 +915,7 @@ crest <- function(
   loc.max <- which(wave == max(wave))/f
   c <- max/rms(wave)
 
-  if(plot==TRUE)
+  if(plot)
     {
       if(which.max(abs(range(wave)))==1) {max2 <- -max} else {max2 <- max}# when the max is actually a negative value
       oscillo(wave=wave, f=f,...)
@@ -941,7 +943,6 @@ csh<-function(
               ylab = "Spectral Entropy",
               ylim = c(0,1.1),
               type = "l",
-              pb = FALSE,
               ...)
 
 {
@@ -953,14 +954,14 @@ csh<-function(
                                         # STFT (see function spectro())
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
+  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw)
                                         # sh applied to the Fourier matrix
   h<-apply(z, MARGIN=2, FUN=sh)
 
   t<-seq(0,n/f,length.out=length(step))
 
                                         # graphic
-  if (plot==TRUE)
+  if(plot)
     {
       plot(x=t, y=h,
            xaxs = "i", xlab = xlab,
@@ -987,25 +988,25 @@ cutspec<-function(
                   )
 
 {
-  if(norm==TRUE & PMF==TRUE) stop("'norm' and 'PMF' should not be both set to TRUE")
+  if(norm & PMF) stop("'norm' and 'PMF' should not be both set to TRUE")
 
   if(is.vector(spec))
     {
       if(is.null(f)) stop("'f' is missing and is necessary when 'spec' is a vector")  
       wl<-length(spec)*2
       specut<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f)]
-      if(norm==TRUE) {specut<-specut/max(specut)}
-      if(PMF==TRUE)  {specut<-specut/sum(specut)}	
+      if(norm) {specut<-specut/max(specut)}
+      if(PMF)  {specut<-specut/sum(specut)}	
     }
 
   else if(is.matrix(spec))
     {
       if(ncol(spec)>2){stop("'spec' should not have more than two columns")}
-      if(is.null(f)==TRUE) {f<-spec[nrow(spec),1]*2000}
+      if(is.null(f)) {f<-spec[nrow(spec),1]*2000}
       wl<-nrow(spec)*2
       specut<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f), ,drop=FALSE]
-      if(norm==TRUE) {specut[,2]<-specut[,2]/max(specut[,2])}
-      if(PMF==TRUE)  {specut[,2]<-specut[,2]/sum(specut[,2])}
+      if(norm) {specut[,2]<-specut[,2]/max(specut[,2])}
+      if(PMF)  {specut[,2]<-specut[,2]/sum(specut[,2])}
     }
 
   return(specut)
@@ -1030,10 +1031,10 @@ cutw<-function(
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose start and end positions on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
       from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
@@ -1045,7 +1046,7 @@ cutw<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -1056,14 +1057,14 @@ cutw<-function(
 
   wavecut <- outputw(wave=wavecut, f=f, format=output)
 
-  if (plot == TRUE)
+  if(plot)
     {
       def.par <- par(no.readonly = TRUE)
       on.exit(par(def.par))
       par(mfrow=c(2,1),oma=c(0,0.1,0,0))
       oscillo(wave,f=f,...)
       title(main="original")
-      if (marks == TRUE)
+      if(marks)
         {
           abline(v=from, col="red", lty=2)
           abline(v=to, col="red", lty=2)
@@ -1099,7 +1100,7 @@ dBscale<-function
   col <- palette(length(collevels) - 1)
   par(las=1)
   
-  if (side == 2 | side == 4)
+  if(side == 2 | side == 4)
     {    
       plot.window(xlim = c(0, 1), ylim = range(collevels), xaxs = "i",
                   yaxs = "i")
@@ -1109,11 +1110,11 @@ dBscale<-function
       segments(x0=0,y0=max(collevels),x1=0.95,y1=max(collevels),col=colaxis)
       segments(x0=0,y0=min(collevels),x1=0.95,y1=min(collevels),col=colaxis)          
       abline(v=c(0,0.95),col=colaxis)
-      if (side == 2) axis(2,col=colaxis,col.axis=colaxis,...)
-      if (side == 4) axis(4,pos=0.95,col=colaxis,col.axis=colaxis,...)
+      if(side == 2) axis(2,col=colaxis,col.axis=colaxis,...)
+      if(side == 4) axis(4,pos=0.95,col=colaxis,col.axis=colaxis,...)
     }
 
-  if (side == 1  | side == 3)
+  if(side == 1  | side == 3)
     {    
       plot.window(xlim = range(collevels), ylim = c(0, 1), xaxs = "i",
                   yaxs = "i")
@@ -1122,8 +1123,8 @@ dBscale<-function
       segments(x0=min(collevels),y0=0,x1=min(collevels),y1=0.95,col=colaxis)
       segments(x0=max(collevels),y0=0,x1=max(collevels),y1=0.95,col=colaxis)       
       abline(h=c(0,0.95),col=colaxis)
-      if (side == 1) axis(1,col=colaxis,col.axis=colaxis,...)
-      if (side == 3) axis(3,pos=0.95,col=colaxis,col.axis=colaxis,...)
+      if(side == 1) axis(1,col=colaxis,col.axis=colaxis,...)
+      if(side == 3) axis(3,pos=0.95,col=colaxis,col.axis=colaxis,...)
     }    
 }    
 
@@ -1180,10 +1181,10 @@ deletew<-function(
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose start and end positions on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
       from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
@@ -1195,7 +1196,7 @@ deletew<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -1204,14 +1205,14 @@ deletew<-function(
 
   wavecut <- outputw(wave=wavecut, f=f, format=output)
 
-  if (plot == TRUE)
+  if(plot)
     {
       def.par <- par(no.readonly = TRUE)
       on.exit(par(def.par))
       par(mfrow=c(2,1))
       oscillo(wave,f=f,k=1,j=1,...)
       title(main="original")
-      if (marks == TRUE)
+      if(marks)
         {
           abline(v=from, col="red", lty=2)
           abline(v=to, col="red", lty=2)
@@ -1237,12 +1238,12 @@ dfreq <- function(
                 fftw = FALSE,
                 at = NULL, 
                 threshold = NULL,
+                bandpass = NULL,
                 clip = NULL,  
                 plot = TRUE,
                 xlab = "Times (s)",
                 ylab = "Frequency (kHz)",
                 ylim = c(0,f/2000),
-                pb = FALSE,
                 ...)
 
 {
@@ -1278,11 +1279,19 @@ dfreq <- function(
   # Fourier
   step <- round(step)
   y1<-matrix(data=numeric(wl*N),wl,N)
-  y2 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
-  ## W<-ftwindow(wl=wl,wn=wn)
-  ## for(i in step) {y1[,which(step==i)]<-Mod(fft(wave[i:(wl+i-1),]*W))}
-  ## y2<-y1[1:(wl/2), ,drop=FALSE]
-  ## y2 <- y2/max(y2)
+  y2 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw) 
+
+
+  # bandpass filter, values outside the bandpass limits are replaced by 0 values
+  if(!is.null(bandpass))
+    {
+      if(length(bandpass)!=2) stop("'The argument 'bandpass' should be a numeric vector of length 2'")
+      if(bandpass[1] > bandpass[2]) stop("The first element of 'bandpass' has to be inferior to the second element, i.e. bandpass[1] < bandpass[2]")
+      if(bandpass[1] == bandpass[2]) stop("The limits of the bandpass have to be different")
+      lowlimit <-round((wl*bandpass[1])/f)
+      upperlimit <-round((wl*bandpass[2])/f)
+      y2[-(lowlimit:upperlimit),] <- 0
+   }
   
   # Maximum search
   # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
@@ -1295,6 +1304,7 @@ dfreq <- function(
     maxi[i] <- max(y2[,i])
     y3[i,] <- as.numeric(which(y2==max(y2[,i]),arr.ind=TRUE)[1,1])
     }
+  
   # discards pics with an amplitude lower thant the clip value
   if(!is.null(clip))
     {
@@ -1306,7 +1316,7 @@ dfreq <- function(
   # add NA values at the begining and end to match with x length
   if(!is.null(at)) {y <- c(NA, y, NA)}
 
-  if (plot==TRUE)
+  if(plot)
     {
       plot(x=x, y=y,
            xaxs="i", xlab = xlab,
@@ -1354,7 +1364,7 @@ diffenv<-function(
 
   n1<-length(env1)
   n2<-length(env2)
-  if (n1 != n2) stop("wave1 and wave2 should have the same length")
+  if(n1 != n2) stop("wave1 and wave2 should have the same length")
 
   if(!is.null(msmooth)|!is.null(ksmooth)) {f<-f*n1/nrow(wave1)}
 
@@ -1363,10 +1373,10 @@ diffenv<-function(
 
   denv<-sum(abs(envPMF1-envPMF2))/2
 
-  if (plot==TRUE)
+  if(plot)
     {
       x<-seq(0,n1/f,length.out=n1)
-      if (is.null(ylim)) ylim<-c(0,max(envPMF1,envPMF2))
+      if(is.null(ylim)) ylim<-c(0,max(envPMF1,envPMF2))
       plot(x=x, y=envPMF1, type="n",
            xaxs="i",
            ylim=ylim, yaxs="i",
@@ -1388,7 +1398,7 @@ diffenv<-function(
       plot(x=x, y=envPMF2, type="l", lty=lty2, col=col2,
            xaxs="i", xlab="",
            yaxs="i", yaxt="n", ylim=ylim, ylab="",...)
-      if(legend==TRUE) {legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg)}
+      if(legend) {legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg)}
       invisible(denv)
     }
   return(denv)
@@ -1422,24 +1432,24 @@ diffspec<-function(
 {
   leg<-c(as.character(deparse(substitute(spec1))),as.character(deparse(substitute(spec2))))
 
-  if(is.null(f)==TRUE)
+  if(is.null(f))
     {
-      if(is.vector(spec1)==TRUE & is.vector(spec2)==TRUE) stop("'f' is missing")  
+      if(is.vector(spec1) & is.vector(spec2)) stop("'f' is missing")  
       else
         {
-          if(is.matrix(spec1)==TRUE) f<-spec1[nrow(spec1),1]*2000
-          else if(is.matrix(spec2)==TRUE) f<-spec2[nrow(spec2),1]*2000
+          if(is.matrix(spec1)) f<-spec1[nrow(spec1),1]*2000
+          else if(is.matrix(spec2)) f<-spec2[nrow(spec2),1]*2000
         }
     }
 
-  if(is.matrix(spec1)==TRUE && ncol(spec1)==2) spec1<-spec1[,2]
-  if(is.matrix(spec2)==TRUE && ncol(spec2)==2) spec2<-spec2[,2]
+  if(is.matrix(spec1) && ncol(spec1)==2) spec1<-spec1[,2]
+  if(is.matrix(spec2) && ncol(spec2)==2) spec2<-spec2[,2]
 
   n1<-length(spec1)
   n2<-length(spec2)
 
-  if (n1 != n2) stop("spec1 and spec2 must have the same length")
-  if (any(spec1 < 0) | any(spec2 < 0))
+  if(n1 != n2) stop("spec1 and spec2 must have the same length")
+  if(any(spec1 < 0) | any(spec2 < 0))
     stop("spectra (spec 1 and/or spec 2) do not have to be in dB")
 
   spec1<-spec1/sum(spec1)
@@ -1447,14 +1457,14 @@ diffspec<-function(
 
   dspec<-sum(abs(spec1-spec2))/2
 
-  if (dB == TRUE)
+  if(dB)
     {
       dspec<-20*log10(dspec)
       spec1<-20*log10(spec1)
       spec2<-20*log10(spec2)
     }
 
-  if (plot==TRUE)
+  if(plot)
     {
       x<-seq((f/2000)/n1,f/2000,length.out=n1)
       st<-(f/2000)/n1
@@ -1482,7 +1492,7 @@ diffspec<-function(
       plot(x=x, y=spec2, type=type, lty=lty2, col=col2,
            xaxs="i", xlab="", xlim=flim,
            yaxs="i", ylim=alim, ylab="",...)
-      if(legend==TRUE) legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg)
+      if(legend) legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg)
       invisible(dspec)
     }
   return(dspec)
@@ -1562,7 +1572,7 @@ discrets<-function(
         }
     }
   s<-s[-1]
-  if(collapse==TRUE) s<-paste(s,collapse="")
+  if(collapse) s<-paste(s,collapse="")
   return(s)  # length(s) = n-1 if symbols=3, length(s)=n-2 if symbols=5
 }
 
@@ -1590,7 +1600,7 @@ drawenv<-function(
                                         # interactive graph
   oscillo(wave=wave,f=f)
   cat("choose points on the positive amplitude side of the wave\nto change the amplitude profile (amplitude envelope)\n")
-  if (.Platform$OS.type == "windows") flush.console()
+  if(.Platform$OS.type == "windows") flush.console()
   coord<-locator(n=n,type="p",col=2)
 
                                         # coordinates ; ordered following x if positions are not localised in order along the x-time axis
@@ -1616,16 +1626,16 @@ drawenv<-function(
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
 
-  if(plot==TRUE)
+  if(plot)
     {
       x11()
       oscillo(wave3,f=f)
-      if(listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       invisible(wave3)
     }
   else
     {
-      if(listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       return(wave3)
     }
 }
@@ -1670,8 +1680,7 @@ dynspec<-function(
                   colwave = "black",
                   coly0 = "lightgrey",
                   colcursor = "red",
-                  bty = "l",
-                  pb = FALSE
+                  bty = "l"
                   )
 
 {
@@ -1689,7 +1698,7 @@ dynspec<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from > to) stop("'from' cannot be superior to 'to'")
+          if(from > to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -1700,7 +1709,7 @@ dynspec<-function(
   step <- seq(1,n-wl,wl-(ovlp*wl/100))
   lstep <- length(step)
                                         # STFT
-  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, norm=norm, fftw=fftw, pb=pb)
+  z <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, norm=norm, fftw=fftw)
  
                                         # DB
   if(!is.null(dB))
@@ -1716,12 +1725,12 @@ dynspec<-function(
                                         # FREQUENCY DATA 
   x<-seq(f/1000/n,f/2000,length.out=nrow(z))
 
-  if(plot == TRUE)
+  if(plot)
     {
-      if (is.null(alim) == TRUE)
+      if(is.null(alim))
         {
           alim<-c(0,max(z)+0.05)
-          if(norm == TRUE && is.null(dB)) alim<-c(0,1.1)
+          if(norm && is.null(dB)) alim<-c(0,1.1)
           if(!is.null(dB)) alim<-c(min(z),10)
         }     
       pos<-1:lstep
@@ -1733,7 +1742,7 @@ dynspec<-function(
           with(panel,
                {
                  par(bg=colbg, col=colline)
-                 if(osc==TRUE | !is.null(envt)) {layout(c(1,2),heights=c(2.5,1)); par(mar=c(4.5,4,3,2))}
+                 if(osc | !is.null(envt)) {layout(c(1,2),heights=c(2.5,1)); par(mar=c(4.5,4,3,2))}
                  plot(x=x,y=z[,pos],
                       xaxs = "i", xlab = flab, xlim = flim,
                       yaxs = "i", yaxt = "s", ylab = alab, ylim = alim,
@@ -1741,7 +1750,7 @@ dynspec<-function(
                       col.lab = collab, cex.lab = cexlab, font.lab = fontlab,
                       type = type, las = 1)
 
-                 if(title==TRUE)
+                 if(title)
                    {
                      nc <- ncol(z)
                      title(main=paste(pos, "/", nc, " - Position along the signal = ", poslabel[pos], "s", sep=""),
@@ -1750,7 +1759,7 @@ dynspec<-function(
                  if(title==FALSE) title(main="")
                  if(is.character(title)) title(main = paste(title), col.main = coltitle)
 
-                 if(osc==TRUE)
+                 if(osc)
                    {
                      par(mar=c(4.5,4,0.5,2))
                      soscillo(wave = wave, f = f,
@@ -1801,7 +1810,7 @@ echo<-function(
 
 {
   cat("Please wait...\n")
-  if (.Platform$OS.type == "windows") flush.console()
+  if(.Platform$OS.type == "windows") flush.console()
 
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
@@ -1823,15 +1832,15 @@ echo<-function(
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
 
-  if(plot==TRUE)
+  if(plot)
     {
       oscillo(wave=wave3,f=f,...)
-      if(listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       invisible(wave3)
     }
   else
     {
-      if(listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       return(wave3)
     }
 }
@@ -1840,7 +1849,6 @@ echo<-function(
 ################################################################################
 ##                               ENV                                        
 ################################################################################
-
 
 env<-function(
               wave,
@@ -1867,8 +1875,7 @@ env<-function(
       if(msmooth[1] == 1) stop("'smooth' window length cannot be equal to 1")
       if(msmooth[2] == 100) stop("'smooth' window overlap cannot be equal to 100")
       step<-seq(1,n-msmooth[1],msmooth[1]-(msmooth[2]*msmooth[1]/100))
-      wave2<-numeric(length(step))
-      for(i in step) {wave2[which(step==i)]<-mean(wave1[i:(i+msmooth[1])])}
+      wave2<-apply(as.matrix(step),1,function(x) mean(wave1[x:(x + msmooth[1])]))
       wave1<-as.matrix(wave2)
       f<-f*nrow(wave1)/n
     }
@@ -1880,15 +1887,15 @@ env<-function(
       f<-f*nrow(wave1)/n
     }
 
-  if(plot==TRUE)
+  if(plot)
     {
       oscillo(wave=wave1,f=f,k=k,j=j,...)
-      if(norm==TRUE) wave1<-wave1/max(abs(wave1))
+      if(norm) wave1<-wave1/max(abs(wave1))
       invisible(as.matrix(wave1))
     }
   else
     {
-      if(norm==TRUE) wave1<-wave1/max(abs(wave1))
+      if(norm) wave1<-wave1/max(abs(wave1))
       return(as.matrix(wave1))
     }
 }
@@ -1906,7 +1913,7 @@ export<-function(
                  ...)
 
 {
-  if(is.null(filename) == TRUE) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
+  if(is.null(filename)) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
 
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
@@ -1963,9 +1970,9 @@ fadew<-function(
 
   if(shape=="cos")
     {
-      if (din == 0) IN<-integer(0)
+      if(din == 0) IN<-integer(0)
       else {IN<-cos(rev(IN)) ; IN<-IN-min(IN) ; IN<-IN/max(IN)}   # pb si din ou dout sont ==0
-      if (dout == 0) OUT<-integer(0)
+      if(dout == 0) OUT<-integer(0)
       else {OUT<-cos(rev(OUT)) ; OUT<-OUT-min(OUT) ; OUT<-OUT/max(OUT)}
     }
 
@@ -1978,15 +1985,15 @@ fadew<-function(
 
   wave2 <- outputw(wave=wave2, f=f, format=output)
 
-  if(plot == TRUE)
+  if(plot)
     {
       oscillo(wave=wave2,f=f,...)
-      if(listen == TRUE) {listen(wave2,f=f)}
+      if(listen) {listen(wave2,f=f)}
       invisible(wave2)
     }
   else
     {
-      if(listen == TRUE) {listen(wave2,f=f)}
+      if(listen) {listen(wave2,f=f)}
       return(wave2)
     }
 }
@@ -1999,7 +2006,7 @@ fadew<-function(
 fbands <- function(spec, f = NULL, bands = 10, width = FALSE, plot=TRUE, xlab= "Frequency (kHz)", ylab = "Relative amplitude",...)
   {
                                         # stop messages
-    if(is.matrix(spec)==TRUE && ncol(spec)!=2){
+    if(is.matrix(spec) && ncol(spec)!=2){
         stop("If 'spec' is a numeric matrix it should be a two-column matrix
 with the first colum describing the frequency x-axis
 and the second column describing the amplitude y-axis")}
@@ -2017,7 +2024,7 @@ be provided (for instance (f = 44100)")
       }
 
     if(is.null(bands)) stop("The argument 'bands' cannot be NULL.")
-    if(any(bands<0)==TRUE) stop("The argument 'bands' cannot include any negative value")
+    if(any(bands<0)) stop("The argument 'bands' cannot include any negative value")
        
     n <- nrow(spec)
     
@@ -2039,14 +2046,14 @@ be provided (for instance (f = 44100)")
       # except for the last band :   [0,1[  [1,2[ ... [n, f/2]
       if(i < k-1) {tmp <- tmp[-nrow(tmp),]} 
       res[i] <- sum(tmp[,2])
-      if (i==k-1) {names[i] <- paste("[", round(bands[i],1),"-", round(bands[i+1],1),"]",sep="")}
+      if(i==k-1) {names[i] <- paste("[", round(bands[i],1),"-", round(bands[i+1],1),"]",sep="")}
       else {names[i] <- paste("[", round(bands[i],1),"-", round(bands[i+1],1),"[",sep="")}
       freq[i] <- round(mean(c(bands[i],bands[i+1])),1)
-      if(width==TRUE) wid[i] <- bands[i+1]-bands[i] else wid <- 1
+      if(width) wid[i] <- bands[i+1]-bands[i] else wid <- 1
     }
     res <- cbind(freq, res/sum(res))
     colnames(res) <- c("freq","height")
-    if(plot==TRUE){
+    if(plot){
     barplot(height=res[,2], names.arg=names, width=wid , xlab=xlab, ylab=ylab,...)
     
     invisible(res)
@@ -2090,8 +2097,7 @@ ffilter<-function(
                   wl = 512,
                   wn="hanning",
                   fftw = FALSE,
-                  output = "matrix",
-                  pb = FALSE
+                  output = "matrix"
                   )
 
 {
@@ -2102,26 +2108,25 @@ ffilter<-function(
   Lstep<-length(step)
 
                                         # STFT
-  z1a <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
+  z1a <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw)
 
-  if (!is.null(custom))
+  if(!is.null(custom))
     {
-      if(is.matrix(custom)==TRUE) custom<-custom[,2]
+      if(is.matrix(custom)) custom<-custom[,2]
       if((length(custom)) != wl/2) stop("custom filter length has to be equal to 'wl'/2")
       z1a<-z1a*(custom/max(custom))
     }
   else
     {
-      if (from == FALSE & to == FALSE)
+      if(from == FALSE & to == FALSE)
         stop("At least one of the 'from' and 'to' arguments has to be set")
-      if (from == to)
+      if(from == to)
         stop("'from' and 'to' have to be different")
-      if (from == FALSE) from<-0
-      if (to == FALSE) to<-f/2
+      if(from == FALSE) from<-0
+      if(to == FALSE) to<-f/2
       F<-round(wl*(from/f))
       T<-round(wl*(to/f))
-      if (bandpass == TRUE) z1a[-c(F:T),]<-0
-      if (bandpass == FALSE) z1a[F:T,]<-0
+      if(bandpass) {z1a[-c(F:T),]<-0} else {z1a[F:T,]<-0}
     }
 
                                         # generate the mirror part of the fft
@@ -2183,25 +2188,25 @@ fir<-function(
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
                                         # frequency limits of the filter
-  if (from == FALSE) from <- 0
-  if (to == FALSE) to <- f/2
+  if(from == FALSE) from <- 0
+  if(to == FALSE) to <- f/2
   from <- round((from * wl)/f)
   to <- round((to * wl)/f)
   n <- nrow(wave)
 
                                         # frequency response of the filter
-  if (!is.null(custom))
+  if(!is.null(custom))
     {
-      if(is.matrix(custom)==TRUE) custom<-custom[,2]
+      if(is.matrix(custom)) custom<-custom[,2]
       if((length(custom)) != wl/2) stop("custom filter length has to be equal to 'wl'/2")
-      if (bandpass == TRUE)  {filtspec1 <- c(custom, rev(custom))}
+      if(bandpass)  {filtspec1 <- c(custom, rev(custom))}
       else                   {filtspec1 <- 1 - c(custom, rev(custom))}
       filtspec1 <- filtspec1/max(filtspec1)
     }
   else
     {
       filtspec1 <- rep(1, wl/2)
-      if (bandpass == TRUE)  {filtspec1[-(from:to)] <- 0}
+      if(bandpass)  {filtspec1[-(from:to)] <- 0}
       else                   {filtspec1[from:to] <- 0}
       filtspec1 <- c(filtspec1, rev(filtspec1))
     }
@@ -2225,7 +2230,7 @@ fir<-function(
 
   wave2 <- outputw(wave=wave2, f=f, format=output)
 
-  if(listen == TRUE) {listen(wave2,f=f)}
+  if(listen) {listen(wave2,f=f)}
   return(wave2)
 }
 
@@ -2424,21 +2429,21 @@ fpeaks <- function(spec,
 
 ## PLOT
   
-  if(plot==TRUE)
+  if(plot)
     {
       plot(spec, type="l", xlab = xlab, ylab = ylab, xaxs="i", yaxt="n", ...)
-      if(title==TRUE) {
+      if(title) {
         if(nrow(res) == 1){text.title <- "peak detected"} else {text.title <- "peaks detected"}
         title(main=paste(nrow(res), text.title))
       }
       points(res, col = collab)
-      if(labels == TRUE & nrow(res)!=0) text(res, labels=round(res[,1],2), pos=3, col=collab)
+      if(labels & nrow(res)!=0) text(res, labels=round(res[,1],2), pos=3, col=collab)
       if(!is.null(threshold))
         {
           abline(h=threshold, col=collab, lty=2)
           mtext(paste(threshold), side=2, line=0.5, at=threshold, las=1, col=collab)
         }
-      if(legend==TRUE)
+      if(legend)
         {
           if(!is.null(nmax)){text.legend <- paste("nmax=",nmax,sep="")}
           else {
@@ -2506,11 +2511,11 @@ fund<-function(
   N<-length(step)
   WL<-wl%/%2
   z1<-matrix(data=numeric(wl*N),wl,N)
-  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=n, style = 3)}
+  if(pb) {pbar <- txtProgressBar(min=0, max=n, style = 3)}
   for(i in step)
     {
       z1[,which(step==i)]<-Re(fft(log(abs(fft(wave[i:(wl+i-1),]))),inverse=TRUE))
-      if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+      if(pb) {setTxtProgressBar(pbar, i)}
     }
   z2<-z1[1:WL,]
   z<-ifelse(z2=="NaN"|z2=="-Inf",yes=0,no=z2)
@@ -2524,7 +2529,7 @@ fund<-function(
   x<-seq(0,n/f,length.out=N)
   y<-ffund/1000
 
-  if (plot == TRUE)
+  if(plot)
     {
 
       plot(x=x, y=y,
@@ -2536,7 +2541,7 @@ fund<-function(
     }
 
   else return(cbind(x,y))
-  if(pb == TRUE) close(pbar)
+  if(pb) close(pbar)
 }
 
 
@@ -2633,7 +2638,7 @@ ifreq<-function(
 
   results <- list(f=cbind(xf,ifreq), p=cbind(xp,phi))
   
-  if(plot == TRUE)
+  if(plot)
     {
       if(phase == FALSE)
         {
@@ -2661,6 +2666,137 @@ ifreq<-function(
 
 
 ################################################################################
+##                                KL.DIST
+################################################################################
+
+kl.dist <- function(
+                    spec1,
+                    spec2,
+                    base = 2
+                    )
+
+  {
+    if(is.matrix(spec1) && ncol(spec1)==2) spec1<-spec1[,2]
+    if(is.matrix(spec2) && ncol(spec2)==2) spec2<-spec2[,2]
+
+    n1<-length(spec1)
+    n2<-length(spec2)
+    if(n1 != n2) stop("spec1 and spec2 must have the same length")
+
+    if(any(is.na(spec1)) | any(is.na(spec2))) {
+      D1 <- D2 <- D <- NA
+      warning("The data sset contains some 'NA' values. The returned values have been set to 'NA'.", call.=FALSE)
+    } 
+    else
+      {
+        if(any(spec1<0, na.rm=TRUE) | any(spec2<0, na.rm=TRUE)) stop("Data do not have to be in dB")
+        if(sum(spec1)==0) {warning("Caution!, spec1 is a null spectrum", call.=FALSE)}
+        if(sum(spec2)==0) {warning("Caution!, spec2 is a null spectrum", call.=FALSE)}
+        spec1[spec1==0]<-1e-7
+        spec2[spec2==0]<-1e-7
+        spec1 <- spec1/sum(spec1)  # PMF
+        spec2 <- spec2/sum(spec2)  # PMF
+        D1 <- sum(spec1 * log(spec1/spec2, base=base))
+        D2 <- sum(spec2 * log(spec2/spec1, base=base))             
+      }
+    D  <- (D1+D2)/2    
+    return(list=c(D1=D1, D2=D2, D=D))
+  }
+
+
+################################################################################
+##                                KS.DIST
+################################################################################
+
+
+ks.dist <- function(
+                    spec1,
+                    spec2,
+                    f = NULL,
+                    plot = FALSE,
+                    type = "l",
+                    col = c("blue", "red"),
+                    lty = c(2,4),
+                    flab = "Frequency (kHz)",
+                    alab = "Cumulated amplitude",
+                    flim = c(0,f/2000),
+                    alim = c(0,1),
+                    title = TRUE,
+                    legend = TRUE,
+                    ...
+                    )
+  {
+    leg<-c(as.character(deparse(substitute(spec1))),as.character(deparse(substitute(spec2))))
+
+    ## data input
+    if(is.null(f))
+      {
+        if(is.vector(spec1) & is.vector(spec2)) stop("'f' is missing")  
+        else
+          {
+            if(is.matrix(spec1)) f<-spec1[nrow(spec1),1]*2000
+            else if(is.matrix(spec2)) f<-spec2[nrow(spec2),1]*2000
+          }
+      }
+
+    if(is.matrix(spec1) && ncol(spec1)==2) spec1<-spec1[,2]
+    if(is.matrix(spec2) && ncol(spec2)==2) spec2<-spec2[,2]
+
+    n1<-length(spec1)
+    n2<-length(spec2)
+    if(n1 != n2) stop("spec1 and spec2 must have the same length")
+
+    x<-seq((f/2000)/n1,f/2000,length.out=n1)
+    
+    ## compute D
+    if(any(is.na(spec1)) | any(is.na(spec2)))
+      {
+        D <- F <- NA
+        warning("The data set contains 'NA' values. The returned values have been set to NA.", call.=FALSE)
+        res <- list(D=D, F=F)
+        return(res)
+      } 
+    else
+      {
+        if(any(spec1 < 0) | any(spec2 < 0)) stop("spectra (spec 1 and/or spec 2) do not have to be in dB")
+        if(sum(spec1)==0) {warning(paste("Caution!, spec1 is a null spectrum"), call.=FALSE)}
+        if(sum(spec2)==0) {warning(paste("Caution!, spec2 is a null spectrum"), call.=FALSE)}
+        cum.spec1 <- cumsum(spec1)
+        cum.spec2 <- cumsum(spec2)
+        cum.spec1.norm <- cum.spec1/max(cum.spec1)
+        cum.spec2.norm <- cum.spec2/max(cum.spec2)
+        diff <- abs(cum.spec1.norm - cum.spec2.norm)
+        D <- max(diff)
+        pos <- which.max(diff)
+        if(D==0) {F <- 0} else {F <- x[pos]}
+        res <- list(D=D, F=F)
+
+        ## plot
+        if(plot)
+          {
+            plot(x=x, y=cum.spec1.norm,
+                 col=col[1], lty=lty[1], type = type,
+                 xlim=flim, xaxs="i",
+                 ylim=alim, yaxs="i",
+                 axes=FALSE, ann=FALSE)
+            par(new=TRUE)
+            plot(x=x, y=cum.spec2.norm,
+                 col=col[2], lty=lty[2], type = type,
+                 xaxs="i", xlab=flab, xlim=flim,
+                 yaxs="i", ylim=alim, ylab=alab,...)
+            segments(x0=F, y0= cum.spec1.norm[pos], x1=F, y1=cum.spec2.norm[pos], lwd=2)
+            if(title) title(main=paste("D = ", round(D, 3), "\n F = ", round(F, 3), " kHz"))
+            if(legend) legend("topleft", col=col, lty=lty, legend=leg, bty="n")
+            invisible(res)
+          }
+        else return(res)
+      }
+  }
+
+
+
+
+################################################################################
 ##                                LISTEN
 ################################################################################
 
@@ -2675,10 +2811,10 @@ listen<-function(
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose start and end positions on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
       from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
@@ -2691,7 +2827,7 @@ listen<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -2715,8 +2851,7 @@ lfs<-function(
               wl = 128,
               wn="hanning",
               fftw = FALSE,
-              output = "matrix",
-              pb = FALSE
+              output = "matrix"
               )
 
 {
@@ -2724,18 +2859,18 @@ lfs<-function(
   n<-nrow(wave)
 
                                         # alerts concerning the chose of the frequency shift
-  if (shift == 0) stop("'shift' value cannot be equal to 0")
-  if (shift>f/2) stop("Positive 'shift' value cannot exceed half of the sampling frequency")
-  if (shift<(-f/2)) stop("Negative 'shift' value cannot be less than half of the sampling frequency")
-  if (abs(shift)<f/wl) stop("'shift' value cannot be less than the frequency resolution (f/wl)")
-  if (wl>n*2) stop("'wl' value is too high, respect wl<length(wave)*2")
+  if(shift == 0) stop("'shift' value cannot be equal to 0")
+  if(shift>f/2) stop("Positive 'shift' value cannot exceed half of the sampling frequency")
+  if(shift<(-f/2)) stop("Negative 'shift' value cannot be less than half of the sampling frequency")
+  if(abs(shift)<f/wl) stop("'shift' value cannot be less than the frequency resolution (f/wl)")
+  if(wl>n*2) stop("'wl' value is too high, respect wl<length(wave)*2")
 
   step<-seq(1,n-wl,wl)
   Lstep<-length(step)
   FSH<-abs(shift)
 
                                         # STFT
-  z1 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw, pb=pb)
+  z1 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw)
   ## z1<-matrix(data=numeric(wl*Lstep),wl,Lstep)
   ## W<-ftwindow(wl=wl,wn=wn)
   ## for(i in step) {z1[,which(step==i)]<-fft(wave[i:(wl+i-1),]*W)}
@@ -2790,7 +2925,7 @@ localpeaks <- function(
   {
 
     # stop messages
-    if(is.matrix(spec)==TRUE && ncol(spec)!=2){
+    if(is.matrix(spec) && ncol(spec)!=2){
         stop("If 'spec' is a numeric matrix it should be a two-column matrix
 with the first colum describing the frequency x-axis
 and the second column describing the amplitude y-axis")}
@@ -2808,7 +2943,7 @@ be provided (for instance (f = 44100)")
       }
 
     if(is.null(bands)) stop("The argument 'bands' cannot be NULL.")
-    if(any(bands<0)==TRUE) stop("The argument 'bands' cannot include any negative value")
+    if(any(bands<0)) stop("The argument 'bands' cannot include any negative value")
        
     n <- nrow(spec)
 
@@ -2835,12 +2970,12 @@ be provided (for instance (f = 44100)")
     
     colnames(res) <- c("freq","amp")
     
-    if(plot==TRUE)
+    if(plot)
       {
         plot(spec, type="l", xlab = xlab, ylab = ylab, xaxs="i", yaxt="n")
         points(res, col = "red")
         abline(v=bands, col="grey")
-        if(labels == TRUE) text(res, labels=round(res[,1],2), pos=3, col="red")
+        if(labels) text(res, labels=round(res[,1],2), pos=3, col="red")
         box()
         invisible(res)
       }
@@ -2884,12 +3019,11 @@ meanspec<-function(
                     flim = c(0,f/2000),
                     alim = NULL,
                     type ="l",
-                    pb = FALSE,
                     ...)
 
 {
                                         # STOP MESSAGES  
-  if(!is.null(dB) & PMF == TRUE) stop("PMF cannot be in dB")
+  if(!is.null(dB) & PMF) stop("PMF cannot be in dB")
   if(is.null(dB) & !is.null(dBref)) stop("'dB' cannot be NULL  when 'dBref' is not NULL")
   if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
@@ -2905,7 +3039,7 @@ meanspec<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else {a<-round(from*f)}
           b<-round(to*f)
         }
@@ -2915,14 +3049,14 @@ meanspec<-function(
                                         # FFT
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  y1<-stft(wave=wave,f=f,wl=wl,zp=0,step=step,wn=wn,fftw=fftw,pb=pb)
+  y1<-stft(wave=wave,f=f,wl=wl,zp=0,step=step,wn=wn,fftw=fftw)
   y2<-apply(y1,MARGIN=1,mean)     # mean computation (by rows)
   y3<-y2/max(y2)                               
   y<-ifelse(y3==0,yes=1e-6,no=y3) # replaces 0 values in spectra that cannot be processed by log10())
 
                                         # PSD and PMF OPTIONS
-  if(PSD == TRUE) y<-y^2
-  if(PMF == TRUE) y<-y/sum(y)
+  if(PSD) y<-y^2
+  if(PMF) y<-y/sum(y)
 
                                         # FREQUENCY DATA 
   x<-seq(f/1000/wl,f/2000,length.out=wl/2)  
@@ -2939,10 +3073,10 @@ meanspec<-function(
     }
   
                                         # LIMITS OF THE AMPLITUDE AXIS
-  if(is.null(alim) == TRUE)
+  if(is.null(alim))
     {
-      if (is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
-      if (PMF == TRUE) alim<-c(0,max(y))
+      if(is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
+      if(PMF) alim<-c(0,max(y))
     }
 
                                         # HORIZONTAL PLOT
@@ -2975,10 +3109,10 @@ meanspec<-function(
                type = type, las = 1,...)
         }
 
-      if(identify == TRUE)
+      if(identify)
         {
           cat("choose points on the spectrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=x,y=y,labels=round(x,2),tolerance=0.15,col="red")
           id.freq<-x[id]
           id.amp<-y[id]
@@ -3000,7 +3134,7 @@ meanspec<-function(
         }
       else
         {
-          if (PMF == FALSE)
+          if(PMF == FALSE)
             {
               xaxt<-"n"
               xlab<-alab
@@ -3017,10 +3151,10 @@ meanspec<-function(
                type = type, las = 1,...)
         }
       
-      if(identify == TRUE)
+      if(identify)
         {
           cat("choose points on the spectrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=y,y=x,labels=round(x,2),tolerance=0.15,col="red")
           id.freq<-x[id]
           id.amp<-y[id]
@@ -3055,7 +3189,7 @@ mel<-function(
 
 {
   y<-1127.01048*log(1+(x/700))
-  if(inverse==TRUE) y<-700*(exp(x/1127.01048)-1)
+  if(inverse) y<-700*(exp(x/1127.01048)-1)
   return(y)
 }
 
@@ -3105,10 +3239,10 @@ mutew<-function(
 
   n<-nrow(wave)
   
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose start and end positions on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
       from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
@@ -3132,8 +3266,8 @@ mutew<-function(
 
       if(!is.null(from) && !is.null(to))
         {
-          if (from > to) stop("'from' cannot be superior to 'to'")
-          if (from == 0) {a<-1; b<-round(to*f)}
+          if(from > to) stop("'from' cannot be superior to 'to'")
+          if(from == 0) {a<-1; b<-round(to*f)}
           else {
             a<-round(from*f)
             b<-round(to*f)}
@@ -3143,7 +3277,7 @@ mutew<-function(
 
   wave.muted <- outputw(wave=wave.muted, f=f, format=output)
 
-  if (plot == TRUE)
+  if(plot)
     {
       oscillo(wave.muted,f=f,...)
       invisible(wave.muted)
@@ -3172,9 +3306,38 @@ noisew<-function(
   if(type == "unif") wave <- as.matrix(runif(d*f,min=-1,max=1))
   if(type == "gaussian") wave <- as.matrix(rnorm(d*f))
   wave <- outputw(wave=wave, f=f, format=output)
-  if(listen == TRUE) {listen(sound,f=f)}
+  if(listen) {listen(sound,f=f)}
   return(wave)
 }
+
+
+################################################################################
+##                                NOTEFREQ
+################################################################################
+
+
+notefreq <- function(note,
+                     ref=440,
+                     octave=3
+                     )
+  {
+    if(is.character(note))
+      {
+        n <- nchar(note)
+        if(n > 2) stop("'note' cannot be a character vector with more than 2 characters")
+        if(any(note == c("E#","Fb", "B#", "Cb"))) stop("This note does not exist")
+        if(n==2)
+          {
+            notesplit <- unlist(strsplit(note, split=NULL))
+            if(notesplit[2]=="b") names <- c("C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B")
+            if(notesplit[2]=="#") names <- c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B") 
+          }
+        else names <- c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B") 
+        note <- which(names==note)
+      }
+    f <- ref*2^((octave-3) + ((note-10)/12))
+    return(f)
+  }
 
 
 ################################################################################
@@ -3240,25 +3403,25 @@ oscillo<-function
   if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave); to<-length(wave)/f}
   if(!is.null(from) && !is.null(to))
     {
-      if (from>to) stop("'from' cannot be superior to 'to'")
+      if(from>to) stop("'from' cannot be superior to 'to'")
       if(from==0) {a<-1} else {a<-round(from*f)}
       b<-round(to*f)
     }
   wave<-as.matrix(wave[a:b,])
   n<-nrow(wave)
 
-  if (plot == TRUE)
+  if(plot)
     {
       alim<-max(abs(wave))
                                         # to get a single window view
-      if (k==1 & j==1)
+      if(k==1 & j==1)
         {
-          if (!is.null(scroll))
+          if(!is.null(scroll))
             {
               if(!is.numeric(scroll)) stop("scroll has to a numeric")
               if(length(scroll)>1) stop("length of scroll cannot be superior to 1")
-              if(zoom == TRUE) stop("zoom and scroll cannot be used together")
-              if(identify == TRUE) stop("identify and scroll cannot be used together")
+              if(zoom) stop("zoom and scroll cannot be used together")
+              if(identify) stop("identify and scroll cannot be used together")
               step<-round(seq(0,n,length.out=scroll+1))
               lstep<-length(step)
               pos<-1:(lstep-1)
@@ -3284,7 +3447,7 @@ oscillo<-function
 
           else
             {
-              if (zoom == TRUE)
+              if(zoom)
                 {
                   par(tcl=0.5, col.axis=colaxis, cex.axis = cexaxis, col=colline,las=0)
                   plot(x=seq(from,to,length.out=n), y=wave,
@@ -3295,7 +3458,7 @@ oscillo<-function
                        cex.lab=0.8, font.lab=2,
                        bty=bty
                        )
-                  if (bty == "l" | bty == "o")
+                  if(bty == "l" | bty == "o")
                     {axis(side=1, col=colline,labels=FALSE)
                      axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)}
                   mtext("Time (s)",col=collab, font=fontlab, cex=cexlab, side=1,line=3)
@@ -3303,11 +3466,11 @@ oscillo<-function
                   abline(h=0,col=coly0,lty=2)
 
                   cat("choose start and end positions on the wave\n")
-                  if (.Platform$OS.type == "windows") flush.console()
+                  if(.Platform$OS.type == "windows") flush.console()
                   coord<-locator(n=2)
                   from<-coord$x[1]; c<-from*f-a
                   to<-coord$x[2]; d<-to*f-a
-                  if (d<c) {c<-d; d<-c}
+                  if(d<c) {c<-d; d<-c}
                   wave<-as.matrix(wave[c:d,1])
                   n<-nrow(wave)
                 }
@@ -3328,7 +3491,7 @@ oscillo<-function
                   axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)
 		}
 
-              if(labels == TRUE)
+              if(labels)
                 {
                   mtext("Time (s)",col=collab, font=fontlab,side=1,line=3,cex=cexlab)
                   mtext("Amplitude",col=collab, font=fontlab, cex=cexlab,side=2,line=3)
@@ -3338,13 +3501,13 @@ oscillo<-function
 
               if(is.character(title)) title<-paste(title)
               if(title == FALSE) {title <- paste("")}
-              if(title == TRUE) {title<-paste("Total time =",as.character(round(n/f,3)), "s - f =",as.character(f),"Hz")}
+                  else {title<-paste("Total time =",as.character(round(n/f,3)), "s - f =",as.character(f),"Hz")}
               title(main=title, col.main=coltitle, cex.main=cextitle, font.main=fonttitle)
 
-              if (identify == TRUE)
+              if(identify)
                 {
                   cat("choose points on the wave\n")
-                  if (.Platform$OS.type == "windows") flush.console()
+                  if(.Platform$OS.type == "windows") flush.console()
                   x<-seq(from=from,to=to,length.out=n)
                   y<-wave
                   id<-identify(x=x, y=y, labels=round(x,3), col="red", plot=TRUE)
@@ -3359,8 +3522,8 @@ oscillo<-function
       else
         {
           if(!is.null(scroll)) stop("scroll cannot be used with a multi-frame window")
-          if(zoom == TRUE) stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
-          if(identify == TRUE) stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
+          if(zoom) stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
+          if(identify) stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
           x<-n%/%p
           def.par <- par(no.readonly = TRUE)
           on.exit(par(def.par))
@@ -3379,15 +3542,15 @@ oscillo<-function
                xaxt=xaxt, yaxt=yaxt,
                bty=bty)
           axis(side=1, col=colline,labels=FALSE)
-          if (bty == "l" | bty == "o")
+          if(bty == "l" | bty == "o")
             {axis(side=2, at=max(abs(wave)), col=colline,labels=FALSE)
              axis(side=1, col=colline,labels=FALSE)}
           abline(h=0,col=coly0,lty=2)
 
                                         # title
           if(is.character(title)) title<-paste(title)
-          if (title == FALSE) {title <- paste("")}
-          if (title == TRUE)
+          if(title == FALSE) {title <- paste("")}
+          else
             {
               title<-paste("Window time =",
                            as.character(round(n/(p*f),3)),"s - Total time =",
@@ -3397,7 +3560,7 @@ oscillo<-function
           mtext(paste(title),side=3,line=0.4,col=coltitle,cex=cextitle,font=fonttitle,outer=TRUE)
 
                                         # X-Y labels
-          if (labels == TRUE)
+          if(labels)
             {
               mtext("Time (s)",col=collab, side=1,line=1.5, font=fontlab,cex=cexlab,outer=TRUE)
               mtext("Amplitude",col=collab, side=2, font=fontlab,cex=cexlab,
@@ -3417,7 +3580,7 @@ oscillo<-function
                    xaxt=xaxt, yaxt=yaxt,
                    bty=bty)
 
-              if (bty == "l" | bty == "o")
+              if(bty == "l" | bty == "o")
                 {axis(side=2, at = max(abs(wave)), col=colline,labels=FALSE)
                  axis(side=1, col=colline,labels=FALSE)}
               abline(h=0,col=coly0,lty=2)
@@ -3475,7 +3638,7 @@ oscilloST<-function(
         }
     }
 
-  if (plot==TRUE)
+  if(plot)
     {
       op<-par(mfrow=c(2,1),oma=c(5,3,2,2),mar=rep(0,4), cex.axis=cexaxis)
       
@@ -3504,7 +3667,7 @@ oscilloST<-function(
 ##                                PASTEW
 ################################################################################
 
-pastew<-function(
+pastew <- function(
                  wave1,
                  wave2,
                  f,
@@ -3521,19 +3684,21 @@ pastew<-function(
 
   n<-nrow(wave2)
 
-  if(choose==TRUE)
+  if(choose)
     { 
       cat("choose position on the wave\n")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave2,f=f)
       coord<-locator(n=1)
       at<-coord$x[1]; abline(v=at,col=2,lty=2)
     }
   else
     {
-      if(at=="start")  at<-0
-      if(at=="middle") at<-n/(2*f)
-      if(at=="end")    at<-n/f
+        switch(at,
+         start = {at <- 0},
+         middle = {at <- n/(2*f)},
+         end = {at <- n/f}
+         )
     }
 
   pos<-round(at*f)
@@ -3543,7 +3708,7 @@ pastew<-function(
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
   
-  if (plot == TRUE)
+  if(plot)
     {
       def.par <- par(no.readonly = TRUE)
       on.exit(par(def.par))
@@ -3554,7 +3719,7 @@ pastew<-function(
       title(main="signal to be completed")  
       oscillo(wave3,f=f,k=1,j=1)
       title(main="resulting signal")
-      if (marks == TRUE)
+      if(marks)
         {
           abline(v=at, col="red", lty=2)
           abline(v=at+(nrow(wave1))/f, col="red", lty=2)
@@ -3587,7 +3752,7 @@ pulse<-function(
 
   wave <- outputw(wave=wave, f=f, format=output)
 
-  if(plot==TRUE)
+  if(plot)
     {
       oscillo(wave,f=f,...)
       invisible(wave)
@@ -3616,18 +3781,18 @@ Q<-function(
             ...)
 
 {
-  if(is.null(f)==TRUE)
+  if(is.null(f))
     {
-      if(is.vector(spec)==TRUE) stop("'f' is missing")  
-      else if(is.matrix(spec)==TRUE) f<-spec[nrow(spec),1]*2000
+      if(is.vector(spec)) stop("'f' is missing")  
+      else if(is.matrix(spec)) f<-spec[nrow(spec),1]*2000
     }
 
-  if(is.matrix(spec)==TRUE) spec<-spec[,2]
+  if(is.matrix(spec)) spec<-spec[,2]
 
   range<-c(f/2000/length(spec),f/2000)
 
-  if (max(spec) == 1) stop ("data must be in dB")
-  if (which.max(spec) == 1) 
+  if(max(spec) == 1) stop ("data must be in dB")
+  if(which.max(spec) == 1) 
     stop ("maximal peak cannot be the first value of the spectrum") 
 
   n0<-length(spec)
@@ -3649,7 +3814,7 @@ Q<-function(
   Q<-f0/(f2[1]-f1[length(f1)])
 
                                         # plot based on original data (=> spectrum)
-  if (plot == TRUE)
+  if(plot)
     {
       x<-seq(range[1],range[2],length.out=n0)
       plot(x=x,y=spec,xlab=flab,ylab=alab,type=type,...)
@@ -3681,7 +3846,7 @@ repw<-function(
   wave1 <- rep(wave,times=times)
   wave1 <- outputw(wave=wave1, f=f, format=output)
 
-  if (plot == TRUE)
+  if(plot)
     {
       oscillo(wave=wave1,f=f,...)
       invisible(wave1)
@@ -3708,18 +3873,18 @@ revw<-function(
 
   if(env == FALSE & ifreq == FALSE) stop ("Both arguments 'env' and 'ifreq' cannot be set to FALSE.")
 
-  if(env==TRUE & ifreq == TRUE) {wave2<-as.matrix(rev(wave[,1]))}
+  if(env & ifreq) {wave2<-as.matrix(rev(wave[,1]))}
   else
     {
       wave.e<-env(wave[,1],f=f,plot=FALSE)
       wave.p<-ifreq(wave[,1],f=f,plot=FALSE)$p[,2]
-      if(env==TRUE & ifreq== FALSE) {wave2<-as.matrix(rev(wave.e)*cos(wave.p))}
-      if(env==FALSE & ifreq == TRUE) {wave2<-as.matrix(wave.e*cos(rev(wave.p)))}
+      if(env & ifreq== FALSE) {wave2<-as.matrix(rev(wave.e)*cos(wave.p))}
+      if(env==FALSE & ifreq) {wave2<-as.matrix(wave.e*cos(rev(wave.p)))}
     }
 
   wave2 <- outputw(wave=wave2, f=f, format=output)
   
-  if (plot == TRUE)
+  if(plot)
     {
       oscillo(wave=wave2,f=f,...)
       invisible(wave2)
@@ -3745,11 +3910,11 @@ resamp<-function(
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)$w
 
   n<-nrow(wave)
-  if (g==f) stop ("'f' and 'g' must be different")
-  if (g<f)  {r<-f/g; wave1<-wave[seq(1,n,by=r),1]}
-  if (g>f)  {s<-(n*g)/f; wave1<-approx(wave,n=s)$y}
+  if(g==f) stop ("'f' and 'g' must be different")
+  if(g<f)  {r<-f/g; wave1<-wave[seq(1,n,by=r),1]}
+  if(g>f)  {s<-(n*g)/f; wave1<-approx(wave,n=s)$y}
 
-  wave1 <- outputw(wave=wave1, f=f, format=output)
+  wave1 <- outputw(wave=wave1, f=g, format=output)
   
   return(wave1)
 }
@@ -3772,15 +3937,15 @@ rmam<-function(
   wave<-as.matrix(wave/Mod(hilbert(wave,f=f)))
   wave <- outputw(wave=wave, f=f, format=output)
 
-  if(plot==TRUE)
+  if(plot)
     {
       oscillo(wave=wave,f=f,...)
-      if(listen == TRUE) {listen(wave,f=f)}
+      if(listen) {listen(wave,f=f)}
       invisible(wave)
     }
   else
     {
-      if(listen == TRUE) {listen(wave,f=f)}
+      if(listen) {listen(wave,f=f)}
       return(wave)
     }
 }
@@ -3804,7 +3969,7 @@ rmoffset<-function(
 
   wave2 <- outputw(wave=wave2, f=f, format=output)
   
-  if (plot==TRUE)
+  if(plot)
     {
       oscillo(wave=wave2,f=f,...)
       invisible(wave2)
@@ -3877,7 +4042,7 @@ savewav<-function(
                   )
 
 {
-  if (is.null(filename)) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
+  if(is.null(filename)) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
   input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
   wave <- Wave(left=wave, samp.rate=f, bit=16)
   max <- max(wave@left)
@@ -3901,7 +4066,7 @@ seedata <- function(
 
 {
                                         # na
-  if(na.rm==TRUE) data<-na.omit(data)
+  if(na.rm) data<-na.omit(data)
 
                                         # layout
   def.par <- par(no.readonly = TRUE)
@@ -3984,15 +4149,15 @@ setenv<-function(
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
 
-  if(plot == TRUE)
+  if(plot)
     {
       oscillo(wave=wave3,f=f,...)
-      if(listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       invisible(wave3)
     }
   else
     {
-      if (listen == TRUE) {listen(wave3,f=f)}
+      if(listen) {listen(wave3,f=f)}
       return(wave3)
     }
 }
@@ -4005,11 +4170,11 @@ setenv<-function(
 sfm<-function(spec)
 
 {
-  if(is.matrix(spec) == TRUE) spec <- spec[, 2]
+  if(is.matrix(spec)) spec <- spec[, 2]
   if(any(spec<0)) stop("Data do not have to be in dB")
   if(sum(spec)==0) flat<-NA
                                         # undersample spec if too long because prod(spec) tends towards zero
-  if (length(spec) > 400)
+  if(length(spec) > 400)
     {
       step<-seq(1,length(spec),by=round(length(spec)/256))
       spec<-spec[step]
@@ -4035,9 +4200,10 @@ sh<-function(
              )
 
 {
-  if(is.matrix(spec)==TRUE) spec<-spec[,2]
+
+  if(is.matrix(spec) && ncol(spec)==2) spec<-spec[,2]
   options(warn=-1)  # to ignore warning messages
-  if(is.na(spec)) {options(warn=-1) ; z <- 0 ; options(warn=0)}  # options(warn) to ignore temporarely warning messages
+  if(any(is.na(spec))) {options(warn=-1) ; z <- NA ; options(warn=0)}  # options(warn) to ignore temporarely warning messages
   else
     {
       options(warn=0)  # to authorize warning messages
@@ -4047,8 +4213,8 @@ sh<-function(
         {
           N<-length(spec)
           spec[spec==0]<-1e-7
-          specn<-spec/sum(spec)  # PMF
-          z<- -sum(specn*log2(specn))/log2(N)
+          spec<-spec/sum(spec)  # PMF
+          z<- -sum(spec*log(spec))/log(N)
         }
     }
   return(z)
@@ -4083,30 +4249,30 @@ simspec<-function(
 {
   leg<-c(as.character(deparse(substitute(spec1))),as.character(deparse(substitute(spec2))))
 
-  if(is.null(f)==TRUE)
+  if(is.null(f))
     {
-      if(is.vector(spec1)==TRUE & is.vector(spec2)==TRUE) stop("'f' is missing")  
+      if(is.vector(spec1) & is.vector(spec2)) stop("'f' is missing")  
       else
         {
-          if(is.matrix(spec1)==TRUE) f<-spec1[nrow(spec1),1]*2000
-          else if(is.matrix(spec2)==TRUE) f<-spec2[nrow(spec2),1]*2000
+          if(is.matrix(spec1)) f<-spec1[nrow(spec1),1]*2000
+          else if(is.matrix(spec2)) f<-spec2[nrow(spec2),1]*2000
         }
     }
 
-  if(is.matrix(spec1)==TRUE && ncol(spec1)==2) spec1<-spec1[,2]
-  if(is.matrix(spec2)==TRUE && ncol(spec2)==2) spec2<-spec2[,2]
+  if(is.matrix(spec1) && ncol(spec1)==2) spec1<-spec1[,2]
+  if(is.matrix(spec2) && ncol(spec2)==2) spec2<-spec2[,2]
 
   n1<-length(spec1)
   n2<-length(spec2)
 
-  if (n1 != n2) stop("spec1 and spec2 must have the same length")
-  if (any(spec1 < 0) | any(spec2 < 0))
+  if(n1 != n2) stop("spec1 and spec2 must have the same length")
+  if(any(spec1 < 0) | any(spec2 < 0))
     stop("spectra (spec 1 and/or spec 2) do not have to be in dB")
 
   S1<-100*(pmin(spec1,spec2)/pmax(spec1,spec2))
   S<-sum(S1)/n1
 
-  if (plot==TRUE)
+  if(plot)
     {
       x<-seq((f/2000)/n1,f/2000,length.out=n1)
       plot(x=x, y=spec1*100, type=type, lty=lty1, col=col1,
@@ -4122,7 +4288,7 @@ simspec<-function(
       plot(x=x, y=S1, type=type, lty=lty3, col=col3,
            xaxs="i", xlab=flab, xlim=flim,
            yaxs="i", ylim=alim, ylab=alab,...)
-      if(legend==TRUE) legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg)
+      if(legend) legend("topleft", col=c(col1,col2),lty=c(lty1,lty2),legend=leg, bty="n")
     }
 
   return(S)
@@ -4158,7 +4324,7 @@ spec<-function(
 
 {
                                         # STOP MESSAGES  
-  if(!is.null(dB) & PMF == TRUE) stop("PMF cannot be in dB")
+  if(!is.null(dB) & PMF) stop("PMF cannot be in dB")
   if(is.null(dB) & !is.null(dBref)) stop("'dB' cannot be NULL  when 'dBref' is not NULL")
   if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
@@ -4174,7 +4340,7 @@ spec<-function(
       if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
-          if (from>to) stop("'from' cannot be superior to 'to'")
+          if(from>to) stop("'from' cannot be superior to 'to'")
           if(from==0) {a<-1} else a<-round(from*f)
           b<-round(to*f)
         }
@@ -4203,8 +4369,8 @@ spec<-function(
   y<-ifelse(y2==0,yes=1e-6,no=y2)  # replaces 0 values in spectra that cannott be processed by log10()
 
                                         # PSD and PMF OPTIONS
-  if(PSD == TRUE) y<-y^2
-  if(PMF == TRUE) y<-y/sum(y)
+  if(PSD) y<-y^2
+  if(PMF) y<-y/sum(y)
 
                                         # FREQUENCY DATA
   if(!is.null(at)) x<-seq(f/1000/wl,f/2000,length.out=n%/%2)
@@ -4222,10 +4388,10 @@ spec<-function(
     }
   
                                         # LIMITS OF THE AMPLITUDE AXIS
-  if(is.null(alim) == TRUE)
+  if(is.null(alim))
     {
-      if (is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
-      if (PMF == TRUE) alim<-c(0,max(y))
+      if(is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y), max(y) + 20)}
+      if(PMF) alim<-c(0,max(y))
     }
 
                                         # HORIZONTAL PLOT
@@ -4242,7 +4408,7 @@ spec<-function(
         }
       else
         {
-          if (PMF == FALSE)
+          if(PMF == FALSE)
             {
               yaxt<-"n"
               ylab<-alab
@@ -4260,10 +4426,10 @@ spec<-function(
                ...)
         }
 
-      if(identify == TRUE)
+      if(identify)
         {
           cat("choose points on the spectrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=x,y=y,labels=round(x,2),tolerance=0.15,col="red")
           id.freq<-x[id]
           id.amp<-y[id]
@@ -4286,7 +4452,7 @@ spec<-function(
         }
       else
         {
-          if (PMF == FALSE)
+          if(PMF == FALSE)
             {
               xaxt<-"n"
               xlab<-alab
@@ -4304,10 +4470,10 @@ spec<-function(
                ...)
         }
 
-      if(identify == TRUE)
+      if(identify)
         {
           cat("choose points on the spectrum\n")
-          if (.Platform$OS.type == "windows") flush.console()
+          if(.Platform$OS.type == "windows") flush.console()
           id<-identify(x=y,y=x,labels=round(x,2),tolerance=0.15,col="red")
           id.freq<-x[id]
           id.amp<-y[id]
@@ -4346,13 +4512,13 @@ specprop<-function(
                    ...)
 
 {
-  if(is.null(f)==TRUE)
+  if(is.null(f))
     {
-      if(is.vector(spec)==TRUE) stop("'f' is missing")  
-      else if(is.matrix(spec)==TRUE) f<-spec[nrow(spec),1]*2000
+      if(is.vector(spec)) stop("'f' is missing")  
+      else if(is.matrix(spec)) f<-spec[nrow(spec),1]*2000
     }
 
-  if(is.matrix(spec)==TRUE) spec<-spec[,2]  
+  if(is.matrix(spec)) spec<-spec[,2]  
   L<-length(spec)
   wl<-L*2
   if(any(spec<0)) stop("The frequency spectrum to be analysed should not be in dB")
@@ -4428,7 +4594,7 @@ specprop<-function(
                 cent=cent,skewness=skew,kurtosis=kurt,
                 sfm=sfm,sh=sh,
                 prec=prec)
-  if(str==TRUE) {results <- str(results,digits.d=5,give.head=FALSE)}
+  if(str) {results <- str(results,digits.d=5,give.head=FALSE)}
   
                                         # plot
   if(plot==1)
@@ -4519,8 +4685,8 @@ spectro <- function(
                   flimd = NULL,
                   widths = c(6,1),
                   heights = c(3,1),
+                  oma = rep(0,4),
                   listen = FALSE,
-                  pb = FALSE,
                   ...)
 
 {
@@ -4535,13 +4701,13 @@ spectro <- function(
                                         # TIME AND FREQUENCY LIMITS
   if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
                                         # dynamic vertical zoom (modifications of analysis parameters)
-  if (!is.null(flimd))                        
+  if(!is.null(flimd))                        
     {
                                         # zoom magnification
       mag<-round((f/2000)/(flimd[2]-flimd[1]))
                                         # new parameters
       wl<-wl*mag                              
-      if (ovlp==0) ovlp<-100
+      if(ovlp==0) ovlp<-100
       ovlp<-100-round(ovlp/mag)
                                         # use of normal flim to follow axis modifications
       flim<-flimd     
@@ -4551,15 +4717,15 @@ spectro <- function(
                                         # STFT
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
-  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,pb=pb)
+  z<-stft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw)
 
                                         # X axis settings
-  if(!is.null(tlim) && trel==TRUE) {X<-seq(tlim[1],tlim[2],length.out=length(step))}
+  if(!is.null(tlim) && trel) {X<-seq(tlim[1],tlim[2],length.out=length(step))}
   else {X<-seq(0,n/f,length.out=length(step))}
 
                                         # Y axis settings
 
-  if(is.null(flim)==TRUE) {Y<-seq((f/1000)/(wl + zp),f/2000,length.out=nrow(z))}
+  if(is.null(flim)) {Y<-seq((f/1000)/(wl + zp),f/2000,length.out=nrow(z))}
   else
     {
       fl1<-flim[1]*nrow(z)*2000/f
@@ -4581,17 +4747,17 @@ spectro <- function(
   
   Z<-t(z)
   
-  if (plot==TRUE)
+  if(plot)
     {
       maxz <- round(max(z))
       if(is.null(collevels)) collevels <- seq(maxz-30,maxz,1)
       if(is.null(contlevels)) contlevels <- seq(maxz-30,maxz,10)
       Zlim<-range(Z, finite = TRUE)
       # SPECTRO + OSC + SCALE
-      if (osc==TRUE & scale==TRUE)
+      if(osc & scale)
         {
           layout(matrix(c(3, 1 ,2, 0), nc = 2, byrow=TRUE), widths = widths, heights = heights)
-          par(las=0, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis)
+          par(las=0, oma=oma, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis)
           # SCALE
           par(mar=c(0,1,4.5,3))
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
@@ -4606,41 +4772,42 @@ spectro <- function(
                    cexaxis=cexaxis,
                    ...)
           # SPECTRO
-          par(mar=c(0,4.1,1,0), las=1)
+          par(mar=c(0,4.1,1,0), las=1, cex.lab=cexlab+0.2)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab="",ylab=flab),
                                 color.palette=palette,
                                 axisX=FALSE, axisY=axisY
                                 )
-          if(grid == TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-          if(cont == TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
+          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
           if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
            
       # SPECTRO + SCALE
-      if (osc==FALSE & scale==TRUE)
+      if(osc==FALSE & scale)
         {
           layout(matrix(c(2, 1), nc = 2, byrow=TRUE), widths = widths)
           # SCALE
-          par(mar=c(5,1,4.5,3),las=0)
+          par(mar=c(5,1,4.5,3), oma=oma, las=0)
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
           # SPECTRO
-          par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg)
+          par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg,cex.lab=cexlab+0.2)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab),
                                 color.palette=palette,
                                 axisX=axisX, axisY=axisY)
-          if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
           if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
-          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
         }
 
       # SPECTRO + OSCILLO
-      if (osc==TRUE & scale==FALSE)
+      if(osc & scale==FALSE)
         {
           layout(matrix(c(2,1), nr = 2, byrow=TRUE), heights=heights) 
-          par(mar=c(5.1,4.1,0,2.1), las=0, bg=colbg)
+          par(mar=c(5.1,4.1,0,2.1), las=0, oma=oma, bg=colbg)
+          # OSCILLO
           soscillo(wave=wave,f=f,bty="u",
                    collab=collab,colaxis=colaxis,colline=colaxis,
                    tickup=max(abs(wave),na.rm=TRUE),
@@ -4648,31 +4815,33 @@ spectro <- function(
                    tlab=tlab, alab=alab,
                    cexlab=cexlab, cexaxis=cexaxis,
                    ...)
-          par(mar=c(0,4.1,2.1,2.1), las=1)
+          # SPECTRO
+          par(mar=c(0,4.1,2.1,2.1), las=1, cex.lab=cexlab)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab="",ylab=flab), color.palette=palette, axisX=FALSE, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis,...)		
-          if(grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
+          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
           if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
 
       # SPECTRO ONLY
-      if (osc==FALSE & scale==FALSE)
+      if(osc==FALSE & scale==FALSE)
         {
-          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg, cex.lab=cexlab, cex.axis=cexaxis,...)
+          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg, cex.axis=cexaxis,cex.lab=cexlab,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab), color.palette=palette, axisX=axisX, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis)		
-          if (grid==TRUE) grid(nx=NA, ny=NULL, col=colgrid)
-          if(cont==TRUE){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+          if(grid) grid(nx=NA, ny=NULL, col=colgrid)
+          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
           if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         } 
-      if (listen == TRUE) {listen(wave, f=f)}
+      if(listen) {listen(wave, f=f)}
       invisible(list(time=X, freq=Y, amp=z))
     }
   else return(list(time=X, freq=Y, amp=z))
 }
+
 
 
 ################################################################################
@@ -4693,8 +4862,7 @@ spectro3D<-function(
                     magt = 10,
                     magf = 10,
                     maga = 2,
-                    palette = rev.terrain.colors,
-                    pb = FALSE
+                    palette = rev.terrain.colors
                     )
 
 {
@@ -4707,7 +4875,7 @@ spectro3D<-function(
                                         # STFT
   n <- nrow(wave)
   step <- seq(1, n - wl, wl - (ovlp * wl/100))
-  z <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw, pb=pb)
+  z <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw)
 
                                         # dB WEIGHTS
   F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(z))
@@ -4721,7 +4889,7 @@ spectro3D<-function(
       if(dB == "D") z <- dBweight(F*1000, dBref = z)$D
     }
  
-  if (plot == TRUE)
+  if(plot)
     {
       X <- magt * (1:ncol(z))
       Y <- magf * (1:nrow(z))
@@ -4781,20 +4949,20 @@ symba<-function(
                                         # entropy of the sequence
   freq1b<-as.vector(freq1a)
   freq1c<-freq1b/sum(freq1b)
-  if(entropy=="abs") h1<- -sum(freq1c*log2(freq1c))
-  else if(entropy=="rel") h1<- -sum(freq1c*log2(freq1c))/log2(length(freq1c))
+  if(entropy=="abs") h1<- -sum(freq1c*log(freq1c))
+  else if(entropy=="rel") h1<- -sum(freq1c*log(freq1c))/log(length(freq1c))
   
   if(is.null(y))
     {
-      if(plot==TRUE)
+      if(plot)
         {
           if(symb==3) {s1<-c(NA,s1)} else if(symb==5) {s1<-c(NA,s1,NA)}
           plot(x,type=type,lty=lty1,xlab=xlab,ylab=ylab,...)
           text(x=x,labels=s1,col=col1, cex=cex1)
         }
-      if(collapse==TRUE) s1<-paste(s1,collapse="")
+      if(collapse) s1<-paste(s1,collapse="")
       results <- list(s1=s1,freq1=freq1c, h1=h1)
-      if(plot==TRUE) {invisible(results)} else return(results)
+      if(plot) {invisible(results)} else return(results)
     }
 
   if(!is.null(y))
@@ -4808,19 +4976,19 @@ symba<-function(
                                         # entropy of the sequence
       freq2b<-as.vector(freq2a)
       freq2c<-freq1b/sum(freq2b)
-      if(entropy=="abs") h2<- -sum(freq2c*log2(freq2c))
-      else if(entropy=="rel") h2<- -sum(freq2c*log2(freq2c))/log2(length(freq2c))
+      if(entropy=="abs") h2<- -sum(freq2c*log(freq2c))
+      else if(entropy=="rel") h2<- -sum(freq2c*log(freq2c))/log(length(freq2c))
                                         # joint entropy
                                         # frequency of each pair of symbols
       freq12<-table(paste(s1,s2,sep=""))
       freq12<-as.vector(freq12)
       freq12<-freq12/sum(freq12)
                                         # joint entropy
-      if(entropy=="abs") h12<- -sum(freq12*log2(freq12))
-      else if(entropy=="rel") h12<- -sum(freq12*log2(freq12))/log2(length(freq12))
+      if(entropy=="abs") h12<- -sum(freq12*log(freq12))
+      else if(entropy=="rel") h12<- -sum(freq12*log(freq12))/log(length(freq12))
                                         # mutual information
       I<-h1+h2-h12
-      if(plot==TRUE)
+      if(plot)
         {
           if(symb==3) {s1<-c(NA,s1);s2<-c(NA,s2)} else {s1<-c(NA,s1,NA);s2<-c(s2,NA)}
           plot(x,type=type, col=col1, lty=lty1,ylim=c(min(c(x,y)),max(c(x,y))),xlab=xlab,ylab=ylab,...)
@@ -4828,9 +4996,9 @@ symba<-function(
           lines(y,type=type, col=col2,lty=lty2)
           text(x=y,labels=s2, col=col2, cex=cex2)
         }
-      if(collapse==TRUE) {s1<-paste(s1,collapse=""); s2<-paste(s2,collapse="")} 
+      if(collapse) {s1<-paste(s1,collapse=""); s2<-paste(s2,collapse="")} 
       results <- list(s1=s1,freq1=freq1c, h1=h1, s1=s2,freq2=freq2c, h2=h2, I=I)
-      if(plot==TRUE) {invisible(results)} else return(results)      
+      if(plot) {invisible(results)} else return(results)      
     }
 }
 
@@ -4866,26 +5034,26 @@ synth<-function(
   t <- seq(0, d*2*pi, length.out = n)
 
 
-  if (fme==0 && fmf!=0)          stop("FM sinusoidal excursion has to be set")
-  if (fme!=0 && fmf==0 && fmE==0) stop("FM sinusoidal frequency or FM linear excursion has to be set")
-  if (fme!=0 && fmf==0 && fmE!=0) stop("FM sinusoidal frequency has to be set")
+  if(fme==0 && fmf!=0)          stop("FM sinusoidal excursion has to be set")
+  if(fme!=0 && fmf==0 && fmE==0) stop("FM sinusoidal frequency or FM linear excursion has to be set")
+  if(fme!=0 && fmf==0 && fmE!=0) stop("FM sinusoidal frequency has to be set")
 
-  if (fmE>0) freq<-seq(0,fmE/2,length.out=f*d) else freq<-rev(seq(fmE/2,0,length.out=n))
+  if(fmE>0) freq<-seq(0,fmE/2,length.out=f*d) else freq<-rev(seq(fmE/2,0,length.out=n))
 
-  if (fme==0 & fmf==0) {sound<-(1+amp*cos(amf*t))*sin((cf*t)+(freq*t)+p)}
+  if(fme==0 & fmf==0) {sound<-(1+amp*cos(amf*t))*sin((cf*t)+(freq*t)+p)}
 
-  if (fme!=0 & fmf!=0)
+  if(fme!=0 & fmf!=0)
     {
-      if (fmE == 0)       sound<-(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+p)
+      if(fmE == 0)       sound<-(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+p)
       else                sound<-(1+amp*cos(amf*t))*sin(cf*t+(fme/fmf)*sin(fmf*t+p)+(freq*t)+p)
     }
 
   if(!is.null(shape))
     {
-      if (shape=="incr") {S<-seq(0,1,length.out=n)}
-      if (shape=="decr") {S<-seq(1,0,length.out=n)}
-      if (shape=="sine") {S<-sin(seq(0,pi,length.out=n))}
-      if (shape=="tria")
+      if(shape=="incr") {S<-seq(0,1,length.out=n)}
+      if(shape=="decr") {S<-seq(1,0,length.out=n)}
+      if(shape=="sine") {S<-sin(seq(0,pi,length.out=n))}
+      if(shape=="tria")
         {
           if(n%%2 == 1) S<-c(seq(0,1,length.out=n%/%2),seq(1,0,length.out=n%/%2+1))  # if n is odd
           else S<-c(seq(0,1,length.out=n%/%2),seq(1,0,length.out=n%/%2)) # if n is even
@@ -4897,15 +5065,15 @@ synth<-function(
 
   sound <- outputw(wave=sound, f=f, format=output)
 
-  if(plot == TRUE)
+  if(plot)
     {
       spectro(sound, f=f,...)
-      if(listen == TRUE) {listen(sound,f=f)}
+      if(listen) {listen(sound,f=f)}
       invisible(sound)
     }
   else
     {
-      if(listen == TRUE) {listen(sound,f=f)}
+      if(listen) {listen(sound,f=f)}
       return(sound)
     }
 }
@@ -4916,7 +5084,7 @@ synth<-function(
 ##                                TH
 ################################################################################
 
-th<-function(
+th <- function(
              env
              )
 
@@ -4925,21 +5093,21 @@ th<-function(
   if(is.na(env)) z <- 0 
   else{
     options(warn=0) # to authorize warning messages
-    if (any(env<0, na.rm=TRUE))  stop ("data must be an envelope, i. e. a vector including positive values only.")
+    if(any(env<0, na.rm=TRUE))  stop ("data must be an envelope, i. e. a vector including positive values only.")
     N<-length(env)
-    if (sum(env)==0) 
+    env<-env/sum(env) # PMF
+    if(any(is.nan(env))) 
       {
         warning("Caution! There is no signal in this data set! The temporal entropy is null!", call.=FALSE)
         return(0)
       }
-    if (sum(env)/(N*env[1]) == 1 | sum(env)/N == 1)
+    if(sum(env)/(N*env[1]) == 1 | sum(env)/N == 1)
       {
         warning("Caution! This is a square signal. The temporal entropy is null!", call.=FALSE)
         return(0)
       }
     env[env==0]<-1e-7
-    envn<-env/sum(env) # PMF
-    z<--sum(envn*log2(envn))/log2(N)
+    z<--sum(env*log(env))/log(N)
   }
   return(z)
 }
@@ -4949,109 +5117,78 @@ th<-function(
 ##                                TIMER
 ################################################################################
 
-timer <- function(
-                  wave,
-                  f,
-                  threshold = 5,
-                  envt = "abs",
-                  power = 1, 
-                  msmooth = NULL,
-                  ksmooth = NULL,
-                  plot = TRUE,
-                  plotthreshold = TRUE,
-                  col = "black",
-                  colval = "red",
-                  xlab = "Time (s)",
-                  ylab = "Amplitude",
-                  ...
-                  )
-
-
+timer<-function (wave, f, threshold = 5, envt = "abs", power = 1,
+msmooth = NULL,
+    ksmooth = NULL, plot = TRUE, plotthreshold = TRUE, col = "black",
+    colval = "red", xlab = "Time (s)", ylab = "Amplitude", ...)
 {
-  if(power==0) stop("'power' cannot equal to 0")
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-  n <- length(wave)
-  thres <- threshold/100
-  wave1 <- env(wave=wave, f=f, msmooth=msmooth, ksmooth=ksmooth, envt=envt, norm=TRUE, plot=FALSE)^power
-  n1 <- length(wave1)
-  F <- f*n1/n
-  wave1 <- ts(wave1,start=0,end=n1/F,freq=F)
-  wave2 <- ifelse(wave1<=thres,yes=1,no=2)
-  wave3 <- ts(wave2,start=0,end=n1/F,freq=F)
-                                        # add successive values in wave1,
-                                        # values of 3 corresponds to the end of a silence or signal period
-  wave4 <- numeric(n1)  
-  for (i in 1:(n-1))  {wave4[i]<-wave2[i]+wave2[i+1]}
-
-                                        # sets a value of 3 at the first and last point of the signal
-  wave4[1] <- 3
-  wave4[n1] <- 3
-
-                                        # gives the indeces of the end of a pause or signal period
-  wave5 <- which(wave4==3)
-
-                                        # calculates the interval index between two successive ZC
-  n5 <- length(wave5)
-  wave6 <- numeric(n5-1)
-  for (i in 1:(n5-1)) {wave6[i] <- wave5[i+1]-wave5[i]}
-                                        # calculates signal and pause durations
-  y <- wave6/F
-
-  if (wave2[1]==1)  # if the file starts with a pause
-    {
-      pause <- y[seq(1,n5-1,by=2)]
-      signal <- y[seq(2,n5-1,by=2)]
+    if(power == 0)
+        stop("'power' cannot equal to 0")
+    input <- inputw(wave = wave, f = f)
+    wave <- input$w
+    f <- input$f
+    rm(input)
+    n <- length(wave)
+    thres <- threshold/100
+    wave1 <- env(wave = wave, f = f, msmooth = msmooth, ksmooth =
+ksmooth,
+        envt = envt, norm = TRUE, plot = FALSE)^power
+    n1 <- length(wave1)
+    F <- f * (n1/n)
+    wave1 <- ts(wave1, start = 0, end = n1/F, freq = F)
+    wave2 <- ifelse(wave1 <= thres, yes = 1, no = 2)
+    wave4 <- apply(as.matrix(1:(n1-1)), 1, function(x) wave2[x] + wave2[x+1])
+    wave4[c(1,n1)] <- 3
+    wave5 <- which(wave4 == 3)
+    n5 <- length(wave5)
+    wave6 <- apply(as.matrix(1:(n5-1)), 1, function(x) wave5[x+1] - wave5[x])
+    y <- wave6/F
+    if(wave2[1] == 1) {
+        pause <- y[seq(1, n5 - 1, by = 2)]
+        signal <- y[seq(2, n5 - 1, by = 2)]
+    } else {
+        signal <- y[seq(1, n5 - 1, by = 2)]
+        pause <- y[seq(2, n5 - 1, by = 2)]
     }
-  
-  else             # if the file starts with a signal
-    {
-      signal <- y[seq(1,n5-1,by=2)]
-      pause <- y[seq(2,n5-1,by=2)]
-    }
-  
-                                        # computes the signal/pause ratio = duty cycle
-  ratio <- sum(signal)/sum(pause)
-                                        # all results in a list
-  timer <- list(s = signal,p = pause, r = ratio)
-
-  if (plot == TRUE)
-    {
-      plot(wave1,xlab=xlab,ylab=ylab,yaxt="n",xaxt="n",,ylim=c(0,1+0.1),col=col,type="l", xaxs="i",...)
-      if (plotthreshold == TRUE)
-        {
-          abline(h=thres, col=colval,lty=2)
-          mtext(paste(as.character(threshold),"%"),
-                side=2,line=0.5,at=thres,las=1,col=colval,cex=0.8)
+    ratio <- sum(signal)/sum(pause)
+    timer <- list(s = signal, p = pause, r = ratio)
+    if(plot) {
+        plot(wave1, xlab = xlab, ylab = ylab, yaxt = "n", xaxt = "n",
+            , ylim = c(0, 1 + 0.1), col = col, type = "l", xaxs =
+"i",
+            ...)
+        if(plotthreshold) {
+            abline(h = thres, col = colval, lty = 2)
+            mtext(paste(as.character(threshold), "%"), side = 2,
+                line = 0.5, at = thres, las = 1, col = colval,
+                cex = 0.8)
         }
-      par(new=TRUE)
-      plot(wave2,xlab="",ylab="",yaxt="n",type="l",col=colval,ylim=c(1,2+0.1),xaxs="i",...)
-
-      wave8 <- numeric(n5-1)
-      for (i in 2:n5) {wave8[i] <- ((wave5[i]-wave5[i-1])/2)+wave5[i-1]}
-      
-      if (wave2[1]==1)  # if the file starts with a pause
-        {
-          wave8.1 <- wave8[seq(2,n5,by=2)]/F
-          wave8.2 <- wave8[seq(3,n5,by=2)]/F
+        par(new = TRUE)
+        plot(wave2, xlab = "", ylab = "", yaxt = "n", type = "l",
+            col = colval, ylim = c(1, 2 + 0.1), xaxs = "i", ...)
+        wave8 <- numeric(n5 - 1)
+        for (i in 2:n5) {
+            wave8[i] <- ((wave5[i] - wave5[i - 1])/2) + wave5[i -
+                1]
         }
-      else              # if the file starts with a signal
-        {
-          wave8.2 <- wave8[seq(2,n5,by=2)]/F
-          wave8.1 <- wave8[seq(3,n5,by=2)]/F
+        if(wave2[1] == 1) {
+            wave8.1 <- wave8[seq(2, n5, by = 2)]/F
+            wave8.2 <- wave8[seq(3, n5, by = 2)]/F
+        }  else {
+            wave8.2 <- wave8[seq(2, n5, by = 2)]/F
+            wave8.1 <- wave8[seq(3, n5, by = 2)]/F
         }
-      
-      ypl <- as.character(round(pause,2))
-      ysl <- as.character(round(signal,2))
-      text(x=wave8.1,y=1.075,ypl,col=colval,cex=0.8)
-      text(x=wave8.2,y=2.075,ysl,col=colval,cex=0.8)
-      invisible(timer)
+        ypl <- as.character(round(pause, 2))
+        ysl <- as.character(round(signal, 2))
+        text(x = wave8.1, y = 1.075, ypl, col = colval, cex = 0.8)
+        text(x = wave8.2, y = 2.075, ysl, col = colval, cex = 0.8)
+        invisible(timer)
     }
-  else
-    {
-      return(timer)
+    else {
+        return(timer)
     }
-  
 }
+
 
 
 ################################################################################
@@ -5070,9 +5207,9 @@ wasp<-function(
 {
   if(medium == "air")
     {
-      if (!is.null(d)) stop("Depth (d) is not a valuable argument for air medium")
-      if (!is.null(s)) stop("Salinity (s) is not a valuable argument for air medium")
-      if (!is.null(c)) C<-c
+      if(!is.null(d)) stop("Depth (d) is not a valuable argument for air medium")
+      if(!is.null(s)) stop("Salinity (s) is not a valuable argument for air medium")
+      if(!is.null(c)) C<-c
       else C<-331.4+0.6*t
     }
   
@@ -5089,9 +5226,9 @@ wasp<-function(
   
   if(medium == "fresh")
     {
-      if (!is.null(c)) C<-c
-      if (!is.null(d)) stop("Depth (d) is not a valuable argument for freshwater medium")
-      if (!is.null(s)) stop("Salinity (s) is not a valuable argument for freshwater medium")
+      if(!is.null(c)) C<-c
+      if(!is.null(d)) stop("Depth (d) is not a valuable argument for freshwater medium")
+      if(!is.null(s)) stop("Salinity (s) is not a valuable argument for freshwater medium")
       else 
         {
           C<-1.402385e3+5.038813*t-(5.799136e-2)*t^2+(3.287156e-4)*t^3-(1.398845e-6)*t^4+(2.787860e-9)*t^5
@@ -5115,19 +5252,19 @@ wav2flac<-function(file, reverse=FALSE, overwrite=FALSE, exename=NULL, path2exe=
       if(missing(exename)) exename<-"flac"
       if(missing(path2exe)) {exe<-exename} else{exe<-paste(path2exe,exename,sep="/")}
       e<-system(paste(exename, file),ignore.stderr = TRUE)
-      if(reverse==TRUE){e<-system(paste(exe, "-d", file),ignore.stderr = TRUE)}
+      if(reverse){e<-system(paste(exe, "-d", file),ignore.stderr = TRUE)}
     }
   
   if(.Platform$OS.type == "windows")
     {
       if(missing(exename)) exename<-"flac.exe"
       if(missing(path2exe)) {exe<-paste("c:/Program Files/FLAC/",exename,sep="")} else {exe<-paste(path2exe,exename,sep="/")}
-      e<-system(paste(shQuote(exe),shQuote(file,type="cmd"), sep=" "),ignore.stderr = TRUE)
-      if(reverse==TRUE){e<-system(paste(shQuote(exe),'-d',shQuote(file,type="cmd"),sep=" "),ignore.stderr = TRUE)}
+      if(reverse){e<-system(paste(shQuote(exe),'-d',shQuote(file,type="cmd"),sep=" "),ignore.stderr = TRUE)}
+      else e<-system(paste(shQuote(exe),shQuote(file,type="cmd"), sep=" "),ignore.stderr = TRUE)
     }
 
   if(e>0) {stop("File not found or wrong format/encoding")}
-  if(overwrite==TRUE){unlink(file)}
+  if(overwrite){unlink(file)}
 }
 
 
@@ -5157,15 +5294,14 @@ wf <- function(
                border = NULL,
                lines = FALSE,
                lwd = NULL,
-               pb = FALSE,
                ...)
 
 {
                                         # STOP MESSAGES
   if(missing(wave) && is.null(x)) stop("'wave' or 'x' has to be set up")
   if(!missing(wave) && !is.null(x)) stop("'wave' or 'x' has to set up, not both of them!")
-  if(lines==TRUE && !is.null(border)) stop("when 'lines' is TRUE, changing 'border' has no effect")
-  if(lines==TRUE && !is.null(density)) stop("when 'lines' is TRUE, changing 'density' has no effect")
+  if(lines && !is.null(border)) stop("when 'lines' is TRUE, changing 'border' has no effect")
+  if(lines && !is.null(density)) stop("when 'lines' is TRUE, changing 'density' has no effect")
   if(hoff < 0) stop("'hoff' cannot be negative")
   if(voff < 0) stop("'voff' cannot be negative")
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
@@ -5181,7 +5317,7 @@ wf <- function(
       n <- nrow(wave)
       step <- seq(1, n - wl, wl - (ovlp * wl/100))
       data <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, 
-                   wn = wn, fftw = fftw, pb = pb)
+                   wn = wn, fftw = fftw)
                                         # dB WEIGHTS
       F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(data))
   if(!is.null(dB))
@@ -5206,7 +5342,7 @@ wf <- function(
                                         # seek for axes ticks: look for the column including the maximum value
                                         # and get the values for both axes with a 'virtual' plot
 
-  if(xaxis==TRUE | yaxis==TRUE)
+  if(xaxis | yaxis)
     {
       maxi <- which(data==max(data),arr.ind=TRUE)[1,2]
       if(!is.null(f)) {x<-seq(0,f/2000,length.out=nrow(data))} else {x<-1:nrow(data)}
@@ -5234,7 +5370,7 @@ wf <- function(
   xwf<-seq(1,pwid+hoff*pht)
 
                                         # lines
-  if(lines==TRUE)
+  if(lines)
     {
       ywf <- apply(ywf, MARGIN=2, function(a) replace(a,which(a == max(a)), NA))
       invisible(mapply(function(x,cols) lines(ywf[,x],col=cols,lwd=lwd), seq(pht,1,-1), col))
@@ -5249,7 +5385,7 @@ wf <- function(
     }
 
                                         # axes
-  if(xaxis==TRUE)
+  if(xaxis)
     {
       from <- dim(ywf)[1]-dim(data)[1]
       len <- length(atX)
@@ -5258,7 +5394,7 @@ wf <- function(
       labels <- as.character(atX)
       axis(side = 1, at = at, labels = labels)
     }
-  if(yaxis==TRUE){axis(side=2, at=atY+1, labels=as.character(atY))}
+  if(yaxis){axis(side=2, at=atY+1, labels=as.character(atY))}
   box()
   par(las=0)
 }
@@ -5286,7 +5422,7 @@ zapsilw<-function(
   wave2 <- wave1[wave1!=0]
   wave2 <- outputw(wave=wave2, f=f, format=output)
 
-  if (plot == TRUE)
+  if(plot)
     {
       def.par <- par(no.readonly = TRUE)
       on.exit(par(def.par))    
@@ -5322,17 +5458,17 @@ zc<-function(
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if (interpol > 5)
+  if(interpol > 5)
     {
       cat("please wait...")
-      if (.Platform$OS.type == "windows") flush.console()
+      if(.Platform$OS.type == "windows") flush.console()
     }
 
   n<-nrow(wave)
 
   if(!is.null(threshold)) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
   
-  if (interpol > 1)
+  if(interpol > 1)
     {
       waveinterpol<-approx(wave,n=n*interpol)
       wave<-as.matrix(waveinterpol$y)
@@ -5367,7 +5503,7 @@ zc<-function(
   y<-replace(wave9,which(wave9==Inf),NA)
 
   x<-seq(0,n/f,length.out=n*interpol)
-  if (plot == TRUE)
+  if(plot)
     {
       plot(x = x, y = y, xlab=xlab, ylab=ylab, las=1, ylim = ylim,...)
       invisible(cbind(x,y))
@@ -5425,9 +5561,9 @@ filled.contour.modif2<-function (x = seq(0, 1, len = nrow(z)),
                                  col = color.palette(length(levels) - 1), plot.title, plot.axes, key.title,
                                  asp = NA, xaxs = "i", yaxs = "i", las = 1, axisX = TRUE, axisY = TRUE,...) 
 {
-  if (missing(z)) {
-    if (!missing(x)) {
-      if (is.list(x)) {
+  if(missing(z)) {
+    if(!missing(x)) {
+      if(is.list(x)) {
         z <- x$z
         y <- x$y
         x <- x$x
@@ -5439,21 +5575,21 @@ filled.contour.modif2<-function (x = seq(0, 1, len = nrow(z)),
     }
     else stop("no 'z' matrix specified")
   }
-  else if (is.list(x)) {
+  else if(is.list(x)) {
     y <- x$y
     x <- x$x
   }
-  if (any(diff(x) <= 0) || any(diff(y) <= 0)) 
+  if(any(diff(x) <= 0) || any(diff(y) <= 0)) 
     stop("increasing 'x' and 'y' values expected")
   plot.new()
   plot.window(xlim, ylim, "", xaxs = xaxs, yaxs = yaxs, asp = asp)
-  if (!is.matrix(z) || nrow(z) <= 1 || ncol(z) <= 1) 
+  if(!is.matrix(z) || nrow(z) <= 1 || ncol(z) <= 1) 
     stop("no proper 'z' matrix specified")
-  if (!is.double(z)) 
+  if(!is.double(z)) 
     storage.mode(z) <- "double"
   .Internal(filledcontour(as.double(x), as.double(y), z, as.double(levels), 
                           col = col))
-  if (missing(plot.axes))
+  if(missing(plot.axes))
     {
       if(axisX)
         {
@@ -5467,7 +5603,7 @@ filled.contour.modif2<-function (x = seq(0, 1, len = nrow(z)),
         }
     }
   box()
-  if (missing(plot.title)) 
+  if(missing(plot.title)) 
     title(...)
   else plot.title
   invisible()
@@ -5581,13 +5717,13 @@ rev.cm.colors<-
   function (x)
 {
   n<-x
-  if ((n <- as.integer(n[1])) > 0) {
+  if((n <- as.integer(n[1])) > 0) {
     even.n <- n%%2 == 0
     k <- n%/%2
     l1 <- k + 1 - even.n
     l2 <- n - k + even.n
-    rev(c(if (l1 > 0) hsv(h = 6/12, s = seq(0.5, ifelse(even.n, 
-                                      0.5/k, 0), length = l1), v = 1), if (l2 > 1) hsv(h = 10/12, 
+    rev(c(if(l1 > 0) hsv(h = 6/12, s = seq(0.5, ifelse(even.n, 
+                                      0.5/k, 0), length = l1), v = 1), if(l2 > 1) hsv(h = 10/12, 
                                                                  s = seq(0, 0.5, length = l2)[-1], v = 1)))
   }
   else character(0)
@@ -5623,10 +5759,10 @@ rev.heat.colors<-
   function (x) 
 {
   n<-x
-  if ((n <- as.integer(n[1])) > 0) {
+  if((n <- as.integer(n[1])) > 0) {
     j <- n%/%4
     i <- n - j
-    rev(c(rainbow(i, start = 0, end = 1/6), if (j > 0) hsv(h = 1/6, 
+    rev(c(rainbow(i, start = 0, end = 1/6), if(j > 0) hsv(h = 1/6, 
                                   s = seq(from = 1 - 1/(2 * j), to = 1/(2 * j), length = j), 
                                   v = 1)))
   }
@@ -5645,7 +5781,7 @@ rev.terrain.colors<-
   function (x)
 {
   n<-x
-  if ((n <- as.integer(n[1])) > 0) {
+  if((n <- as.integer(n[1])) > 0) {
     k <- n%/%2
     h <- c(4/12, 2/12, 0/12)
     s <- c(1, 1, 0)
@@ -5675,13 +5811,13 @@ rev.topo.colors<-
   function (x) 
 {
   n<-x
-  if ((n <- as.integer(n[1])) > 0) {
+  if((n <- as.integer(n[1])) > 0) {
     j <- n%/%3
     k <- n%/%3
     i <- n - j - k
-    rev(c(if (i > 0) hsv(h = seq(from = 43/60, to = 31/60, length = i)), 
-          if (j > 0) hsv(h = seq(from = 23/60, to = 11/60, 
-                           length = j)), if (k > 0) hsv(h = seq(from = 10/60, 
+    rev(c(if(i > 0) hsv(h = seq(from = 43/60, to = 31/60, length = i)), 
+          if(j > 0) hsv(h = seq(from = 23/60, to = 11/60, 
+                           length = j)), if(k > 0) hsv(h = seq(from = 10/60, 
                                                           to = 6/60, length = k), s = seq(from = 1, to = 0.3, 
                                                                                     length = k), v = 1)))
   }
@@ -5721,11 +5857,11 @@ soscillo<-function
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if (from|to)
+  if(from|to)
     {
-      if (from == 0) {a<-1; b<-round(to*f)}
-      if (from == FALSE) {a<-1; b<-round(to*f);from<-0}
-      if (to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
+      if(from == 0) {a<-1; b<-round(to*f)}
+      if(from == FALSE) {a<-1; b<-round(to*f);from<-0}
+      if(to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
       else {a<-round(from*f); b<-round(to*f)}
       wave<-as.matrix(wave[a:b,])
       n<-nrow(wave)
@@ -5767,18 +5903,10 @@ sspectro <- function
 
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-
   n<-nrow(wave)
-  step<-seq(1,n-wl,wl)		# FT windows
-
-  z1<-matrix(data=numeric(wl*length(step)),wl,length(step))
-
-  for(i in step)
-    {
-      W<-ftwindow(wl=wl,wn=wn)
-      z1[,which(step==i)]<- Mod(fft(wave[i:(wl+i-1),]*W))
-    }
-
+  step<-seq(1,n-wl,wl)
+  W<-ftwindow(wl=wl,wn=wn)
+  z1 <- apply(as.matrix(step), 1, function(x) Mod(fft(wave[x:(wl+x-1),]*W)))
   z2<-z1[1:(wl/2),]
   z3<-z2/max(z2)
   return(z3)
@@ -5793,14 +5921,14 @@ sspectro <- function
 spectro.colors<-
   function (n)
 {
-  if ((n <- as.integer(n[1])) > 0)
+  if((n <- as.integer(n[1])) > 0)
     {
       j <- n%/%3
       k <- n%/%3
       i <- n - j - k
-      c(if (i > 0) hsv(h = seq(from = 31/60, to = 43/60, length = i), s = seq(0,1,length=i)),
-        if (j > 0) hsv(h = seq(from = 21/60, to = 9/60, length = j), v = seq(0.5,0.8,length=j)),
-        if (k > 0) hsv(h = seq(from = 8/60, to = 1/60, length = k), s = seq(from = 0.5, to = 1, length = k), v=1))
+      c(if(i > 0) hsv(h = seq(from = 31/60, to = 43/60, length = i), s = seq(0,1,length=i)),
+        if(j > 0) hsv(h = seq(from = 21/60, to = 9/60, length = j), v = seq(0.5,0.8,length=j)),
+        if(k > 0) hsv(h = seq(from = 8/60, to = 1/60, length = k), s = seq(from = 0.5, to = 1, length = k), v=1))
     }
   else character(0)
 }
@@ -5817,71 +5945,45 @@ stft<-function(
                step,
                wn,
                norm = FALSE,
-               fftw = FALSE,
-               pb = FALSE
+               fftw = FALSE
                )
 
 {
-  if(pb==TRUE) {pbar <- txtProgressBar(min=0, max=nrow(wave), style = 3)}
-
-  z1<-matrix(data=numeric((wl+(zp))*length(step)),wl+zp,length(step))
   zpl<-zp%/%2
-
   
   if(zpl==0)
     {
       W<-ftwindow(wl=wl,wn=wn)
-      if(fftw == TRUE)
+      if(fftw)
         {
           p <- planFFT(wl)
-          for(i in step)
-            {
-              z1[,which(step==i)] <- Mod(FFT(wave[i:(wl+i-1)]*W, plan=p))
-              if(pb==TRUE) {setTxtProgressBar(pbar, i)}
-            }
+          z1 <- apply(as.matrix(step), 1, function(x) Mod(FFT(wave[x:(wl+x-1)]*W, plan=p)))
         }
-      else
-        {
-          for(i in step)
-            {
-              z1[,which(step==i)] <- Mod(fft(wave[i:(wl+i-1),]*W))
-              if(pb==TRUE) {setTxtProgressBar(pbar, i)}
-            }
-        }
+      else {z1 <- apply(as.matrix(step), 1, function(x) Mod(fft(wave[x:(wl+x-1),]*W)))}
 
     }
   
   else
     {
       W<-ftwindow(wl=wl+zp,wn=wn)
-      if(fftw == TRUE)
+      if(fftw)
         {
           p <- planFFT(wl+zp)
-          for(i in step)
-            {z1[,which(step==i)] <- Mod(FFT(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W, plan=p))}
-          if(pb==TRUE) {setTxtProgressBar(pbar, i)}
+          z1 <- apply(as.matrix(step), 1, function(x) Mod(FFT(c(1:zpl,wave[x:(wl+x-1),],1:zpl)*W, plan=p)))
         }
-      else
-        {
-          
-          for(i in step)
-            {z1[,which(step==i)] <- Mod(fft(c(1:zpl,wave[i:(wl+i-1),],1:zpl)*W))}
-          if(pb==TRUE) {setTxtProgressBar(pbar, i)}
-          
-        }
+      else {z1 <- apply(as.matrix(step), 1, function(x) Mod(fft(c(1:zpl,wave[x:(wl+x-1),],1:zpl)*W)))}
     }
 
-                                        # to keep only the relevant frequencies (half of the FT)
-  z2<-z1[1:((wl+zp)/2), , drop=FALSE]	
-                                        # to get only values between 0 and 1
-  if (norm == TRUE)
+                                        
+  z2<-z1[1:((wl+zp)/2), , drop=FALSE]	# to keep only the relevant frequencies (half of the FT)
+
+  if(norm)  # to get only values between 0 and 1
     {
       z<-matrix(numeric(length(z2))); dim(z)<-dim(z2)
       for(i in 1:ncol(z)) {z[,i]<-z2[,i]/max(z2[,i])}
     }
   else {z<-z2/max(z2)}
   return(z)
-  if(pb == TRUE) close(pbar)
 }
 
 
@@ -5891,14 +5993,14 @@ stft<-function(
 
 temp.colors<-function (n)
 {
-  if ((n <- as.integer(n[1])) > 0) {
+  if((n <- as.integer(n[1])) > 0) {
     j <- n%/%3
     k <- n%/%3
     i <- n - j - k
     c(
-      if (i > 0) hsv(h=seq(from=44/60, to=31/60, length=i), s=seq(from=1, to=0.3, length=i), v=1),
-      if (j > 0) hsv(h=seq(from=31/60, to=8/60,  length=j), s=seq(from=0.3, to=0.6, length=j), v=1),
-      if (k > 0) hsv(h=seq(from= 8/60, to=1/60,  length=k), s=seq(from=0.6, to=1, length=k), v=1)
+      if(i > 0) hsv(h=seq(from=44/60, to=31/60, length=i), s=seq(from=1, to=0.3, length=i), v=1),
+      if(j > 0) hsv(h=seq(from=31/60, to=8/60,  length=j), s=seq(from=0.3, to=0.6, length=j), v=1),
+      if(k > 0) hsv(h=seq(from= 8/60, to=1/60,  length=k), s=seq(from=0.6, to=1, length=k), v=1)
       )
   }
   else character(0)
@@ -5916,27 +6018,27 @@ unwrap <- function (a, tol = pi, dim = 1)
 {
   sz = dim(a)
   nd = length(sz)
-  if (nd == 0) {
+  if(nd == 0) {
     sz = length(a)
     nd = 1
   }
-  if (!(length(dim) == 1 && dim == round(dim)) && dim > 0 && 
+  if(!(length(dim) == 1 && dim == round(dim)) && dim > 0 && 
       dim < (nd + 1)) 
     stop("unwrap: dim must be an integer and valid dimension")
   while (dim < (nd + 1) && sz[dim] == 1) dim = dim + 1
-  if (dim > nd) 
+  if(dim > nd) 
     dim = 1
   tol = abs(tol)
   rng = 2 * pi
   m = sz[dim]
-  if (m == 1) 
+  if(m == 1) 
     return(a)
   idx = list()
   for (i in 1:nd) idx[[i]] = 1:sz[i]
   idx[[dim]] = c(1, 1:(m - 1))
   d = a[unlist(idx)] - a
   p = rng * (((d > tol) > 0) - ((d < -tol) > 0))
-  if (nd == 1) 
+  if(nd == 1) 
     r = cumsum(p)
   else r = apply(p, MARGIN = dim, FUN = cumsum)
   a + r

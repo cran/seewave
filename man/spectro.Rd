@@ -27,8 +27,8 @@ scalefontlab = 1, scalecexlab =0.75,
 axisX = TRUE, axisY = TRUE, tlim = NULL, trel = TRUE,
 flim = NULL, flimd = NULL,
 widths = c(6,1), heights = c(3,1),
+oma = rep(0,4),
 listen=FALSE,
-pb = FALSE,
 ...)
 }
 
@@ -87,10 +87,11 @@ pb = FALSE,
   \item{widths}{a vector of length 2 to control the relative widths of columns on
   the device when \code{scale} is \code{TRUE}.}
   \item{heights}{a vector of length 2 to control the relative heights of rows on
-  the device when \code{osc} is \code{TRUE}.}
+    the device when \code{osc} is \code{TRUE}.}
+  \item{oma}{a vector of length 4 to control the size of outer margins
+  when either \code{scale} or \code{osc} is \code{TRUE}.}
 \item{listen}{if \code{TRUE} the sound is played back (by default
   \code{FALSE}).}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
 }

@@ -14,8 +14,7 @@
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, 
 identify = FALSE, col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
-alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l", pb =
-FALSE, ...)
+alab = "Amplitude", flim = c(0,f/2000),alim = NULL, type ="l", ...)
 }
 
 \arguments{
@@ -48,7 +47,6 @@ FALSE, ...)
   \item{alim}{range of amplitude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

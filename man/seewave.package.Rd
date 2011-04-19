@@ -15,13 +15,13 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.5.9\cr
-    Date: \tab 2010-09-01\cr
+    Version: \tab 1.6.0\cr
+    Date: \tab 2011-02-17\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Amandine Gasc, Jonathan Lees, Sandrine Pavoine,
     Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
     Acknowledgments: \tab Michel Baylac, Charlotte Cure, Arnold Fertin,
-    Kurt Hornik, Uwe Ligges, Emmanuel Paradis \cr
+    Kurt Hornik, Emiliano A. Laca, Uwe Ligges, Emmanuel Paradis \cr
     Webpage: \tab \url{http://rug.mnhn.fr/seewave}\cr
     Discussion group : \tab \url{http://groups.google.com/group/seewave}\cr
     Reference: \tab Sueur J, Aubin T, Simonis C - Seewave: a free modular tool for sound analysis and synthesis. Bioacoustics, 18: 213-226.
@@ -30,8 +30,8 @@
 
 \author{
   Jerome Sueur <sueur@mnhn.fr>\cr 
-  Thierry Aubin <thierry.aubin@u-psud.fr>\cr
-  Caroline Simonis <csimonis@mnhn.fr>\cr
+  Thierry Aubin\cr
+  Caroline Simonis\cr
 
   Maintainer: Jerome Sueur <sueur@mnhn.fr>\cr
 }

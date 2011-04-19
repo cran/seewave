@@ -50,7 +50,7 @@ orni2<-mutew(orni,f=22050,from=0.3,to=0.55,plot=FALSE)
 envorni2<-env(orni2,f=22050,plot=FALSE)
 th(envorni2)
 # The temporal entropy of noise tends towards 1
-a<-noise(d=1,f=8000)
+a<-noisew(d=1,f=8000)
 enva<-env(a,f=8000,plot=FALSE)
 th(enva)
 # But be aware that the temporal entropy

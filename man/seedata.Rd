@@ -22,6 +22,6 @@
 
 \author{Caroline Simonis \email{csimonis@mnhn.fr} and Jerome Sueur \email{sueur@mnhn.fr}.}
   
-\examples{rnorm(1000)}
+\examples{seedata(rnorm(1000))}
 
 \keyword{dplot}

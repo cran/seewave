@@ -2,8 +2,27 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.6.0 [19-April-2011]
 
-		CHANGES IN SEEWAVE VERSION 1.5.9 [XX-XXXXX-2010]
+NEW FEATURES
+	o kl.dist(): a new function to compute Kullback-Leibler distance between two spectra.
+	o ks.dist(): a new function to compute Kolmogorov-Smirnov distance between two spectra.
+	o notefreq(): a new function to compute musical note frequency.
+	o spectro(): a new argument 'oma' giving the size of the outer margins.
+
+OTHER CHANGES
+	o ama(): a small bug regarding the argument 'f' has been fixed.
+	o covspectro(), csh(), dfreq(), dynspec(), ffilter(), lfs(), meanspec(), spectro(), spectro3D(), wf(): are now faster.
+	o dfreq(): a new argument 'bandpass' to limit the search of the dominant frequency in a specified frequency band.
+	o env(): is now faster when using the argument 'msmooth'
+	o spectro(): a small bug regarding the size of the labels have been fixed.
+	o th(): should be faster.
+	o timer(): is now much faster.
+
+DEPRECATED & DEFUNCT
+	o csh(), dfreq(), dynspec(), ffilter(), lfs(), meanspec(), spectro(), spectro3D(), wf(): 'pb' argument has been deleted.
+
+		CHANGES IN SEEWAVE VERSION 1.5.9 [01-September-2010]
 
 NEW FEATURES
 

@@ -19,7 +19,7 @@ msmooth = NULL, ksmooth = NULL, colspec = "black",
 coltitle = "black", colbg = "white", colline = "black",
 colaxis = "black", collab = "black", cexlab = 1,
 fontlab = 1, colwave = "black",
-coly0 = "lightgrey", colcursor = "red", bty = "l", pb = FALSE)
+coly0 = "lightgrey", colcursor = "red", bty = "l")
 }
 
 \arguments{
@@ -75,7 +75,6 @@ coly0 = "lightgrey", colcursor = "red", bty = "l", pb = FALSE)
   \item{colcursor}{colour of oscillogram cursor (only when \code{osc} is \code{TRUE}).}
   \item{bty}{the type of box to be drawn around the oscillogram (only
     when \code{osc} is \code{TRUE}).} 
-  \item{pb}{if \code{TRUE} returns a text progress bar in the console.}
 }
 
 \details{
