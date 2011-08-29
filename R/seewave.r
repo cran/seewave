@@ -1256,14 +1256,11 @@ dfreq <- function(
 
   # amplitude threshold
   if(!is.null(threshold)) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
-  wave<-ifelse(wave==0,yes=1e-6,no=wave)
 
   # Position(s)
   n<-nrow(wave)
   if(!is.null(at))
        {
-       ## if(at[1]==0) {at[1] <- 1/f}  # first window
-       ## if(at[length(at)] == round(n/f,2)) {at[length(at)] <- n/f-(wl/(f*2))} # last window
        step <- at*f
        N <- length(step)
        if(step[1]==0) {step[1] <- 1}
@@ -1278,10 +1275,8 @@ dfreq <- function(
 
   # Fourier
   step <- round(step)
-  y1<-matrix(data=numeric(wl*N),wl,N)
-  y2 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw) 
-
-
+  y1 <- stft(wave=wave, f=f, wl=wl, zp=0, step=step, wn=wn, fftw=fftw) 
+  
   # bandpass filter, values outside the bandpass limits are replaced by 0 values
   if(!is.null(bandpass))
     {
@@ -1290,30 +1285,23 @@ dfreq <- function(
       if(bandpass[1] == bandpass[2]) stop("The limits of the bandpass have to be different")
       lowlimit <-round((wl*bandpass[1])/f)
       upperlimit <-round((wl*bandpass[2])/f)
-      y2[-(lowlimit:upperlimit),] <- 0
+      y1[-(lowlimit:upperlimit),] <- 0
    }
-  
+
   # Maximum search
-  # [1,1] is to keep only the first line and firt column of the results (=c(1,1))
-  # when there is no max value, this happens when the fft is totally flat
-  # (e.g. signal =0)
-  y3 <- matrix(data=numeric(N*2),N,2)
-  maxi <- numeric(N)
-  for (i in 1:N)
-    {
-    maxi[i] <- max(y2[,i])
-    y3[i,] <- as.numeric(which(y2==max(y2[,i]),arr.ind=TRUE)[1,1])
-    }
-  
-  # discards pics with an amplitude lower thant the clip value
+  maxi <- apply(y1, MARGIN=2, FUN=max)
+  y2 <- apply(y1, MARGIN=2, FUN=which.max)
+  y2[which(maxi==0)] <- NA
+ 
+  # discards peaks with an amplitude lower than the clip value
   if(!is.null(clip))
     {
-      y3[which(maxi < clip),] <- NA
+      maxi <- apply(y1, MARGIN=2, FUN=max)
+      y2[which(maxi < clip)] <- NA
     }
-  y3 <- (f*y3[,1])/(1000*wl)
-  # discards max results when signal = 0, i. e. when which.max = c(1,1)
-  y <- ifelse(y3==f/(wl*1000), yes=NA, no=y3)
-  # add NA values at the begining and end to match with x length
+  # converts into frequency
+  y <- (f*y2)/(1000*wl)
+
   if(!is.null(at)) {y <- c(NA, y, NA)}
 
   if(plot)
@@ -1642,6 +1630,58 @@ drawenv<-function(
 
 
 ################################################################################
+##                               DYNOSCILLO
+################################################################################
+
+dynoscillo <- function(
+                  wave,
+                  f,
+                  wd = NULL,
+                  wl = NULL,
+                  wnb = NULL,
+                  title = TRUE,
+                  ...)                  
+
+{
+# STOP MESSAGES
+  if(is.null(wl) && is.null(wnb) && is.null(wd)) stop("Either 'wd', 'wl' or 'wnb' has to be set.")
+  if(!is.null(wl) && !is.null(wnb) && !is.null(wd)) stop("'wd', 'wl', 'wnb' cannot be used in the same time. Please choose one.")
+  if(!is.null(wl) && !is.null(wnb)) stop("'wl' and 'wnb' cannot be used in the same time. Please choose one.")
+  if(!is.null(wl) && !is.null(wd)) stop("'wl' and 'wd' cannot be used in the same time. Please choose one.")
+  if(!is.null(wnb) && !is.null(wd)) stop("'wnb' and 'wd' cannot be used in the same time. Please choose one.")
+  
+# INPUT
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
+# SECTIONS
+  n <- nrow(wave)
+  if(!is.null(wd)) {wl <- wd*f}
+  if(!is.null(wnb)) {wl <- round(n/wnb); wd <- wl/f}
+  if(!is.null(wf)) {wd <- wl/f}
+  step <- seq(from = 0, to = n-wl, by = wl)/f
+  lstep <- length(step)
+  pos <- 1:lstep
+  
+# PLOT  
+      plot.osc<-function(panel)
+        {
+          with(panel,
+                  {
+                     max <- max(abs(wave))
+                     soscillo(wave = wave, f = f, from = step[pos], to = step[pos]+wd, ylim=c(-max, max), tickup=max,...)
+                     if(title) title(main=paste(pos,"/",lstep, "\n [wd = ", round(wd,3), " s, ", "wl = ", wl, "]", sep=""))
+                  }
+               )
+          panel
+        }
+
+      osc.panel <- rp.control("Position")
+      rp.slider(osc.panel, pos, from = 1, to = lstep, resolution = 1,
+                title = "Position along the signal", action = plot.osc)
+}
+
+
+################################################################################
 ##                               DYNSPEC
 ################################################################################
 
@@ -1689,7 +1729,7 @@ dynspec<-function(
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
     stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
 
-                                        # PACKAGES CALL
+                                        # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
   if(!is.null(from)|!is.null(to))
@@ -1762,12 +1802,13 @@ dynspec<-function(
                  if(osc)
                    {
                      par(mar=c(4.5,4,0.5,2))
+                     max <- max(abs(wave))
                      soscillo(wave = wave, f = f,
                               colwave = colwave, collab = collab,
                               cexlab = cexlab, fontlab = fontlab, colline = colline,
                               colaxis = colaxis, coly0 = coly0, bty = bty,
                               tickup=max(abs(wave),na.rm=TRUE),
-                              ylim=c(-max(abs(wave)),max(abs(wave))))
+                              ylim=c(-max,max))
                      abline(v=poslabel[pos], col=colcursor)
                    }
                  else if(!is.null(envt))
@@ -2376,8 +2417,9 @@ fpeaks <- function(spec,
                   peaks0 <- peaks0[1:(length(peaks0)-error)]
                 }
               peaks <- peaks0[comp]
-              res <- matrix(na.omit(spec[peaks,]),nc=2) # remove NA, coerce into a two-column matrix
+              res <- matrix(na.omit(spec[peaks,]), nc=2) # remove NA, coerce into a two-column matrix
               colnames(res) <- c("freq","amp")
+              res <-  res[order(res[,1]),] # reorder according to frequency values
             }
         }
       
@@ -3016,7 +3058,7 @@ meanspec<-function(
                     plot = 1,
                     flab = "Frequency (kHz)",
                     alab = "Amplitude",
-                    flim = c(0,f/2000),
+                    flim = NULL,
                     alim = NULL,
                     type ="l",
                     ...)
@@ -3360,7 +3402,7 @@ octaves <- function(x, below=3, above=3)
 ##                                OSCILLO
 ################################################################################
 
-oscillo<-function
+oscillo <- function
 (
  wave,
  f,
@@ -3511,8 +3553,11 @@ oscillo<-function
                   x<-seq(from=from,to=to,length.out=n)
                   y<-wave
                   id<-identify(x=x, y=y, labels=round(x,3), col="red", plot=TRUE)
-                  abline(v=(id/f)+from,col="red")
-                  return(round((id/f)+from,3))
+                  time <- x[id]
+                  abline(v=time, col="red")
+                  amp <- y[id,1]
+                  res <- cbind(time, amp)
+                  return(res)
                 }
               par(op)
             }
@@ -3672,6 +3717,7 @@ pastew <- function(
                  wave2,
                  f,
                  at = "end",
+                 join = FALSE,  
                  choose = FALSE,
                  plot = FALSE,
                  marks = TRUE,
@@ -3701,10 +3747,10 @@ pastew <- function(
          )
     }
 
-  pos<-round(at*f)
-  wave2a<-as.matrix(wave2[c(1:pos),1])
-  wave2b<-as.matrix(wave2[c(pos:n),1])
-  wave3<-rbind(wave2a,wave1,wave2b)
+  pos <- round(at*f)
+  if(at==0) wave2a <- NULL else wave2a <- wave2[c(1:pos),1]
+  if(at==n/f) wave2b <- NULL else wave2b <- wave2[c(pos:n),1]
+  if(join) wave3 <- c(wave2a[-length(wave2a)], wave1, wave2b) else wave3 <- c(wave2a, wave1, wave2b)
 
   wave3 <- outputw(wave=wave3, f=f, format=output)
   
@@ -3836,6 +3882,7 @@ repw<-function(
                wave,
                f,
                times = 2,
+               join = FALSE,
                plot = FALSE,
                output = "matrix",
                ...
@@ -3843,7 +3890,8 @@ repw<-function(
 
 {
   input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-  wave1 <- rep(wave,times=times)
+  n <- nrow(wave)
+  if(join) wave1 <- rep(wave[-n],times=times) else wave1 <- rep(wave,times=times)
   wave1 <- outputw(wave=wave1, f=f, format=output)
 
   if(plot)
@@ -4013,6 +4061,18 @@ rms <- function(
     return(x)
   }
 
+
+################################################################################
+##                               ROUGHNESS
+################################################################################
+
+roughness <- function(x, std=FALSE){
+  if(std) x <- x/max(x)
+  deriv2 <- diff(x, 1, 2)
+  roughness <- sum(deriv2^2, na.rm=TRUE)
+  return(roughness)
+} 
+  
 
 ################################################################################
 ##                               RUGO
@@ -4195,9 +4255,10 @@ sfm<-function(spec)
 ##                               SH
 ################################################################################
 
-sh<-function(
-             spec
-             )
+sh <- function(
+               spec,
+               alpha = NULL
+               )
 
 {
 
@@ -4207,14 +4268,19 @@ sh<-function(
   else
     {
       options(warn=0)  # to authorize warning messages
-      if(any(spec<0, na.rm=TRUE)) stop("Data do not have to be in dB")
+      if(any(spec<0, na.rm=TRUE)) stop("Data do not have to be in dB.")
       if(sum(spec)==0) {warning("Caution! This is a null spectrum. The spectral entropy is null!", call.=FALSE) ; z <- 0}
       else
         {
           N<-length(spec)
           spec[spec==0]<-1e-7
           spec<-spec/sum(spec)  # PMF
-          z<- -sum(spec*log(spec))/log(N)
+          if(is.null(alpha)) {z <- -sum(spec*log(spec))/log(N)}
+          else {
+            if(alpha < 0) stop ("'alpha' cannot be negative.")
+            if(alpha == 1) stop ("'alpha' cannot be set to 1.")
+            z <- (1/(1-alpha))*log2(sum(spec^alpha))
+          }
         }
     }
   return(z)
@@ -4317,7 +4383,7 @@ spec<-function(
                plot = 1,
                flab = "Frequency (kHz)",
                alab = "Amplitude",
-               flim = c(0,f/2000),
+               flim = NULL,
                alim = NULL,
                type ="l",
                ...)
@@ -4502,144 +4568,123 @@ spec<-function(
 ##                                SPECPROP
 ################################################################################
 
-specprop<-function(
-                   spec,
-                   f = NULL,
-                   str = FALSE,
-                   flim = NULL,
-                   plot = FALSE,
-                   type = "l",
-                   ...)
-
+specprop <- function (spec, f = NULL, str = FALSE, flim = NULL, plot = FALSE, 
+    type = "l", ...) 
 {
-  if(is.null(f))
-    {
-      if(is.vector(spec)) stop("'f' is missing")  
-      else if(is.matrix(spec)) f<-spec[nrow(spec),1]*2000
+## DATA 
+## Input
+    if (is.null(f)) {
+        if (is.vector(spec)) 
+            stop("'f' is missing")
+        else if (is.matrix(spec)) 
+            f <- spec[nrow(spec), 1] * 2000
+    }
+    if (is.matrix(spec)) 
+        spec <- spec[, 2]
+    L <- length(spec)
+    wl <- L * 2
+    if (any(spec < 0)) 
+        stop("The frequency spectrum to be analysed should not be in dB")
+    if (f/wl < 0.5) 
+        stop("Frequency resolution is too high (<0.5 hz)")
+    if (!is.null(flim)) {
+        spec <- spec[(flim[1] * 1000 * wl/f):(flim[2] * 1000 * 
+            wl/f)]
+        L <- length(spec)
     }
 
-  if(is.matrix(spec)) spec<-spec[,2]  
-  L<-length(spec)
-  wl<-L*2
-  if(any(spec<0)) stop("The frequency spectrum to be analysed should not be in dB")
-  if(f/wl<0.5)    stop("Frequency resolution is too high (<0.5 hz)")
-
-                                        # modifcation of the frequency limits
-  if(!is.null(flim))
-    {
-      spec<-spec[(flim[1]*1000*wl/f):(flim[2]*1000*wl/f)]
-      L<-length(spec)
+## Amplitude
+    amp <- spec/sum(spec)
+    cumamp <- cumsum(amp)
+    
+## Frequency    
+    if (is.null(flim)) {
+        freq <- round(seq(from = f/wl, to = f/2, length.out = L))
+    }
+    else {
+        freq <- round(seq(from = flim[1] * 1000, to = flim[2] * 
+            1000, length.out = L))
     }
 
-                                        # to get all spectrum values >1 
-                                        # it is necessary to multiply the PMF spectrum by a factor of 10
-  s<-spec/sum(spec)
-  MS<-min(s) 
-  if(diff(range(s))<0.01)
-    {
-      if(1e-2<MS & MS<1e-1)   S<-round(s*1e5)
-      if(1e-3<MS & MS<1e-2)   S<-round(s*1e6)
-      if(1e-4<MS & MS<1e-3)   S<-round(s*1e7)
-      if(1e-5<MS & MS<1e-4)   S<-round(s*1e8)
-      if(1e-6<MS & MS<1e-5)   S<-round(s*1e9)
-      if(1e-7<MS & MS<1e-6)   S<-round(s*1e10)
-      if(1e-8<MS & MS<1e-7)   S<-round(s*1e12)
-      if(1e-9<MS & MS<1e-8)   S<-round(s*1e13)
-      if(1e-10<MS & MS<1e-9)  S<-round(s*1e14)
-      if(1e-11<MS & MS<1e-10) S<-round(s*1e15)
-      if(1e-12<MS & MS<1e-11) S<-round(s*1e16)
-    }
-  else
-    {
-      if(1e-2<MS & MS<1e-1)   S<-round(s*1e2)
-      if(1e-3<MS & MS<1e-2)   S<-round(s*1e3)
-      if(1e-4<MS & MS<1e-3)   S<-round(s*1e4)
-      if(1e-5<MS & MS<1e-4)   S<-round(s*1e5)
-      if(1e-6<MS & MS<1e-5)   S<-round(s*1e6)
-      if(1e-7<MS & MS<1e-6)   S<-round(s*1e7)
-      if(1e-8<MS & MS<1e-7)   S<-round(s*1e8)
-      if(1e-9<MS & MS<1e-8)   S<-round(s*1e9)
-      if(1e-10<MS & MS<1e-9)  S<-round(s*1e10)
-      if(1e-11<MS & MS<1e-10) S<-round(s*1e11)
-      if(1e-12<MS & MS<1e-11) S<-round(s*1e12)
-    }
-
-                                        # generate the frequency vector in Hz to avoid values <1
-  if(is.null(flim)) {X<-round(seq(from=f/wl,to=f/2,length.out=L))}
-  else {X<-round(seq(from=flim[1]*1000,to=flim[2]*1000,length.out=L))}
-
-                                        # generate the variable from the distribution function
-  V<-rep(X,S)
-
-                                        # descriptive statistics computation in Hz
-  mean<-mean(V)
-  sd<-sd(V)
-  sem<-sd/sqrt(L)                          # standard error of the mean
-  median<-median(V)
-  mad<-mad(V)
-  mode<-X[which.max(S)]                   # dominant frequency
-  Q25<-quantile(V, names = FALSE)[2]
-  Q75<-quantile(V, names = FALSE)[4]
-  IQR<-IQR(V)
-  cent<-sum(X*s)                          # centroid
-  z<-sum(s-mean(s)) ; w<-sd(s)
-  skew<-(sum((s-mean(s))^3)/(L-1))/w^3    # skewness
-  kurt<-(sum((s-mean(s))^4)/(L-1))/w^4    # kurtosis
-  sfm<-sfm(s)                             # spectral flatness measure
-  sh<-sh(s)                               # spectral entropy
-  prec<-f/wl                              # frequency precision 
-                                        # all results in a raw list or in a structured list
-  results<-list(mean=mean,sd=sd,sem=sem,median=median,mad=mad,mode=mode,
-                Q25=Q25,Q75=Q75,IQR=IQR,
-                cent=cent,skewness=skew,kurtosis=kurt,
-                sfm=sfm,sh=sh,
-                prec=prec)
-  if(str) {results <- str(results,digits.d=5,give.head=FALSE)}
+## RESULTS
+    mean <- sum(amp*freq)
+    sd <- sqrt(sum(amp*((freq-mean)^2)))
+    sem <- sd/sqrt(L)
+    median <- freq[length(cumamp[cumamp <= 0.5])+1]
+    # mad deleted at version 1.6.1
   
-                                        # plot
-  if(plot==1)
-    {
-      par(mar=c(5,5,4,2)+0.1)
-      plot(x=X/1000,y=s,type=type,
-           xlab="Frequency (kHz)", xaxs="i",
-           ylab="",yaxs="i",
-           las=1,
-           ...)
-      mtext("Probability",side=2,line=4)
-      segments(x0=mode/1000, y0=0, x1=mode/1000, y1=s[which(X==mode)], col=4)
-      segments(x0=median/1000, y0=0, x1=median/1000, y1=s[which(X==median)], col=2)
-      segments(x0=Q25/1000, y0=0, x1=Q25/1000, y1=s[which(X==Q25)], col=2, lty=2)
-      segments(x0=Q75/1000, y0=0, x1=Q75/1000, y1=s[which(X==Q75)], col=2, lty=3)
-      legend("topright", legend=c("Q25","median","Q75","mode"),col=c(2,2,2,4),
-             lty=c(2,1,3,1),bty="n")
-    }
+    ###################################################################################
+    mode <- freq[which.max(amp)]
+    Q25 <- freq[length(cumamp[cumamp <= 0.25])+1]
+    Q75 <- freq[length(cumamp[cumamp <= 0.75])+1]
+    IQR <- Q75 - Q25
+    cent <- sum(freq * amp)
+    z <- sum(amp - mean(amp))
+    w <- sd(amp)
+    skew <- (sum((amp - mean(amp))^3)/(L - 1))/w^3
+    kurt <- (sum((amp - mean(amp))^4)/(L - 1))/w^4
+    sfm <- sfm(amp)
+    sh <- sh(amp)
+    prec <- f/wl
   
-  if(plot==2)
-    {
-      C<-cumsum(s)
-      plot(x=X/1000,y=C,type=type,
-           xlab="Frequency (kHz)", xaxs="i",
-           ylab="Cumulated probability",yaxs="i",
-           las=1,
-           ...)
-      segments(x0=mode/1000, y0=0, x1=mode/1000, y1=C[which(X==mode)], col=4)
-      segments(x0=0, y0=C[which(X==mode)], x1=mode/1000, y1=C[which(X==mode)], col=4)
-      segments(x0=median/1000, y0=0, x1=median/1000, y1=max(C)/2, col=2)
-      segments(x0=0, y0=max(C)/2, x1=median/1000, y1=max(C)/2, col=2)
-      segments(x0=Q25/1000, y0=0, x1=Q25/1000, y1=max(C)/4, col=2, lty=2)
-      segments(x0=0, y0=max(C)/4, x1=Q25/1000, y1=max(C)/4, col=2, lty=2)
-      segments(x0=Q75/1000, y0=0, x1=Q75/1000, y1=max(C)*3/4, col=2, lty=3)
-      segments(x0=0, y0=max(C)*3/4, x1=Q75/1000, y1=max(C)*3/4, col=2,lty=3)
-      legend("bottomright", legend=c("Q25","median","Q75","mode"),col=c(2,2,2,4),
-             lty=c(2,1,3,1),bty="n")
-      
+## VALUE    
+    results <- list(mean = mean, sd = sd, sem = sem, median = median, 
+        mode = mode, Q25 = Q25, Q75 = Q75, IQR = IQR, 
+        cent = cent, skewness = skew, kurtosis = kurt, sfm = sfm, 
+        sh = sh, prec = prec)
+    if (str) {
+        results <- str(results, digits.d = 5, give.head = FALSE)
     }
 
-  if(plot==1 | plot == 2) {invisible(results)}
-  else if(plot==FALSE) {return(results)}
-
+## PLOT
+    if (plot == 1) {
+        par(mar = c(5, 5, 4, 2) + 0.1)
+        plot(x = freq/1000, y = amp, type = type, xlab = "Frequency (kHz)", 
+            xaxs = "i", ylab = "", yaxs = "i", las = 1, ...)
+        mtext("Probability", side = 2, line = 4)
+        segments(x0 = mode/1000, y0 = 0, x1 = mode/1000, y1 = amp[which(freq == 
+            mode)], col = 4)
+        segments(x0 = median/1000, y0 = 0, x1 = median/1000, 
+            y1 = amp[which(freq == median)], col = 2)
+        segments(x0 = Q25/1000, y0 = 0, x1 = Q25/1000, y1 = amp[which(freq == 
+            Q25)], col = 2, lty = 2)
+        segments(x0 = Q75/1000, y0 = 0, x1 = Q75/1000, y1 = amp[which(freq == 
+            Q75)], col = 2, lty = 3)
+        legend("topright", legend = c("Q25", "median", "Q75", 
+            "mode"), col = c(2, 2, 2, 4), lty = c(2, 1, 3, 1), 
+            bty = "n")
+    }
+    if (plot == 2) {
+        plot(x = freq/1000, y = cumamp, type = type, xlab = "Frequency (kHz)", 
+            xaxs = "i", ylab = "Cumulated probability", yaxs = "i", 
+            las = 1, ...)
+        segments(x0 = mode/1000, y0 = 0, x1 = mode/1000, y1 = cumamp[which(freq == 
+            mode)], col = 4)
+        segments(x0 = 0, y0 = cumamp[which(freq == mode)], x1 = mode/1000, 
+            y1 = cumamp[which(freq == mode)], col = 4)
+        segments(x0 = median/1000, y0 = 0, x1 = median/1000, 
+            y1 = max(cumamp)/2, col = 2)
+        segments(x0 = 0, y0 = max(cumamp)/2, x1 = median/1000, y1 = max(cumamp)/2, 
+            col = 2)
+        segments(x0 = Q25/1000, y0 = 0, x1 = Q25/1000, y1 = max(cumamp)/4, 
+            col = 2, lty = 2)
+        segments(x0 = 0, y0 = max(cumamp)/4, x1 = Q25/1000, y1 = max(cumamp)/4, 
+            col = 2, lty = 2)
+        segments(x0 = Q75/1000, y0 = 0, x1 = Q75/1000, y1 = max(cumamp) * 
+            3/4, col = 2, lty = 3)
+        segments(x0 = 0, y0 = max(cumamp) * 3/4, x1 = Q75/1000, y1 = max(cumamp) * 
+            3/4, col = 2, lty = 3)
+        legend("bottomright", legend = c("Q25", "median", "Q75", 
+            "mode"), col = c(2, 2, 2, 4), lty = c(2, 1, 3, 1), 
+            bty = "n")
+    }
+    if (plot == 1 | plot == 2) {
+        invisible(results)
+    }
+    else if (plot == FALSE) {
+        return(results)
+    }
 }
-
 
 ################################################################################
 ##                                SPECTRO
@@ -5117,13 +5162,12 @@ th <- function(
 ##                                TIMER
 ################################################################################
 
-timer<-function (wave, f, threshold = 5, envt = "abs", power = 1,
+timer <- function (wave, f, threshold = 5, envt = "abs", power = 1,
 msmooth = NULL,
     ksmooth = NULL, plot = TRUE, plotthreshold = TRUE, col = "black",
     colval = "red", xlab = "Time (s)", ylab = "Amplitude", ...)
 {
-    if(power == 0)
-        stop("'power' cannot equal to 0")
+    if(power == 0) stop("'power' cannot equal to 0")
     input <- inputw(wave = wave, f = f)
     wave <- input$w
     f <- input$f
@@ -5131,8 +5175,8 @@ msmooth = NULL,
     n <- length(wave)
     thres <- threshold/100
     wave1 <- env(wave = wave, f = f, msmooth = msmooth, ksmooth =
-ksmooth,
-        envt = envt, norm = TRUE, plot = FALSE)^power
+ksmooth, envt = envt, norm = TRUE, plot = FALSE)
+    if(power!=1) wave1 <- wave1^power
     n1 <- length(wave1)
     F <- f * (n1/n)
     wave1 <- ts(wave1, start = 0, end = n1/F, freq = F)
@@ -5140,18 +5184,24 @@ ksmooth,
     wave4 <- apply(as.matrix(1:(n1-1)), 1, function(x) wave2[x] + wave2[x+1])
     wave4[c(1,n1)] <- 3
     wave5 <- which(wave4 == 3)
-    n5 <- length(wave5)
-    wave6 <- apply(as.matrix(1:(n5-1)), 1, function(x) wave5[x+1] - wave5[x])
-    y <- wave6/F
+    positions <- time(wave1)[wave5]
+    npos <- length(positions)
+    durations <- apply(as.matrix(1:(npos-1)), 1, function(x) positions[x+1] - positions[x])
     if(wave2[1] == 1) {
-        pause <- y[seq(1, n5 - 1, by = 2)]
-        signal <- y[seq(2, n5 - 1, by = 2)]
+        pause <- durations[seq(1, npos - 1, by = 2)]
+        signal <- durations[seq(2, npos - 1, by = 2)]
+        start.signal <- positions[seq(2, npos - 1, by = 2)]
+        end.signal <- positions[seq(3, npos - 1, by = 2)]
     } else {
-        signal <- y[seq(1, n5 - 1, by = 2)]
-        pause <- y[seq(2, n5 - 1, by = 2)]
+        pause <- durations[seq(2, npos - 1, by = 2)]
+        signal <- durations[seq(1, npos - 1, by = 2)]
+        start.signal <- positions[seq(1, npos - 1, by = 2)]
+        end.signal <- positions[seq(2, npos - 1, by = 2)]
     }
+     
     ratio <- sum(signal)/sum(pause)
-    timer <- list(s = signal, p = pause, r = ratio)
+    timer <- list(s = signal, p = pause, r = ratio,
+                  s.start = start.signal, s.end = end.signal)
     if(plot) {
         plot(wave1, xlab = xlab, ylab = ylab, yaxt = "n", xaxt = "n",
             , ylim = c(0, 1 + 0.1), col = col, type = "l", xaxs =
@@ -5165,18 +5215,18 @@ ksmooth,
         }
         par(new = TRUE)
         plot(wave2, xlab = "", ylab = "", yaxt = "n", type = "l",
-            col = colval, ylim = c(1, 2 + 0.1), xaxs = "i", ...)
-        wave8 <- numeric(n5 - 1)
-        for (i in 2:n5) {
+           col = colval, ylim = c(1, 2 + 0.1), xaxs = "i", ...)
+        wave8 <- numeric(npos - 1)
+        for (i in 2:npos) {
             wave8[i] <- ((wave5[i] - wave5[i - 1])/2) + wave5[i -
                 1]
         }
         if(wave2[1] == 1) {
-            wave8.1 <- wave8[seq(2, n5, by = 2)]/F
-            wave8.2 <- wave8[seq(3, n5, by = 2)]/F
+            wave8.1 <- wave8[seq(2, npos, by = 2)]/F
+            wave8.2 <- wave8[seq(3, npos, by = 2)]/F
         }  else {
-            wave8.2 <- wave8[seq(2, n5, by = 2)]/F
-            wave8.1 <- wave8[seq(3, n5, by = 2)]/F
+            wave8.2 <- wave8[seq(2, npos, by = 2)]/F
+            wave8.1 <- wave8[seq(3, npos, by = 2)]/F
         }
         ypl <- as.character(round(pause, 2))
         ysl <- as.character(round(signal, 2))

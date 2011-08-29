@@ -35,7 +35,6 @@
   \item{sd}{standard deviation of the mean (see \code{\link{sd}})}
   \item{sem}{standard error of the mean}
   \item{median}{median frequency (see \code{\link{median}})}
-  \item{mad}{absolute deviation of median (see \code{\link{mad}})}
   \item{mode}{mode frequency, \emph{i.e.} the dominant frequency}
   \item{Q25}{first quartile (see \code{\link{quantile}})}
   \item{Q75}{third quartile (see \code{\link{quantile}})}

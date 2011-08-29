@@ -28,7 +28,7 @@ ylim = c(0, f/2000), ...)
     computed (in s.).}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{bandpass}{a numeric vector of length two, giving the lower and
-    upper limits of a frequancy bandpass filter (in Hz).}
+    upper limits of a frequency bandpass filter (in Hz).}
   \item{clip}{a numeric value to select dominant frequency values according to
     their amplitude in reference to a maximal value of 1 for
     the whole signal (has to be >0 & < 1).}

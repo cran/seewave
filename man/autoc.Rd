@@ -21,7 +21,7 @@ FALSE, ...)
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{length of the window for the analysis (even number of points,
   by default = 512).}
-  \item{fmin}{the maximum frequency to detect (in Hz). See details.}
+  \item{fmin}{the minimum frequency to detect (in Hz). See details.}
   \item{fmax}{the maximum frequency to detect (in Hz). See details}
   \item{threshold}{amplitude threshold for signal detection (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the fundamental frequency 

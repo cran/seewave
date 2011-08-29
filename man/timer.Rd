@@ -46,9 +46,12 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
 \value{
   If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
   components:
-  \item{s}{duration of signal periods in seconds}
-  \item{p}{duration of pause periods in seconds}
-  \item{r}{ratio between the signal periods and silence}.
+  \item{s}{duration of signal period(s) in seconds}
+  \item{p}{duration of pause period(s) in seconds}
+  \item{r}{ratio between the signal and silence periods(s)}.
+  \item{positions}{a list containing four elements:}
+  \item{s.start}{start position(s) of signal period(s)}
+  \item{s.end}{end position(s) of signal period(s)}
 }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}

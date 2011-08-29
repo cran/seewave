@@ -1,3 +1,4 @@
+
 \name{spec}
 
 \alias{spec}
@@ -16,7 +17,7 @@ PMF = FALSE, dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL,
 identify = FALSE, col = "black", cex = 1,
 plot = 1, flab = "Frequency (kHz)",
-alab = "Amplitude", flim = c(0, f/2000),
+alab = "Amplitude", flim = NULL,
 alim = NULL, type="l",...)
 }
 
@@ -69,7 +70,7 @@ alim = NULL, type="l",...)
   \item{amp}{the relative amplitude of the points chosen on the spectrum}\cr 
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}.}
+\author{Jerome Sueur}
 
 \note{This function is based on \code{\link{fft}}.} 
 

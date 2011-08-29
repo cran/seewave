@@ -44,11 +44,11 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
 \details{The Kolmogorov distance is the maximal distance between the
   cumulated spectra. The function returns this distance and the
   corresponding frequency. This is an adaptation of the statistic
-  computed by the  non-parametric  Kolmogorov-Smirnov test (see \code{\link{simspec}}).}
+  computed by the  non-parametric  Kolmogorov-Smirnov test (see \code{\link{ks.test}}).}
 
 \value{The function returns a list of two items
   \item{D}{the Kolomogorv-Smirnov distance}
-  \item{F}{the frequency (in KHz) where the Kolmogorov-Smirnov has been found}
+  \item{F}{the frequency (in KHz) where the Kolmogorov-Smirnov distance was found}
 }
 
 \author{Jerome Sueur}

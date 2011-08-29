@@ -36,7 +36,7 @@ The rugosity is then computed as following:
 \note{The rugosity of a noisy signal will tend towards 1 whereas
   the spectral entropy of a pure tone signal will tend towards 0.}
 
-\seealso{\code{\link{rms}}, \code{\link{sh}}, \code{\link{th}}, \code{\link{H}}.}
+\seealso{\code{\link{roughness}}, \code{\link{rms}}, \code{\link{sh}}, \code{\link{th}}, \code{\link{H}}.}
 
 \examples{
 data(tico) ; tico <-tico@left

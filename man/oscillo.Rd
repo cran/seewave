@@ -33,7 +33,7 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
   \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
   \item{byrow}{logical, if \code{TRUE}, the sections are filled by
     rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
-  \item{identify}{returns the time coordinate of points chosen  with a cursor
+  \item{identify}{returns the time and amplitude coordinates of points chosen  with a cursor
     on the oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot
     of \code{wave}(by default \code{TRUE}).}
@@ -63,8 +63,8 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 
 \value{
   Data are returned as one-column matrix if \code{plot} is \code{FALSE}.
-  \code{identify} returns a numeric object with the time coordinate 
-  of points successively chosen on the oscillogram. 
+  \code{identify} returns a two-column matrix with the time and
+  amplitude coordinates of points successively chosen on the oscillogram. 
 }
 
 
@@ -80,7 +80,7 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 \author{Jerome Sueur \email{sueur@mnhn.fr} and 
   Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{oscilloST}},\code{\link{cutw}}, \code{\link{pastew}},
+\seealso{\code{\link{dynoscillo}}, \code{\link{oscilloST}}, \code{\link{cutw}}, \code{\link{pastew}},
   \code{\link{timer}}}
 
 \examples{
