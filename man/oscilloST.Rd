@@ -51,7 +51,7 @@ bty = "l")
 \author{Jerome Sueur \email{sueur@mnhn.fr} and 
   Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{oscillo}}}
+\seealso{\code{\link{oscillo}}, \code{\link{dynoscillo}}}
 
 \examples{
 a<-synth(f=8000,d=1,cf=2000,am=c(50,10),plot=FALSE)

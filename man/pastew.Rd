@@ -11,7 +11,7 @@
 }
 
 \usage{
-pastew(wave1, wave2, f, at = "end", choose = FALSE, plot = FALSE,
+pastew(wave1, wave2, f, at = "end", join = FALSE, choose = FALSE, plot = FALSE,
 marks = TRUE, output = "matrix", ...)
 }
 
@@ -20,7 +20,10 @@ marks = TRUE, output = "matrix", ...)
   \item{wave2}{a second R object.}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
-    Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
+    Can be also specified as \code{"start"}, \code{"middle"} or
+    \code{"end"}.}
+  \item{join}{if \code{TRUE} the two waves will be pasted and jointed by
+  removing the last point of wave2. See examples.}
   \item{choose}{logical, if \code{TRUE} the point where \code{wave1} will
     be pasted into \code{wave2} (=\code{at}) can be graphically chosen with a cursor.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
@@ -58,6 +61,16 @@ a<-cutw(tico, f=22050, from=0.5, to=0.9)
 pastew(a,tico,f=22050,at="start",plot=TRUE)
 # or paste it at a specific location
 pastew(a,tico,f=22050,at=1.4,plot=TRUE)
+# setting the argument 'join' to TRUE might be useful
+# to smooth pasting when some phase problem occur
+# generate two sine waves
+a <- synth(cf=50, f=400, d=0.1)
+b <- synth(cf=100, f=400, d=0.1)
+# paste it with 'join' turned to FALSE
+# there is a click at the junction between the two waves
+pastew(a, b, f=400, plot=TRUE)
+# that can be removed by setting 'join' to TRUE
+pastew(a, b, f=400, join=TRUE, plot=TRUE)
 } 
 \keyword{dplot}
 \keyword{ts}

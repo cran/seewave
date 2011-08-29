@@ -2,6 +2,26 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+
+		CHANGES IN SEEWAVE VERSION 1.6.1 [30-August-2011]
+
+NEW FEATURES
+	o dynoscillo(): a new function to explore dynamically a wave through an oscillographic representation.
+	o roughness(): a new function to compute the roughness or total curvature of a curve (a wave or a spectrum)
+	o oscillo(): using the argument 'identify' now returns a two-column matrix as a value. The first colum gives the time position and the second column the amplitude position.
+	o timer(): the function now returns the start and end positions of the so-called 'signal' and 'pause' bouts.
+	o specprop(): rewritten, much faster.
+	o sh(): a new argument 'alpha' to compute to the Renyi entropy of order 'alpha'.
+
+OTHER CHANGES
+	o dfreq(): the argument 'threshold' and 'bandpass' can now be used in the same time.
+	o fpeaks(): the value is now correctly ordered following frequencies when 'nmax' is used.
+	o pastew() and repw(): a new argument 'join' to smooth pasting.
+	o meanspec() and spec(): the default value of the argument 'flim' is now set to NULL. This allows plotting a log scale for the frequency axis with log="x".
+
+DEPRECATED & DEFUNCT
+	o specprop(): the value 'mad' has been withdrawn.
+
 		CHANGES IN SEEWAVE VERSION 1.6.0 [19-April-2011]
 
 NEW FEATURES
@@ -37,7 +57,7 @@ OTHER CHANGES
 		CHANGES IN SEEWAVE VERSION 1.5.8 [15-June-2010]
 
 NEW FEATURES
-	o dfreq(): a new argument 'at' to compute the dominant frequency at specific positions along the signal. 
+	o dfreq(): a new argument 'at' to compute the dominant frequency at specific positions along the signal.
 	  	   a new argument 'clip' to select dominant frequency values in reference to the stft maximum.
 	o spectro(): two new arguments to control the size of the labels (cexlab) and the size of the axes (cexaxis).
 	             it is now possible to do annotations on the spectrogram for any layout.
@@ -83,7 +103,7 @@ NEW FEATURES
 		     4 new arguments, 'tlab', 'flab', 'alab' and 'main', to replace the 'plot.title'.
 	o timer() has four new arguments: 'envt' to set the type of envelope used, 'ksmooth' and 'msmooth' to smooth the envelope, and 'power' to apply a power factor the envelope potentially reducing low amplitude background noise.
 	o wf(): a new argument 'lwd' to set line width.
- 
+
 
 OTHER CHANGES
 	o IMPORTANT: the package dependency has moved from sound to tuneR. This change is mainly due to problems araising during daily CRAN checks.
@@ -109,7 +129,7 @@ NEW FEATURES
 	o rms(): a new function that computes the root mean square.
 
 OTHER CHANGES
-	o sh(): a 0 value is now returned when the input spectrum is null i.e. including any NA or 0 values only. 
+	o sh(): a 0 value is now returned when the input spectrum is null i.e. including any NA or 0 values only.
 	o th(): a 0 value is now returned when the input envelope is null (i.e. including any NA or 0 values only) or has a square shape.
 	o This file (NEWS) has been added.
 	o The I/O vignette has been updated including the audio package.
