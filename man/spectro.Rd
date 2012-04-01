@@ -90,7 +90,7 @@ listen=FALSE,
     the device when \code{osc} is \code{TRUE}.}
   \item{oma}{a vector of length 4 to control the size of outer margins
   when either \code{scale} or \code{osc} is \code{TRUE}.}
-\item{listen}{if \code{TRUE} the sound is played back (by default
+  \item{listen}{if \code{TRUE} the sound is played back (by default
   \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}
     graphical parameters.}
@@ -135,8 +135,7 @@ listen=FALSE,
   Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
     communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Caroline Simonis \email{csimonis@mnhn.fr}.}
+\author{Jerome Sueur and Caroline Simonis.}
 
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
   \code{\link{filled.contour}}}

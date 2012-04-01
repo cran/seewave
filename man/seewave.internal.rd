@@ -14,6 +14,7 @@
 \alias{rev.heat.colors}
 \alias{rev.terrain.colors}
 \alias{rev.topo.colors}
+\alias{sumsmooth}
 \alias{soscillo}
 \alias{sspectro}
 \alias{spectro.colors}

@@ -12,7 +12,7 @@
 \usage{
 timer(wave, f, threshold = 5, envt="abs",
 power = 1, msmooth = NULL, ksmooth = NULL,
-plot = TRUE, plotthreshold = TRUE,
+ssmooth = NULL, plot = TRUE, plotthreshold = TRUE,
 col = "black", colval = "red", 
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
@@ -32,6 +32,7 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
     (in number of points). The second component is the overlap between
     successive windows (in \%).  See \code{\link{env}}.}
   \item{ksmooth}{kernel smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
+  \item{ssmooth}{sum smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
     (by default \code{TRUE}).}
   \item{plotthreshold}{logical, if \code{TRUE} plots the threshold
@@ -44,8 +45,7 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
 }
 
 \value{
-  If \code{plot} is \code{FALSE}, \code{timer} returns a list containing three
-  components:
+  A list containing six items:
   \item{s}{duration of signal period(s) in seconds}
   \item{p}{duration of pause period(s) in seconds}
   \item{r}{ratio between the signal and silence periods(s)}.
@@ -54,7 +54,11 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
   \item{s.end}{end position(s) of signal period(s)}
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\section{Warning }{Setting to high values to \code{msmooth} or
+  \code{ssmooth} might return unaccurate results. Double check you
+  results if so.}
+
+  \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \seealso{\code{\link{env}}, \code{\link{cutw}},  \code{\link{pastew}}.}
 

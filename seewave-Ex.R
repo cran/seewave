@@ -2010,7 +2010,7 @@ nameEx("sh")
 flush(stderr()); flush(stdout())
 
 ### Name: sh
-### Title: Shannon and RÃ©nyi spectral entropy
+### Title: Shannon and Renyi spectral entropy
 ### Aliases: sh
 ### Keywords: ts
 
