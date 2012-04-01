@@ -40,14 +40,14 @@
     (\emph{i.e.} D(spec1 || spec2))}
     \item{D2}{The K-L distance of 'spec1' with respect to 'spec2'
     (\emph{i.e.} D(spec2 || spec1))}
-    \item{D}{The symmetric K-L distance (\emph{i.e.} D = 0.5*(d1+d2))}
+    \item{D}{The symmetric K-L distance (\emph{i.e.} D = 0.5*(D1+D2))}
   }
 
 \references{Kullback, S., Leibler, R.A. (1951). On information and sufficiency. \emph{Annals of Mathematical Statistics}, 22: 79-86}
 
 \author{Jerome Sueur}
 
-\seealso{\code{\link{ks.dist}}, \code{\link{simspec}}, \code{\link{diffspec}}}
+\seealso{\code{\link{ks.dist}}, \code{\link{logspec.dist}}, \code{\link{simspec}}, \code{\link{diffspec}}}
 
 \examples{
 # Comparison of two spectra

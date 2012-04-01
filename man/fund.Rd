@@ -1,4 +1,5 @@
 \name{fund}
+
 \alias{fund}
 
 \title{Fundamental frequency track}
@@ -8,6 +9,7 @@
 }
 
 \usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
+from = NULL, to = NULL, 
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), pb = FALSE, ...)}
 
@@ -19,6 +21,8 @@ ylim = c(0, f/2000), pb = FALSE, ...)}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{fmax}{the maximum frequency to detect (in Hz).}  
   \item{threshold}{amplitude threshold for signal detection (in \%).}
+  \item{from}{start position where to compute the fundamental frequency (in s).}
+  \item{to}{end position to compute the fundamental frequency (in s).}
   \item{plot}{logical, if \code{TRUE} plots the fundamental frequency
   modulations against time (by default \code{TRUE}).}
   \item{xlab}{title of the time axis (s).}

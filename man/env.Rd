@@ -8,7 +8,7 @@
 amplitude envelope of a time wave.}
 
 \usage{env(wave, f, envt = "hil", msmooth = NULL,
-ksmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
+ksmooth = NULL, ssmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -20,6 +20,7 @@ ksmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
     (in number of points). The second component is the overlap between
     successive windows (in \%). See examples.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See examples.}
+  \item{ssmooth}{sum smooth.}
   \item{norm}{a logical, if \code{TRUE} the amplitude of the envelope
 		is normalised between 0 and 1.}
   \item{plot}{logical, if \code{TRUE} returns a plot
@@ -58,6 +59,8 @@ env(tico,f=22050,envt="abs")
 env(tico,f=22050,msmooth=c(10,50))
 # smoothing kernel
 env(tico,f=22050,ksmooth=kernel("daniell",10))
+# sum smooth
+env(tico,f=22050,ssmooth=50)
 # overplot of oscillographic and envelope representations
 oscillo(tico,f=22050)
 par(new=TRUE)

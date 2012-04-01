@@ -74,7 +74,7 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
   \code{\link{simspec}}, \code{\link{diffenv}},  \code{\link{kl.dist}},
-  \code{\link{ks.dist}}}
+  \code{\link{ks.dist}}, \code{\link{logspec.dist}}, \code{\link{itakura.dist}}}
 
 \examples{
 a<-noisew(f=8000,d=1)

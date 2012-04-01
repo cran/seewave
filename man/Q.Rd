@@ -30,7 +30,7 @@ alab = "Relative amplitude (dB)", type = "l", ...)
   \item{cexval}{character size of plotting Q.}
   \item{fontval}{font of plotting Q.}
   \item{flab}{title of the frequency axis.}
-  \item{alab}{title of the ampltiude axis.}
+  \item{alab}{title of the amplitude axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
@@ -38,7 +38,16 @@ alab = "Relative amplitude (dB)", type = "l", ...)
 
 \details{A high Q value indicates a highly resonant system.}
 
-\value{Q is returned as a single numeric data.}
+\value{A list is returned with the following four items:
+  \item{Q}{a numeric vector of length 1 returning the Q factor (no units)}
+  \item{dfreq}{a numeric vector of length 1 the dominant frequency (kHz)}
+  \item{fmin}{a numeric vector of length 1 returning the minimum
+  frequency of the -dB level bandwidth (kHz)} 
+  \item{fmax}{a numeric vector of length 1 returning the minimum
+  frequency of the -dB level bandwidth (kHz)}
+  \item{bwd}{a numeric vector of length 1 returning the bandwidth,
+  i. e. \code{fmax-fmin} (kHz)}
+ }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

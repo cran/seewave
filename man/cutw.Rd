@@ -37,7 +37,7 @@ plot = FALSE, marks = TRUE, output="matrix", ...)
 \value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
   of the returned object is set with the argument \code{output}.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}},\code{\link{deletew}},
   \code{\link{fadew}},\code{\link{mutew}},\code{\link{pastew}},\code{\link{revw}},

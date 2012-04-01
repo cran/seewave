@@ -2,6 +2,21 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.6.2 [01-April-2012]
+
+NEW FEATURES
+	o logspec.dist(): a new function to compute the log-spectral distance. 
+	o itakura.dist(): a new function to compute the Itakura-Saito distance between two spectra. 
+	o phaseplot(): a new function to plot the first, second, and possibly third derivatives of a wave.
+	o smoothw(): a new function that tries to smooth a time wave.
+	o timer(): a new argument, 'ssmooth', to smooth the envelope.
+	o fund(): two new arguments, 'from' and 'to', to limit in time the search of the fundamental frequency.
+	o Q(): returns now a list of 5 items including the Q factor, the dominant frequency, the frequecy limits of the bandwdith and the frequency bandwidth.
+
+OTHER CHANGES
+	o Now requires R (>= 2.15) because of an issue regarding filled.contour().
+	o rmam(): a small bug regarding data input fixed.
+
 
 		CHANGES IN SEEWAVE VERSION 1.6.1 [30-August-2011]
 
