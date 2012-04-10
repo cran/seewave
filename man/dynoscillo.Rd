@@ -20,7 +20,7 @@
 \details{
 The arguments \code{wd}, \code{wl} and \code{wn} have to be used isolated, not in conjunction. They basically do the same, ie they set the duration of the zooming window that is slided along the signal. For instance, for a 5 seconds sound with a sampling rate (\code{f}) at 44.1 kHz, \code{wl = 4096} is equivalent to \code{wd = 4096 / 44100 = 0.093 s} and equivalent to \code{wnb = 5*4096 / 44100 = 53}.} 
 
-\author{Jérôme Sueur}
+\author{Jerome Sueur}
 
 \note{This function requires the package \code{rpanel}.}
 

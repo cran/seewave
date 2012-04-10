@@ -39,7 +39,7 @@
   \item{Q25}{first quartile (see \code{\link{quantile}})}
   \item{Q75}{third quartile (see \code{\link{quantile}})}
   \item{IQR}{interquartile range (see \code{\link{IQR}})}
-  \item{cent}{centro�d, see \code{note}}
+  \item{cent}{centroid, see \code{note}}
   \item{skewness}{skewness, a measure of asymmetry, see \code{note}}
   \item{kurtosis}{kurtosis, a measure of peakedness, see \code{note}}
   \item{sfm}{spectral flatness measure (see \code{\link{sfm}})}

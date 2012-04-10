@@ -56,7 +56,7 @@
 \note{
   The Shannon spectral entropy of a noisy signal will tend towards 1 whereas
   the Shannon spectral entropy of a pure tone signal will tend towards
-  0. See Han \emph{et al}. for details regarding the Rényi entropy.}
+  0. See Han \emph{et al}. for details regarding the Renyi entropy.}
 
 \seealso{\code{\link{csh}},\code{\link{th}}, \code{\link{H}}, \code{\link{sfm}}}
 
@@ -73,7 +73,7 @@ specb<-spec(b,f=8000,at=0.5,plot=FALSE)
 sh(specb)
 # close to 1
 ##########################
-# Rényi spectral entropy
+# Renyi spectral entropy
 ##########################
 sh(speca, alpha=2)
 sh(speca, alpha=3)
