@@ -1,6 +1,6 @@
-d0d444d030162895cd55ac7be9e79ac2 *DESCRIPTION
+7be8a1db2dbb0fe15d0fab80ad938208 *DESCRIPTION
 08b12be78d0397074bbb971b32b63b68 *NAMESPACE
-72e9a7acef049e3d15de825ae897b234 *NEWS
+4ce245557010a9547feeecb3c8809245 *NEWS
 0986fbb444d05eb53ff4384f544c16e1 *R/seewave.r
 2bf0c6aa0e5523a2729ea72e4d73dc25 *R/zzz.r
 bc945349f644a838f96eac7ed830a28c *data/orni.RData
@@ -11,7 +11,7 @@ d0974c6921d2c4abffc1b6bfe38d2fcb *data/tico.RData
 9e0e622839b069f607812c3bed77c764 *demo/00Index
 db7ad879beec73334b76d1e70f5542b9 *demo/seewave.R
 54da0770bb6a6d5addc696d3ec836c45 *inst/CITATION
-c0142d721c408fec439121addae42b22 *inst/doc/seewave_IO.pdf
+f6cfc8acb013a825e5dfdf7ccf5ea7a4 *inst/doc/seewave_IO.pdf
 7d46377d431440fd8de9fd7227cea093 *inst/doc/seewave_IO.rnw
 cf115826226ed5c82274baec7c62ddf2 *man/H.Rd
 daac385b6924c3c39d41abe40a57d000 *man/Q.Rd
@@ -41,7 +41,7 @@ a61d5edc577fbf580498754e7c122fac *man/diffspec.Rd
 0e5010ea2db7da3b22cea58546d8264f *man/diffwave.Rd
 6b9a4a3c1a204727aeb3c4395b602ecb *man/discrets.Rd
 f696814995a4aad98ee021810c993ff3 *man/drawenv.Rd
-84bbee8643097e5b6fc5d7766da31e47 *man/dynoscillo.Rd
+cc1bdeeaa970ceed3433d7a0c27c982e *man/dynoscillo.Rd
 2ade255007df5d7868bced854c55201a *man/dynspec.Rd
 0a5c85d97027c747ae03af2782c2db0c *man/echo.Rd
 0e9ce243211fb59b3988ce24ae6d5623 *man/env.Rd
@@ -85,7 +85,7 @@ a4ef6c3fcd5c4ce8e36fe43870db7894 *man/pulse.Rd
 d0d3d67f678a2509b3d9596a699a3467 *man/repw.Rd
 657733660435994e527130474a64bf73 *man/resamp.Rd
 4be517c27dda879e30b8f2b0bde40858 *man/revw.Rd
-b5a1d5c9d63864f451732ca8afeae481 *man/rmam.Rd
+fb4b7b659fa9df3c859066176792073a *man/rmam.Rd
 5952f3876e12773dc3c5f580feffa9d5 *man/rmnoise.Rd
 eb6a6a4bf16b51cc73438947ebb20bb6 *man/rmoffset.Rd
 538e285fff65f213dc673d28f438e55e *man/rms.Rd
@@ -94,15 +94,15 @@ eb6a6a4bf16b51cc73438947ebb20bb6 *man/rmoffset.Rd
 e879296b6604c524dc2fc8d7019d0923 *man/savewav.Rd
 2a2296b9a0d3b75f3529a1f90109f54a *man/seedata.Rd
 ec29e10f8e02817c5fa8eda9b6f9b07a *man/seewave.internal.Rd
-a00d1de6b44615c19a11568274cc4db6 *man/seewave.package.Rd
+edca8133223ff014fe003221a2e47c9c *man/seewave.package.Rd
 726fe89670cef0463e1acfd8e7a32ed6 *man/setenv.Rd
 a07b5cc54137609e111ff1c936017b2b *man/sfm.Rd
-3ba19017f44978088ff56ad1c01642e1 *man/sh.Rd
+a8b74090f92ba79d6a44b09574458445 *man/sh.Rd
 e4a58cea8619735904f81676cb77a1d3 *man/sheep.Rd
 7f984d94c4738cdd40a5e4c2e9793dc0 *man/simspec.Rd
 5b4037cdc4b628f4933e2207b716a49c *man/smoothw.Rd
 00ccff5c61f44eb7ab458e1c58c9f950 *man/spec.Rd
-e9455fac24849f802d16290340569726 *man/specprop.Rd
+b79ee75d9516e6baf333fe66dc95c5f8 *man/specprop.Rd
 0158baedffcd5840932e39e3097f6cb2 *man/spectro.Rd
 fc264cc4c098f20a33294c30aad1eb37 *man/spectro3D.Rd
 e4d66bcd1bae623a3b4b875a436c6540 *man/symba.Rd
@@ -110,7 +110,7 @@ e4d66bcd1bae623a3b4b875a436c6540 *man/symba.Rd
 3f02a9d2cc07cea5abbef36e255d3f9c *man/th.Rd
 8c8eba4ada16977cc953b718812568d6 *man/tico.Rd
 c347be06986d89515e1d16d2c4e8fd19 *man/timer.Rd
-1302e1b33ef6894251376deaace44449 *man/wasp.Rd
+b0243c829ed4ab198c01f7a81f55f839 *man/wasp.Rd
 4c9a84f14ac810c932861ce89a397c90 *man/wav2flac.Rd
 6f06e69165be9e9eb13586ac233a3f4e *man/wf.Rd
 10713ed5b6be77bbda0a6b24dffee8ed *man/zapsilw.Rd

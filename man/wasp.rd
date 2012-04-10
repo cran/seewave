@@ -12,7 +12,7 @@
 
 \arguments{
   \item{f}{frequency (Hz).}
-  \item{t}{temperature (degree Celcius).}
+  \item{t}{temperature (degree Celsius).}
   \item{c}{celerity (m/s) if a wavelength is to be found at a particular speed of sound.}
   \item{s}{salinity (parts per thousand) when \code{medium} is \code{"sea"}.}
   \item{d}{depth (m) when \code{medium} is \code{"sea"}.}
@@ -35,7 +35,7 @@
     +(2.787860e-9)*t^5}
 
   with \emph{t} = temperature in degrees Celsius;
-  range of validity: 0-95°C at atmospheric pressure.\cr
+  range of validity: 0-95 degrees Celcius at atmospheric pressure.\cr
 
   Speed of sound in sea-water is computed according to Mackenzie equation:\cr
   \deqn{c = 1448.96 + 4.591\times{t}- 5.304.10^{-2}\times{t^{2}}}{%
@@ -50,7 +50,7 @@
   with \emph{t} = temperature in degrees Celsius;
   \emph{s} = salinity in parts per thousand;
   \emph{d} = depth in meters;
-  range of validity: temperature 2 to 30 °C, salinity 25 to 40 parts per thousand, depth 0 to 8000 m.\cr
+  range of validity: temperature 2 to 30 degrees Celcius, salinity 25 to 40 parts per thousand, depth 0 to 8000 m.\cr
 
   Wavelength is obtained following:\cr
   \deqn{\lambda = \frac{c}{f}}{% 
@@ -70,11 +70,11 @@
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \examples{
-# wavelength (m) of a 2000 Hz air-borne sound at 20 deg. C
+# wavelength (m) of a 2000 Hz air-borne sound at 20 degrees Celsius
 wasp(f=2000)$l
 # [1] 0.1717
 
-# sound speed in sea at 0 and -500 m for a respective temperature of 22deg.C and 11deg.C
+# sound speed in sea at 0 and -500 m for a respective temperature of 22 degrees Celcius and 11 degrees Celsius
 wasp(f=1000,s=30,d=c(0,500),t=c(22,11),medium="sea")$c
 # [1] 1521.246 1495.414
 
