@@ -11,7 +11,7 @@
 
 \usage{
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, norm = TRUE, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
 palette = rev.terrain.colors)
 }
@@ -24,6 +24,7 @@ palette = rev.terrain.colors)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
+  \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return:
@@ -81,6 +82,9 @@ palette = rev.terrain.colors)
 require(rgl)
 data(tico)
 spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
+# linear amplitude scale without a normisation of the STFT matrix
+# time and frequency scales need to be dramatically amplified
+spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)
 }
 
 \keyword{dplot}

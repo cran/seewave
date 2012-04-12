@@ -11,7 +11,7 @@
 }
 
 \usage{
-meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, PSD = FALSE,
+meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, norm = TRUE, fftw = FALSE, PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, 
 identify = FALSE, col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
@@ -23,6 +23,7 @@ alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
   \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}
+  \item{norm}{if \code{TRUE} the mean spectrum is normalised (i. e. scaled) by  its maximum.}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of \code{spectro}.}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,

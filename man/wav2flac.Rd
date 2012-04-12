@@ -25,7 +25,7 @@ exename = NULL, path2exe = NULL)
 
 \note{Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}, Luis J. Villanueva-Rivera \email{lvillanu@purdue.edu}}
+\author{Jerome Sueur, Luis J. Villanueva-Rivera}
 
 \seealso{\code{\link{savewav}}}
 

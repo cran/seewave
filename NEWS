@@ -2,12 +2,28 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.6.5 [12-December-2012]
+
+NEW FEATURES
+	o a new vignette named 'seewave_analysis' for a short introduction to sound analysis. This vignette is mainly written for students starting with bioacoustics.
+	o meandB(), moredB(): a new argument 'level' to choose between intensity level (IL) and sound pressure level(SPL).
+	o meanspec(), spec(), spectro() and spectro3D(): a new argument 'norm' to control the normalisation of the results.
+	o sddB(): a new function to estimate the standard deviation of dB values.
+	o oscillo(): three new arguments: 'xlab' and 'ylab' to specify the name of the axes, 'cex' to specify pitch size if type is "p", or "b" or "o".
+	o sox(): a new function to call SoX. Sox is required to use the function but not to install the package.
+
+
+OTHER CHANGES
+	o ceps(): a bug regarding the argument 'alim' is now fixed.
+        o specprop(): frequency resolution is increased thanks to a patch by Jesse Ross (Cornell University)
+	o zc(): a new argument 'warning' to control the display of the warning message in case of interpolation.
+
 		CHANGES IN SEEWAVE VERSION 1.6.4 [28-June-2012]
 
 NEW FEATURES
 	o stft.ext(): a new function to compute externally (i.e. out of R environment) the short-term Fourier transform. This function has been developed to speed up computing process time when doing batch analysis.
 	o timer(): a new argument, 'tlim', to change to time axis.
-	o savewav() : a new argument, 'rescale', to rescale the amplitude of the exported .wav file.
+	o savewav(): a new argument, 'rescale', to rescale the amplitude of the exported .wav file.
 
 OTHER CHANGES
 	o ama(), dynspec(), spec(), meanspec(), spectro(), spectro3D(): a small shift in Fourier coefficients fixed.
@@ -17,6 +33,7 @@ OTHER CHANGES
 	o noisew(): the argument 'listen' now works properly.
         o timer(): should be faster.
 	o Numerous typoes and small errors fixed in the documentation!
+
 
 		CHANGES IN SEEWAVE VERSION 1.6.3 [10-April-2012]
 

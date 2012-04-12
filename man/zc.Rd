@@ -10,7 +10,8 @@
 
 \usage{
 zc(wave, f, plot = TRUE, interpol = 1, threshold = NULL,
-xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
+xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),
+warning = TRUE, ...)
 }
 
 \arguments{
@@ -18,11 +19,13 @@ xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),...)
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
     the time wave(by default \code{TRUE}).}
-  \item{interpol}{interpolation factor.}
+  \item{interpol}{a numeric vector of length 1, interpolation factor.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{xlab}{title of the x axis.}
   \item{ylab}{title of the y axis.}
   \item{ylim}{the range of y values.}
+  \item{warning}{a logial to specify if warning message should be
+  displayed or not when \code{interpol} is > 5.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

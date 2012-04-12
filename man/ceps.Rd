@@ -27,7 +27,7 @@ qlim = NULL, alim = NULL, type = "l", ...)
   \item{col}{colour of the cepstrum.}
   \item{cex}{pitch size of the cepstrum.}
   \item{plot}{logical, if \code{TRUE} plots the cepstrum.}
-  \item{qlab}{title of the quefrency axis.}
+  \item{qlab}{title of the quefrency axis (in s).}
   \item{alab}{title of the amplitude axis.}
   \item{qlim}{range of quefrency axis.}
   \item{alim}{range of amplitude axis.}
@@ -38,14 +38,14 @@ qlim = NULL, alim = NULL, type = "l", ...)
 
 \details{
   The cepstrum of a time wave is the inverse Fourier transform of the logarithm
-  of the Fourier transform. The cepstrum of a wave \emph{s} is then calcuated as follows:\cr
+  of the Fourier transform. The cepstrum of a wave \emph{s} is then calculated as follows:\cr
   \deqn{C(s) = Re[FFT^{-1}(\log{(|FFT(s)|)]}}{% 
     C(s) = Re(invfft(log(abs(fft(s)))))}\cr
 
   The independent variable of a cepstral graph is called the quefrency.
   The quefrency is a measure of time, though not in the sense of a signal
   in the time domain. A correspondence with the frequency domain is obtained
-  by simply computing the reverse of the temporal x co0rdinate. For instance if
+  by simply computing the reverse of the temporal x coordinate. For instance if
   a peak appears at 0.005 s, this reveals a frequency peak at 200 Hz (=1/0.005).
   This explain the two scales plotted when \code{plot} is \code{TRUE}. \cr
   If \code{at}, \code{from} or \code{to} are \code{FALSE} then \code{ceps} 
