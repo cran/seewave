@@ -12,7 +12,7 @@
 }
 
 \usage{
-spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, PSD = FALSE,
+spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, norm = TRUE, PSD = FALSE,
 PMF = FALSE, dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL,
 identify = FALSE, col = "black", cex = 1,
@@ -29,7 +29,9 @@ alim = NULL, type="l",...)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
-  library \code{fftw}. See Notes of the \code{spectro}.}x
+    library \code{fftw}. See Notes of the \code{spectro}.}
+  \item{norm}{if \code{TRUE} the spectrum is normalised (i. e. scaled) by
+  its maximum.}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,
     \emph{i. e.} the square of the spectra.}  
   \item{PMF}{if \code{TRUE} return Probability Mass Function,

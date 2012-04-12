@@ -62,7 +62,7 @@ abline(h=seq(-80, 20, 20),col="grey")
 par(new=TRUE)
 plot(f, dBweight(f)$A, type="l", log="x",
 xlab="Frequency (Hz)", ylab="dB",lwd=2, col="blue", xlim=c(10,10^5),ylim=c(-80,20))
-title(main="Acoustic weighting curves (10 Hz -20 kHz)")
+title(main="Acoustic weighting curves (10 Hz - 20 kHz)")
 lines(x=f, y=dBweight(f)$B, col="green",lwd=2)
 lines(x=f, y=dBweight(f)$C, col="red",lwd=2)
 lines(x=f, y=dBweight(f)$D, col="black",lwd=2)

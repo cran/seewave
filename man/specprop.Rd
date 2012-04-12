@@ -73,8 +73,8 @@
   relative to normal distribution with the same mean and variance.
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Caroline Simonis \email{csimonis@mnhn.fr}.}
+\author{Jerome Sueur and Caroline Simonis, and a patch by Jesse Ross
+  (Dec. 2012)}
 
 \examples{
 data(orni)

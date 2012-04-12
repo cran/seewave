@@ -15,10 +15,11 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.6.4\cr
-    Date: \tab 2012-23-10\cr
+    Version: \tab 1.6.5\cr
+    Date: \tab 2012-12-12\cr
     License: \tab GPL version 2 or newer\cr
-    Contributors : \tab Ethan C. Brown, Amandine Gasc, Jonathan Lees, Sandrine Pavoine,
+    Contributors : \tab Ethan C. Brown, Amandine Gasc, Stefanie LaZerte,
+    Jonathan Lees, Sandrine Pavoine,
     Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
     Acknowledgments: \tab Michel Baylac, Charlotte Cure, Denis Dupeyron,
     Arnold Fertin, Kurt Hornik, Emiliano A. Laca, Uwe Ligges, Emmanuel

@@ -11,7 +11,9 @@
 
 \usage{
 oscillo(wave, f, from = NULL, to = NULL, scroll = NULL,
-zoom = FALSE, k=1, j=1, labels = TRUE, byrow = TRUE,
+zoom = FALSE, k=1, j=1, cex,
+labels = TRUE,  tlab = "Time (s)", alab = "Amplitude",            
+byrow = TRUE,
 identify = FALSE, plot = TRUE, colwave = "black", 
 coltitle = "black", cextitle = 1.2,
 fonttitle = 2, collab = "black",
@@ -30,7 +32,10 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
   \item{k}{number of horizontal sections (by default =1).}
   \item{j}{number of vertical sections (by default =1).}
+  \item{cex}{Pitch size if type.}
   \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
+  \item{tlab}{Label of time axis.}
+  \item{alab}{Label of amplitude axis.}
   \item{byrow}{logical, if \code{TRUE}, the sections are filled by
     rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
   \item{identify}{returns the time and amplitude coordinates of points chosen  with a cursor

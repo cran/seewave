@@ -11,7 +11,7 @@
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, norm = TRUE, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
@@ -39,6 +39,7 @@ listen=FALSE,
     (even number of points) (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes.}
   \item{dB}{a character string specifying the type dB to return: "max0"
@@ -151,7 +152,10 @@ spectro(tico,f=22050)
 spectro(tico,f=22050,osc=TRUE)
 spectro(tico,f=22050,scale=FALSE)
 spectro(tico,f=22050,osc=TRUE,scale=FALSE)
-# change the dB scale by setting a different dB reference value (20 microPa)spectro(tico,f=22050, dBref=2*10e-5)
+# change the dB scale by setting a different dB reference value (20microPa)
+spectro(tico,f=22050, dBref=2*10e-5)
+# unnormalised spectrogram with a linear amplitude scale
+spectro(tico, dB=NULL, norm=FALSE, scale=FALSE)
 # manipulating wl
 op<-par(mfrow=c(2,2))
 spectro(tico,f=22050,wl=256,scale=FALSE)

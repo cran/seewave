@@ -145,7 +145,7 @@ flush(stderr()); flush(stdout())
 
 data(sheep)
 # fundamental frequency of a sheep
-res<-autoc(sheep, f=8000, threshold=5, fmin=100, fmax=700)
+res <- autoc(sheep, f=8000, threshold=5, fmin=100, fmax=700, plot=FALSE)
 spectro(sheep, f=8000, ovlp=75, scale=FALSE)
 points(res, pch=20)
 legend(0.5, 3.6, "Fundamental frequency", pch=20, bty=0, cex=0.7)
@@ -487,7 +487,7 @@ abline(h=seq(-80, 20, 20),col="grey")
 par(new=TRUE)
 plot(f, dBweight(f)$A, type="l", log="x",
 xlab="Frequency (Hz)", ylab="dB",lwd=2, col="blue", xlim=c(10,10^5),ylim=c(-80,20))
-title(main="Acoustic weighting curves (10 Hz -20 kHz)")
+title(main="Acoustic weighting curves (10 Hz - 20 kHz)")
 lines(x=f, y=dBweight(f)$B, col="green",lwd=2)
 lines(x=f, y=dBweight(f)$C, col="red",lwd=2)
 lines(x=f, y=dBweight(f)$D, col="black",lwd=2)
@@ -1352,7 +1352,7 @@ nameEx("meandB")
 flush(stderr()); flush(stdout())
 
 ### Name: meandB
-### Title: mean of dB values
+### Title: Mean of dB values
 ### Aliases: meandB
 ### Keywords: math
 
@@ -1470,7 +1470,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# two sources of 60 dB give an intensity or pressure level of 63 dB
+# two sources of 60 dB give an intensity level of 63 dB
 moredB(c(60,60))
 # addition of three sources
 moredB(c(89,90,95))
@@ -1970,13 +1970,16 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(tico) ; tico <-tico@left
-# rugosity of the original recording
+# rugosity of the original recording normalised
 rugo(tico/max(tico))
-# add artificially some background noise
+# synthesis of white noise with the same duration as tico
 noise <- noisew(d=length(tico)/22050, f=22050)
-ticon1 <- tico/max(tico) + 0.5*noise
-# new rugosity (higher)
-rugo(ticon1/max(ticon1))
+# tico is normalised to get similar amplitude with the noise
+tico.norm <- tico/max(tico)
+# addition of noise to tico
+tico.noisy <- tico.norm + 0.5*noise
+# new rugosity (higher) on normalised signal
+rugo(tico.noisy/max(tico.noisy))
 
 
 
@@ -1999,9 +2002,32 @@ a<-synth(f=8000,d=2,cf=2000,plot=FALSE)
 # here: "a.wav"
 savewav(a,f=22050)
 unlink("a.wav")
-# if you wish to change the name, use 'file' argument
+# if you wish to change the name, use the 'file' argument
 savewav(a,f=22050,file="b.wav")
 unlink("b.wav")
+# if you wish to change the amplitude of the file, use the argument 'rescale'
+# this will turn down the volume of a 16 bit sound
+# which amplitude was originally ranging between -2^15 and +2^15
+savewav(a, f=22050, file="c.wav", rescale=c(-1500,1500))
+unlink("c.wav")
+
+
+
+cleanEx()
+nameEx("sddB")
+### * sddB
+
+flush(stderr()); flush(stdout())
+
+### Name: sddB
+### Title: Standard deviation of dB values
+### Aliases: sddB
+### Keywords: math
+
+### ** Examples
+
+sddB(c(89,90,95))
+sddB(c(89,90,95), level="SPL")
 
 
 
@@ -2176,6 +2202,35 @@ legend("topright", col=1:5, lty=1, legend=c("original","wl=2","wl=10","wl=50","w
 
 
 cleanEx()
+nameEx("sox")
+### * sox
+
+flush(stderr()); flush(stdout())
+
+### Name: sox
+### Title: Calls SoX
+### Aliases: sox
+### Keywords: IO
+
+### ** Examples
+
+## Not run: 
+##D ## Generate a simple sound file at 440 Hz
+##D s <- synth(cf=440, f= 8000, d=1, output="Wave")
+##D savewav(s, file="mysound.wav")
+##D ## Plays the file
+##D sox("mysound.wav", exe="play")
+##D ## Slows down  the  audio  tempo  (but  not  its  pitch)
+##D sox("mysound.wav myslowsound.wav tempo 0.5")
+##D ## Cuts the file
+##D sox("myslowsound.wav myslowcuttedsound.wav trim 0.25, 0.75")
+##D ## Deletes example files
+##D file.remove("mysound.wav", "myslowsound.wav", "myslowcuttedsound.wav")
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("spec")
 ### * spec
 
@@ -2274,8 +2329,10 @@ spectro(tico,f=22050)
 spectro(tico,f=22050,osc=TRUE)
 spectro(tico,f=22050,scale=FALSE)
 spectro(tico,f=22050,osc=TRUE,scale=FALSE)
-# change the dB scale by setting a different dB reference value (20 microPa)
+# change the dB scale by setting a different dB reference value (20microPa)
 spectro(tico,f=22050, dBref=2*10e-5)
+# unnormalised spectrogram with a linear amplitude scale
+spectro(tico, dB=NULL, norm=FALSE, scale=FALSE)
 # manipulating wl
 op<-par(mfrow=c(2,2))
 spectro(tico,f=22050,wl=256,scale=FALSE)
@@ -2288,8 +2345,8 @@ spectro(tico,f=22050,wl=4096,scale=FALSE)
 title("wl = 4096")
 par(op)
 # vertical zoom using flim
-spectro(tico,f=22050, ylim=c(2,6))
-spectro(tico,f=22050, ylimd=c(2,6))
+spectro(tico,f=22050, flim=c(2,6))
+spectro(tico,f=22050, flimd=c(2,6))
 # a full plot
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
@@ -2325,6 +2382,42 @@ flush(stderr()); flush(stdout())
 require(rgl)
 data(tico)
 spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
+# linear amplitude scale without a normisation of the STFT matrix
+# time and frequency scales need to be dramatically amplified
+spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)
+
+
+
+cleanEx()
+nameEx("stft.ext")
+### * stft.ext
+
+flush(stderr()); flush(stdout())
+
+### Name: stft.ext
+### Title: Short-term Fourier transform using fftw and libsndfile C
+###   libraries
+### Aliases: stft.ext
+### Keywords: ts
+
+### ** Examples
+
+# tico data
+data(tico)
+# write a local .wav file
+savewav(tico, file="tico.wav")
+# spectrogram - not normalised - linear scale - meta-information returned
+res <- stft.ext(file="tico.wav", verbose=TRUE)
+# spectrogram - normalised - linear scale - no meta-information
+res <- stft.ext(file="tico.wav", norm=TRUE)
+# spectrogram - dB scale - no meta-information
+res <- stft.ext(file="tico.wav", dB=TRUE)
+# see how it looks like (no scale)
+filled.contour(t(res))
+# spectrogram and mean spectrum - normalised - linear scale
+res <- stft.ext(file="tico.wav", norm = TRUE, mean = TRUE)
+# remove .wav file
+unlink("tico.wav")
 
 
 

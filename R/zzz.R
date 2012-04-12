@@ -1,11 +1,11 @@
 .onLoad <- function(lib,pkg) {
-packageStartupMessage("
+packageStartupMessage(paste("
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Welcome to seewave! [http://rug.mnhn.fr/seewave]
-The package is regularly updated, please check for new version
+Welcome to seewave ! 
+The package is regularly updated, please check for new version [http://rug.mnhn.fr/seewave]
 Thanks to use the right reference when citing seewave in publications
 See citation('seewave')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-")
+"))
 library.dynam("seewave", pkg, lib)
 }
