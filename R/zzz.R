@@ -7,4 +7,5 @@ Thanks to use the right reference when citing seewave in publications
 See citation('seewave')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ")
+library.dynam("seewave", pkg, lib)
 }

@@ -25,8 +25,7 @@ noisew(f, d, type="unif", listen = FALSE, output = "matrix")
   Uniform noise is generated using \code{\link{runif}} and gaussian noise is based on \code{\link{rnorm}} 
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
-  of the returned object is set with the argument \code{output}.}
+\value{A new wave is returned. The class of the returned object is set with the argument \code{output}.}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

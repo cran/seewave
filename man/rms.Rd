@@ -21,12 +21,12 @@ rms(x, ...)
 }
 
 \details{
-  The Root Mean Square or quadratic mean is cimputed according to:\cr
+  The Root Mean Square or quadratic mean is computed according to:\cr
   \deqn{RMS = \sqrt{\frac{1}{n} \times \sum_{i=1}^{N} x{_i}{^2}}}{% 
     RMS = sqrt(mean(x^2))}
 }
 
-\value{A vector}
+\value{A numeric vector of length 1}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 

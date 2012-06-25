@@ -2,6 +2,22 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.6.4 [28-June-2012]
+
+NEW FEATURES
+	o stft.ext(): a new function to compute externally (i.e. out of R environment) the short-term Fourier transform. This function has been developed to speed up computing process time when doing batch analysis.
+	o timer(): a new argument, 'tlim', to change to time axis.
+	o savewav() : a new argument, 'rescale', to rescale the amplitude of the exported .wav file.
+
+OTHER CHANGES
+	o ama(), dynspec(), spec(), meanspec(), spectro(), spectro3D(): a small shift in Fourier coefficients fixed.
+        o env(): computing the Hilbert envelope should be faster.
+	o export(), listen(), savewav(): the sampling frequency can now be changed with the argument 'f' (i.e. it is now possible to listen or to write a wav file with a different sampling frequency than the original one).
+	o meanspec(): should be slightly faster.
+	o noisew(): the argument 'listen' now works properly.
+        o timer(): should be faster.
+	o Numerous typoes and small errors fixed in the documentation!
+
 		CHANGES IN SEEWAVE VERSION 1.6.3 [10-April-2012]
 
 OTHER CHANGES

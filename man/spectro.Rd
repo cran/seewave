@@ -36,7 +36,7 @@ listen=FALSE,
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{window length for the analysis
-    (even number of points). (by default = 512)}
+    (even number of points) (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
@@ -128,7 +128,7 @@ listen=FALSE,
   \item{time}{a numeric vector corresponding to the time axis.}
   \item{freq}{a numeric vector corresponding to the frequency axis.}
   \item{amp}{a numeric matrix corresponding to the amplitude values.
-   Each column is a Fourier transform of length \code{wl}.}
+   Each column is a Fourier transform of length \code{wl/2}.}
 }
 
 \references{
@@ -164,8 +164,8 @@ spectro(tico,f=22050,wl=4096,scale=FALSE)
 title("wl = 4096")
 par(op)
 # vertical zoom using flim
-spectro(tico,f=22050, ylim=c(2,6))
-spectro(tico,f=22050, ylimd=c(2,6))
+spectro(tico,f=22050, flim=c(2,6))
+spectro(tico,f=22050, flimd=c(2,6))
 # a full plot
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,

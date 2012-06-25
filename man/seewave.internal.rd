@@ -8,6 +8,7 @@
 \alias{inputw}
 \alias{outputw}
 \alias{rectangle.w}
+\alias{rescale}
 \alias{rev.cm.colors}
 \alias{rev.gray.colors.1}
 \alias{rev.gray.colors.2}

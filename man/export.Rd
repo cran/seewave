@@ -10,7 +10,7 @@
 }
 
 \usage{
-export(wave, f, filename = NULL, header=TRUE, ...)
+export(wave, f = NULL, filename = NULL, header=TRUE, ...)
 }
 
 \arguments{

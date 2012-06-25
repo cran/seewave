@@ -14,7 +14,7 @@
 \arguments{
 \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{plot}{if \code{TRUE} plots the oscillograme of \code{wave} and
+  \item{plot}{if \code{TRUE} plots the oscillogram of \code{wave} and
   indicates the location of the crest(s)}
   \item{col}{color of the symbol indicating the localisation of the crest(s)}
   \item{cex}{symbol magnification}
