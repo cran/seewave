@@ -769,6 +769,8 @@ env(tico,f=22050,envt="abs")
 env(tico,f=22050,msmooth=c(10,50))
 # smoothing kernel
 env(tico,f=22050,ksmooth=kernel("daniell",10))
+# sum smooth
+env(tico,f=22050,ssmooth=50)
 # overplot of oscillographic and envelope representations
 oscillo(tico,f=22050)
 par(new=TRUE)
@@ -1182,6 +1184,27 @@ par(op)
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 cleanEx()
+nameEx("itakura.dist")
+### * itakura.dist
+
+flush(stderr()); flush(stdout())
+
+### Name: itakura.dist
+### Title: Itakuro-Saito distance
+### Aliases: itakura.dist
+### Keywords: distribution ts
+
+### ** Examples
+
+# Comparison of two spectra
+data(tico)
+tico1 <- spec(tico, at=0.65, plot=FALSE)
+tico2 <- spec(tico, at=1.1, plot=FALSE)
+itakura.dist(tico1, tico2) 
+
+
+
+cleanEx()
 nameEx("kl.dist")
 ### * kl.dist
 
@@ -1298,6 +1321,27 @@ localpeaks(spec, bands=c(0,0.5,1,1.5,3,4))
 # Amaj octave bands, note that there is no peak detection
 # in the higher part of the spectrum as sequence stops at 3520 Hz
 localpeaks(spec, bands=octaves(440, below=3, above=3)/1000) 
+
+
+
+cleanEx()
+nameEx("logspec.dist")
+### * logspec.dist
+
+flush(stderr()); flush(stdout())
+
+### Name: logspec.dist
+### Title: Log-spectral distance
+### Aliases: logspec.dist
+### Keywords: distribution ts
+
+### ** Examples
+
+# Comparison of two spectra
+data(tico)
+tico1 <- spec(tico, at=0.65, plot=FALSE)
+tico2 <- spec(tico, at=1.1, plot=FALSE)
+logspec.dist(tico1, tico2)
 
 
 
@@ -1699,6 +1743,25 @@ oscillo(pellucens,f=11025)
 
 
 cleanEx()
+nameEx("phaseplot")
+### * phaseplot
+
+flush(stderr()); flush(stdout())
+
+### Name: phaseplot
+### Title: Phase-phase 2D or 3D plot of a time wave
+### Aliases: phaseplot
+### Keywords: dplot ts
+
+### ** Examples
+
+require(rgl)
+data(tico)
+phaseplot(tico)
+
+
+
+cleanEx()
 nameEx("pulse")
 ### * pulse
 
@@ -2028,7 +2091,7 @@ specb<-spec(b,f=8000,at=0.5,plot=FALSE)
 sh(specb)
 # close to 1
 ##########################
-# RÃ©nyi spectral entropy
+# Renyi spectral entropy
 ##########################
 sh(speca, alpha=2)
 sh(speca, alpha=3)
@@ -2080,6 +2143,35 @@ simspec(speca,specc,plot=TRUE)
 simspec(specb,specc,plot=TRUE)
 #[1] 12.05652
 simspec(speca,specd,plot=TRUE)
+
+
+
+cleanEx()
+nameEx("smoothw")
+### * smoothw
+
+flush(stderr()); flush(stdout())
+
+### Name: smoothw
+### Title: A function to tentavily smooth a time wave
+### Aliases: smoothw
+### Keywords: ts
+
+### ** Examples
+
+# An example to show that smoothw() may change
+# the frequency content of your sound
+data(orni)
+orni2 <- smoothw(orni, wl=2, out="Wave")
+orni10 <- smoothw(orni, wl=10, out="Wave")
+orni50 <- smoothw(orni, wl=50, out="Wave")
+orni100 <- smoothw(orni, wl=100, out="Wave")
+meanspec(orni)
+lines(meanspec(orni2, plot=FALSE), col=2)
+lines(meanspec(orni10, plot=FALSE), col=3)
+lines(meanspec(orni50, plot=FALSE), col=4)
+lines(meanspec(orni100, plot=FALSE), col=5)
+legend("topright", col=1:5, lty=1, legend=c("original","wl=2","wl=10","wl=50","wl=100"))
 
 
 
@@ -2402,11 +2494,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# wavelength (m) of a 2000 Hz air-borne sound at 20 deg. C
+# wavelength (m) of a 2000 Hz air-borne sound at 20 degrees Celsius
 wasp(f=2000)$l
 # [1] 0.1717
 
-# sound speed in sea at 0 and -500 m for a respective temperature of 22deg.C and 11deg.C
+# sound speed in sea at 0 and -500 m for a respective temperature of 22 degrees Celcius and 11 degrees Celsius
 wasp(f=1000,s=30,d=c(0,500),t=c(22,11),medium="sea")$c
 # [1] 1521.246 1495.414
 

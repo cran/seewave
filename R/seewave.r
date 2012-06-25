@@ -145,7 +145,7 @@ attenuation<-function
 ##                                AUTOC                                         
 ################################################################################
 
-autoc<-function(
+autoc <- function(
                 wave,
                 f,
                 wl = 512,
@@ -610,7 +610,7 @@ corenv<-function(
 
   n<-nrow(wave1)
 
-  cat("please wait...")
+  cat("please wait...\n")
   if(.Platform$OS.type == "windows") flush.console()
   
   x<-env(wave=wave1,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
@@ -779,7 +779,6 @@ corspec<-function(
     }
 
 }
-
 
 
 ################################################################################
@@ -1052,8 +1051,8 @@ cutw<-function(
         }
     }
 
-  wavecut1<-as.matrix(wave[a:b,])
-  wavecut<-wavecut1/max(abs(wavecut1))
+  wavecut <- as.matrix(wave[a:b,])
+#  wavecut<-wavecut1/max(abs(wavecut1))
 
   wavecut <- outputw(wave=wavecut, f=f, format=output)
 
@@ -1741,7 +1740,7 @@ dynspec<-function(
     }
   
                                         # FREQUENCY DATA 
-  x<-seq(f/1000/n,f/2000,length.out=nrow(z))
+  x<-seq(0, (f/2)-(f/wl),length.out=nrow(z))/1000
 
   if(plot)
     {
@@ -1939,7 +1938,7 @@ env<-function(
 
 export<-function(
                  wave,
-                 f,
+                 f = NULL,
                  filename = NULL,
                  header = TRUE, 
                  ...)
@@ -1947,7 +1946,9 @@ export<-function(
 {
   if(is.null(filename)) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
 
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ;
+  if(is.null(f)) {f<-input$f}
+  rm(input)
 
   wave<-wave/(max(abs(wave))*1.5) # this avoids overclipping problems
   n<-nrow(wave)
@@ -2065,10 +2066,10 @@ be provided (for instance (f = 44100)")
         if(n/bands <= 2) {stop("Decrease the number of frequency bands")}
         bands <- seq(spec[1,1], spec[nrow(spec),1], length.out=bands+1)
       }
-
-    else{                    
-      if(bands[length(bands)] > spec[n,1]){stop("The upper limit of 'bands' cannot be higher than half the sampling frequency (f/2)")}
-    }
+    ## else
+    ##   {                    
+    ##     if (bands[length(bands)] > f/2000) {stop("The upper limit of 'bands' cannot be greater than half the Nyquist frequency (f/2)")}
+    ##   }
     
     k <- length(bands)
     res <- names <- freq <- wid <- numeric(k-1)
@@ -2642,8 +2643,8 @@ hilbert<-function(
   n<-nrow(wave)
   ff<-fft(wave)
   h<-rep(0,n)
-  if(n>0 & 2*floor(n/2)==n){h[c(1, n/2+1)]<-1; h[2:n/2]<-2}
-  else{if(n>0){h[1]<-1; h[2:(n+1)/2]<-2}}
+  if(n>0 & 2*floor(n/2)==n){h[c(1, n/2+1)]<-1; h[2:(n/2)]<-2}
+  else{if(n>0){h[1]<-1; h[2:((n+1)/2)]<-2}}
   ht<-fft(ff*h,inverse=TRUE)/length(ff)
   return(ht)
 }
@@ -2652,7 +2653,22 @@ hilbert<-function(
 ################################################################################
 ##                                IFREQ
 ################################################################################
-
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##' @title 
+##' @param wave 
+##' @param f 
+##' @param phase 
+##' @param threshold 
+##' @param plot 
+##' @param xlab 
+##' @param ylab 
+##' @param ylim 
+##' @param type 
+##' @param ... 
+##' @return 
+##' @author Jerome
 ifreq<-function(
                 wave,
                 f,
@@ -2667,7 +2683,8 @@ ifreq<-function(
                 )
 
 {
-  wave<-hilbert(wave,f=f)
+  if(class(wave)=="Wave") {f <- wave@samp.rate}
+  wave<-hilbert(wave, f=f)
   n<-nrow(wave)
                                         # instantaneous phase
   phi<-Arg(wave)
@@ -2946,16 +2963,18 @@ ks.dist <- function(
 ##                                LISTEN
 ################################################################################
 
-listen<-function(
+listen <- function(
                  wave,
-                 f,
+                 f = NULL,
                  from = NULL,
                  to = NULL,
                  choose = FALSE
                  )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ;
+  if(is.null(f)) {f<-input$f}
+  rm(input)
 
   if(choose)
     { 
@@ -3099,9 +3118,9 @@ be provided (for instance (f = 44100)")
         bands <- seq(spec[1,1], spec[nrow(spec),1], length.out=bands+1)
       }
 
-    else{                    
-      if(bands[length(bands)] > spec[n,1]){stop("The upper limit of 'bands' cannot be higher than half the sampling frequency (f/2)")}
-    }
+    ## else{                    
+    ##   if(bands[length(bands)] > spec[n,1]){stop("The upper limit of 'bands' cannot be higher than half the sampling frequency (f/2)")}
+    ## }
     
     k <- length(bands)
     res <- matrix(numeric((k-1)*2), nrow = k-1, ncol = 2)
@@ -3210,7 +3229,8 @@ meanspec<-function(
   if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
     stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
-
+  if(!is.null(wl) & wl%%2 == 1) stop("'wl' has to be an even number.")
+  
                                         # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
@@ -3232,7 +3252,7 @@ meanspec<-function(
   n<-nrow(wave)
   step<-seq(1,n-wl,wl-(ovlp*wl/100))
   y1<-stft(wave=wave,f=f,wl=wl,zp=0,step=step,wn=wn,fftw=fftw)
-  y2<-apply(y1,MARGIN=1,mean)     # mean computation (by rows)
+  y2<-rowMeans(y1) # mean computation (by rows), faster than  y2<-apply(y1,MARGIN=1,mean     
   y3<-y2/max(y2)                               
   y<-ifelse(y3==0,yes=1e-6,no=y3) # replaces 0 values in spectra that cannot be processed by log10())
 
@@ -3241,7 +3261,7 @@ meanspec<-function(
   if(PMF) y<-y/sum(y)
 
                                         # FREQUENCY DATA 
-  x<-seq(f/1000/wl,f/2000,length.out=wl/2)  
+  x<-seq(0, (f/2)-(f/wl), length.out= wl%/%2) / 1000
 
                                         # DB
   if(!is.null(dB))
@@ -3488,7 +3508,7 @@ noisew<-function(
   if(type == "unif") wave <- as.matrix(runif(d*f,min=-1,max=1))
   if(type == "gaussian") wave <- as.matrix(rnorm(d*f))
   wave <- outputw(wave=wave, f=f, format=output)
-  if(listen) {listen(sound,f=f)}
+  if(listen) {listen(wave,f=f)}
   return(wave)
 }
 
@@ -4215,7 +4235,7 @@ rmnoise<-function(
                   )
 
   {
-    input <- inputw(wave=wave,f=f); wave<-input$w; f<-input$f; rm(input)
+    input <- inputw(wave=wave, f=f); wave<-input$w; f<-input$f; rm(input)
     wave2 <- smooth.spline(wave, all.knots=TRUE,...)$y  
     wave2 <- outputw(wave=wave2, f=f, format=output)
     return(wave2)
@@ -4271,24 +4291,43 @@ rugo <- function(
 ##                               SAVEWAV
 ################################################################################
 
-savewav<-function(
+savewav <- function(
                   wave,
-                  f,
-                  filename = NULL
+                  f = NULL,
+                  filename = NULL,
+                  rescale = NULL
                   )
 
 {
+  ## ERROR MESSAGE
+  if(!is.null(rescale))
+    {
+      if(rescale[1] >= 0) stop("The first value of 'rescale' should not be >=0")
+      if(rescale[2] <= 0) stop("The first value of 'rescale' should not be <=0")
+    }
+  ## FILENAME  
   if(is.null(filename)) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
-  wave <- Wave(left=wave, samp.rate=f, bit=16)
-  max <- max(wave@left)
-  if(max <= 1) {level <- max} else {level <- 1}
-  wave <- normalize(wave, unit="16", level=level)
+  ## INPUT
+  input <- inputw(wave=wave, f=f) ; wave <- input$w ;
+  if(is.null(f)) {f <- input$f}
+  rm(input)
+
+  ## OUTPUT
+  if(!is.null(rescale))
+       {
+        wave <- rescale(wave, lower=rescale[1], upper=rescale[2])
+        wave <- Wave(left=wave, samp.rate=f, bit=16)
+       }
+  else {
+        wave <- Wave(left=wave, samp.rate=f, bit=16)
+        max <- max(wave@left)
+        if(max <= 1) {level <- max} else {level <- 1}
+        wave <- normalize(wave, unit="16", level=level)
+       }
+  
+  ## WRITING TO FILE
   writeWave(wave, filename=filename)
 }
-
-
-
 
 ################################################################################
 ##                               SEEDATA
@@ -4554,7 +4593,7 @@ smoothw <- function(
 ##                                SPEC
 ################################################################################
 
-spec<-function(
+spec <- function(
                wave,
                f,
                wl = 512,
@@ -4585,6 +4624,7 @@ spec<-function(
   if(is.logical(dB)) stop("'dB' is no more a logical. Please see the documentation: help(spec).")
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
     stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+  if(!is.null(wl) & wl%%2 == 1) stop("'wl' has to be an even number.")
 
                                         # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
@@ -4629,9 +4669,8 @@ spec<-function(
   if(PMF) y<-y/sum(y)
 
                                         # FREQUENCY DATA
-  if(!is.null(at)) x<-seq(f/1000/wl,f/2000,length.out=n%/%2)
-  else x<-seq(f/1000/n,f/2000,length.out=n%/%2)
-
+  x<-seq(0, (f/2)-(f/wl), length.out= n%/%2) / 1000
+ 
                                         # DB
   if(!is.null(dB))
     {
@@ -4818,7 +4857,7 @@ specprop <- function (spec, f = NULL, str = FALSE, flim = NULL, plot = FALSE,
     prec <- f/wl
   
 ## VALUE    
-    results <- list(mean = mean, sd = sd, sem = sem, median = median, 
+    results <- list(mean = mean, sd = sd, median = median, sem = sem, 
         mode = mode, Q25 = Q25, Q75 = Q75, IQR = IQR, 
         cent = cent, skewness = skew, kurtosis = kurt, sfm = sfm, 
         sh = sh, prec = prec)
@@ -4960,12 +4999,12 @@ spectro <- function(
 
                                         # Y axis settings
 
-  if(is.null(flim)) {Y<-seq((f/1000)/(wl + zp),f/2000,length.out=nrow(z))}
+  if(is.null(flim)) {Y<-seq(0, (f/2)-(f/wl), length.out=nrow(z))/1000}
   else
     {
       fl1<-flim[1]*nrow(z)*2000/f
       fl2<-flim[2]*nrow(z)*2000/f
-      z<-z[fl1:fl2,]
+      z<-z[(fl1:fl2)+1,]
       Y<-seq(flim[1],flim[2],length.out=nrow(z))
     }
 
@@ -5104,7 +5143,7 @@ spectro3D<-function(
                                         # STOP MESSAGES
   if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
     stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
-
+  if(!is.null(wl) & wl%%2 == 1) stop("'wl' has to be an even number.")
                                         # INPUT
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
                                         # STFT
@@ -5113,7 +5152,7 @@ spectro3D<-function(
   z <- stft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw)
 
                                         # dB WEIGHTS
-  F <- seq((f/1000)/(wl + zp), f/2000, length.out=nrow(z))
+  F <- seq(0, (f/2)-(f/wl), length.out=nrow(z)) / 1000
   if(!is.null(dB))
     {
       if(is.null(dBref)) z<-20*log10(z) else z<-20*log10(z/dBref)
@@ -5155,8 +5194,26 @@ spectro3D<-function(
 
 
 ################################################################################
+##                                STFT.EXT
+################################################################################
+
+stft.ext <- function(
+                  file,
+                  wl = 512,
+                  ovlp = 0,
+                  mean = FALSE,
+                  norm = FALSE,
+                  dB = FALSE,
+                  verbose = FALSE)
+{
+  .Call("stft", file, ovlp, wl, mean, norm, dB, verbose, PACKAGE = "seewave") 
+}
+
+
+################################################################################
 ##                                SYMBA
 ################################################################################
+
 symba<-function(
                 x,
                 y = NULL,
@@ -5361,6 +5418,7 @@ timer <- function (
                    msmooth = NULL,
                    ksmooth = NULL,
                    ssmooth = NULL,
+                   tlim = NULL,
                    plot = TRUE,
                    plotthreshold = TRUE,
                    col = "black",
@@ -5383,6 +5441,10 @@ timer <- function (
     rm(input)
     n <- length(wave)
     thres <- threshold/100
+
+
+    ## TIME LIMITS
+    if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
 
     ## ENVELOPE
     wave1 <- env(wave = wave, f = f, msmooth = msmooth, ksmooth =
@@ -5982,6 +6044,19 @@ rectangle.w<-function (n)
 }
 
 
+
+
+################################################################################
+##                                RESCALE
+################################################################################
+## by Ethan Brown
+## https://github.com/statisfactions/AutoregressionTones/blob/master/Autoregression.R
+rescale <- function(x, lower, upper) {
+  nrange <- upper-lower
+  out <- ((x-min(x))*nrange/(max(x)-min(x)) - nrange/2)
+}
+
+
 ################################################################################
 ##                                REV.CM.COLORS
 ################################################################################
@@ -6201,7 +6276,7 @@ sspectro <- function
   step<-seq(1,n-wl,wl)
   W<-ftwindow(wl=wl,wn=wn)
   z1 <- apply(as.matrix(step), 1, function(x) Mod(fft(wave[x:(wl+x-1),]*W)))
-  z2<-z1[1:(wl/2),]
+  z2<-z1[2:(1+wl/2),]
   z3<-z2/max(z2)
   return(z3)
 }
@@ -6269,7 +6344,7 @@ stft<-function(
     }
 
                                         
-  z2<-z1[1:((wl+zp)/2), , drop=FALSE]	# to keep only the relevant frequencies (half of the FT)
+  z2<-z1[1:((wl+zp)%/%2), , drop=FALSE]	# to keep only the relevant frequencies (half of the FFT)
 
   if(norm)  # to get only values between 0 and 1
     {

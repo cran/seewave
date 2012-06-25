@@ -26,27 +26,31 @@ The rugosity is then computed as following:
 \value{A vector of length 1.}
 
 \references{Mezquida DA, Martinez JL (2009) -
-  Platform for beehives monitoring based on sound Analysis.
+  Platform for bee-hives monitoring based on sound analysis.
   A perpetual warehouse for swarm's daily acitvity.
   \emph{Spanish Journal of Agricultural Research} \bold{7}, 824-828.
 }
 
 \author{Jerome Sueur}
 
-\note{The rugosity of a noisy signal will tend towards 1 whereas
-  the spectral entropy of a pure tone signal will tend towards 0.}
+\note{The rugosity of a noisy signal will tend to be higher than that of
+  a pure tone signal, all other things being equal.\cr
+}
 
 \seealso{\code{\link{roughness}}, \code{\link{rms}}, \code{\link{sh}}, \code{\link{th}}, \code{\link{H}}.}
 
 \examples{
 data(tico) ; tico <-tico@left
-# rugosity of the original recording
+# rugosity of the original recording normalised
 rugo(tico/max(tico))
-# add artificially some background noise
+# synthesis of white noise with the same duration as tico
 noise <- noisew(d=length(tico)/22050, f=22050)
-ticon1 <- tico/max(tico) + 0.5*noise
-# new rugosity (higher)
-rugo(ticon1/max(ticon1))
+# tico is normalised to get similar amplitude with the noise
+tico.norm <- tico/max(tico)
+# addition of noise to tico
+tico.noisy <- tico.norm + 0.5*noise
+# new rugosity (higher) on normalised signal
+rugo(tico.noisy/max(tico.noisy))
 }
 
 \keyword{ts}

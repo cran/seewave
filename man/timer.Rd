@@ -12,7 +12,7 @@
 \usage{
 timer(wave, f, threshold = 5, envt="abs",
 power = 1, msmooth = NULL, ksmooth = NULL,
-ssmooth = NULL, plot = TRUE, plotthreshold = TRUE,
+ssmooth = NULL, tlim = NULL, plot = TRUE, plotthreshold = TRUE,
 col = "black", colval = "red", 
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
@@ -33,6 +33,7 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
     successive windows (in \%).  See \code{\link{env}}.}
   \item{ksmooth}{kernel smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{ssmooth}{sum smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
+  \item{tlim}{modifications of the time X-axis limits.}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
     (by default \code{TRUE}).}
   \item{plotthreshold}{logical, if \code{TRUE} plots the threshold
@@ -54,8 +55,8 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
   \item{s.end}{end position(s) of signal period(s)}
 }
 
-\section{Warning }{Setting to high values to \code{msmooth} or
-  \code{ssmooth} might return unaccurate results. Double check you
+\section{Warning}{Setting to high values to \code{msmooth} or
+  \code{ssmooth} might return unaccurate results. Double check your
   results if so.}
 
   \author{Jerome Sueur \email{sueur@mnhn.fr}}
