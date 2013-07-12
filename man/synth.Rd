@@ -2,10 +2,10 @@
 
 \alias{synth}
 
-\title{Synthesis of time wave}
+\title{Synthesis of time wave (additive model)}
 
 \description{
-  This functions synthesize pure tone sound with amplitude modulation (am)
+  This functions synthesizes pure tone sound with amplitude modulation (am)
   and/or frequency modulation (fm).
 }
 
@@ -64,7 +64,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
   Thierry Aubin \email{thierry.aubin@u-psud.fr} and 
   Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{noisew}}, \code{\link{pulse}}, \code{\link{echo}}}
+\seealso{\code{\link{synth2}},  \code{\link{noisew}}, \code{\link{pulse}}, \code{\link{echo}}}
 
 \examples{
 # pure tone

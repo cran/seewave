@@ -82,7 +82,7 @@ listen=FALSE,
   \item{tlim}{modifications of the time X-axis limits.}
   \item{trel}{time X-axis with a relative scale when \code{tlim} is not null,
     \emph{i.e.} relative to \code{wave}.} 
-  \item{flim}{modifications of the frequency Y-axis limits.} 
+  \item{flim}{modifications of the frequency Y-axis limits (in kHz).} 
   \item{flimd}{dynamic modifications of the frequency Y-axis limits. New \code{wl}
     and \code{ovlp} arguments are applied to increase time/frequency resolution.}
   \item{widths}{a vector of length 2 to control the relative widths of columns on
@@ -112,7 +112,8 @@ listen=FALSE,
   palettes coming with \pkg{seewave}: \code{temp.colors}, 
   \code{rev.gray.colors.1},
   \code{rev.gray.colors.2}, \code{rev.heat.colors},
-  \code{rev.terrain.colors}, \code{rev.topo.colors},
+  \code{rev.terrain.colors},
+  \code{rev.topo.colors},
   \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
   \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.
@@ -141,7 +142,7 @@ listen=FALSE,
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
   \code{\link{filled.contour}}}
 
-\seealso{\code{\link{spectro3D}}, \code{\link{dynspec}}, \code{\link{wf}}, 
+\seealso{\code{\link{ggspectro}}, \code{\link{spectro3D}}, \code{\link{dynspec}}, \code{\link{wf}}, 
   \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{

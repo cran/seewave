@@ -7,7 +7,10 @@
 \description{This function returns a 2D or 3D representation of a time
   wave according to its first, second and possibly third derivatives.}
 
-\usage{phaseplot(wave, f, dim = 3, plot = TRUE, type = "l", xlab = "1st derivative", ylab = "2nd derivative", zlab = "3rd derivative", ...)}
+\usage{phaseplot(wave, f, dim = 3, plot = TRUE, type = "l",
+xlab = "1st derivative",
+ylab = "2nd derivative",
+zlab = "3rd derivative", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -19,7 +22,8 @@
   \item{xlab}{title of the x axis.}
   \item{ylab}{title of the y axis.}
   \item{zlab}{title of the z axis.}
-  \item{\dots}{other \code{\link{plot}} or \code{\link{plot3d}} graphical parameters}
+  \item{\dots}{other \code{\link{plot}} or \code{plot3d} graphical
+  parameters of the package \pkg{rgl}.}
 }
 
 \value{If \code{plot} is \code{FALSE} then a 2 or 3 column matrix is
@@ -36,10 +40,11 @@
 \author{Jerome Sueur}
 
 \examples{
+\dontrun{
 require(rgl)
 data(tico)
 phaseplot(tico)
-}
+}}
 
 \keyword{dplot}
 \keyword{ts}

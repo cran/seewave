@@ -2,6 +2,23 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.7.0 [12-July-2013]
+
+NEW FEATURES
+	o ACI(): a new function to compute the Acoustic Complexity Index following Pieretti et al. (2011).
+	o ggspectro(): a new function to plot a spectrogram using ggplot2.
+	o playlist(): a new function to play a list of sound files.
+	o synth2(): a new function to synthesize sound with envelope amplitude and instantaneous frequency (tonal model).
+	o dfreq(): a new argument 'tlim' to set time limits. 
+	o specprop(): two new arguments ('col.mode' and 'col.quartiles') to set the colour of the mode and quartiles segments respectively and two other new arguments ('xlab' and 'ylab') to change axis labels.
+
+OTHER CHANGES
+	o The dependency with the package audio has been removed since audio is no more available on CRAN. This also makes CRAN installation and checks easier.
+	o The dependency with the package rgl and rpanel has been removed. This makes seewave easier to install on servers and faster for CRAN daily checks.
+	o fpeaks(): a bug regarding the frequency values when using a vector as a wave object is now fixed.
+	o spectro(): a small bug regarding the argument 'colbg' is now fixed.
+
+
 		CHANGES IN SEEWAVE VERSION 1.6.7 [09-April-2013]
 
 OTHER CHANGES

@@ -11,9 +11,10 @@
 }
 
 \usage{
-meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, norm = TRUE, fftw = FALSE, PSD = FALSE,
-PMF = FALSE, dB = NULL, dBref = NULL, from = NULL, to = NULL, 
-identify = FALSE, col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
+meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, norm = TRUE,
+fftw = FALSE, PSD = FALSE, PMF = FALSE, dB = NULL,
+dBref = NULL, from = NULL, to = NULL, identify = FALSE,
+col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
 }
 

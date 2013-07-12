@@ -8,8 +8,8 @@
   This function gives the dominant frequency (i. e. the frequency of highest amplitude) of a time wave.}
 
 \usage{
-dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw=  FALSE, at = NULL, threshold
-= NULL, bandpass = NULL, clip = NULL, 
+dfreq(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw=  FALSE, at =
+NULL, tlim = NULL, threshold = NULL, bandpass = NULL, clip = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), ...)
 }
@@ -25,6 +25,7 @@ ylim = c(0, f/2000), ...)
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{at}{time position where the dominant frequency has to be
     computed (in s.).}
+  \item{tlim}{modifications of the time X-axis limits.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{bandpass}{a numeric vector of length two, giving the lower and
     upper limits of a frequency bandpass filter (in Hz).}
@@ -69,7 +70,7 @@ dfreq(tico, f, at=seq(0.5, 0.9, len=100), threshold=5, xlim=c(0.5,0.9))
 op <- par()
 ticon <- tico@left/max(tico@left) + noisew(d=length(tico@left)/f, f)
 spectro(ticon, f)
-res <- dfreq(tico, f, clip=0.2, plot=FALSE)
+res <- dfreq(ticon, f, clip=0.3, plot=FALSE)
 points(res, col=2, pch =13)
 par(op)
 }

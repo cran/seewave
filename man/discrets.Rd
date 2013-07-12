@@ -10,7 +10,7 @@
 
 \arguments{
   \item{x}{a \code{vector}, a \code{matrix} (first column),
-    an object of class \code{ts}, \code{\link[sound]{Sample}} (left channel),
+    an object of class \code{ts}, \code{Sample} (left channel),
     or \code{\link[tuneR]{Wave}} (left channel).}
   \item{symb}{the number of symbols used for the discretisation,
     can be set to 3 or 5 only.}

@@ -3,7 +3,7 @@
 %\VignettePackage{seewave}
 %\VignetteKeyword{sound}
 %\VignetteKeyword{time-series}
-%\VignetteDepends{tuneR,sound,audio}
+%\VignetteDepends{tuneR,audio}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
@@ -38,7 +38,6 @@
 \setlength{\parindent}{0pt}
 \newcommand{\pkg}{\textsf}
 \newcommand{\seewave}{\pkg{seewave}}
-\newcommand{\sound}{\pkg{sound}}
 \newcommand{\tuneR}{\pkg{tuneR}}
 \newcommand{\audio}{\pkg{audio}}
 \newcommand{\R}{\pkg{R}}
@@ -63,7 +62,7 @@ I\slash O of sound with R
 {formatcom={\color{Soutput}},fontsize=\footnotesize, baselinestretch=0.75}
 
 \maketitle
-This document shortly details how to import and export sound with \R using the packages \seewave, \sound, \tuneR{} and \audio.
+This document shortly details how to import and export sound with \R using the packages \seewave, \tuneR{} and \audio{}\footnote{The package \pkg{sound} is no more maintained.}.
 
 \tableofcontents
 \newpage
@@ -77,7 +76,7 @@ The main functions of \texttt{seewave (>1.5.0)} can use different classes of obj
 \begin{itemize}
 \item usual classes (numeric \texttt{vector}, numeric \texttt{matrix}),
 \item time series classes (\texttt{ts}, \texttt{mts}),
-\item sound-specific classes (\texttt{Wave}, \texttt{Sample}, \texttt{audioSample}).   
+\item sound-specific classes (\texttt{Wave} and \texttt{audioSample}).   
 \end{itemize}
 
 \subsection{Non specific classes}
@@ -144,7 +143,6 @@ There are three object classes corresponding to the binary \texttt{wav} format o
 
 \begin{itemize}
 \item the class \texttt{Wave} of the package \tuneR,
-\item the class \texttt{Sample} of the package \sound,
 \item the class \texttt{audioSample} of the package \audio
 \end{itemize}
 
@@ -182,48 +180,10 @@ A property not apparent in these call is that \texttt{readWave} does not normali
 range(s7@left)
 @ 
 
-\subsubsection{Sample class (package sound)}
-The class \texttt{Sample} and the related \texttt{as.Sample} and \texttt{is.Sample} functions belong to the package \sound written by Matthias Heymann. Like \texttt{Wave}, the \texttt{Sample} class is a list containing information regarding data, sampling frequency, bits and the type of sound (mono\slash stereo).\par
-To read a \texttt{.wav} file stored on the hard-disk using \texttt{loadSample}:
-
-<<echo=false,quiet=true>>=
-detach(package: tuneR)
-library(sound)
-@
-
-<<s8a>>=
-s8<-loadSample("mysong.wav")
-s8
-@
-All kinds of .wav files are supported: mono, stereo, 8 or 16 bits per sample, at any sampling frequency above 1000 Hz. The duration and the sampling frequency of a \texttt{Sample} object can be obtained using dedicated functions or list indexing:
-<<s8b>>=
-rate(s8)
-s8$rate
-duration(s8)
-s8$duration
-@
-Unlike \texttt{readWave}, \texttt{loadSample} changes the limits of the sound between $\pm 1$:
-<<rangeSample>>=
-range(s8$sound[1,])
-@ 
-
-\seewave~functions which return a value describing a sound have a special argument named \texttt{output} that can be set to \texttt{"matrix"}, \texttt{"Sample"}, \texttt{"audioSample"}, \texttt{"Wave"} or \texttt{"ts"}. This allows to control the class of the returned object.
-
-<<s9>>=
-s9<-repw(s2,f=8000,times=2,output="Sample")
-s9
-@
-
-However, matrix objects are easier to handle and can be used with functions not dedicated to sound. It might be then better to let the arguments \texttt{Sample} and \texttt{Wave} set to \texttt{FALSE} and to store the sampling frequency \texttt{f} in an object:
-<<>>=
-f<-8000
-oscillo(s2,f)
-@
-
 \subsubsection{audioSample class (package audio)}
 The package \audio, developed by Simon Urbanek, is another option to handle \texttt{.wav} files. Sound can be imported using the function \texttt{load.wave}. The class of the resulting object is \texttt{audioSample} which is essentially a numeric vector (for mono) or numeric matrix with two rows (for stereo). The sampling frequency and the resolution can be called as attributes :
 <<echo=false,quiet=true>>=
-detach(package: sound)
+detach(package: tuneR)
 library(audio)
 @
 <<s10>>=
@@ -270,12 +230,12 @@ header="f=22050; ch=left")
 
 
 \subsection{.wav format}
-\tuneR, \sound and \audio have a function to write \texttt{.wav} files: \texttt{writeWave}, \texttt{saveSample}, and \texttt{save.wave} respectively.  Within \seewave, the function \texttt{savewav}, which is based on \texttt{writeWAve}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
+\tuneR and \audio have a function to write \texttt{.wav} files: \texttt{writeWave},  and \texttt{save.wave} respectively.  Within \seewave, the function \texttt{savewav}, which is based on \texttt{writeWAve}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
 <<savewave>>=
 savewav(tico, f=22050)
 @
 
-As seen before, if the object to be saved is of class \texttt{ts}, \texttt{Sample} or \texttt{Wave}, there is no need to specify the argument \texttt{f}. Here we use the argument \texttt{filename} to change the name of the \texttt{wav} file:
+As seen before, if the object to be saved is of class \texttt{ts} or \texttt{Wave}, there is no need to specify the argument \texttt{f}. Here we use the argument \texttt{filename} to change the name of the \texttt{wav} file:
 <<savewavb>>=
 ticofirst<-cutw(tico, f=22050, to=0.5, output="Wave")
 savewav(ticofirst, filename = "tico_firstnote.wav")
@@ -297,9 +257,8 @@ To compress a \texttt{.wav} file into \texttt{.flac}, the argument \texttt{rever
 %% MONO AND STEREO
 %%%%%%%%%%%%%%%%%
 \section{Mono and stereo}
-Both \texttt{Sample} and \texttt{Wave} classes can handle stereo files. There are some specific functions regarding mono\slash stereo type. Both libraries include functions with the same name.
+\texttt{Wave} class can handle stereo files. There are some specific functions regarding mono\slash stereo type.
  
-\subsection{Wave class}
 To generate a stereo sound, two mono sounds are first created using \texttt{sine}, a function that returns a \texttt{Wave} object, and then combined using \texttt{stereo}:
 <<s12>>=
 left<-sine(440, bit = 16)
@@ -323,38 +282,6 @@ s14<-s12@right
 is.vector(s14)
 @
 
-\subsection{Sample class}
-<<echo=false,quiet=true>>=
-detach(package: tuneR)
-library(sound)
-@
-
-With the \texttt{Sample} objects, the syntax is almost similar. To generate stereo sound, the function \texttt{synth} with the argument \texttt{Sample=TRUE} is called twice:
-<<>>=
-left<-synth(cf=440,d=5,f=8000,output="Sample")
-right<-synth(cf=2000,d=5,f=8000,output="Sample")
-s13<-stereo(left,right)
-s13
-@
-To get either the left or right channel:
-<<>>=
-s14<-left(s13)
-s14
-s15<-right(s13)
-s15
-@
-List indexing allows extracting manually the data:
-<<>>=
-s16<-s13$sound[1, ]
-is.vector(s16)
-s17<-s13$sound[2, ]
-is.vector(s17)
-@
-The \texttt{mirror} function interchanges left and right channels and \texttt{panorama} control the panaroma through a \texttt{pan} argument which varies between -50 and +50.
-<<>>=
-s13<-mirror(s13)
-s14<-panorama(s13, pan=30)
-@
 
 %%%%%%%%%%%%%%%%%
 %% LISTEN
@@ -372,14 +299,6 @@ It may happen that the default players of the function \texttt{play} are not ins
 > setWavPlayer("audacious") 
 \end{Sinput}
 
-\subsubsection{Sample class}
-For the class \texttt{Sample} of the package \tuneR~the functions are basically the same. The function \texttt{play}:
-\begin{Sinput}
-> play(ticofirst)
-> play("mysong.wav")
-\end{Sinput}
-and the functions \texttt{WavPlayer}, \texttt{setWavPlayer}, \texttt{getWavPlayer} to set the sound player of your OS.
-
 \subsubsection{audioSample class}
 \label{playaudioSample}
 The package \audio~has similarly a function \texttt{play} but also have three useful functions to control recording and playback:
@@ -391,7 +310,7 @@ The package \audio~has similarly a function \texttt{play} but also have three us
 
 
 \subsubsection{Other classes}
-The package \seewave includes listen a function based on \texttt{play} of \texttt{soundR} but accepting all specific and non-specific classes and with two arguments (\texttt{from} and \texttt{to}) to listen only a section of a sound object:
+The package \seewave includes listen a function based on \texttt{play} of \texttt{tuneR} but accepting all specific and non-specific classes and with two arguments (\texttt{from} and \texttt{to}) to listen only a section of a sound object:
 \begin{Sinput}
 > listen(s1, f=8000, from=0.3, to=7)
 > listen(s13, from=0.3, to=4)
@@ -420,12 +339,11 @@ Here is a temptative of summary of main \texttt{R} functions used for sound inpu
 &  \textbf{Input} & \textbf{Output} & \textbf{Mono}\slash \textbf{Stereo} & \textbf{Play} & \textbf{Object}\\ 
 \hline
 \textbf{tuneR} & readWave & writeWave & mono, stereo & play & \texttt{Wave} \\ 
-\textbf{sound} & loadSample & saveSample & mono, stereo & play & \texttt{Sample} \\ 
 \textbf{audio} & load.wave, record & save.wave& mono, stereo & play, pause, & \texttt{audioSample} \\ 
  &  & &  & resume, rewind &  \\ 
 \textbf{seewave} & -- & export, savewav & -- & listen & \texttt{vector}, \texttt{matrix}, \\ 
  & & & & &  \texttt{ts}, \texttt{mts}, \texttt{Wave},\\ 
- & & & & &  \texttt{Sample}, \texttt{audioSample}\\ 
+ & & & & &  \texttt{audioSample}\\ 
 \hline 
 \end{tabular} 
 \end{document}

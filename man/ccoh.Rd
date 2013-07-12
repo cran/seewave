@@ -76,9 +76,10 @@ flim = NULL, flimd = NULL,
   Any colour palette can be used. In particular, it is possible to use other
   palettes coming with \pkg{seewave}: \code{temp.colors}, \code{rev.gray.colors.1},
   \code{rev.gray.colors.2}, 
-  \code{spectro.colors}, \code{rev.terrain.colors}, \code{rev.topo.colors},
-  \code{rev.cm.colors} corresponding to the reverse of  
-  \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
+  \code{spectro.colors}, \code{rev.terrain.colors},
+  \code{rev.topo.colors}, \code{rev.cm.colors} corresponding
+  to the reverse of  \code{terrain.colors}, \code{topo.colors},
+  \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.
 }
 
@@ -86,7 +87,8 @@ flim = NULL, flimd = NULL,
   This function returns a list of three items:
   \item{time}{a numeric vector corresponding to the time axis.}
   \item{freq}{a numeric vector corresponding to the frequency axis.}
-  \item{amp}{a numeric matrix corresponding to the coherence. Each column corresponds to a coherence function of length \code{wl}.}
+  \item{amp}{a numeric matrix corresponding to the coherence.
+    Each column corresponds to a coherence function of length \code{wl}.}
 }
 
 \author{Jerome Sueur \email{sueur@mnhn.fr} but this function is
