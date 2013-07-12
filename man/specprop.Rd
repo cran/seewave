@@ -7,7 +7,8 @@
 \description{
   This function returns a list of statistical properties of a frequency spectrum.}
 
-\usage{specprop(spec, f, str = FALSE, flim=NULL, plot = FALSE, type = "l", ...)}
+\usage{specprop(spec, f=NULL, str = FALSE, flim=NULL, plot = FALSE,
+type = "l", xlab=NULL, ylab = NULL,  col.mode = 2, col.quartiles = 4, ...)}
 
 \arguments{
   \item{spec}{a data set resulting of a spectral analysis obtained
@@ -20,7 +21,11 @@
     the median and the mode plotted (by default \code{FALSE}).}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{\dots}{other \code{\link{plot}} graphical parameters.}
+  \item{xlab}{label of the x axis.}
+  \item{ylab}{label of the y axis.}
+  \item{col.mode}{colour of the mode segments (by default blue).}
+  \item{col.quartiles}{colour of the quartiles segments (by default red).}
+  \item{\dots}{other arguments to be passed to \code{plot}}
 }
 
 \details{

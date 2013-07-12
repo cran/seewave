@@ -26,10 +26,10 @@ The arguments \code{wd}, \code{wl} and \code{wn} have to be used isolated, not i
 
 \seealso{\code{\link{oscillo}}, \code{\link{oscilloST}}, \code{\link{dynspec}}.}
 
-\examples{
+\examples{\dontrun{
 require(rpanel)
 data(tico)
-dynoscillo(tico, wn=4)
+dynoscillo(tico, wn=4)}
 }
 
 \keyword{dplot}

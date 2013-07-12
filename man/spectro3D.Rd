@@ -79,13 +79,14 @@ palette = rev.terrain.colors)
   \code{\link{wf}}, \code{\link{fft}}.}
 
 \examples{
+\dontrun{
 require(rgl)
 data(tico)
 spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
 # linear amplitude scale without a normisation of the STFT matrix
 # time and frequency scales need to be dramatically amplified
 spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)
-}
+}}
 
 \keyword{dplot}
 \keyword{ts}

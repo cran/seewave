@@ -3,7 +3,29 @@ source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('seewave')
 
-assign(".oldSearch", search(), pos = 'CheckExEnv')
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+cleanEx()
+nameEx("ACI")
+### * ACI
+
+flush(stderr()); flush(stdout())
+
+### Name: ACI
+### Title: Acoustic Complexity Index
+### Aliases: ACI
+### Keywords: ts
+
+### ** Examples
+
+data(tico)
+ACI(tico)
+## dividing the sound sample into 4 windows of equal duration
+ACI(tico, nbwindows=4)
+## selection of a frequency band
+ACI(tico, flim=c(2,6))
+
+
+
 cleanEx()
 nameEx("H")
 ### * H
@@ -258,11 +280,13 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(orni)
-# cross-correlation between two echemes of a cicada song
-wave1<-cutw(orni,f=22050,from=0.3,to=0.4,plot=FALSE)
-wave2<-cutw(orni,f=22050,from=0.58,to=0.68,plot=FALSE)
-corenv(wave1,wave2,f=22050)
+## Not run: 
+##D data(orni)
+##D # cross-correlation between two echemes of a cicada song
+##D wave1<-cutw(orni,f=22050,from=0.3,to=0.4,plot=FALSE)
+##D wave2<-cutw(orni,f=22050,from=0.58,to=0.68,plot=FALSE)
+##D corenv(wave1,wave2,f=22050)
+## End(Not run)
 
 
 
@@ -323,10 +347,12 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # covariance between two notes of a birdsong
-data(tico)
-note1<-cutw(tico, f=22050, from=0.5, to=0.9)
-note2<-cutw(tico, f=22050, from=0.9, to=1.3)
-covspectro(note1,note2,f=22050,n=37)
+## Not run: 
+##D data(tico)
+##D note1<-cutw(tico, f=22050, from=0.5, to=0.9)
+##D note2<-cutw(tico, f=22050, from=0.9, to=1.3)
+##D covspectro(note1,note2,f=22050,n=37)
+## End(Not run)
 
 
 
@@ -549,7 +575,7 @@ dfreq(tico, f, at=seq(0.5, 0.9, len=100), threshold=5, xlim=c(0.5,0.9))
 op <- par()
 ticon <- tico@left/max(tico@left) + noisew(d=length(tico@left)/f, f)
 spectro(ticon, f)
-res <- dfreq(tico, f, clip=0.2, plot=FALSE)
+res <- dfreq(ticon, f, clip=0.3, plot=FALSE)
 points(res, col=2, pch =13)
 par(op)
 
@@ -690,10 +716,11 @@ flush(stderr()); flush(stdout())
 ### Keywords: dplot ts
 
 ### ** Examples
-
-require(rpanel)
-data(tico)
-dynoscillo(tico, wn=4)
+## Not run: 
+##D require(rpanel)
+##D data(tico)
+##D dynoscillo(tico, wn=4)
+## End(Not run)
 
 
 
@@ -710,11 +737,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(sheep)
-require(rpanel)
-dynspec(sheep,f=8000,wl=1024,ovlp=50,osc=TRUE)
-dev.off()
-
+## Not run: 
+##D data(sheep)
+##D require(rpanel)
+##D dynspec(sheep,f=8000,wl=1024,ovlp=50,osc=TRUE)
+## End(Not run)
 
 
 cleanEx()
@@ -742,7 +769,7 @@ oscillo(a,f=11025,title="Input signal")
 oscillo(aecho,f=11025,colwave="blue",title="Signal with echoes",coltitle="blue")
 par(op)
 # another echo with time delays overlapping with the input wave
-echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5),plot=TRUE,listen=TRUE)
+echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5),plot=TRUE)
 
 
 
@@ -1141,6 +1168,42 @@ fund(sheep,f=8000,fmax=300,type="p",pch=24,ann=FALSE,
 
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+cleanEx()
+nameEx("ggspectro")
+### * ggspectro
+
+flush(stderr()); flush(stdout())
+
+### Name: ggspectro
+### Title: 2D-spectrogram of a time wave using ggplot2
+### Aliases: ggspectro
+### Keywords: dplot ts
+
+### ** Examples
+
+## Not run: 
+##D require(ggplot2)
+##D ## first layer
+##D v <- ggspectro(tico, ovlp=50)
+##D summary(v)
+##D ## using geom_tile ##
+##D v + geom_tile(aes(fill = amplitude)) + stat_contour()
+##D ## coordinates flip (interest?)
+##D v + geom_tile(aes(fill = amplitude)) + stat_contour() + coord_flip()
+##D ## using stat_contour ##
+##D # default (not nice at all)
+##D v + stat_contour(geom="polygon", aes(fill=..level..))
+##D # set up to 30 color levels with the argument bins
+##D (vv <- v + stat_contour(geom="polygon", aes(fill=..level..), bins=30))
+##D # change the limits of amplitude and NA values as transparent
+##D vv + scale_fill_continuous(name="Amplitude\n(dB)\n", limits=c(-30,0), na.value="transparent")
+##D # Black-and-white theme
+##D (vv + scale_fill_continuous(name="Amplitude\n(dB)\n", limits=c(-30,0), na.value="transparent", low="white", high="black") + theme_bw())
+##D # Other colour scale (close to spectro() default output)
+##D v + stat_contour(geom="polygon", aes(fill=..level..), bins=30) + scale_fill_gradientn(name="Amplitude\n(dB)\n", limits=c(-30,0), na.value="transparent", colours = spectro.colors(30))
+## End(Not run)
+
+
 cleanEx()
 nameEx("hilbert")
 ### * hilbert
@@ -1644,8 +1707,10 @@ par(op)
 data(orni)
 oscillo(orni,f=22050,title="The song of a famous cicada")
 # move along the signal using scroll
-require(rpanel)
-oscillo(tico,f=22050,scroll=8)
+## Not run: 
+##D require(rpanel)
+##D oscillo(tico,f=22050,scroll=8)
+## End(Not run)
 
 
 
@@ -1755,9 +1820,29 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-require(rgl)
-data(tico)
-phaseplot(tico)
+## Not run: 
+##D require(rgl)
+##D data(tico)
+##D phaseplot(tico)
+## End(Not run)
+
+
+cleanEx()
+nameEx("playlist")
+### * playlist
+
+flush(stderr()); flush(stdout())
+
+### Name: playlist
+### Title: Play a list of sound files
+### Aliases: playlist
+### Keywords: ts
+
+### ** Examples
+
+## Not run: 
+##D playlist("MyMusic", sample = TRUE, loop=2)
+## End(Not run)
 
 
 
@@ -2322,50 +2407,51 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(tico)
-data(pellucens)
-# simple plots
-spectro(tico,f=22050)
-spectro(tico,f=22050,osc=TRUE)
-spectro(tico,f=22050,scale=FALSE)
-spectro(tico,f=22050,osc=TRUE,scale=FALSE)
-# change the dB scale by setting a different dB reference value (20microPa)
-spectro(tico,f=22050, dBref=2*10e-5)
-# unnormalised spectrogram with a linear amplitude scale
-spectro(tico, dB=NULL, norm=FALSE, scale=FALSE)
-# manipulating wl
-op<-par(mfrow=c(2,2))
-spectro(tico,f=22050,wl=256,scale=FALSE)
-title("wl = 256")
-spectro(tico,f=22050,wl=512,scale=FALSE)
-title("wl = 512")
-spectro(tico,f=22050,wl=1024,scale=FALSE)
-title("wl = 1024")
-spectro(tico,f=22050,wl=4096,scale=FALSE)
-title("wl = 4096")
-par(op)
-# vertical zoom using flim
-spectro(tico,f=22050, flim=c(2,6))
-spectro(tico,f=22050, flimd=c(2,6))
-# a full plot
-pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
-spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
-    cont=TRUE,contlevels=seq(-30,0,20),colcont="red",
-    lwd=1.5,lty=2,palette=rev.terrain.colors)
-# black and white spectrogram 
-spectro(pellu2,f=22050,ovlp=85,zp=16,
-    palette=rev.gray.colors.1)
-# colour modifications
-data(sheep)
-spectro(sheep,f=8000,palette=temp.colors,collevels=seq(-115,0,1))
-spectro(pellu2,f=22050,ovlp=85,zp=16,
-palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
-spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
-colbg="black",colgrid="white", colwave="white",colaxis="white",collab="white")
+## Not run: 
+##D data(tico)
+##D data(pellucens)
+##D # simple plots
+##D spectro(tico,f=22050)
+##D spectro(tico,f=22050,osc=TRUE)
+##D spectro(tico,f=22050,scale=FALSE)
+##D spectro(tico,f=22050,osc=TRUE,scale=FALSE)
+##D # change the dB scale by setting a different dB reference value (20microPa)
+##D spectro(tico,f=22050, dBref=2*10e-5)
+##D # unnormalised spectrogram with a linear amplitude scale
+##D spectro(tico, dB=NULL, norm=FALSE, scale=FALSE)
+##D # manipulating wl
+##D op<-par(mfrow=c(2,2))
+##D spectro(tico,f=22050,wl=256,scale=FALSE)
+##D title("wl = 256")
+##D spectro(tico,f=22050,wl=512,scale=FALSE)
+##D title("wl = 512")
+##D spectro(tico,f=22050,wl=1024,scale=FALSE)
+##D title("wl = 1024")
+##D spectro(tico,f=22050,wl=4096,scale=FALSE)
+##D title("wl = 4096")
+##D par(op)
+##D # vertical zoom using flim
+##D spectro(tico,f=22050, flim=c(2,6))
+##D spectro(tico,f=22050, flimd=c(2,6))
+##D # a full plot
+##D pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
+##D spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
+##D     cont=TRUE,contlevels=seq(-30,0,20),colcont="red",
+##D     lwd=1.5,lty=2,palette=rev.terrain.colors)
+##D # black and white spectrogram 
+##D spectro(pellu2,f=22050,ovlp=85,zp=16,
+##D     palette=rev.gray.colors.1)
+##D # colour modifications
+##D data(sheep)
+##D spectro(sheep,f=8000,palette=temp.colors,collevels=seq(-115,0,1))
+##D spectro(pellu2,f=22050,ovlp=85,zp=16,
+##D palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
+##D spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
+##D colbg="black",colgrid="white", colwave="white",colaxis="white",collab="white")
+## End(Not run)
 
 
 
-graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 cleanEx()
 nameEx("spectro3D")
 ### * spectro3D
@@ -2379,13 +2465,14 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-require(rgl)
-data(tico)
-spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
-# linear amplitude scale without a normisation of the STFT matrix
-# time and frequency scales need to be dramatically amplified
-spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)
-
+## Not run: 
+##D require(rgl)
+##D data(tico)
+##D spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
+##D # linear amplitude scale without a normisation of the STFT matrix
+##D # time and frequency scales need to be dramatically amplified
+##D spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)
+## End(Not run)
 
 
 cleanEx()
@@ -2628,19 +2715,18 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if(nzchar(Sys.which("flac"))) # check that FLAC is installed on your system
-{
-# synthesis of a 1kHz sound
-a<-synth(d=10,f=8000,cf=1000)
-# save it as a .wav file in the default working directory
-savewav(a,f=8000)
-# compress it to FLAC format and overwrite on the file a.wav
-wav2flac("a.wav", overwrite=TRUE)
-# back to .wav format
-wav2flac("a.flac", reverse=TRUE)
-# remove the files
-unlink(c("a.wav","a.flac"))
-}
+## Not run: 
+##D # synthesis of a 1kHz sound
+##D a<-synth(d=10,f=8000,cf=1000)
+##D # save it as a .wav file in the default working directory
+##D savewav(a,f=8000)
+##D # compress it to FLAC format and overwrite on the file a.wav
+##D wav2flac("a.wav", overwrite=TRUE)
+##D # back to .wav format
+##D wav2flac("a.flac", reverse=TRUE)
+##D # remove the files
+##D unlink(c("a.wav","a.flac"))
+## End(Not run)
 
 
 
@@ -2720,7 +2806,8 @@ plot(x=seq(0,nrow(pellu1)/22050,length.out=length(pellu4)),
 
 ### * <FOOTER>
 ###
-cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+options(digits = 7L)
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***

@@ -119,8 +119,9 @@ par(op)
 data(orni)
 oscillo(orni,f=22050,title="The song of a famous cicada")
 # move along the signal using scroll
+\dontrun{
 require(rpanel)
-oscillo(tico,f=22050,scroll=8)
+oscillo(tico,f=22050,scroll=8)}
 }
 
 \keyword{dplot}

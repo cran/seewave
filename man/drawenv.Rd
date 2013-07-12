@@ -42,11 +42,13 @@ drawenv(wave, f, n = 20, plot = FALSE, listen = FALSE, output = "matrix")
 \seealso{\code{\link{setenv}}, \code{\link{env}}, \code{\link{synth}}}
 
 \examples{
+\dontrun{
 a<-synth(d=1,f=22050,cf=1000)
 # drawenv(a,f=22050,plot=TRUE)
 # choose points on the oscillogram view to draw a new enveloppe
 # stop (ESC on Windows; right mouse button on Linux)
 # check the result on the second graphics device opened thanks to plot=TRUE
+}
 }
 
 \keyword{datagen}

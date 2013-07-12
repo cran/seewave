@@ -1,9 +1,52 @@
 ################################################################################
-##  Seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
-##  Contributors : Jonathan Fees, Amandine Gasc, Martin Maechler, Sandrine Pavoine,
-##  Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft
-##  Acknowledgements: Michel Baylac, Emmanuel Paradis, Arnold Fertin, Kurt Hornik
+##  seewave by Jerome Sueur, Caroline Simonis & Thierry Aubin
+##  http://rug.mnhn.fr/seewave/
 ################################################################################
+
+################################################################################
+##                                ACI
+################################################################################
+
+ACI <- function (
+    wave,
+    f,
+    wl = 512,
+    ovlp = 0,
+    wn = "hamming",
+    flim = NULL,
+    nbwindows = 1
+    )
+    
+{
+    ## INPUT
+    input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+
+    ## SPECTROGRAM MATRIX
+    z <- sspectro(wave, f, wn=wn, ovlp=ovlp)
+
+    ## FREQUENCY SELECTION 
+    if(!is.null(flim))
+        {
+            flim<-flim*1000*wl/f
+            z <- z[flim[1]:flim[2], ]
+        }
+
+    acis <- array(0, nbwindows)
+
+    for(j in 1:nbwindows)
+        {
+            ## WINDOWING
+            l <- dim(z)[2]
+            z1 <- z[,floor(l/nbwindows*(j-1) + 1):floor(l/nbwindows*j)]
+
+            ## ACI COMPUTATION  
+            t <- array(0, dim(z1)-c(0,1))
+            for (i in 1:(dim(t)[1])) {t[i,] <- abs(diff(z1[i,]))/sum(z1[i,])}
+            acis[j] <- sum(t)
+        }
+
+    return(sum(acis))
+}
 
 ################################################################################
 ##                                ADDSILW
@@ -1244,7 +1287,8 @@ dfreq <- function(
                 wn = "hanning",
                 ovlp = 0,
                 fftw = FALSE,
-                at = NULL, 
+                at = NULL,
+                tlim = NULL,
                 threshold = NULL,
                 bandpass = NULL,
                 clip = NULL,  
@@ -1262,6 +1306,9 @@ dfreq <- function(
   # input
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
+  # time limits
+  if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
+  
   # amplitude threshold
   if(!is.null(threshold)) {wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)}
 
@@ -1602,7 +1649,7 @@ drawenv<-function(
 
   if(plot)
     {
-      x11()
+      dev.new()
       oscillo(wave3,f=f)
       if(listen) {listen(wave3,f=f)}
       invisible(wave3)
@@ -1661,8 +1708,8 @@ dynoscillo <- function(
           panel
         }
 
-      osc.panel <- rp.control("Position")
-      rp.slider(osc.panel, pos, from = 1, to = lstep, resolution = 1,
+      osc.panel <- rpanel::rp.control("Position")
+      rpanel::rp.slider(osc.panel, pos, from = 1, to = lstep, resolution = 1,
                 title = "Position along the signal", action = plot.osc)
 }
 
@@ -1812,8 +1859,8 @@ dynspec<-function(
           panel
         }
 
-      spec.panel <- rp.control("Position")
-      rp.slider(spec.panel, pos, from=1, to=lstep, resolution=1,
+      spec.panel <- rpanel::rp.control("Position")
+      rpanel::rp.slider(spec.panel, pos, from=1, to=lstep, resolution=1,
                 title = "Position along the signal", action=plot.spec)
     }
   else return(list(time=seq(0,n/f,length.out=length(step)), freq=x, amp=z))
@@ -2215,8 +2262,8 @@ field<-function(f,d)
 fir<-function(
               wave,
               f,
-              from = FALSE,
-              to = FALSE,
+              from = NULL,
+              to = NULL,
               bandpass = TRUE,
               custom = NULL,
               wl = 512,
@@ -2230,8 +2277,8 @@ fir<-function(
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
                                         # frequency limits of the filter
-  if(from == FALSE) from <- 0
-  if(to == FALSE) to <- f/2
+  if(is.null(from)) from <- 0
+  if(is.null(to)) to <- f/2
   from <- round((from * wl)/f)
   to <- round((to * wl)/f)
   n <- nrow(wave)
@@ -2330,7 +2377,7 @@ fpeaks <- function(spec,
         }
       if(!is.null(f) && !is.na(f))
         {
-      spec <- cbind(seq(f/(N*2), f/2, length=N)/1000, spec)
+      spec <- cbind(seq(0, f/2 -f/(N*2), length=N)/1000, spec)
     }
       if(!is.null(f) && is.na(f))
         {
@@ -2606,6 +2653,24 @@ fund <- function(
     }
   else {return(res)}
   if(pb) close(pbar)
+}
+
+################################################################################
+##                                   GGSPECTRO
+################################################################################
+
+ggspectro <- function(wave, f, tlab = "Time (s)", flab = "Frequency (kHz)", alab = "Amplitude\n(dB)\n", ...)
+{
+    ## data 
+    spectrogram <- spectro(wave, f=f, plot=FALSE, ...)
+    frequency <- rep(spectrogram$freq, times=ncol(spectrogram$amp))
+    time <- rep(spectrogram$time, each=nrow(spectrogram$amp))
+    amplitude <- as.vector(spectrogram$amp)
+    df <- data.frame(time, frequency, amplitude)
+    ## ggplot object
+    v <- ggplot(df, aes(x=time, y=frequency, z = amplitude)) + xlab(tlab) + ylab(flab) + scale_fill_continuous(alab)
+    rm(spectrogram)
+    return(v)
 }
 
 
@@ -2981,8 +3046,8 @@ listen <- function(
                  )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ;
-  if(is.null(f)) {f<-input$f}
+  input <- inputw(wave=wave,f=f) ; wave <- input$w ;
+  if(is.null(f)) {f <- input$f}
   rm(input)
 
   if(choose)
@@ -3672,8 +3737,8 @@ oscillo <- function
                        )
                   panel
                 }
-              osc.panel <- rp.control("Window")
-              rp.slider(osc.panel,pos,from=1,to=lstep-1,resolution=1,
+              osc.panel <- rpanel::rp.control("Window")
+              rpanel::rp.slider(osc.panel,pos,from=1,to=lstep-1,resolution=1,
                         title = "Window", action=plot.dynosc)
             }
 
@@ -3855,24 +3920,7 @@ oscilloST<-function(
 
 {
   input1<-inputw(wave1,f=f,channel=1) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  if(class(wave1)=="Sample" && channels(wave1)==2) {wave2<-inputw(wave1,channel=2)$w}
-  else wave2<-inputw(wave2,f=f,channel=1)$w
-
-  if(class(wave1)=="Sample" | class(wave2)=="Sample")
-    {
-      if(channels(wave1)==2)
-        {
-          f<-wave1$rate ; 
-          wave2<-as.matrix(wave1$sound[2,])
-          wave1<-as.matrix(wave1$sound[1,])
-        }
-      else
-        {
-          f<-wave1$rate ; wave1<-as.matrix(wave1$sound[1,])
-          if(class(wave2)=="Sample" & channels(wave2)==1) {f<-wave2$rate ; wave2<-as.matrix(wave2$sound[1,])}
-        }
-    }
-
+  wave2<-inputw(wave2,f=f,channel=1)$w
   if(plot)
     {
       op<-par(mfrow=c(2,1),oma=c(5,3,2,2),mar=rep(0,4), cex.axis=cexaxis)
@@ -4003,6 +4051,22 @@ phaseplot <- function(wave,
   else return(z)
 }
 
+
+################################################################################
+##                                PLAYLIST
+################################################################################
+
+playlist <- function(directory, sample=FALSE, loop=1)
+  {
+    files <- dir(directory, pattern={".wav|.mp3|.ogg|.aiff"})
+    n <- length(files)
+    if(isTRUE(sample)) {files <- sample(files, size=n, replace=FALSE)}
+    i <- 1
+    while(i <= loop){
+      for(j in 1:n) {play(shQuote(paste(directory, files[j], sep="")))}
+      i <- i+1
+    }
+  }
 
 ################################################################################
 ##                                PULSE
@@ -4885,7 +4949,7 @@ sox <- function(command, exename = NULL, path2exe = NULL)
 ################################################################################
 
 specprop <- function (spec, f = NULL, str = FALSE, flim = NULL, plot = FALSE, 
-    type = "l", ...) 
+    type = "l", xlab=NULL, ylab = NULL, col.mode = 2, col.quartiles = 4, ...) 
 {
 ## DATA 
   ## Input
@@ -4916,7 +4980,7 @@ specprop <- function (spec, f = NULL, str = FALSE, flim = NULL, plot = FALSE,
   ## Frequency    
   if (!is.null(flim)) {freq <- seq(from = flim[1] * 1000, to = flim[2] * 1000, length.out = L)}
 
-## RESULTS
+  ## RESULTS
     mean <- sum(amp*freq)
     sd <- sqrt(sum(amp*((freq-mean)^2)))
     sem <- sd/sqrt(L)
@@ -4948,44 +5012,46 @@ specprop <- function (spec, f = NULL, str = FALSE, flim = NULL, plot = FALSE,
 
 ## PLOT
     if (plot == 1) {
+        if(is.null(ylab)) {ylab <- "Probability"}
         par(mar = c(5, 5, 4, 2) + 0.1)
-        plot(x = freq/1000, y = amp, type = type, xlab = "Frequency (kHz)", 
+        plot(x = freq/1000, y = amp, type = type, xlab = xlab, 
             xaxs = "i", ylab = "", yaxs = "i", las = 1, ...)
-        mtext("Probability", side = 2, line = 4)
+        mtext(ylab, side = 2, line = 4)
         segments(x0 = mode/1000, y0 = 0, x1 = mode/1000, y1 = amp[which(freq == 
-            mode)], col = 4)
+            mode)], col = col.mode)
         segments(x0 = median/1000, y0 = 0, x1 = median/1000, 
-            y1 = amp[which(freq == median)], col = 2)
+            y1 = amp[which(freq == median)], col = col.quartiles)
         segments(x0 = Q25/1000, y0 = 0, x1 = Q25/1000, y1 = amp[which(freq == 
-            Q25)], col = 2, lty = 2)
+            Q25)], col = col.quartiles, lty = 2)
         segments(x0 = Q75/1000, y0 = 0, x1 = Q75/1000, y1 = amp[which(freq == 
-            Q75)], col = 2, lty = 3)
+            Q75)], col = col.quartiles, lty = 3)
         legend("topright", legend = c("Q25", "median", "Q75", 
-            "mode"), col = c(2, 2, 2, 4), lty = c(2, 1, 3, 1), 
+            "mode"), col = c(col.quartiles, col.quartiles, col.quartiles, col.mode), lty = c(2, 1, 3, 1), 
             bty = "n")
     }
     if (plot == 2) {
-        plot(x = freq/1000, y = cumamp, type = type, xlab = "Frequency (kHz)", 
-            xaxs = "i", ylab = "Cumulated probability", yaxs = "i", 
+        if(is.null(ylab)) {ylab <- "Cumulated probability"}
+        plot(x = freq/1000, y = cumamp, type = type, xlab = xlab, 
+            xaxs = "i", ylab = ylab, yaxs = "i", 
             las = 1, ...)
         segments(x0 = mode/1000, y0 = 0, x1 = mode/1000, y1 = cumamp[which(freq == 
-            mode)], col = 4)
+            mode)], col = col.mode)
         segments(x0 = 0, y0 = cumamp[which(freq == mode)], x1 = mode/1000, 
-            y1 = cumamp[which(freq == mode)], col = 4)
+            y1 = cumamp[which(freq == mode)], col = col.mode)
         segments(x0 = median/1000, y0 = 0, x1 = median/1000, 
-            y1 = max(cumamp)/2, col = 2)
+            y1 = max(cumamp)/2, col = col.quartiles)
         segments(x0 = 0, y0 = max(cumamp)/2, x1 = median/1000, y1 = max(cumamp)/2, 
-            col = 2)
+            col = col.quartiles)
         segments(x0 = Q25/1000, y0 = 0, x1 = Q25/1000, y1 = max(cumamp)/4, 
-            col = 2, lty = 2)
+            col = col.quartiles, lty = 2)
         segments(x0 = 0, y0 = max(cumamp)/4, x1 = Q25/1000, y1 = max(cumamp)/4, 
-            col = 2, lty = 2)
+            col = col.quartiles, lty = 2)
         segments(x0 = Q75/1000, y0 = 0, x1 = Q75/1000, y1 = max(cumamp) * 
-            3/4, col = 2, lty = 3)
+            3/4, col = col.quartiles, lty = 3)
         segments(x0 = 0, y0 = max(cumamp) * 3/4, x1 = Q75/1000, y1 = max(cumamp) * 
-            3/4, col = 2, lty = 3)
+            3/4, col = col.quartiles, lty = 3)
         legend("bottomright", legend = c("Q25", "median", "Q75", 
-            "mode"), col = c(2, 2, 2, 4), lty = c(2, 1, 3, 1), 
+            "mode"), col =  c(col.quartiles, col.quartiles, col.quartiles, col.mode), lty = c(2, 1, 3, 1), 
             bty = "n")
     }
     if (plot == 1 | plot == 2) {
@@ -5125,7 +5191,7 @@ spectro <- function(
       if(osc & scale)
         {
           layout(matrix(c(3, 1 ,2, 0), ncol = 2, byrow=TRUE), widths = widths, heights = heights)
-          par(las=0, oma=oma, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis)
+          par(las=0, oma=oma, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis, bg=colbg)
           # SCALE
           par(mar=c(0,1,4.5,3))
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
@@ -5156,7 +5222,7 @@ spectro <- function(
         {
           layout(matrix(c(2, 1), ncol = 2, byrow=TRUE), widths = widths)
           # SCALE
-          par(mar=c(5,1,4.5,3), oma=oma, las=0)
+          par(mar=c(5,1,4.5,3), oma=oma, las=0, bg=colbg)
           dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
           # SPECTRO
@@ -5196,7 +5262,7 @@ spectro <- function(
       # SPECTRO ONLY
       if(osc==FALSE & scale==FALSE)
         {
-          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab,bg=colbg, cex.axis=cexaxis,cex.lab=cexlab,...)
+          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab, bg=colbg, cex.axis=cexaxis, cex.lab=cexlab,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab), color.palette=palette, axisX=axisX, axisY=axisY,
                                 col.lab=collab,colaxis=colaxis)		
@@ -5480,6 +5546,50 @@ synth<-function(
 }
 
 
+################################################################################
+##                                SYNTH2
+################################################################################
+
+synth2 <- function(
+    env = NULL,
+    ifreq,    # in Hz
+    f,   # in Hz
+    plot = FALSE,
+    listen = FALSE,
+    output = "matrix",
+    ...
+    )
+
+{
+    ## input
+    nfreq <- length(ifreq)
+    if(is.null(env)) {env <- rep(1, times=nfreq)}    
+    nenv <- length(env)
+    if(nenv != nfreq) {stop("'wave' and 'freq' should have exactly the same length")}
+
+    ## get the instantaneous phase from the instantaneous frequency
+    ## equivalent to the integral (primitive) of the instantaneous phase along time
+    iphase <- 2*pi*cumsum(ifreq)/f
+
+    ## synthesis
+    sound <- env*cos(iphase)   
+    sound <- outputw(wave = sound, f = f, format = output)
+
+    ##output
+    if (plot) {
+        spectro(sound, f = f, ...)
+        if (listen) {
+            listen(sound, f = f)
+        }
+        invisible(sound)
+    }
+    else {
+        if (listen) {
+            listen(sound, f = f)
+        }
+        return(sound)
+    }
+}
 
 ################################################################################
 ##                                TH
@@ -6133,7 +6243,6 @@ outputw <- function(
                     )
   {
     if(format == "matrix") {wave <- as.matrix(wave)}
-    if(format == "Sample"){wave <- as.Sample(as.numeric(wave), rate=f, bits=16)}
     if(format == "Wave")  {wave <- Wave(left=wave, samp.rate=f, bit=16)}
     if(format == "audioSample") {wave <- audioSample(wave, rate=f, bits=bit, clip=FALSE)}
     if(format == "ts") {wave <- ts(wave, start=0, end=length(wave)/f, frequency=f)}
@@ -6377,17 +6486,19 @@ sspectro <- function
  wave,
  f,
  wl = 512,
- wn="hanning"
+ ovlp = 0,
+ wn="hanning",
+ norm=TRUE
  )
 
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
   n<-nrow(wave)
-  step<-seq(1,n-wl,wl)
+  step<-seq(1,n-wl,wl-(ovlp*wl/100))
   W<-ftwindow(wl=wl,wn=wn)
   z <- apply(as.matrix(step), 1, function(x) Mod(fft(wave[x:(wl+x-1),]*W)))
   z<-z[2:(1+wl/2),]
-  z<-z/max(z)
+  if(norm) {z <- z/max(z)}
   return(z)
 }
 

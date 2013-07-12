@@ -9,7 +9,7 @@
   or bandstop frequency filter).}
 
 \usage{
-fir(wave, f, from = FALSE, to = FALSE, bandpass = TRUE, custom = NULL,
+fir(wave, f, from = NULL, to = NULL, bandpass = TRUE, custom = NULL,
 wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
 }
 
@@ -19,8 +19,8 @@ wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}
   \item{bandpass}{if \code{TRUE} a band-pass filter is applied between
-    \code{from} and  \code{to}, if \code{FALSE} a band-stop filter is applied
-    between \code{from} and  \code{to} (by default \code{TRUE}).}
+  \code{from} and  \code{to}, if not \code{NULL} a band-stop filter is applied
+    between \code{from} and  \code{to} (by default \code{NULL}).}
   \item{custom}{a vector describing the frequency response of a custom filter.
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
     \code{wl} is no more required. See examples.}

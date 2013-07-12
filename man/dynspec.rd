@@ -85,11 +85,14 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
 }
 
 \value{
-  If \code{plot} is \code{FALSE}, this function returns a matrix which columns
-  correspond to the spectra computed along the time wave.}
+  This function returns a list of three items:
+  \item{time}{a numeric vector corresponding to the time axis.}
+  \item{freq}{a numeric vector corresponding to the frequency axis.}
+  \item{amp}{a numeric matrix corresponding to the amplitude values.
+   Each column is a Fourier transform of length \code{wl/2}.}
+}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Caroline Simonis \email{csimonis@mnhn.fr}.}
+\author{Jerome Sueur and Caroline Simonis}
 
 \note{This function is very similar to a spectrogram. See the \code{Details} of
   \code{\link{spectro}} for some information regarding the short term Fourier 
@@ -99,11 +102,11 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
   \code{\link{fft}}, \code{\link{oscillo}}.}
 
 \examples{
+\dontrun{
 data(sheep)
 require(rpanel)
 dynspec(sheep,f=8000,wl=1024,ovlp=50,osc=TRUE)
-dev.off()
-}
+}}
 
 \keyword{dplot}
 \keyword{ts}

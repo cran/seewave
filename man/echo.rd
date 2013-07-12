@@ -54,7 +54,7 @@ oscillo(a,f=11025,title="Input signal")
 oscillo(aecho,f=11025,colwave="blue",title="Signal with echoes",coltitle="blue")
 par(op)
 # another echo with time delays overlapping with the input wave
-echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5),plot=TRUE,listen=TRUE)
+echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5),plot=TRUE)
 }
 
 \keyword{datagen}

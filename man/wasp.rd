@@ -74,7 +74,8 @@
 wasp(f=2000)$l
 # [1] 0.1717
 
-# sound speed in sea at 0 and -500 m for a respective temperature of 22 degrees Celcius and 11 degrees Celsius
+# sound speed in sea at 0 and -500 m
+# for a respective temperature of 22 degrees Celcius and 11 degrees Celcius
 wasp(f=1000,s=30,d=c(0,500),t=c(22,11),medium="sea")$c
 # [1] 1521.246 1495.414
 

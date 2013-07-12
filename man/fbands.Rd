@@ -52,7 +52,8 @@ xlab = "Frequency (kHz)", ylab = "Relative amplitude", ...)}
 
 
 \value{A two-column matrix, the first column corresponding to the
-  frequency values (x-axis, mean of the bars limits) and the second column corresponding to height values (y-axis) of the bars.}
+  frequency values (x-axis, mean of the bars limits) and
+  the second column corresponding to height values (y-axis) of the bars.}
 
 \author{Jerome Sueur}
 
@@ -92,7 +93,9 @@ fbands(spec, bands=seq(2,3,by=0.2),
 par(op)
 # kind of dynamic frequency bands
 specs <- dynspec(sheep, f=8000, plot= FALSE)$amp
-out <- apply(specs, f=8000, MARGIN=2, FUN = fbands, bands = seq(0,4,by=0.2), col = 1, ylim=c(0,max(specs))) 
+out <- apply(specs, f=8000, MARGIN=2,
+     FUN = fbands, bands = seq(0,4,by=0.2),
+     col = 1, ylim=c(0,max(specs))) 
 }
 
 \keyword{dplot}
