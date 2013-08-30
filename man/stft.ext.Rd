@@ -46,7 +46,9 @@ norm = FALSE, dB = FALSE, verbose = FALSE)
   (\url{http://www.mega-nerd.com/libsndfile/}) libraries. The function
   is typically made for batch processing or long files. Gain in process
   time is significant for files > 10 minutes and for more thant 1000
-  files lasting one second.} 
+  files lasting one second.\cr
+  A Hanning window shape is used by default.
+} 
 
 \seealso{\code{\link{spectro}}, \code{\link{meanspec}}, \code{\link{fft}}.}
 
