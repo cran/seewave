@@ -182,16 +182,36 @@ range(s7@left)
 
 \subsubsection{audioSample class (package audio)}
 The package \audio, developed by Simon Urbanek, is another option to handle \texttt{.wav} files. Sound can be imported using the function \texttt{load.wave}. The class of the resulting object is \texttt{audioSample} which is essentially a numeric vector (for mono) or numeric matrix with two rows (for stereo). The sampling frequency and the resolution can be called as attributes :
-<<echo=false,quiet=true>>=
-detach(package: tuneR)
+
+\begin{Sinput}
 library(audio)
-@
-<<s10>>=
 s10<-load.wave("mysong.wav")
+\end{Sinput}
+
+\begin{Sinput}
 head(s10)
+\end{Sinput}
+
+\begin{Soutput}
+sample rate: 8000Hz, mono, 16-bits
+[1] 0.0000000 0.7070923 0.9999695 0.7070923 0.0000000 -0.7071139
+\end{Soutput}
+
+\begin{Sinput}
 s10$rate
+\end{Sinput}
+
+\begin{Soutput}
+[1] 8000
+\end{Soutput}
+
+\begin{Sinput}
 s10$bits
-@ 
+\end{Sinput}
+
+\begin{Soutput}
+[1] 16
+\end{Soutput}
 
 The main advantage of the package \audio~is that sound can be directly acquired within an \texttt{R} session. This is achieved by first preparing a vector of \texttt{NA} and then using the function \texttt{record}. For instance, to get a mono sound of 5 seconds sampled at 16 kHz :
 <<s11, eval=FALSE>>=
@@ -199,12 +219,6 @@ s11 <- rep(NA_real_, 16000*5)
 record(s11, 16000, 1)
 @ 
 A recording session can be controled using three complementary functions : \texttt{pause}, \texttt{rewind}, and \texttt{resume} (see~\ref{playaudioSample}). See the documentation of \audio~for details regarding the control of audio drivers: \href{http://www.rforge.net/audio/}{http://www.rforge.net/audio/}.
-
-<<echo=false,quiet=true>>=
-detach(package: audio)
-library(tuneR)
-@
-
 
 %%%%%%%%%%%%%%%%%%%%%%
 %%%% Out
@@ -261,8 +275,8 @@ To compress a \texttt{.wav} file into \texttt{.flac}, the argument \texttt{rever
  
 To generate a stereo sound, two mono sounds are first created using \texttt{sine}, a function that returns a \texttt{Wave} object, and then combined using \texttt{stereo}:
 <<s12>>=
-left<-sine(440, bit = 16)
-right<-sine(2000, bit = 16)
+left<-sine(440)
+right<-sine(2000)
 s12<-stereo(left,right)
 s12
 @

@@ -2,6 +2,13 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.7.2 [30-August-2013]
+
+OTHER CHANGES
+        o Some invisible changes with the data to comply with tuneR update (tuneR 1.0)
+	o Slight modification to work with different bit levels (and not only 16).
+
+
 		CHANGES IN SEEWAVE VERSION 1.7.0 [12-July-2013]
 
 NEW FEATURES

@@ -63,7 +63,7 @@ addsilw<-function(
                   ...)
 
 {
-  input<-inputw(wave=wave,f=f); wave<-input$w; f<-input$f; rm(input)
+  input<-inputw(wave=wave,f=f); wave<-input$w; f<-input$f; bit <- input$bit; rm(input)
 
   switch(at,
          start = {at<-0},
@@ -114,7 +114,7 @@ afilter<-function(
                   )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   t1<-max(abs(wave))*(threshold/100)
   wave1 <- ifelse(abs(wave)<=t1,yes=0,no=1)
@@ -1071,7 +1071,7 @@ cutw<-function(
                ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
 
   if(choose)
     { 
@@ -1097,7 +1097,7 @@ cutw<-function(
   wavecut <- as.matrix(wave[a:b,])
 #  wavecut<-wavecut1/max(abs(wavecut1))
 
-  wavecut <- outputw(wave=wavecut, f=f, format=output)
+  wavecut <- outputw(wave=wavecut, f=f, bit=bit, format=output)
 
   if(plot)
     {
@@ -1230,7 +1230,7 @@ deletew<-function(
                   ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   if(choose)
     { 
@@ -1613,7 +1613,7 @@ drawenv<-function(
 
 {
                                         # input
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave<-wave/max(abs(wave))
   wave<-rmoffset(wave, f=f)
@@ -1886,7 +1886,7 @@ echo<-function(
   cat("Please wait...\n")
   if(.Platform$OS.type == "windows") flush.console()
 
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave<-wave/max(abs(wave))
   n<-nrow(wave)
@@ -2035,7 +2035,7 @@ fadew<-function(
                 )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave<-wave/max(abs(wave))
   n<-nrow(wave)
@@ -2190,7 +2190,7 @@ ffilter<-function(
                   )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   n<-nrow(wave)
   step<-seq(1,n-wl,wl)
@@ -2274,7 +2274,7 @@ fir<-function(
 
 {
                                         # input
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
                                         # frequency limits of the filter
   if(is.null(from)) from <- 0
@@ -3094,7 +3094,7 @@ lfs<-function(
               )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   n<-nrow(wave)
 
                                         # alerts concerning the chose of the frequency shift
@@ -3529,7 +3529,7 @@ mutew<-function(
                 )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   n<-nrow(wave)
   
@@ -3963,8 +3963,8 @@ pastew <- function(
                  ...)
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  input1 <- inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; bit <- input1$bit ; rm(input1)
+  wave2  <- inputw(wave=wave2,f=f)$w
 
   n<-nrow(wave2)
 
@@ -4178,7 +4178,7 @@ repw<-function(
                )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   n <- nrow(wave)
   if(join) wave1 <- rep(wave[-n],times=times) else wave1 <- rep(wave,times=times)
   wave1 <- outputw(wave=wave1, f=f, format=output)
@@ -4206,7 +4206,7 @@ revw<-function(
                ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   if(env == FALSE & ifreq == FALSE) stop ("Both arguments 'env' and 'ifreq' cannot be set to FALSE.")
 
@@ -4244,7 +4244,7 @@ resamp<-function(
                  )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)$w
+  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)$w
 
   n<-nrow(wave)
   if(g==f) stop ("'f' and 'g' must be different")
@@ -4271,7 +4271,7 @@ rmam <- function(
                )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   wave <- wave/Mod(hilbert(wave,f=f))
   wave <- outputw(wave=wave, f=f, format=output)
 
@@ -4302,7 +4302,7 @@ rmoffset<-function(
                    )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   wave <- wave-mean(wave)
 
   wave <- outputw(wave=wave, f=f, format=output)
@@ -4329,7 +4329,7 @@ rmnoise<-function(
                   )
 
   {
-    input <- inputw(wave=wave, f=f); wave<-input$w; f<-input$f; rm(input)
+    input <- inputw(wave=wave, f=f); wave<-input$w; f<-input$f; bit <- input$bit ; rm(input)
     wave2 <- smooth.spline(wave, all.knots=TRUE,...)$y  
     wave2 <- outputw(wave=wave2, f=f, format=output)
     return(wave2)
@@ -4401,22 +4401,22 @@ savewav <- function(
     }
   ## FILENAME  
   if(is.null(filename)) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
+  
   ## INPUT
-  input <- inputw(wave=wave, f=f) ; wave <- input$w ;
-  if(is.null(f)) {f <- input$f}
+  input <- inputw(wave=wave, f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit
   rm(input)
 
   ## OUTPUT
   if(!is.null(rescale))
        {
         wave <- rescale(wave, lower=rescale[1], upper=rescale[2])
-        wave <- Wave(left=wave, samp.rate=f, bit=16)
+        wave <- Wave(left=wave, samp.rate=f, bit=bit)
        }
   else {
-        wave <- Wave(left=wave, samp.rate=f, bit=16)
+        wave <- Wave(left=wave, samp.rate=f, bit=bit)
         max <- max(wave@left)
         if(max <= 1) {level <- max} else {level <- 1}
-        wave <- normalize(wave, unit="16", level=level)
+        wave <- normalize(wave, unit=as.character(bit), level=level)
        }
   
   ## WRITING TO FILE
@@ -4522,7 +4522,7 @@ setenv<-function(
                  )
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; bit <- input1$bit ; rm(input1)
   wave2<-inputw(wave=wave2,f=f)$w
 
   wave1<-rmoffset(wave1,f=f)
@@ -5972,7 +5972,7 @@ zapsilw<-function(
                   ...)
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave1 <- afilter(wave,f=f,threshold=threshold,plot=FALSE)
   wave2 <- wave1[wave1!=0]
@@ -6211,23 +6211,36 @@ hanning.w<-function (n)
 ##                                INPUTW
 ################################################################################ 
 
-inputw<-function(wave, f, channel=1)
+inputw <- function(
+                  wave,
+                  f,
+                  channel = 1,
+                  bit = 16
+                  )
+    
 {
   if(is.data.frame(wave))   {f<-f ; wave <- as.matrix(wave[,channel])}
   if(is.vector(wave))       {f<-f ; wave <- as.matrix(wave)}
-                                        # mts objects are matrix by default, there is then a conflict between is.matrix and is.mts
-  if(is.matrix(wave) && !is.mts(wave)) {f<-f ; wave <- wave[,channel,drop=FALSE]}  
+  ## WaveMC and mts objects are matrix by default, there is then a conflict between is.matrix and is.mts
+  if(is.matrix(wave) && !is.mts(wave) && class(wave) != "WaveMC") {f<-f ; wave <- wave[,channel,drop=FALSE]}
   if(is.ts(wave))           {f<-frequency(wave) ; wave <- as.matrix(wave)} 
   if(is.mts(wave))          {f<-frequency(wave) ; wave <- as.matrix(wave[, channel])} 
-  if(class(wave)=="Sample") {f<-wave$rate ; wave <- as.matrix(wave$sound[channel, ])}
-  if(class(wave)=="audioSample"){f<-wave$rate ; wave <- as.matrix(wave)}
+  if(class(wave)=="Sample") {f<-wave$rate ; wave <- as.matrix(wave$sound[channel, ]) ; bit=wave@bits}
+  if(class(wave)=="audioSample"){f<-wave$rate ; wave <- as.matrix(wave); bit=wave@bits}
   if(class(wave)=="Wave")
     {
-      f <- wave@samp.rate  
+      f <- wave@samp.rate
+      bit <- wave@bit
       if(channel==1) {wave <- as.matrix(wave@left)}   
       if(channel==2) {wave <- as.matrix(wave@right)}     
     }
-  return(list(w=wave,f=f))
+  if(class(wave)=="WaveMC")
+    {
+      f <- wave@samp.rate  
+      bit <- wave@bit
+      wave <- as.matrix(wave@.Data[, channel])
+    }
+  return(list(w=wave, f=f, bit=bit))
 }
 
 
@@ -6243,7 +6256,7 @@ outputw <- function(
                     )
   {
     if(format == "matrix") {wave <- as.matrix(wave)}
-    if(format == "Wave")  {wave <- Wave(left=wave, samp.rate=f, bit=16)}
+    if(format == "Wave")  {wave <- Wave(left=wave, samp.rate=f, bit=bit)}
     if(format == "audioSample") {wave <- audioSample(wave, rate=f, bits=bit, clip=FALSE)}
     if(format == "ts") {wave <- ts(wave, start=0, end=length(wave)/f, frequency=f)}
     return(wave)

@@ -75,7 +75,7 @@ SEXP stft ( SEXP FILENAME, SEXP OVLP, SEXP WL,SEXP MEAN, SEXP NORM ,SEXP DB, SEX
 	PROTECT(DB = coerceVector (DB, LGLSXP));
 	ptrdb = LOGICAL(DB);
 
-//Recovery if the user want the DB matrix
+//Recovery if the user want the MEAN matrix
 	PROTECT(MEAN = coerceVector (MEAN, LGLSXP));
 	ptrmean = LOGICAL(MEAN);
 

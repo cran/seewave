@@ -102,91 +102,68 @@ range(s7@left)
 
 
 ###################################################
-### code chunk number 14: seewave_IO.rnw:185-187
-###################################################
-detach(package: tuneR)
-library(audio)
-
-
-###################################################
-### code chunk number 15: s10
-###################################################
-s10<-load.wave("mysong.wav")
-head(s10)
-s10$rate
-s10$bits
-
-
-###################################################
-### code chunk number 16: s11 (eval = FALSE)
+### code chunk number 14: s11 (eval = FALSE)
 ###################################################
 ## s11 <- rep(NA_real_, 16000*5)
 ## record(s11, 16000, 1)
 
 
 ###################################################
-### code chunk number 17: seewave_IO.rnw:203-205
-###################################################
-detach(package: audio)
-library(tuneR)
-
-
-###################################################
-### code chunk number 18: exporta
+### code chunk number 15: exporta
 ###################################################
 data(tico)
 export(tico, f=22050, header=FALSE)
 
 
 ###################################################
-### code chunk number 19: exportb
+### code chunk number 16: exportb
 ###################################################
 export(tico, f=22050, filename="tico_Gold.txt")
 
 
 ###################################################
-### code chunk number 20: exportc
+### code chunk number 17: exportc
 ###################################################
 export(tico, f=22050, filename="tico_ext.txt",
 header="f=22050; ch=left")
 
 
 ###################################################
-### code chunk number 21: savewave
+### code chunk number 18: savewave
 ###################################################
 savewav(tico, f=22050)
 
 
 ###################################################
-### code chunk number 22: savewavb
+### code chunk number 19: savewavb
 ###################################################
 ticofirst<-cutw(tico, f=22050, to=0.5, output="Wave")
 savewav(ticofirst, filename = "tico_firstnote.wav")
 
 
 ###################################################
-### code chunk number 23: s12
+### code chunk number 20: s12
 ###################################################
-left<-sine(440, bit = 16)
-right<-sine(2000, bit = 16)
+left<-sine(440)
+right<-sine(2000)
 s12<-stereo(left,right)
 s12
 
 
 ###################################################
-### code chunk number 24: s13
+### code chunk number 21: s13
 ###################################################
 s13<-mono(s12,"left")
 
 
 ###################################################
-### code chunk number 25: seewave_IO.rnw:274-275
+### code chunk number 22: seewave_IO.rnw:288-289
 ###################################################
 s14<-channel(s12,"right")
 
 
 ###################################################
-### code chunk number 26: s14
+### code chunk number 23: s14
 ###################################################
 s13<-s12@left
 is.vector(s13)
