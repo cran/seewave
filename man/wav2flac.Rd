@@ -7,8 +7,8 @@
 \description{This function converts .wav files into .flac files and reversely}
 
 \usage{wav2flac(file, reverse = FALSE, overwrite = FALSE,
-exename = NULL, path2exe = NULL)
-}
+exename = NULL, path2exe = NULL)}
+
 \arguments{
   \item{file}{the .wav or .flac file to convert.}
   \item{reverse}{logical, if \code{TRUE} converts a .flac file into a .wav file.}
@@ -23,15 +23,15 @@ exename = NULL, path2exe = NULL)
 
 \references{FLAC website: \url{http://flac.sourceforge.net/}}
 
-\note{Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent.}
+\note{FLAC must be installed to use this function but not to install the
+  package \code{seewave}. Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent.}
 
 \author{Jerome Sueur, Luis J. Villanueva-Rivera}
 
 \seealso{\code{\link{savewav}}}
 
 \examples{
-if(nzchar(Sys.which("flac"))) # check that FLAC is installed on your system
-{
+\dontrun{
 # synthesis of a 1kHz sound
 a<-synth(d=10,f=8000,cf=1000)
 # save it as a .wav file in the default working directory

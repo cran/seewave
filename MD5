@@ -1,8 +1,8 @@
-8b3b3402324250b4512c11c93ad49320 *DESCRIPTION
+735b286aaac7fce3c90a69f0f9236287 *DESCRIPTION
 08b12be78d0397074bbb971b32b63b68 *NAMESPACE
-0814b2188f8b35326f3818e6da260952 *NEWS
-317f2a7c408516fece74b7fc6214dbc4 *R/seewave.r
-31b42d43fe33893b6de8bf8e022b37cd *R/zzz.r
+0846001ac0aa100e0db99c483ace4349 *NEWS
+2cfc6e531bd4d04340024a31d9f85b04 *R/seewave.r
+8de43cbf5b3ab9c3bc0f26fef42cf663 *R/zzz.r
 bc945349f644a838f96eac7ed830a28c *data/orni.RData
 f8fb9c086794f8e0ddca4712bbdb34d5 *data/peewit.RData
 d2bdc74819ade4ff1457521a7391a257 *data/pellucens.RData
@@ -11,10 +11,10 @@ d0974c6921d2c4abffc1b6bfe38d2fcb *data/tico.RData
 9e0e622839b069f607812c3bed77c764 *demo/00Index
 db7ad879beec73334b76d1e70f5542b9 *demo/seewave.R
 54da0770bb6a6d5addc696d3ec836c45 *inst/CITATION
-45c40c77c9c6328be8f6b3f6869ad796 *inst/doc/seewave_IO.pdf
+e98370cf05ffba45487ee8a175017db0 *inst/doc/seewave_IO.pdf
 fd3900003a4d8c890bdbd821762ef38d *inst/doc/seewave_IO.rnw
-eb8fbf62f532f4b080092eb4a0300a8f *inst/doc/seewave_analysis.pdf
-c64f9c614341f21b189839804d6f2a43 *inst/doc/seewave_analysis.rnw
+0c350d20dbd16427925b6c6052f8f25c *inst/doc/seewave_analysis.pdf
+4b9f8e4dc6e359cac83aaa1f06b9089d *inst/doc/seewave_analysis.rnw
 cf115826226ed5c82274baec7c62ddf2 *man/H.Rd
 daac385b6924c3c39d41abe40a57d000 *man/Q.Rd
 3135e2cb7e118c02830a14fcf2a9f9dc *man/addsilw.Rd
@@ -27,9 +27,9 @@ d9ecec3b51192d791054550cd761cf35 *man/ccoh.Rd
 5cd7050bb1e96d600e39e8d7f04ec43b *man/cepstro.Rd
 83c5562350a61880ba8beede86aef5c7 *man/coh.Rd
 fb49dc180469979bee5c97c75f01e5f5 *man/convSPL.Rd
-c312c470faf5d94a242a555b6f79fe8d *man/corenv.Rd
+0a19d69b584ecf945b01541ef542f05e *man/corenv.Rd
 c24bbb7830ec3fcbb73f0835810a3983 *man/corspec.Rd
-dde8386aff596c195898770e03f95e06 *man/covspectro.Rd
+c67c06cb3b07ebb6f434efa2134523ef *man/covspectro.Rd
 0bb9d3becc6e9c08e0a086f3ae73a986 *man/crest.Rd
 813adcb087ab77754552acfd362e528d *man/csh.Rd
 2b04aa096f4ab526759221c520077d1b *man/cutspec.Rd
@@ -37,7 +37,7 @@ dde8386aff596c195898770e03f95e06 *man/covspectro.Rd
 6d8da75755f8adb799c37fe7bab676d4 *man/dBscale.Rd
 89391ffca7d394097526c11ca7a45b58 *man/dBweight.Rd
 4fcb6ae5207b1a8497626758579432da *man/deletew.Rd
-35ea87b515af27d26ece992d648d4fc9 *man/dfreq.Rd
+14bbe97e37afd4a2e10ac32bad87f215 *man/dfreq.Rd
 e0a3dccd5dc2aa16d907fba00a91205d *man/diffenv.Rd
 a61d5edc577fbf580498754e7c122fac *man/diffspec.Rd
 0e5010ea2db7da3b22cea58546d8264f *man/diffwave.Rd
@@ -97,7 +97,7 @@ b1b39c6f7a3f1fde089c7b7389aa08e3 *man/savewav.Rd
 e180d46a7e6119fb747688dedd37bb98 *man/sddB.Rd
 2a2296b9a0d3b75f3529a1f90109f54a *man/seedata.Rd
 ff5f5e858c0c8a3b6b4bc8aa61b6c9c5 *man/seewave.internal.Rd
-1f903fbcc1a2a96dceecef01c14af6ef *man/seewave.package.Rd
+2039986e21eee08698822a0e73854740 *man/seewave.package.Rd
 726fe89670cef0463e1acfd8e7a32ed6 *man/setenv.Rd
 a07b5cc54137609e111ff1c936017b2b *man/sfm.Rd
 a8b74090f92ba79d6a44b09574458445 *man/sh.Rd
@@ -107,7 +107,7 @@ e4a58cea8619735904f81676cb77a1d3 *man/sheep.Rd
 4524e2df535503788d1c32a47b1faa5a *man/sox.Rd
 99987ec86a0e58b55de7474a6c5b1b1d *man/spec.Rd
 e8c413f916b4db2a56b77f8f4b246989 *man/specprop.Rd
-154e7521ac80cee84018cbe3797e7974 *man/spectro.Rd
+85f6c653c214003a0438b569a361aec7 *man/spectro.Rd
 9721726007675d3851100d030f418d7b *man/spectro3D.Rd
 42a69d732b74ec2927bd3681a610d867 *man/stft.ext.Rd
 e4d66bcd1bae623a3b4b875a436c6540 *man/symba.Rd
@@ -116,7 +116,7 @@ e4d66bcd1bae623a3b4b875a436c6540 *man/symba.Rd
 8c8eba4ada16977cc953b718812568d6 *man/tico.Rd
 ae195e82cf5a5439b18d2277afba22c9 *man/timer.Rd
 b0243c829ed4ab198c01f7a81f55f839 *man/wasp.Rd
-0c8cd612d3b1d4124a948f685a57e2a0 *man/wav2flac.Rd
+70ad78b65975eb34213368df052da858 *man/wav2flac.Rd
 6f06e69165be9e9eb13586ac233a3f4e *man/wf.Rd
 10713ed5b6be77bbda0a6b24dffee8ed *man/zapsilw.Rd
 3cecf763b668447ec8dae59fa2191eb2 *man/zc.Rd
@@ -126,9 +126,9 @@ f5ad7a5db64c1fedc44b0d16012da3f4 *seewave-Ex.R
 6a57a61c091e67729a3b71d062f75f27 *src/fourierDB.h
 2950a23308d9774505a44ebe9ef03589 *src/fourierMean.h
 b350d19e28c1a0b7e3dad6079784bf91 *src/fourierNorm.h
-ee50f0f09ad1267a9ce796bed4ee9e5d *src/stft.c
+c9e074307a38253fe225eb888b204364 *src/stft.c
 be18392ce7afe44bcb809f94b8726d39 *vignettes/Joseph_Fourier.jpg
 44420ba4443fef8da085224a0e9d81a1 *vignettes/Zonotrichia_capensis.jpg
 fd3900003a4d8c890bdbd821762ef38d *vignettes/seewave_IO.rnw
-c64f9c614341f21b189839804d6f2a43 *vignettes/seewave_analysis.rnw
+4b9f8e4dc6e359cac83aaa1f06b9089d *vignettes/seewave_analysis.rnw
 1200b94a83f2c9ceedf1e41e718977d3 *vignettes/seewave_logo.png

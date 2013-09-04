@@ -75,11 +75,13 @@ ylab = "Coefficient of correlation (r)", type = "l", pb = FALSE, ...)
   \code{\link{cor}},\code{\link{cor.test}}.}
 
 \examples{
+\dontrun{
 data(orni)
 # cross-correlation between two echemes of a cicada song
 wave1<-cutw(orni,f=22050,from=0.3,to=0.4,plot=FALSE)
 wave2<-cutw(orni,f=22050,from=0.58,to=0.68,plot=FALSE)
 corenv(wave1,wave2,f=22050)
+}
 }
 
 \keyword{dplot}
