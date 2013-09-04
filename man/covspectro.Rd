@@ -75,10 +75,12 @@ ylab = "Normalised covariance (cov)", type = "l", pb = FALSE, ...)
 
 \examples{
 # covariance between two notes of a birdsong
+\dontrun{
 data(tico)
 note1<-cutw(tico, f=22050, from=0.5, to=0.9)
 note2<-cutw(tico, f=22050, from=0.9, to=1.3)
 covspectro(note1,note2,f=22050,n=37)
+}
 }
 
 \keyword{dplot}

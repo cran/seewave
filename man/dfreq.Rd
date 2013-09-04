@@ -17,7 +17,6 @@ ylim = c(0, f/2000), ...)
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-
   \item{wl}{length of the window for the analysis
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

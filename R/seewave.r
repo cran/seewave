@@ -1912,14 +1912,14 @@ env<-function(
       step<-seq(1,n-msmooth[1],msmooth[1]-(msmooth[2]*msmooth[1]/100))
       wave<-apply(as.matrix(step),1,function(x) mean(wave[x:(x + msmooth[1])]))
       wave<-as.matrix(wave)
-      f<-f*nrow(wave)/n
+      f<-f*(nrow(wave)/n)
     }
 
   if(!is.null(ksmooth))
     {
       wave<-kernapply(as.matrix(wave),ksmooth)
       wave<-as.matrix(wave)
-      f<-f*nrow(wave)/n
+      f<-f*(nrow(wave)/n)
     }
 
   if(!is.null(ssmooth))

@@ -2,6 +2,15 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.6.7 [09-April-2013]
+
+OTHER CHANGES
+	o env(): a small bug fixed.
+	o stft.ext(): a slight change to pass the Mac CRAN checks (thanks to Simon Urbanek!).
+	o FLAC is no more required to install seewave but is needed to use wav2flac() function.
+	o Some other changes to pass R 3.0.0 checks.
+
+
 		CHANGES IN SEEWAVE VERSION 1.6.5 [12-December-2012]
 
 NEW FEATURES

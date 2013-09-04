@@ -145,6 +145,7 @@ listen=FALSE,
   \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{
+\dontrun{
 data(tico)
 data(pellucens)
 # simple plots
@@ -185,6 +186,7 @@ spectro(pellu2,f=22050,ovlp=85,zp=16,
 palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
 colbg="black",colgrid="white", colwave="white",colaxis="white",collab="white")
+}
 }
 
 \keyword{dplot}

@@ -10,7 +10,7 @@
 # include <Rmath.h>
 # include <Rversion.h>
 # include <unistd.h>
-# include <malloc.h>
+//# include <malloc.h> // unnecessary and stops Mac CRAN checks
 # include <fftw3.h> //Library for fftw calculate
 # include <math.h>
 

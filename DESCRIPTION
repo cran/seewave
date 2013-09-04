@@ -1,14 +1,13 @@
 Package: seewave
 Type: Package
 Title: Time wave analysis and graphical representation
-Version: 1.6.5
-Date: 2012-04-12
+Version: 1.6.7
+Date: 2013-09-04
 Author: Jerome Sueur <sueur@mnhn.fr>, Thierry Aubin, Caroline Simonis
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
-Webpage: http://rug.mnhn.fr/seewave
 Depends: R(>= 2.15.0)
 Encoding: UTF-8
-SystemRequirements: FLAC, FFTW, LIBSNDFILE
+SystemRequirements: FFTW, LIBSNDFILE
 Imports: fftw, rgl, rpanel, tcltk, tuneR,
 Suggests: audio, sound
 ZipData: no
@@ -21,6 +20,7 @@ Description: seewave provides functions for analysing, manipulating,
         and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
 URL: http://rug.mnhn.fr/seewave
-Packaged: 2012-12-12 14:29:15 UTC; root
+Packaged: 2013-04-09 12:46:47 UTC; root
+NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2012-12-12 17:25:02
+Date/Publication: 2013-04-09 16:57:29
