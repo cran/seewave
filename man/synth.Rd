@@ -67,27 +67,27 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
 \seealso{\code{\link{synth2}},  \code{\link{noisew}}, \code{\link{pulse}}, \code{\link{echo}}}
 
 \examples{
+## You can use plot=TRUE and spectro() options
+## to directly 'see' the new-built sounds
 # pure tone
-synth(f=22050,d=1,cf=4000,plot=TRUE)
+s <- synth(f=22050,d=1,cf=4000)
 # pure tone with sinusoid-like overall shape
-synth(f=22050,d=1,cf=4000,shape="sine",plot=TRUE,osc=TRUE)
+s <- synth(f=22050,d=1,cf=4000,shape="sine")
 # pure tones with am
-synth(f=22050,d=1,cf=4000,am=c(50,10),plot=TRUE,osc=TRUE)
+s <- synth(f=22050,d=1,cf=4000,am=c(50,10))
 # pure tone with +2000 Hz linear fm 
-synth(f=22050,d=1,cf=4000,fm=c(0,0,2000),plot=TRUE)
+s <- synth(f=22050,d=1,cf=4000,fm=c(0,0,2000))
 # pure tone with sinusoidal fm
 # (maximum excursion of 1000 Hz, frequency of 10 Hz)
-synth(f=22050,d=1,cf=4000,fm=c(1000,10,0),plot=TRUE,wl=256,ovlp=75)
+s <- synth(f=22050,d=1,cf=4000,fm=c(1000,10,0))
 # pure tone with sinusoidal am
 # (maximum excursion of 1000 Hz, frequency of 10 Hz)
 # and linear fm (maximum excursion of 1000 Hz)
-synth(f=22050,d=1,cf=4000,fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75)
+s <- synth(f=22050,d=1,cf=4000,fm=c(1000,10,1000))
 # the same with am
-synth(f=22050,d=1,cf=4000,am=c(50,10),
-    fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75,osc=TRUE)
+s <- synth(f=22050,d=1,cf=4000,am=c(50,10), fm=c(1000,10,1000))
 # the same with am and a triangular overall shape 
-synth(f=22050,d=1,cf=4000,shape="tria",am=c(50,10),
-    fm=c(1000,10,1000),plot=TRUE,wl=256,ovlp=75,osc=TRUE)   
+synth(f=22050,d=1,cf=4000,shape="tria",am=c(50,10), fm=c(1000,10,1000))   
 # more complex sound
 F1<-synth(f=22050,cf=2000,d=1,fm=c(500,5,0))
 F2<-synth(f=22050,a=0.8,cf=4000,d=1,fm=c(500,5,0))

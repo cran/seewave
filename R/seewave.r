@@ -48,6 +48,89 @@ ACI <- function (
     return(sum(acis))
 }
 
+
+################################################################################
+##                                ACOUSTAT
+################################################################################
+
+acoustat <- function(
+    wave,
+    f,
+    wl = 512,
+    ovlp = 0,
+    wn = "hanning",
+    aggregate = sum, # a function to compute the aggregate contours
+    fraction = 90,  # in %
+    plot = TRUE,
+    type = "l",
+    ...)
+    
+    {
+        ## INPUT
+        input <- inputw(wave = wave, f = f)
+        wave <- input$w
+        n <- length(wave)
+        f <- input$f
+        rm(input)
+
+        ## STFT
+        m <- sspectro(wave, f=f, wl=wl, ovlp=ovlp, wn=wn)
+        time <- seq(0, n/f, length.out = ncol(m))
+        freq <- seq(0, (f/2) - (f/wl), length.out = nrow(m))/1000
+
+        ## TIME AND FREQUENCY CONTOURS
+        t.cont <- apply(m, MARGIN=2, FUN=aggregate) ## Frequency contour
+        f.cont <- apply(m, MARGIN=1, FUN=aggregate) ## Time contour
+        t.cont <- t.cont/sum(t.cont)  ## Probability Mass Function (PMF)
+        f.cont <- f.cont/sum(f.cont)  ## Probability Mass Function (PMF)
+        t.cont.cum <- cumsum(t.cont)  ## Cumulated Distribution Function (CDF)
+        f.cont.cum <- cumsum(f.cont)  ## Cumulated Distribution Function (CDF)
+
+        ## PERCENTILES INCLUDING MEDIAN AND INTER-PERCENTILE (IPR)
+        P <- fraction/100
+        proportions <- as.matrix(c((1-P)/2, 0.5, P + (1-P)/2))        
+        t.quantiles <- apply(proportions, MARGIN=1, function(x) time[length(t.cont.cum[t.cont.cum <= x]) + 1])
+        f.quantiles <- apply(proportions, MARGIN=1, function(x) freq[length(f.cont.cum[f.cont.cum <= x]) + 1])
+
+        time.P1 <- t.quantiles[1]
+        time.M  <- t.quantiles[2]
+        time.P2 <- t.quantiles[3]
+        time.IPR <- time.P2-time.P1
+        freq.P1 <- f.quantiles[1]
+        freq.M  <- f.quantiles[2]
+        freq.P2 <- f.quantiles[3]
+        freq.IPR <- freq.P2-freq.P1
+        results <- list(
+                        time.contour = cbind(time=time, contour = t.cont),
+                        freq.contour = cbind(frequency=freq, contour = f.cont),
+                        time.P1  = time.P1,
+                        time.M   = time.M,
+                        time.P2  = time.P2,
+                        time.IPR = time.IPR,
+                        freq.P1  = freq.P1,
+                        freq.M   = freq.M,
+                        freq.P2  = freq.P2,
+                        freq.IPR = freq.IPR)
+
+        ## PRINT
+        if(plot){
+            def.par <- par(no.readonly = TRUE)
+            on.exit(par(def.par))
+            par(mfrow=c(2,1))
+            plot(x=time, y=t.cont, type=type, xlab="Time (s)", ylab="Probability", main="Time envelope", ...)
+            segments(x0=t.quantiles[1], y0=0, y1=t.cont[time==time.P1], col=2)
+            segments(x0=t.quantiles[2], y0=0, y1=t.cont[time==time.M], col=2, lwd=2)
+            segments(x0=t.quantiles[3], y0=0, y1=t.cont[time==time.P2], col=2)
+            plot(x=freq, y=f.cont, type=type, xlab="Frequency (kHz)", ylab="Probability", main="Frequency spectrum", ...)
+            segments(x0=f.quantiles[1], y0=0, y1=f.cont[freq==freq.P1], col=2)
+            segments(x0=f.quantiles[2], y0=0, y1=f.cont[freq==freq.M], col=2, lwd=2)
+            segments(x0=f.quantiles[3], y0=0, y1=f.cont[freq==freq.P2], col=2)
+            invisible(results)
+        }
+        else return(results)
+    }
+
+
 ################################################################################
 ##                                ADDSILW
 ################################################################################
@@ -3585,6 +3668,29 @@ mutew<-function(
 
 
 ################################################################################
+##                                NDSI
+################################################################################
+
+NDSI <- function(
+                x,
+                anthrophony = 1,
+                biophony = 2:8
+                )
+    
+{
+    ## INPUT
+    if(!is.matrix(x)) stop("'x' should be a two-column matrix obtained with the function sounscapespec().")
+    else if(ncol(x) <1 | ncol(x) > 2) stop("'x' should be a two-column matrix obtained with the function sounscapespec().")
+    ## INDEX
+    alpha <- x[anthrophony, 2]
+    beta <- sum(x[biophony, 2])
+    res <- (beta - alpha) / (beta + alpha)
+    names(res) <- NULL # to remove the colnames 'amplitude' of the soundscapespec result
+    return(res)
+}
+
+
+################################################################################
 ##                                NOISEW
 ################################################################################
 
@@ -4293,9 +4399,10 @@ rmam <- function(
 ##                                RMOFFSET
 ################################################################################
 
-rmoffset<-function(
+rmoffset <-function(
                    wave,
                    f,
+                   FUN = mean,
                    plot = FALSE,
                    output = "matrix",
                    ...
@@ -4303,7 +4410,8 @@ rmoffset<-function(
 
 {
   input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
-  wave <- wave-mean(wave)
+  m <- apply(wave, MARGIN=2, FUN=FUN)
+  wave <- wave-m
 
   wave <- outputw(wave=wave, f=f, format=output)
   
@@ -4424,6 +4532,51 @@ savewav <- function(
 }
 
 
+################################################################################
+##                               SAX
+################################################################################
+
+
+SAX <- function (
+                 x,
+                 alphabet_size,
+                 PAA_number,
+                 breakpoints = "gaussian",
+                 collapse = NULL
+                )
+    
+{
+    ## INPUT
+    if (class(x) == "Wave") {x <- soundscapespec(x)[,2]}
+    
+    pos <- function(t,v) {which.max(v[v<=t])}
+
+    if (alphabet_size > PAA_number)
+        {warning('alphabet_size must preferably be smaller than PAA_number', call. = FALSE)}
+
+    l <- length(x)
+
+    PAA <- array(0, PAA_number)
+    for (i in 1:PAA_number)
+        {PAA[i] <- mean(x[round((i-1)*l/PAA_number+1):round(i*l/PAA_number)])}
+
+    if (class(breakpoints) == 'character')
+        {
+            if (breakpoints == 'gaussian') {q <- (qnorm(seq(0,1,1/alphabet_size)))*sd(x)+mean(x)}
+            else if (breakpoints == 'quantiles') {q <- as.numeric(quantile(x, probs = seq(0, 1, 1/alphabet_size)))}
+            
+            else {stop ('this method is not implemented')}
+        }
+
+    else if (class(breakpoints) == 'numeric') {
+        if(length(breakpoints) != alphabet_size-1) stop('The number of breakpoints should not be different from the (alphabet_size - 1)')
+        q <- c(-Inf,breakpoints, Inf)}
+    else {stop ('breakpoints class must be character or numeric')}
+
+    res <- paste(letters[sapply(PAA, pos, v = q)], collapse = collapse)
+    
+    return(res)
+}
 
 
 ################################################################################
@@ -4705,6 +4858,91 @@ smoothw <- function(
 
 
 ################################################################################
+##                                SOUNDSCAPESPEC
+################################################################################
+
+soundscapespec <- function(wave, 
+                           f,    
+                           wl = 1024,
+                           wn = "hamming", 
+                           ovlp = 50,
+                           plot = TRUE, 
+                           xlab = "Frequency (kHz)",
+                           ylim = c(0,1),
+                           ...     
+                           )
+    
+    {
+        ## INPUT
+        input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+        ## WELCH SPEC
+        n <- nrow(wave)   ## number of samples in wave
+        step <- seq(1, n - wl, wl - (ovlp * wl/100))   ## positions of the sliding window for the STFT
+        n_recs <- length(step) # EPK: Number of records processed
+        x <- seq(f/wl, (f/2) - (f/wl), length.out = wl%/%2)/1000  ## frequency values of the spectrum       
+        y <- stft(wave = wave, f = f, wl = wl, zp = 0, step = step, wn = wn, fftw = FALSE, scale = FALSE) ## STFT with the parameters set above
+        y <- y^2     # EPK: square of the summed spectrum
+        y <- apply(y, MARGIN = 1, FUN = sum)     ## sum of successive spectra
+        # y <- y^2     # square of the summed spectrum
+        # y <- y*2 / (sum(y)*f)  # normalisation as indicated in an email THE PROBLEM MIGHT BE HERE
+        y <- y / (n_recs*f) # EPK: normalize for number of records and frequency
+        y <- y*2            # EPK: If half the reflected spectra then *2 
+        ## frequency bining 
+        freq <- trunc(x)  ## truncate frequency digits to get only 0, 1 etc values
+        freq <- freq[freq!=0]  ## eliminate frequency values between 0 and 1 kHz
+        spec <- y[trunc(x)!=0]  ## eliminate amplitude values between 0 and 1 kHz
+        ## 1 kHz frequency bins
+        bin  <- unique(freq) 
+        bin.length <- numeric(length(bin))
+        for(i in bin) {bin.length[i] <- length(freq[freq==i])}  ## width of each frequency bin
+        ## remove small frequency bin at the extreme right of the spectrum
+        bin.width <- 1000 * wl / f
+        bin.out <- which(bin.length < trunc(bin.width))
+        if(length(bin.out)!=0) {bin.new <- bin[-bin.out]} else {bin.new <- bin}
+        ## compute the energy of each frequency bin
+        val <- numeric(length(bin.new))
+        for (i in bin.new) val[i] <- sum(spec[freq==bin.new[i]])
+
+        vlen <- sqrt(sum(val^2)) # EPK: Compute the vector length
+        val <- val / vlen        # EPK: Normalize to the range [0,1]
+
+        ## RETURN
+        res <- cbind(frequency = bin.new, amplitude = val, deparse.level=0)
+        if(plot)
+            {
+            barplot(val, names=as.character(bin.new), xlab=xlab, ylim=ylim, ...)    
+            invisible(res)    
+            }
+        else return(res)
+    }
+
+
+################################################################################
+##                                SOX
+################################################################################
+
+sox <- function(command, exename = NULL, path2exe = NULL)
+  
+  {
+
+    if(.Platform$OS.type == "unix")
+      {
+        if(missing(exename)) exename <- "sox"
+        if(missing(path2exe)) {exe <- exename} else {exe <- paste(path2exe, exename ,sep="/")}
+        system(paste(exename, command),ignore.stderr = TRUE)
+      }
+
+   if(.Platform$OS.type == "windows")
+     {
+      if(missing(exename)) exename <- "sox.exe"
+      if(missing(path2exe)) {exe <- paste("c:\\sox-14-4-0\\", exename, sep="")} else {exe <- paste(path2exe,exename,sep="/")} 
+      e <- system(paste(exe, command, sep=" "), ignore.stderr = TRUE) 
+     }
+
+  }
+
+
+################################################################################
 ##                                SPEC
 ################################################################################
 
@@ -4918,30 +5156,6 @@ spec <- function(
       return(spec)
     }
 }
-
-################################################################################
-##                                SOX
-################################################################################
-
-sox <- function(command, exename = NULL, path2exe = NULL)
-  
-  {
-
-    if(.Platform$OS.type == "unix")
-      {
-        if(missing(exename)) exename <- "sox"
-        if(missing(path2exe)) {exe <- exename} else {exe <- paste(path2exe, exename ,sep="/")}
-        system(paste(exename, command),ignore.stderr = TRUE)
-      }
-
-   if(.Platform$OS.type == "windows")
-     {
-      if(missing(exename)) exename <- "sox.exe"
-      if(missing(path2exe)) {exe <- paste("c:\\sox-14-4-0\\", exename, sep="")} else {exe <- paste(path2exe,exename,sep="/")} 
-      e <- system(paste(exe, command, sep=" "), ignore.stderr = TRUE) 
-     }
-
-  }
 
 
 ################################################################################
@@ -5746,6 +5960,39 @@ timer <- function (
 
 
 
+################################################################################
+##                                TKEO
+################################################################################
+
+TKEO <- function(
+                 wave,
+                 f,
+                 m=1,
+                 M=1,
+                 plot = TRUE,
+                 xlab = "Time (s)",
+                 ylab = "Energy",
+                 type = "l",
+                 bty = "l",
+                 ...
+                 )
+    
+{
+    input <- inputw(wave = wave, f = f)
+    wave <- input$w
+    f <- input$f
+    n <- length(wave)
+    rm(input)
+    t <- seq(0, n/f, length.out=n)
+    y <- wave^(2/m) - (c(wave[-(1:M)], rep(NA,M)) * c(rep(NA,M), wave[1:(length(wave)-M)]))^(1/m)
+    results <- cbind(time=t, tkeo=y)
+    if(plot) {
+    plot(x=t, y=y, xlab=xlab, ylab=ylab, type=type, bty=bty, xaxs="i", ...)
+    invisible(results)
+    }
+    else return(results)
+}
+
 
 ################################################################################
 ##                                WASP
@@ -6067,6 +6314,51 @@ zc<-function(
     }
   else return(cbind(x,y))
 }
+
+
+################################################################################
+##                                ZCR
+################################################################################
+
+zcr <- function(wave,
+                f,
+                wl = 512,
+                ovlp = 0,
+                plot = TRUE,
+                type = "o",
+                xlab = "Time (s)",
+                ylab = "Zero crossing rate",
+                ...)
+    
+    {
+        
+        ## INPUT
+        input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+        n <- nrow(wave)
+
+        ## function to compute the zero-crossing rate
+        ZCR <- function(x)
+            {
+                sign <- ifelse(x>=0, 1, -1) 
+                res <- sum(abs(diff(sign)))/(2*length(x))
+                return(res)
+            }
+        ## first option (wl=NULL): computation of zcr on the whole signal
+        if(is.null(wl)) {results <- ZCR(wave) ; return(results)}
+        ## second option (wl = 2 exp(i)): computation of zcr on a sliding window and plot if requested
+        else { 
+            step <- seq(1, n-wl, wl-(ovlp*wl/100))
+            res <- apply(as.matrix(step), MARGIN=1, function(x) ZCR(wave[x:(wl+x-1)]))
+            t <- seq(0, n/f, length.out=length(step))
+            results <- cbind(time=t, ZCR=res)
+            if(plot)
+                {
+                    plot(x=t, y=res, type=type, xlab=xlab, ylab=ylab, ...)
+                    invisible(results)
+                }
+            else return(results)                           
+        }
+    }
 
 
 

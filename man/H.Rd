@@ -42,8 +42,8 @@ for implications on the results.
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
 \note{
-The  entropy of a noisy signal will tend towards 1 whereas
-the  entropy of a pure tone signal will tend towards 0.}
+The entropy of a noisy signal will tend towards 1 whereas
+the entropy of a pure tone signal will tend towards 0.}
 
 \seealso{\code{\link{sh}}, \code{\link{th}}, \code{\link{csh}}}
 

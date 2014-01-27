@@ -34,9 +34,12 @@ listen=FALSE,
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}  
   \item{wl}{window length for the analysis
-    (even number of points) (by default = 512)}
+    (even number of points) (by default = 512).}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default
+    \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
@@ -46,7 +49,6 @@ listen=FALSE,
     (default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference.}
-  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
     (by default \code{TRUE}).}
   \item{grid}{logical, if \code{TRUE} plots a y-axis grid
