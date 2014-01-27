@@ -2,6 +2,20 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 1.7.3 [27-January-2014]
+
+NEW FEATURES
+	o acoustat(): a new function to obtain statistics on the time and frequency contours of the short-term Fourier transform, following the principles described by Fristrup and Watkins (1992). Checked by K. Fristrup.
+	o NDSI(): a new function to obtain a Symbolic Aggregate approXimation of a numeric vector as described in Lin et al. (2003). Checked by E. Kasten.
+	o SAX(): a new function to compute the Normalized Difference Soundscape Index as described in Kasten et al. (2003). Checked by E. Kasten.
+	o soundscapespec(): a new function to compute a frequency spectrum according to soundscape description as described in Kasten et al. (2012). Checked by E. Kasten.
+	o TKEO(): a new function to compute the Teager-Kaiser Energy Operator.
+	o zcr(): a new function to compute the zero-crossing rate.
+
+OTHER CHANGES
+        o rmoffset(): a new argument 'FUN' to specify the function used to remove the offset. Using the median instead of the mean default function, can help, for instance, to remove offset and transients.
+
+
 		CHANGES IN SEEWAVE VERSION 1.7.2 [30-August-2013]
 
 OTHER CHANGES

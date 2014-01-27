@@ -17,14 +17,15 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.7.2\cr
-    Date: \tab 2013-08-30\cr
+    Version: \tab 1.7.3\cr
+    Date: \tab 2014-01-24\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Amandine Gasc, Stefanie LaZerte,
     Jonathan Lees, Laurent Lellouch, \cr
                   \tab Sandrine Pavoine, Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
-    Acknowledgments: \tab Michel Baylac, Charlotte Cure, Denis Dupeyron, \cr
-                     \tab Arnold Fertin, Kurt Hornik, Emiliano A. Laca, Uwe Ligges, \cr
+    Acknowledgments: \tab Michel Baylac, Charlotte Cure, Denis Dupeyron,\cr
+                     \tab Krut Fristrup, Arnold Fertin, Kurt Hornik, \cr  
+                     \tab Eric Kasten, Emiliano A. Laca, Uwe Ligges, \cr
 		     \tab Emmanuel Paradis, Brian Ripley, Jesse Ross, Simon Urbanek \cr
     Webpage: \tab \url{http://rug.mnhn.fr/seewave}\cr
     Discussion group : \tab \url{http://groups.google.com/group/seewave}\cr

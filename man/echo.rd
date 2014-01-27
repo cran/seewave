@@ -43,18 +43,13 @@ input wave and a pulse echo filter.}
 
 \examples{
 # generation of the input wave
-a<-synth(f=11025,d=1,cf=2000,shape="tria",am=c(50,10),fm=c(1000,10,1000))
+a <- synth(f=11025,d=1,cf=2000,shape="tria",am=c(50,10),fm=c(1000,10,1000))
 # generation of three echoes
 # with respectively a relative amplitude of 0.8, 0.4, and 0.2
 # and with a delay of 1s, 2s, and 3s  from the beginning of the input wave
-aecho<-echo(a,f=11025,amp=c(0.8,0.4,0.2),delay=c(1,2,3))
-# oscillographic output to see what we have generated
-op<-par(mfrow=c(2,1))
-oscillo(a,f=11025,title="Input signal")
-oscillo(aecho,f=11025,colwave="blue",title="Signal with echoes",coltitle="blue")
-par(op)
+aecho <- echo(a,f=11025,amp=c(0.8,0.4,0.2),delay=c(1,2,3))
 # another echo with time delays overlapping with the input wave
-echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5),plot=TRUE)
+aecho <- echo(a,f=11025,amp=c(0.4,0.2,0.4),delay=c(0.6,0.8,1.5))
 }
 
 \keyword{datagen}

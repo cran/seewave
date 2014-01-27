@@ -72,7 +72,7 @@ cex1 = 0.75, cex2= 0.75, xlab = "index", ylab = "Amplitude", legend=TRUE, ...)
   between the series to compare (\code{x} and \code{y}).
 }
 
-\seealso{\code{\link{discrets}}}
+\seealso{\code{\link{discrets}}, \code{\link{SAX}}}
 
 \examples{
 # analysis of a frequency spectrum
