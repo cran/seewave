@@ -28,7 +28,7 @@
     al}. (2010). \cr
   See the references for details on computation. }
 
-\note{Values returned where checked with the results provided by the
+\note{Values returned were checked with the results provided by the
   add-on Soundscapemeter
   (\url{http://www.disbef.uniurb.it/biomia/soundscapemeter/}) for the
   software Wavesurfer \url{http://www.speech.kth.se/wavesurfer/}.

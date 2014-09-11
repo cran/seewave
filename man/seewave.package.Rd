@@ -17,12 +17,14 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.7.3\cr
-    Date: \tab 2014-01-24\cr
+    Version: \tab 1.7.6\cr
+    Date: \tab 2014-09-11\cr
     License: \tab GPL version 2 or newer\cr
-    Contributors : \tab Ethan C. Brown, Amandine Gasc, Stefanie LaZerte,
-    Jonathan Lees, Laurent Lellouch, \cr
-                  \tab Sandrine Pavoine, Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft\cr
+    Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
+                   \tab Amandine Gasc, Stefanie LaZerte,\cr
+                   \tab Jonathan Lees, Laurent Lellouch, \cr
+                   \tab Sandrine Pavoine, Luis J. Villanueva-Rivera,\cr
+		   \tab Zev Ross, Carl G. Witthoft \cr
     Acknowledgments: \tab Michel Baylac, Charlotte Cure, Denis Dupeyron,\cr
                      \tab Krut Fristrup, Arnold Fertin, Kurt Hornik, \cr  
                      \tab Eric Kasten, Emiliano A. Laca, Uwe Ligges, \cr
@@ -31,7 +33,7 @@
     Discussion group : \tab \url{http://groups.google.com/group/seewave}\cr
     Reference: \tab Sueur J, Aubin T, Simonis C - Seewave: a free
     modular tool for sound analysis and synthesis.\cr
-               \tab Bioacoustics, 18: 213-226.
+               \tab Bioacoustics, 18: 213-226.\cr
   }
 }
 

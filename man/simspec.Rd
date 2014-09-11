@@ -49,7 +49,7 @@ legend = TRUE, ...)
 
 \details{
   Spectra similarity is assessed according to:\cr
-  \deqn{S = 100\times{\sum_{i=1}^N{\frac{\min{spec1(i),spec2(i)}}
+  \deqn{S = \frac{100/N} \times{\sum_{i=1}^N{\frac{\min{spec1(i),spec2(i)}}
         {\max{spec1(i),spec2(i)}}}}}{% 
     S = 100*sum(min(spec1,spec2)/max(spec1,spec2))/N, with \emph{S} in \%.}
   with \emph{S} in \%.

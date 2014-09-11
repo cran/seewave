@@ -4,12 +4,12 @@
 
 \title{Fundamental frequency track}
 
-\description{This function tracks the fundamental frequency through a
+\description{This function estimates the fundamental frequency through a
   short-term cepstral transform.
 }
 
 \usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
-from = NULL, to = NULL, 
+at = NULL, from = NULL, to = NULL, 
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), pb = FALSE, ...)}
 
@@ -21,6 +21,7 @@ ylim = c(0, f/2000), pb = FALSE, ...)}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{fmax}{the maximum frequency to detect (in Hz).}  
   \item{threshold}{amplitude threshold for signal detection (in \%).}
+  \item{at}{position where the estimate the fundamental frequency (in s)}.
   \item{from}{start position where to compute the fundamental frequency (in s).}
   \item{to}{end position to compute the fundamental frequency (in s).}
   \item{plot}{logical, if \code{TRUE} plots the fundamental frequency
@@ -35,7 +36,9 @@ ylim = c(0, f/2000), pb = FALSE, ...)}
 \value{
 When \code{plot} is \code{FALSE}, \code{fund} returns a two-column matrix, the first column corresponding to time in seconds (\emph{x}-axis) and the second column corresponding to 
 to fundamental frequency in kHz (\emph{y}-axis).\cr
-NA corresponds to pause sections in \code{wave} (see \code{threshold}). 
+NA corresponds to pause sections in \code{wave} (see
+\code{threshold}). \cr
+No plot is produced when using \code{at}.
 }
 
 \references{Oppenheim, A.V. and Schafer, R.W. 2004. From frequency
@@ -50,6 +53,9 @@ to quefrency: a history of the cepstrum. \emph{Signal Processing Magazine IEEE},
 
 \examples{
 data(sheep)
+# estimate the fundamental frequency at a single position
+fund(sheep, f=8000, fmax=300, at=1, plot=FALSE)
+# track the fundamental frequency along time
 fund(sheep,f=8000,fmax=300,type="l")
 # with 50% overlap between successive sliding windows, time zoom and 
 # amplitude filter (threshold)

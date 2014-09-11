@@ -9,7 +9,9 @@
 
 \usage{
 acoustat(wave, f, wl = 512, ovlp = 0, wn = "hanning",
-aggregate = sum, fraction = 90, plot = TRUE, type = "l", ...)
+tlim = NULL, flim = NULL,
+aggregate = sum, fraction = 90,
+plot = TRUE, type = "l", ...)
 }
 
 \arguments{
@@ -20,6 +22,8 @@ aggregate = sum, fraction = 90, plot = TRUE, type = "l", ...)
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
+  \item{tlim}{modifications of the time limits of the analysis (in s).}
+  \item{flim}{modifications of the frequency limits of the analysis (in kHz).} 
   \item{aggregate}{a character vector of length 1 specifying the function to be applied on the rows (time) and columns (frequency) of the STFT matrix. By default set to \code{sum}.}
   \item{fraction}{a numeric vector of length 1, specifying a particular
     fraction of the contours amplitude to be captured by the initial and
@@ -92,6 +96,8 @@ acoustat(note, wl=1024, ovlp=80)
 ## change the function to compute the aggregate contours
 ## standard deviation instead of sum   
 acoustat(note, aggregate=sd)
+## direct time and frequency selection     
+acoustat(tico, tlim=c(0.5,0.9), flim=c(3,6))
 ## some useless graphical changes
 acoustat(note, type="o", col="blue") 
 }

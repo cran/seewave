@@ -4,13 +4,13 @@
 
 \title{Kolmogorov-Smirnov distance}
 
-\description{Compare two distributions (e.g. two frequency spectra) by
+\description{This function compares two distributions (e.g. two frequency spectra) by
   computing the Kolmogorov-Smirnov distance}
 
 \usage{
 ks.dist(spec1, spec2, f = NULL, plot = FALSE, type = "l",
-col = c("blue", "red"),
-lty = c(2, 4), flab = "Frequency (kHz)",
+col = c(2, 4),
+lty = c(1, 2), flab = "Frequency (kHz)",
 alab = "Cumulated amplitude", flim = c(0, f/2000),
 alim = c(0, 1), title = TRUE, legend = TRUE, ...)
 }
@@ -26,7 +26,7 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
     is a two columns matrix obtained with \code{\link{spec}}
     or \code{\link{meanspec}}.}
   \item{plot}{logical, if \code{TRUE} plots both cumulated spectra and
-    their maximal distance (\emph{i.e.} the K-S distance.}
+    their maximal distance (\emph{i.e.} the K-S distance.)}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
   \item{col}{a vector of length 2 for the colour of \code{spec1} and \code{spec2}.}
@@ -47,7 +47,7 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
   computed by the  non-parametric  Kolmogorov-Smirnov test (see \code{\link{ks.test}}).}
 
 \value{The function returns a list of two items
-  \item{D}{the Kolomogorv-Smirnov distance}
+  \item{D}{the Kolomogorov-Smirnov distance}
   \item{F}{the frequency (in KHz) where the Kolmogorov-Smirnov distance was found}
 }
 
@@ -55,7 +55,8 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
 
 \note{There is no p-value associated to the K-S distance.}
 
-\seealso{\code{\link{kl.dist}}, \code{\link{simspec}}, \code{\link{diffspec}}}
+\seealso{\code{\link{kl.dist}}, \code{\link{simspec}},
+  \code{\link{diffspec}}, \code{\link{logspec.dist}}, \code{\link{diffcumspec}}, \code{\link{itakura.dist}}}
 
 \examples{
 # Comparison of two spectra and plot of the cumulated spectra with the K-S distance
@@ -65,5 +66,5 @@ tico2 <- spec(tico, at=1.1, plot=FALSE)
 ks.dist(tico1, tico2, plot=TRUE)
 }
 
-\keyword{distrubtion}
+\keyword{distribution}
 \keyword{ts}

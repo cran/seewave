@@ -10,7 +10,7 @@
 
 \usage{
 ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
-custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix")
+custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matrix")
 }
 
 \arguments{
@@ -23,21 +23,21 @@ custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix")
     between \code{from} and  \code{to} (by default \code{TRUE}).}
   \item{custom}{a vector describing the frequency response of a custom filter.
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
-    \code{wl} is no more required. See examples.}
+    The legnth of the vector should be half the length of \code{wl}. See examples.}
   \item{wl}{window length for the analysis (even number of points).}
+  \item{ovlp}{overlap between successive FFT windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{output}{character string, the class of the object to return, either
-    \code{"matrix"}, \code{"Wave"}, \code{"Sample"},
-    \code{"audioSample"} or \code{"ts"}.}
+    \code{"matrix"}, \code{"Wave"}, \code{"audioSample"} or \code{"ts"}.}
 }
 
 \details{
   A short-term Fourier transform is first applied to the signal
   (see \code{\link{spectro}}), then the frequency filter is applied and the new
   signal is eventually generated using the reverse of the Fourier Transform
-  (\code{\link{fft}}).\cr
+  (\code{\link{istft}}).\cr
   There is therefore neither temporal modifications nor 
   amplitude modifications.
 }
@@ -45,7 +45,7 @@ custom = NULL, wl = 512, wn = "hanning", fftw = FALSE, output="matrix")
 \value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
   of the returned object is set with the argument \code{output}.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
 \seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
 
@@ -64,8 +64,8 @@ spectro(d,f=8000,wl=512)
 e<-ffilter(a,f=8000,from=1500,to=2500,bandpass=FALSE)
 spectro(e,f=8000,wl=512)
 # custom
-myfilter1<-rep(c(rep(0,32),rep(1,32)),4)
-g<-fir(a,f=8000,custom=myfilter1)
+myfilter1<-rep(c(rep(0,64),rep(1,64)),4)
+g<-ffilter(a,f=8000,custom=myfilter1)
 spectro(g,f=8000)
 }
 

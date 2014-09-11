@@ -11,7 +11,8 @@
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, norm = TRUE, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, complex = FALSE, norm = TRUE, fftw = FALSE,
+dB = "max0", dBref = NULL, plot = TRUE,
 grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
@@ -42,12 +43,15 @@ listen=FALSE,
     \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{complex}{if \code{TRUE} the STFT will be returned as complex
+  numbers.}  
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes.}
   \item{dB}{a character string specifying the type dB to return: "max0"
-    (default) for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
-  \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
+    (default) for a maximum dB value at 0, "A", "B", "C" and "D" for
+  common dB weights. If set to \code{NULL}, then a linear scale is used.}
+  \item{dBref}{a dB reference value. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
     (by default \code{TRUE}).}
@@ -131,7 +135,7 @@ listen=FALSE,
   This function returns a list of three items:
   \item{time}{a numeric vector corresponding to the time axis.}
   \item{freq}{a numeric vector corresponding to the frequency axis.}
-  \item{amp}{a numeric matrix corresponding to the amplitude values.
+  \item{amp}{a numeric or a complex matrix corresponding to the amplitude values.
    Each column is a Fourier transform of length \code{wl/2}.}
 }
 

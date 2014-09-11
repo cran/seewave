@@ -1,4 +1,5 @@
 \name{seewave-internal}
+\alias{aux}
 \alias{bartlett.w}
 \alias{blackman.w}
 \alias{filled.contour.modif2}
@@ -20,6 +21,7 @@
 \alias{sspectro}
 \alias{spectro.colors}
 \alias{stft}
+\alias{synth0}
 \alias{temp.colors}
 \alias{unwrap}
 

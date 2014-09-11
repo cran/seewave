@@ -8,13 +8,15 @@
   This function linearly shifts all the frequency content of a time wave. 
 }
 
-\usage{lfs(wave, f, shift, wl = 128, wn = "hanning", fftw = FALSE, output = "matrix")}
+\usage{lfs(wave, f, shift, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output = "matrix")}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{shift}{positive or negative frequency shift to apply (in Hz).)}
-  \item{wl}{window length for the analysis (even number of points, by default = 512).}
+  \item{wl}{window length for the analysis (even number of points, by
+    default = 1024).}
+  \item{ovlp}{overlap between successive FFT windows (in \%, by default 75\%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
@@ -28,7 +30,7 @@
   A short-term Fourier transform is first applied to the signal
   (see \code{\link{spectro}}), then the frequency shift is applied and the new
   signal is eventually generated using the reverse of the Fourier Transform
-  (\code{\link{fft}}).\cr
+  (\code{\link{istft}}).\cr
   There is therefore neither temporal modifications nor 
   amplitude modifications.
 }

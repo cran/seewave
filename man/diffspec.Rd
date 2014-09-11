@@ -49,7 +49,7 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
   Both spectra are first transformed as probability mass functions (PMF).\cr
   Spectral difference is then computed according to:\cr
   \deqn{D = \frac{\sum{|spec1-spec2|}}{2}, with D \in [0,1].}{% 
-    D = sum(abs(spec1-spec2))/2}, with 0 < D <1.
+    D = sum(abs(spec1-spec2))/2}, with 0 < D < 1.
 }
 
 \value{
@@ -73,7 +73,7 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
   when looking at the graph (\code{plot=TRUE}).}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
-  \code{\link{simspec}}, \code{\link{diffenv}},  \code{\link{kl.dist}},
+  \code{\link{simspec}}, \code{\link{diffcumspec}}, \code{\link{diffenv}},  \code{\link{kl.dist}},
   \code{\link{ks.dist}}, \code{\link{logspec.dist}}, \code{\link{itakura.dist}}}
 
 \examples{

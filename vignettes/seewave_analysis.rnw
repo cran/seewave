@@ -521,8 +521,19 @@ There are several other options to analyse a signal. Among others, we could list
 \item Wigner-Ville transform -- not yet implemented in \R.
 \end{itemize}
 
-
 \section{References}
+
+\subsection{Specific papers}
+Deecke VB, Janik VM (2006) -- Automated categorization of bioacoustic signals: avoiding perceptual pitfalls. \textit{Journal of the Acoustical Society of America}, 119: 645-653.\\
+Depraetere M, Pavoine S, Jiguet F, Gasc A, Duvail S, Sueur J (2012) -- Monitoring animal diversity using acoustic indices: implementation in a temperate woodland. \textit{Ecological Indicators}, 13: 46-54.\\
+Gasc A, Sueur J, Jiguet F, Devictor V, Grandcolas P, Burrow C, Depraetere M Pavoine S (2013) -- Assessing biodiversity with sound: do acoustic diversity indices reflect phylogenetic and functional diversities of bird communities? \textit{Ecological Indicators}, 25 : 279-287. \\
+Gasc A, Sueur J, Pavoine S, Pellens R, Grandcolas P (2013b) -- Biodiversity sampling using a global acoustic approach: contrasting sites with micro-endemics in New Caledonia. \textit{PLoS ONE}, 8(5): e65311.\\
+Kasten EP, Gage SH, Fox J, Joo W (2012) -- The remote environmental assessment laboratory's acoustic library: an archive for studying soundscape ecology. \textit{Ecological Informatics}, 12, 50-67. \\
+Lellouch L, Pavoine S, Jiguet F, Glotin H, Sueur J (2014) -- Monitoring temporal change of bird communities with dissimilarity acoustic indices. \textit{Methods in Ecology and Evolution}, in press.\\
+Farina A, Pieretti N, Piccioli L (2011) The soundscape methodology for long-term bird monitoring: a Mediterranean Europe case-study. \emph{Ecological Informatics}, 6, 354-363.
+Rodriguez A, Gasc A, Pavoine S, Gaucher P, Grandcolas P, Sueur J (2013) -- Temporal and spatial dynamics of animal sound within a neotropical forest. \textit{Ecological Informatics}, in press.\\
+Sueur J, Pavoine S, Hamerlynck O, Duvail S (2008) -- Rapid acoustic survey for biodiversity appraisal. \textit{PLoS ONE}, 3(12): e4065.\\
+Sueur J, Farina A, Gasc A, Pieretti N, Pavoine S (2014) -- Acoustic indices for biodiversity assessment and landscape investigation. \textit{Acta Acustica united with Acustica}, in press.
 
 \subsection{Books}
 Au WWL, Hastings MC (2008) \textit{Principles of marine bioacoustics}, Springer.\\
