@@ -32,7 +32,9 @@
 \note{
     The base of the logarithm can be changed using the argument
     \code{base}. When sets to base 2, the information is measured in units of
-    bits. When sets to base \emph{e}, the information is measured in nats. 
+    bits. When sets to base \emph{e}, the information is measured in
+    nats.\cr
+    The function works for both Hz and (htk-)mel scales.
 }
 
 \value{The function returns a list of three items:
@@ -45,7 +47,7 @@
 
 \references{Kullback, S., Leibler, R.A. (1951). On information and sufficiency. \emph{Annals of Mathematical Statistics}, 22: 79-86}
 
-\author{Jerome Sueur}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \seealso{\code{\link{ks.dist}}, \code{\link{logspec.dist}}, \code{\link{simspec}}, \code{\link{diffspec}}}
 

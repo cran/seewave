@@ -8,11 +8,12 @@
   computing the Kolmogorov-Smirnov distance}
 
 \usage{
-ks.dist(spec1, spec2, f = NULL, plot = FALSE, type = "l",
-col = c(2, 4),
-lty = c(1, 2), flab = "Frequency (kHz)",
-alab = "Cumulated amplitude", flim = c(0, f/2000),
-alim = c(0, 1), title = TRUE, legend = TRUE, ...)
+ks.dist(spec1, spec2, f = NULL, mel = FALSE,
+plot = FALSE, type = "l",
+lty = c(1, 2), col = c(2, 4), 
+flab = NULL, alab = "Cumulated amplitude",
+flim = NULL, alim = NULL,
+title = TRUE, legend = TRUE, ...)
 }
 
 \arguments{
@@ -25,13 +26,14 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
     and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
     is a two columns matrix obtained with \code{\link{spec}}
     or \code{\link{meanspec}}.}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE} plots both cumulated spectra and
     their maximal distance (\emph{i.e.} the K-S distance.)}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{col}{a vector of length 2 for the colour of \code{spec1} and \code{spec2}.}
   \item{lty}{a vector of length 2 for the line type of \code{spec1} and
     \code{spec2} if \code{type}="l".}
+  \item{col}{a vector of length 2 for the colour of \code{spec1} and \code{spec2}.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
   \item{flim}{the range of frequency values.}
@@ -51,19 +53,28 @@ alim = c(0, 1), title = TRUE, legend = TRUE, ...)
   \item{F}{the frequency (in KHz) where the Kolmogorov-Smirnov distance was found}
 }
 
-\author{Jerome Sueur}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
-\note{There is no p-value associated to the K-S distance.}
+\note{There is no p-value associated to the K-S distance.\cr
+If no frequency is provided, only the distance D.}
 
 \seealso{\code{\link{kl.dist}}, \code{\link{simspec}},
   \code{\link{diffspec}}, \code{\link{logspec.dist}}, \code{\link{diffcumspec}}, \code{\link{itakura.dist}}}
 
 \examples{
-# Comparison of two spectra and plot of the cumulated spectra with the K-S distance
+## Comparison of two spectra and plot of the cumulated spectra with the K-S distance
 data(tico)
 tico1 <- spec(tico, at=0.65, plot=FALSE)
 tico2 <- spec(tico, at=1.1, plot=FALSE)
 ks.dist(tico1, tico2, plot=TRUE)
+## mel scale
+require(tuneR)
+data(orni)
+orni.mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+orni.mel.mean <- apply(orni.mel$aspectrum, MARGIN=2, FUN=mean)
+tico.mel <- melfcc(tico, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+tico.mel.mean <- apply(tico.mel$aspectrum, MARGIN=2, FUN=mean)
+ks.dist(orni.mel.mean, tico.mel.mean, f=22050, mel=TRUE, plot=TRUE)
 }
 
 \keyword{distribution}

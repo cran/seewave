@@ -48,7 +48,7 @@ Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
 \examples{
 # theoretical attenuation up to 150 m of a 100 dB/1m sound source
-attenuation(lref=100,dstop=150,n=200)
+attenuation(lref=100, dref=1, dstop=150, n=200)
 }
 
 \keyword{data}

@@ -11,7 +11,7 @@
 
 \usage{
 synth(f, d, cf, a = 1, signal = "sine", shape = NULL, p = 0,
-am = c(0, 0), fm = c(0, 0, 0), harmonics = 1, 
+am = c(0, 0, 0), fm = c(0, 0, 0, 0), harmonics = 1, 
 plot = FALSE, listen = FALSE, output = "matrix",...)
 }
 
@@ -25,9 +25,9 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
   \item{shape}{modification of the whole amplitude shape of the wave,
     see \code{details}.}
   \item{p}{phase (in radians).}
-  \item{am}{a numeric vector of length 2 describing amplitude modulation parameters,
+  \item{am}{a numeric vector of length 3 describing amplitude modulation parameters,
     see \code{details}.}
-  \item{fm}{a numeric vector of length 3 describing frequency modulation parameters,
+  \item{fm}{a numeric vector of length 4 describing frequency modulation parameters,
     see \code{details}.}
   \item{harmonics}{a numeric specifying the number and the relative
     amplitude of harmonics, see \code{details}.}
@@ -64,10 +64,11 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
       }
     }
 
-    \item{\code{am} is a numeric vector of length 2 including:
+    \item{\code{am} is a numeric vector of length 3 including:
       \enumerate{
 	\item{the amplitude modulation depth (in \%)}
-	\item{the frequency of the amplitude modulation (in Hz).}
+	\item{the frequency of the amplitude modulation (in Hz),}
+	\item{the phase of the amplitude modulation (in radian).}
       }
     }
 
@@ -76,7 +77,9 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
 	\item{the maximum excursion of a sinusoidal frequency modulation (in
 	  Hz),}
 	\item{the frequency of a sinusoidal frequency modulation (in Hz),}
-	\item{the maximum excursion of a linear frequency modulation (in Hz).}
+	\item{the maximum excursion of a linear frequency modulation (in
+Hz).}
+        \item{the pase of the frequency modulation (in radian).}
       }
     }
 
@@ -128,11 +131,18 @@ s <- synth(f=f,d=d,cf=cf, signal="tria")
 s <- synth(f=f,d=d,cf=cf,shape="tria")
 # pure tones with am
 s <- synth(f=f,d=d,cf=cf,am=c(50,10))
+# pure tones with am
+# and phase shift of pi radian (180 degrees)
+s <- synth(f=f,d=d,cf=cf,am=c(50,10,pi))
 # pure tone with +1000 Hz linear fm 
 s <- synth(f=f,d=d,cf=cf,fm=c(0,0,1000))
 # pure tone with sinusoidal fm
 # (maximum excursion of 250 Hz, frequency of 10 Hz)
 s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0))
+# pure tone with sinusoidal fm
+# (maximum excursion of 250 Hz, frequency of 10 Hz,
+# phase shift of pi radian (180 degrees))
+s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0, pi))
 # pure tone with sinusoidal am
 # (maximum excursion of 250 Hz, frequency of 10 Hz)
 # and linear fm (maximum excursion of 500 Hz)

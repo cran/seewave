@@ -13,12 +13,13 @@
 oscillo(wave, f, from = NULL, to = NULL, scroll = NULL,
 zoom = FALSE, k=1, j=1, cex,
 labels = TRUE,  tlab = "Time (s)", alab = "Amplitude",            
-byrow = TRUE,
-identify = FALSE, plot = TRUE, colwave = "black", 
-coltitle = "black", cextitle = 1.2,
-fonttitle = 2, collab = "black",
-cexlab = 1, fontlab = 1, colline = "black", 
-colaxis = "black", cexaxis = 1, coly0 = "lightgrey",
+byrow = TRUE, identify = FALSE, nidentify = NULL, 
+plot = TRUE, colwave = "black", 
+coltitle = "black", cextitle = 1.2, fonttitle = 2,
+collab = "black", cexlab = 1, fontlab = 1,
+colline = "black",
+colaxis = "black", cexaxis = 1, fontaxis = 1,
+coly0 = "lightgrey",
 tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 }
 
@@ -32,7 +33,7 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
   \item{k}{number of horizontal sections (by default =1).}
   \item{j}{number of vertical sections (by default =1).}
-  \item{cex}{Pitch size if type.}
+  \item{cex}{Pitch size if \code{type = "p"}.}
   \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
   \item{tlab}{Label of time axis.}
   \item{alab}{Label of amplitude axis.}
@@ -40,23 +41,26 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
     rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
   \item{identify}{returns the time and amplitude coordinates of points chosen  with a cursor
     on the oscillogram.}
+  \item{nidentify}{a numeric vector of length 1, specifies the number of
+  points to identified on \code{wave} if \code{identify} is \code{TRUE}.}  
   \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot
     of \code{wave}(by default \code{TRUE}).}
   \item{colwave}{colour of the oscillogram or of the envelope.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
   \item{cextitle}{character size for the title.}
   \item{fonttitle}{font for the title.}
-  \item{cexlab}{character size for axes title.}
-  \item{fontlab}{font for axes title.}
-  \item{collab}{colour of axes title.}  
+  \item{cexlab}{character size for axes labels.}
+  \item{fontlab}{font for axes labels.}
+  \item{collab}{colour of axes labels.}  
   \item{colline}{colour of axes line.}
-  \item{colaxis}{colour of the axes.}
-  \item{cexaxis}{magnification for axes annotation.}
+  \item{colaxis}{colour of the axis annotation.}
+  \item{fontaxis}{font of axis annotation.}
+  \item{cexaxis}{magnification for axis annotation.}
   \item{coly0}{colour of the y=0 line.}
   \item{tcl}{length of tick marks.}
   \item{title}{\code{TRUE} to add a title
     with information on \code{wave} duration and \code{f},
-    \code{FALSE} to live it blanck,
+    \code{FALSE} to live it blank,
     or a character string to add any desired title.}
   \item{xaxt}{equivalent to \code{xaxt} of \code{\link{par}} (by default =\code{"s"}).}    
   \item{yaxt}{equivalent to \code{yaxt} of \code{\link{par}} (by default
@@ -91,7 +95,7 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 \examples{
 data(tico)
 # a simple oscillogram of a bird song
-oscillo(tico,f=22050)
+oscillo(tico)
 # zoom in
 op<-par(mfrow=c(4,1),mar=c(4.5,4,2,2))
 oscillo(tico,22050,cexlab=0.75)

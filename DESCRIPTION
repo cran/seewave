@@ -1,22 +1,26 @@
 Package: seewave
 Type: Package
-Title: Sound analysis and synthesis
-Version: 1.7.6
-Date: 2014-09-11
-Author: Jerome Sueur <sueur@mnhn.fr>, Thierry Aubin, Caroline Simonis, \cr
-        with contributions of Ethan C. Brown, Camille Desjonqueres,
-        Amandine Gasc, Stefanie LaZerte, Jonathan Lees, Laurent Lellouch, 
-        Sandrine Pavoine, Luis J. Villanueva-Rivera, Zev Ross, Carl G. Witthoft.
+Title: Sound Analysis and Synthesis
+Version: 2.0.1
+Date: 2015-07-08
+Author: Jerome Sueur <sueur@mnhn.fr> [cre, au], Thierry Aubin [au],
+        Caroline Simonis [au], Laurent Lellouch [main ctrb]
+        Ethan C. Brown [ctrb], Marion Depraetere [ctrb],
+        Camille Desjonqueres [ctrb], Francois Fabianek [ctrb] 
+        Amandine Gasc [ctrb], Stefanie LaZerte [ctrb], Jonathan Lees [ctrb],
+        Jean Marchal [ctrb],  Sandrine Pavoine [ctrb], Alicia Stotz [ctrb],
+        Luis J. Villanueva-Rivera [ctrb], Zev Ross [ctrb], 
+        Carl G. Witthoft [ctrb], Hristo Zhivomirov [ctrb].
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
 Encoding: UTF-8
-SystemRequirements: FFTW, LIBSNDFILE
-Imports: fftw, tuneR
-Suggests: audio, ggplot2, rgl, rpanel
+SystemRequirements: LIBSNDFILE
+Imports: graphics, grDevices, stats, utils, tuneR
+Suggests: audio, fftw, ggplot2, rgl, rpanel
 ZipData: no
-Description: seewave provides functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
+Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
 URL: http://rug.mnhn.fr/seewave
-Packaged: 2014-09-12 10:50:57 UTC; jerome
 NeedsCompilation: yes
+Packaged: 2015-07-08 09:17:42 UTC; root
 Repository: CRAN
-Date/Publication: 2014-09-12 16:38:54
+Date/Publication: 2015-07-08 13:21:59

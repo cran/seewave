@@ -13,7 +13,7 @@
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
 ovlp = 0, norm = TRUE, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
-palette = rev.terrain.colors)
+palette = reverse.terrain.colors)
 }
 
 \arguments{
@@ -52,9 +52,9 @@ palette = rev.terrain.colors)
   adds 0 values on both sides of the analysis window. This increases frequency
   resolution without altering time resolution.\cr
   Any colour palette can be used. In particular, it is possible to use other palettes coming with
-  \pkg{seewave}: \code{rev.gray.colors.1}, \code{rev.gray.colors.2},
-  \code{spectro.colors}, \code{temp.colors}, \code{rev.heat.colors}, 
-  \code{rev.cm.colors}, \code{rev.topo.colors}, corresponding to the reverse
+  \pkg{seewave}: \code{reverse.gray.colors.1}, \code{reverse.gray.colors.2},
+  \code{spectro.colors}, \code{temp.colors}, \code{reverse.heat.colors}, 
+  \code{reverse.cm.colors}, \code{reverse.topo.colors}, corresponding to the reverse
   of \code{heat.colors},\code{topo.colors},
   \code{cm.colors}.\cr
   Use \code{magt}, \code{magf} and \code{maga} to resize the plot.   
@@ -82,7 +82,7 @@ palette = rev.terrain.colors)
 \dontrun{
 require(rgl)
 data(tico)
-spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=rev.terrain.colors)
+spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=4,palette=reverse.terrain.colors)
 # linear amplitude scale without a normisation of the STFT matrix
 # time and frequency scales need to be dramatically amplified
 spectro3D(tico, norm=FALSE, dB=NULL, magt=100000, magf=100000)

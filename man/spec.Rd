@@ -29,7 +29,7 @@ alim = NULL, type="l",...)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
-    library \code{fftw}. See Notes of the \code{spectro}.}
+    library \code{fftw} for faster computation. See Notes of the function \code{\link{spectro}}.}
   \item{norm}{if \code{TRUE} the spectrum is normalised (i. e. scaled) by
   its maximum.}
   \item{PSD}{if \code{TRUE} return Power Spectra Density,

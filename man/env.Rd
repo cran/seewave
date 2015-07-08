@@ -7,8 +7,10 @@
 \description{This function returns the absolute or Hilbert
 amplitude envelope of a time wave.}
 
-\usage{env(wave, f, envt = "hil", msmooth = NULL,
-ksmooth = NULL, ssmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
+\usage{env(wave, f, envt = "hil", 
+msmooth = NULL, ksmooth = NULL, ssmooth = NULL,
+fftw = FALSE, norm = FALSE,
+plot = TRUE, k = 1, j = 1, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -21,6 +23,10 @@ ksmooth = NULL, ssmooth = NULL, norm = FALSE, plot = TRUE, k = 1, j = 1, ...)}
     successive windows (in \%). See examples.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See examples.}
   \item{ssmooth}{sum smooth.}
+  \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
+    library \code{fftw} for faster computation for the Hilbert amplitude
+  envelope (\code{envt="hil"}) and/or for kernell smoothing
+  (\code{ksmooth}).}
   \item{norm}{a logical, if \code{TRUE} the amplitude of the envelope
 		is normalised between 0 and 1.}
   \item{plot}{logical, if \code{TRUE} returns a plot
@@ -42,7 +48,7 @@ obtained through the Hilbert transform (\code{\link{hilbert}}).
 
 \value{Data are returned as one-column matrix when \code{plot} is \code{FALSE}.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur. Implementation of 'fftw' argument by Jean Marchal and Francois Fabianek.}
 
 \note{Be aware that smoothing with either \code{msmooth} or \code{ksmooth}
 changes the original number of points describing \code{wave}.}
@@ -52,19 +58,19 @@ changes the original number of points describing \code{wave}.}
 \examples{
 data(tico)
 # Hilbert amplitude envelope
-env(tico,f=22050)
+env(tico)
 # absolute amplitude envelope
-env(tico,f=22050,envt="abs")
+env(tico, envt="abs")
 # smoothing with a 10 points and 50% overlaping mean sliding window
-env(tico,f=22050,msmooth=c(10,50))
+env(tico, msmooth=c(10,50))
 # smoothing kernel
-env(tico,f=22050,ksmooth=kernel("daniell",10))
+env(tico, ksmooth=kernel("daniell",10))
 # sum smooth
-env(tico,f=22050,ssmooth=50)
+env(tico, ssmooth=50)
 # overplot of oscillographic and envelope representations
-oscillo(tico,f=22050)
+oscillo(tico)
 par(new=TRUE)
-env(tico,f=22050,colwave=2)
+env(tico, colwave=2)
 }
 
 \keyword{dplot}

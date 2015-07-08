@@ -8,9 +8,9 @@
   computing the difference between two cumulative frequency spectra}
 
 \usage{
-diffcumspec(spec1, spec2, f = NULL,
+diffcumspec(spec1, spec2, f = NULL, mel = FALSE, 
 plot = FALSE, type = "l", lty = c(1, 2), col = c(2, 4, 8),
-flab = "Frequency (kHz)", alab = "Cumulated amplitude",
+flab = NULL, alab = "Cumulated amplitude",
 flim = NULL, alim = NULL,
 title = TRUE, legend = TRUE, ...)
 }
@@ -25,7 +25,8 @@ title = TRUE, legend = TRUE, ...)
     and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
     is a two columns matrix obtained with \code{\link{spec}}
     or \code{\link{meanspec}}.}
-  \item{plot}{logical, if \code{TRUE} plots both cumulative spectra and
+ \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
+ \item{plot}{logical, if \code{TRUE} plots both cumulative spectra and
     their distance.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
@@ -69,10 +70,19 @@ title = TRUE, legend = TRUE, ...)
   \code{\link{diffspec}}, \code{\link{logspec.dist}}, \code{\link{itakura.dist}}}
 
 \examples{
+## Hz scale
 data(tico)
-tico1 <- spec(tico, at=0.65, plot=FALSE)
-tico2 <- spec(tico, at=1.1, plot=FALSE)
-diffcumspec(tico1, tico2, plot=TRUE)
+data(orni)
+orni.hz <- meanspec(orni, plot=FALSE)
+tico.hz <- meanspec(tico, plot=FALSE)
+diffcumspec(orni.hz, tico.hz, plot=TRUE)
+## mel scale
+require(tuneR)
+orni.mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+orni.mel.mean <- apply(orni.mel$aspectrum, MARGIN=2, FUN=mean)
+tico.mel <- melfcc(tico, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+tico.mel.mean <- apply(tico.mel$aspectrum, MARGIN=2, FUN=mean)
+diffcumspec(orni.mel.mean, tico.mel.mean, f=22050, mel=TRUE, plot=TRUE)
 }
 
 \keyword{distribution}

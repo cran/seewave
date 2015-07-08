@@ -8,12 +8,13 @@
   two frequency spectra.}
 
 \usage{
-simspec(spec1, spec2, f = NULL, plot = FALSE, type = "l",
-lty1 = 1, lty2 = 2,
-lty3 = 3, col1 = 2, col2 = 4, col3 = 1, flab = "Frequency (kHz)",
-alab = "Amplitude (percentage)", flim = c(0, f/2000),
-alim = c(0, 100),
-legend = TRUE, ...)
+simspec(spec1, spec2, f = NULL, mel = FALSE,
+norm = FALSE, PMF = FALSE,
+plot = FALSE, type = "l",
+lty =c(1, 2, 3), col = c(2, 4, 1),
+flab = NULL, alab = "Amplitude (percentage)",
+flim = NULL, alim = NULL,
+title = TRUE, legend = TRUE, ...)
 }
 
 \arguments{
@@ -29,20 +30,24 @@ legend = TRUE, ...)
     and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
     is a two columns matrix obtained with \code{\link{spec}}
     or \code{\link{meanspec}}.}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}  
+  \item{norm}{a logical, if \code{TRUE} \code{spec1} and \code{spec2}
+  are normalised (scaled) between 0 and 1.}
+  \item{PMF}{a logical, if \code{TRUE} \code{spec1} and \code{spec2} are
+  transformed into probability mass functions.}
   \item{plot}{logical, if \code{TRUE} plots both spectra and similarity function 
     (by default \code{FALSE}).}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{lty1}{line type of \code{spec1} if \code{type}="l".}
-  \item{lty2}{line type of \code{spec2} if \code{type}="l".}
-  \item{lty3}{line type of the similarity function if \code{type}="l".}
-  \item{col1}{colour of \code{spec1}.}
-  \item{col2}{colour of \code{spec2}.}
-  \item{col3}{colour of the similarity function.}
+  \item{lty}{a vector of length 3 for the line type of \code{spec1},
+    \code{spec2} and  of the similarity function if \code{type}="l".}
+  \item{col}{a vector of length 3 for the colour of \code{spec1},
+   \code{spec2}, and the similarity function.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
   \item{flim}{the range of frequency values.}
   \item{alim}{range of amplitude axis.}
+  \item{title}{logical, if \code{TRUE}, adds a title with S value.}
   \item{legend}{logical, if \code{TRUE} adds a legend to the plot.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
@@ -65,7 +70,7 @@ legend = TRUE, ...)
   bioacoustic signals: avoiding perceptual pitfalls. \emph{Journal of the Acoustical
     Society of America}, 119: 645-653.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
   \code{\link{diffspec}}, \code{\link{diffenv}},  \code{\link{kl.dist}},
@@ -86,6 +91,15 @@ simspec(speca,specc,plot=TRUE)
 simspec(specb,specc,plot=TRUE)
 #[1] 12.05652
 simspec(speca,specd,plot=TRUE)
+## mel scale
+require(tuneR)
+data(orni)
+data(tico)
+orni.mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+orni.mel.mean <- apply(orni.mel$aspectrum, MARGIN=2, FUN=mean)
+tico.mel <- melfcc(tico, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+tico.mel.mean <- apply(tico.mel$aspectrum, MARGIN=2, FUN=mean)
+simspec(orni.mel.mean, tico.mel.mean, f=22050, mel=TRUE, plot=TRUE)
 }
 
 \keyword{dplot}

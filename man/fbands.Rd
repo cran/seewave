@@ -7,8 +7,8 @@
 \description{This graphical function returns a frequency spectrum as a
   bar plot.}
 
-\usage{fbands(spec, f = NULL, bands = 10, width = FALSE, plot = TRUE,
-xlab = "Frequency (kHz)", ylab = "Relative amplitude", ...)}
+\usage{fbands(spec, f = NULL, bands = 10, width = FALSE, mel = FALSE, plot = TRUE,
+xlab = NULL, ylab = "Relative amplitude", ...)}
 
 \arguments{
   \item{spec}{a data set resulting of a spectral analysis obtained
@@ -22,6 +22,7 @@ xlab = "Frequency (kHz)", ylab = "Relative amplitude", ...)}
   \item{width}{logical, if \code{TRUE} and that \code{bands} is an
     irregular series of values, then the width of the bands will be
     proportional to the frequency  limits defined in \code{bands}.}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE}, a plot showing the peaks is
     returned.}
   \item{xlab}{label of the x-axis.}
@@ -55,7 +56,7 @@ xlab = "Frequency (kHz)", ylab = "Relative amplitude", ...)}
   frequency values (x-axis, mean of the bars limits) and
   the second column corresponding to height values (y-axis) of the bars.}
 
-\author{Jerome Sueur}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \note{The value below bars is the mean between the corresponding frequency limits.}
 
@@ -95,7 +96,13 @@ par(op)
 specs <- dynspec(sheep, f=8000, plot= FALSE)$amp
 out <- apply(specs, f=8000, MARGIN=2,
      FUN = fbands, bands = seq(0,4,by=0.2),
-     col = 1, ylim=c(0,max(specs))) 
+     col = 1, ylim=c(0,max(specs)))
+# mel scale
+require(tuneR)
+mel <- melfcc(sheep, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+melspec.mean <- apply(mel$aspectrum, MARGIN=2, FUN=mean)
+melspec.mean <- melspec.mean/max(melspec.mean) # [0,1] scaling 
+fbands(melspec.mean, f=8000, bands=8)
 }
 
 \keyword{dplot}

@@ -69,7 +69,7 @@ ylab = "Coefficient of correlation (r)", type = "l", pb = FALSE, ...)
   \item{t}{the time offset corresponding to \code{rmax}.}
 }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
 \seealso{\code{\link{env}},\code{\link{corspec}},\code{\link{covspectro}},
   \code{\link{cor}},\code{\link{cor.test}}.}

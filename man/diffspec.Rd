@@ -8,10 +8,11 @@
   two frequency spectra.}
 
 \usage{
-diffspec(spec1, spec2, f = NULL, dB = FALSE, plot = FALSE, type="l", 
-lty1 = 1, lty2 = 2, col1 = 2, col2 = 4, cold = 8,
-flab = "Frequency (kHz)", alab = "Amplitude",
-flim = NULL, alim = NULL, legend = TRUE, ...)
+diffspec(spec1, spec2, f = NULL, mel = FALSE,
+plot = FALSE, type="l", 
+lty=c(1, 2), col =c(2, 4, 8),
+flab = NULL, alab = "Amplitude",
+flim = NULL, alim = NULL, title = TRUE, legend = TRUE, ...)
 }
 
 \arguments{
@@ -26,21 +27,20 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
   \item{f}{sampling frequency of waves used to obtain \code{spec1}
     and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
     is a two-column matrix obtained with \code{\link{spec}} or \code{\link{meanspec}}.}
-  \item{dB}{logical, if \code{TRUE} return the spectra and their surface
-    difference in dB (by default \code{FALSE}).}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE} plots both spectra and their surface
     difference (by default \code{FALSE}).}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
     See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{lty1}{line type of \code{spec1} if \code{type}="l".}
-  \item{lty2}{line type of \code{spec2} if \code{type}="l".}
-  \item{col1}{colour of \code{spec1}.}
-  \item{col2}{colour of \code{spec2}.}
-  \item{cold}{colour of the surface difference.}
+  \item{lty}{a vector of length 2 for the line type of \code{spec1} and
+    \code{spec2} if \code{type}="l".}
+  \item{col}{a vector of length 3 for the colour of \code{spec1},
+    \code{spec2}, and the surface difference between each of them.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
   \item{flim}{the range of frequency values.}
   \item{alim}{range of amplitude axis.}
+  \item{title}{logical, if \code{TRUE}, adds a title with D value.}
   \item{legend}{logical, if \code{TRUE} adds a legend to the plot.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
@@ -54,7 +54,6 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
 
 \value{
   The difference is returned. This value is without unit.
-  If \code{dB} is \code{TRUE},  the same value is returned in dB.\cr
   When \code{plot} is \code{TRUE}, both spectra and their difference surface are
   plotted on the same graph.
 }
@@ -64,8 +63,7 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
   Rapid acoustic survey for biodiversity appraisal. \emph{PLoS One},
   3(12): e4065.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}
-  and Sandrine Pavoine \email{pavoine@mnhn.fr}.}
+\author{Jerome Sueur, Sandrine Pavoine and Laurent Lellouch}
 
 \note{This method can be used as a relative distance estimation
   between different spectra.\cr
@@ -77,20 +75,29 @@ flim = NULL, alim = NULL, legend = TRUE, ...)
   \code{\link{ks.dist}}, \code{\link{logspec.dist}}, \code{\link{itakura.dist}}}
 
 \examples{
-a<-noisew(f=8000,d=1)
-b<-synth(f=8000,d=1,cf=2000)
-c<-synth(f=8000,d=1,cf=1000)
-d<-noisew(f=8000,d=1)
-speca<-spec(a,f=8000,wl=512,at=0.5,plot=FALSE)
-specb<-spec(b,f=8000,wl=512,at=0.5,plot=FALSE)
-specc<-spec(c,f=8000,wl=512,at=0.5,plot=FALSE)
-specd<-spec(d,f=8000,wl=512,at=0.5,plot=FALSE)
+a <- noisew(f=8000,d=1)
+b <- synth(f=8000,d=1,cf=2000)
+c <- synth(f=8000,d=1,cf=1000)
+d <- noisew(f=8000,d=1)
+speca <- spec(a,f=8000,wl=512,at=0.5,plot=FALSE)
+specb <- spec(b,f=8000,wl=512,at=0.5,plot=FALSE)
+specc <- spec(c,f=8000,wl=512,at=0.5,plot=FALSE)
+specd <- spec(d,f=8000,wl=512,at=0.5,plot=FALSE)
 diffspec(speca,speca,f=8000)
 #[1] 0 => similar spectra of course !
 diffspec(speca,specb)
 diffspec(speca,specc,plot=TRUE)
 diffspec(specb,specc,plot=TRUE)
 diffspec(speca,specd,plot=TRUE)
+## mel scale
+require(tuneR)
+data(orni)
+data(tico)
+orni.mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+orni.mel.mean <- apply(orni.mel$aspectrum, MARGIN=2, FUN=mean)
+tico.mel <- melfcc(tico, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+tico.mel.mean <- apply(tico.mel$aspectrum, MARGIN=2, FUN=mean)
+diffspec(orni.mel.mean, tico.mel.mean, f=22050, mel=TRUE, plot=TRUE)
 }
 
 \keyword{dplot}

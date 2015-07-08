@@ -7,9 +7,11 @@
 \description{This function searches for peaks of a frequency spectrum.}
 
 \usage{
-fpeaks(spec, f = NULL, nmax = NULL, amp = NULL, freq = NULL,
-threshold = NULL, plot = TRUE, title = TRUE,
-xlab = "Frequency (kHz)", ylab = "Amplitude",
+fpeaks(spec, f = NULL,
+nmax = NULL, amp = NULL, freq = NULL, threshold = NULL,
+mel =FALSE,
+plot = TRUE, title = TRUE,
+xlab = NULL, ylab = "Amplitude",
 labels = TRUE, legend = TRUE, collab = "red", ...)
 }
 
@@ -21,14 +23,15 @@ labels = TRUE, legend = TRUE, collab = "red", ...)
   \item{nmax}{maximal number of peaks detected. Overrides \code{amp},
     \code{freq} and \code{threshold}. See details.}
   \item{amp}{amplitude slope parameter, a numeric vector of length
-    2. Refers to the amplitude slope of the peak. The first value is the
+    2. Refers to the amplitude slopes of the peak. The first value is the
     left slope and the second value is the right slope. Only peaks with
-    higher slopes than threshold values will be keps. See details.}
-  \item{freq}{frequency threshold parameter. If the frequency
+    higher slopes than threshold values will be kept. See details.}
+  \item{freq}{frequency threshold parameter (in Hz). If the frequency
     difference of two successive peaks is less than this threshold, then 
     the peak of highest amplitude will be kept only. See details.}
   \item{threshold}{amplitude threshold parameter. Only peaks above this
     threshold will be considered. See details.}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE}, a plot showing the peaks is returned.}
   \item{title}{logical, if \code{TRUE} add the number of peaks detected
     as a plot title.}
@@ -121,6 +124,15 @@ pt.cex=cex, col=col, bty="n")
 data(sheep)
 res <- ceps(sheep,f=8000,at=0.4,wl=1024,plot=FALSE)
 fpeaks(res, nmax=4, xlab="Quefrency (s)")
+# melscale
+require(tuneR)
+mel <- melfcc(sheep, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+melspec.mean <- apply(mel$aspectrum, MARGIN=2, FUN=mean)
+melspec.mean <- melspec.mean/max(melspec.mean) # [0,1] scaling 
+fpeaks(melspec.mean, nmax=4, f=8000, mel=TRUE)
+fpeaks(melspec.mean, freq=4, f=8000, mel=TRUE) # freq in Hz!
+fpeaks(melspec.mean, threshold=0.3, f=8000, mel=TRUE)
+fpeaks(melspec.mean, amp=c(0.1,0.1), f=8000, mel=TRUE)
 }
 
 \keyword{dplot}

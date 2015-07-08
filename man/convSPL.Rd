@@ -17,8 +17,8 @@ convSPL(x, d = 1, Iref = 10^-12, pref = 2*10^-5)
   \item{x}{a numeric vector or a matrix describind SPL values (in dB).}
   \item{d}{the distance from the sound source where SPL values have been
         measured (in meter) (by default = 1m)}
-  \item{Iref}{reference intensity (in Watt/m2) (by default = 10e-12)}
-  \item{pref}{reference pressure (in Pa) (by default = 2.10e-5)}
+  \item{Iref}{reference intensity (in Watt/m2) (by default = 10^-12)}
+  \item{pref}{reference pressure (in Pa) (by default = 2*10^-5)}
 }
 
 

@@ -1,2 +1,2 @@
-import("fftw", "tuneR")
+import("graphics", "grDevices", "stats", "utils", "tuneR")
 exportPattern(".+")

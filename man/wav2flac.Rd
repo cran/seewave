@@ -26,7 +26,7 @@ exename = NULL, path2exe = NULL)}
 \note{FLAC must be installed to use this function but not to install the
   package \code{seewave}. Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent.}
 
-\author{Jerome Sueur, Luis J. Villanueva-Rivera}
+\author{Luis J. Villanueva-Rivera}
 
 \seealso{\code{\link{savewav}}}
 

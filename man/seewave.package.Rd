@@ -2,9 +2,6 @@
 
 \alias{seewave-package}
 \alias{seewave}
-\alias{Seewave}
-\alias{seawave}
-\alias{Seewave}
 
 \docType{package}
 
@@ -17,14 +14,15 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 1.7.6\cr
-    Date: \tab 2014-09-11\cr
+    Version: \tab 2.0.1\cr
+    Date: \tab 2015-07-08\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
-                   \tab Amandine Gasc, Stefanie LaZerte,\cr
-                   \tab Jonathan Lees, Laurent Lellouch, \cr
+                   \tab Marion Depraetere, Francois Fabianek, \cr
+                   \tab Amandine Gasc, Laurent Lellouch, Stefanie LaZerte, \cr
+		   \tab Jonathan Lees, Jean Marchal \cr
                    \tab Sandrine Pavoine, Luis J. Villanueva-Rivera,\cr
-		   \tab Zev Ross, Carl G. Witthoft \cr
+		   \tab Zev Ross, Carl G. Witthoft, Hristo Zhivomirov \cr
     Acknowledgments: \tab Michel Baylac, Charlotte Cure, Denis Dupeyron,\cr
                      \tab Krut Fristrup, Arnold Fertin, Kurt Hornik, \cr  
                      \tab Eric Kasten, Emiliano A. Laca, Uwe Ligges, \cr
@@ -41,7 +39,6 @@
   Jerome Sueur <sueur@mnhn.fr>\cr 
   Thierry Aubin\cr
   Caroline Simonis\cr
-
   Maintainer: Jerome Sueur <sueur@mnhn.fr>\cr
 }
 

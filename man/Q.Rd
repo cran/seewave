@@ -9,8 +9,8 @@
   quality factor Q at a specific dB level.}
 
 \usage{
-Q(spec, f = NULL, level = -3, plot = TRUE, colval = "red",
-cexval = 1, fontval = 1, flab = "Frequency (kHz)",
+Q(spec, f = NULL, level = -3, mel = FALSE, plot = TRUE, colval = "red",
+cexval = 1, fontval = 1, flab = NULL,
 alab = "Relative amplitude (dB)", type = "l", ...)
 }
 
@@ -24,6 +24,7 @@ alab = "Relative amplitude (dB)", type = "l", ...)
     with \code{\link{spec}} or \code{\link{meanspec}}.}
   \item{level}{frequency bandwidth set by an amplitude value relative
     to \code{spectrum} (in dB).}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE} returns the spectrum 
     with Q plotted (by default \code{TRUE}).}
   \item{colval}{colour of plotting Q.}
@@ -49,7 +50,7 @@ alab = "Relative amplitude (dB)", type = "l", ...)
   i. e. \code{fmax-fmin} (kHz)}
  }
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \note{This function is based on \code{\link{fft}}.} 
 

@@ -61,7 +61,7 @@ fund(sheep,f=8000,fmax=300,type="l")
 # amplitude filter (threshold)
 fund(sheep,f=8000,fmax=300,type="b",ovlp=50,threshold=5,ylim=c(0,1),cex=0.5)
 # overlaid on a spectrogram
-spectro(sheep,f=8000,ovlp=75,zp=16,scale=FALSE,palette=rev.gray.colors.2)
+spectro(sheep,f=8000,ovlp=75,zp=16,scale=FALSE,palette=reverse.gray.colors.2)
 par(new=TRUE)
 fund(sheep,f=8000,fmax=300,type="p",pch=24,ann=FALSE,
   xaxs="i",yaxs="i",col="black",bg="red",threshold=6)

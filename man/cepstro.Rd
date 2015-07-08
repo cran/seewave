@@ -12,7 +12,7 @@
 \usage{
 cepstro(wave, f, wl = 512, ovlp = 0, plot = TRUE, grid = TRUE,
 scale = TRUE, cont = FALSE, collevels = seq(0, 1, 0.01),
-palette = rev.heat.colors, contlevels = seq(0, 1, 0.01),
+palette = reverse.heat.colors, contlevels = seq(0, 1, 0.01),
 colcont = "black", colbg="white", colgrid = "black",
 colaxis = "black", collab = "black",
 xlab = "Time (s)", ylab = "Quefrency (ms)",
@@ -37,7 +37,7 @@ axisX = TRUE, axisY = TRUE, ...)
   \item{collevels}{a set of levels which are used to partition
     the amplitude range of the cepstrogram (in dB).}
   \item{palette}{a color palette function to be used to assign colors in
-    the plot, see \code{Details}.}
+    the plot.}
   \item{contlevels}{a set of levels which are used to partition
     the amplitude range for contour overplot (in dB).}
   \item{colcont}{colour for \code{cont} plotting.}

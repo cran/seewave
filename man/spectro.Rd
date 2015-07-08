@@ -116,11 +116,11 @@ listen=FALSE,
   resolution without altering time resolution.\cr
   Any colour palette can be used. In particular, it is possible to use other
   palettes coming with \pkg{seewave}: \code{temp.colors}, 
-  \code{rev.gray.colors.1},
-  \code{rev.gray.colors.2}, \code{rev.heat.colors},
-  \code{rev.terrain.colors},
-  \code{rev.topo.colors},
-  \code{rev.cm.colors} corresponding to the reverse of \code{heat.colors}, 
+  \code{reverse.gray.colors.1},
+  \code{reverse.gray.colors.2}, \code{reverse.heat.colors},
+  \code{reverse.terrain.colors},
+  \code{reverse.topo.colors},
+  \code{reverse.cm.colors} corresponding to the reverse of \code{heat.colors}, 
   \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.
 }
@@ -182,16 +182,16 @@ spectro(tico,f=22050, flimd=c(2,6))
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
 spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,
     cont=TRUE,contlevels=seq(-30,0,20),colcont="red",
-    lwd=1.5,lty=2,palette=rev.terrain.colors)
+    lwd=1.5,lty=2,palette=reverse.terrain.colors)
 # black and white spectrogram 
 spectro(pellu2,f=22050,ovlp=85,zp=16,
-    palette=rev.gray.colors.1)
+    palette=reverse.gray.colors.1)
 # colour modifications
 data(sheep)
 spectro(sheep,f=8000,palette=temp.colors,collevels=seq(-115,0,1))
 spectro(pellu2,f=22050,ovlp=85,zp=16,
-palette=rev.cm.colors,osc=TRUE,colwave="orchid1") 
-spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=rev.heat.colors,
+palette=reverse.cm.colors,osc=TRUE,colwave="orchid1") 
+spectro(pellu2,f=22050,ovlp=85,zp=16,osc=TRUE,palette=reverse.heat.colors,
 colbg="black",colgrid="white", colwave="white",colaxis="white",collab="white")
 }
 }

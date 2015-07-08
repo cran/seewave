@@ -10,9 +10,9 @@ their maximal correlation and the frequency shift related to it.
 }
 
 \usage{
-corspec(spec1, spec2, f = NULL, plot = TRUE, plotval = TRUE,
+corspec(spec1, spec2, f = NULL, mel = FALSE, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
-cexval = 1, fontval = 1, xlab = "Frequency (kHz)",
+cexval = 1, fontval = 1, xlab = NULL,
 ylab = "Coefficient of correlation (r)", type="l",...)
 }
 
@@ -28,6 +28,7 @@ ylab = "Coefficient of correlation (r)", type="l",...)
   \item{f}{sampling frequency of waves used to obtain \code{spec1}
       and \code{spec2} (in Hz). Not necessary if \code{spec1} and/or \code{spec2}
       is a two columns matrix obtained with \code{\link{spec}} or \code{\link{meanspec}}.}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value
   and frequency offset (by default \code{TRUE}).}  
@@ -70,14 +71,14 @@ If \code{plot} is \code{FALSE}, \code{corspec} returns a list containing four
 Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds) 1998. \emph{Animal acoustic 
 communication}. Springer, Berlin, Heidelberg.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
         \code{\link{covspectro}}, \code{\link{cor}}, \code{\link{cor.test}}.}
 
 \examples{
-data(tico)
-# compare the two first notes spectra
+\dontrun{data(tico)
+## compare the two first notes spectra
 a<-spec(tico,f=22050,wl=512,at=0.2,plot=FALSE)
 c<-spec(tico,f=22050,wl=512,at=1.1,plot=FALSE)
 op<-par(mfrow=c(2,1), mar=c(4.5,4,3,1))
@@ -88,7 +89,7 @@ legend(x=8,y=0.5,c("Note A", "Note C"),lty=1,col=c("blue","green"),bty="o")
 par(mar=c(5,4,2,1))
 corspec(a,c, ylim=c(-0.25,0.8),xaxs="i",yaxs="i",las=1)
 par(op)
-# different correlation methods give different results...
+## different correlation methods give different results...
 op<-par(mfrow=c(3,1))
 corspec(a,c,xaxs="i",las=1, ylim=c(-0.25,0.8))
 title("spearmann correlation (by default)")
@@ -97,12 +98,20 @@ title("pearson correlation")
 corspec(a,c,xaxs="i",las=1,ylim=c(-0.23,0.5),method="kendall")
 title("kendall correlation")
 par(op)
-# inverting x and y does not give exactly similar results
+## inverting x and y does not give exactly similar results
 op<-par(mfrow=c(2,1),mar=c(2,4,3,1))
 corspec(a,c)
 corspec(c,a)
 par(op)
-}
+## mel scale
+require(tuneR)
+data(orni)
+orni.mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+orni.mel.mean <- apply(orni.mel$aspectrum, MARGIN=2, FUN=mean)
+tico.mel <- melfcc(tico, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+tico.mel.mean <- apply(tico.mel$aspectrum, MARGIN=2, FUN=mean)
+corspec(orni.mel.mean, tico.mel.mean, f=22050, mel=TRUE, plot=TRUE)
+}}
 
 \keyword{dplot}
 \keyword{ts}

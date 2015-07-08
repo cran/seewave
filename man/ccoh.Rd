@@ -13,7 +13,7 @@
 \usage{
 ccoh(wave1, wave2, f, wl = 512, ovlp = 0, plot = TRUE,
 grid = TRUE, scale = TRUE, cont = FALSE,
-collevels = seq(0, 1, 0.01), palette = rev.heat.colors,
+collevels = seq(0, 1, 0.01), palette = reverse.heat.colors,
 contlevels = seq(0, 1, 0.01), colcont = "black",
 colbg="white", colgrid = "black",
 colaxis = "black", collab="black",
@@ -74,10 +74,10 @@ flim = NULL, flimd = NULL,
   two signals. This can be used, for instance, to compare the input and output
   signals of a system.\cr
   Any colour palette can be used. In particular, it is possible to use other
-  palettes coming with \pkg{seewave}: \code{temp.colors}, \code{rev.gray.colors.1},
-  \code{rev.gray.colors.2}, 
-  \code{spectro.colors}, \code{rev.terrain.colors},
-  \code{rev.topo.colors}, \code{rev.cm.colors} corresponding
+  palettes coming with \pkg{seewave}: \code{temp.colors}, \code{reverse.gray.colors.1},
+  \code{reverse.gray.colors.2}, 
+  \code{spectro.colors}, \code{reverse.terrain.colors},
+  \code{reverse.topo.colors}, \code{reverse.cm.colors} corresponding
   to the reverse of  \code{terrain.colors}, \code{topo.colors},
   \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.

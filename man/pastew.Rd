@@ -11,7 +11,9 @@
 }
 
 \usage{
-pastew(wave1, wave2, f, at = "end", join = FALSE, choose = FALSE, plot = FALSE,
+pastew(wave1, wave2, f, at = "end",
+join = FALSE, tjunction=0,
+choose = FALSE, plot = FALSE,
 marks = TRUE, output = "matrix", ...)
 }
 
@@ -23,7 +25,8 @@ marks = TRUE, output = "matrix", ...)
     Can be also specified as \code{"start"}, \code{"middle"} or
     \code{"end"}.}
   \item{join}{if \code{TRUE} the two waves will be pasted and jointed by
-  removing the last point of wave2. See examples.}
+    removing the last point of wave2. See examples.}
+  \item{tjunction}{a numeric vector to remove clicks at the junction of ‘wave1’ and ‘wave2’. The value specifies the duration in seconds where the real vales will be replaced by a linear interpolation. This duration should be a few milliseconds.}
   \item{choose}{logical, if \code{TRUE} the point where \code{wave1} will
     be pasted into \code{wave2} (=\code{at}) can be graphically chosen with a cursor.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of 
@@ -43,7 +46,7 @@ marks = TRUE, output = "matrix", ...)
 \value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
   of the returned object is set with the argument \code{output}.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur, improved by Laurent Lellouch}
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
   \code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}
@@ -71,6 +74,8 @@ b <- synth(cf=100, f=400, d=0.1)
 pastew(a, b, f=400, plot=TRUE)
 # that can be removed by setting 'join' to TRUE
 pastew(a, b, f=400, join=TRUE, plot=TRUE)
+# or by using the argument 'tjunction'
+pastew(a, b, f=400, tjunction=0.01, plot=TRUE)
 } 
 \keyword{dplot}
 \keyword{ts}

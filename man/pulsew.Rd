@@ -1,6 +1,6 @@
-\name{pulse}
+\name{pulsew}
 
-\alias{pulse}
+\alias{pulsew}
 
 \title{Generate rectangle pulse}
 
@@ -9,7 +9,7 @@
 }
 
 \usage{
-pulse(dbefore, dpulse, dafter, f, plot = FALSE, output = "matrix", ...)
+pulsew(dbefore, dpulse, dafter, f, plot = FALSE, output = "matrix", ...)
 }
 
 \arguments{
@@ -32,7 +32,7 @@ pulse(dbefore, dpulse, dafter, f, plot = FALSE, output = "matrix", ...)
 \seealso{\code{\link{synth}}, \code{\link{noisew}}}
 
 \examples{
-pulse(dbefore=0.5,dpulse=0.1,dafter=0.3,f=8000,plot=TRUE)
+pulsew(dbefore=0.5,dpulse=0.1,dafter=0.3,f=8000,plot=TRUE)
 }
 
 \keyword{datagen}

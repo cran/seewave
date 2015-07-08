@@ -11,7 +11,7 @@
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{wd}{a numerical vector, duraiton of the window (in seconds)}
+  \item{wd}{a numerical vector, duration of the window (in seconds)}
   \item{wl}{a numerical vector, length of the window (in number of points).}
   \item{wnb}{a numerical vector, number of windows (no unit).}
   \item{title}{a logical, if \code{TRUE} displays a title with information regarding window size and number.}

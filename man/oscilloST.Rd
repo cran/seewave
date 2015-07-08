@@ -48,8 +48,7 @@ bty = "l")
   \code{identify} returns a numeric object with the time coordinate 
   of points successively chosen on the bottom oscillogram.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and 
-  Caroline Simonis \email{csimonis@mnhn.fr}.}
+\author{Jerome Sueur and Caroline Simonis.}
 
 \seealso{\code{\link{oscillo}}, \code{\link{dynoscillo}}}
 

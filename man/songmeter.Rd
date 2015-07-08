@@ -16,7 +16,7 @@ SongMeters, audio digal recorders produced by the society Wildlife Acoustics.}
 
 \details{The digital recorder SongMeter (either SM2 or SM3 device model)
   produced by the society 'Wildlife Acoustics' generates '.wav' or
-  '.wac' files which name include useful information. Here are the
+  '.wac' files which names include useful information. Here are the
   character format of the files:\cr
 
 \itemize{

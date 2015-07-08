@@ -43,11 +43,14 @@
 \fancyfoot[R]{\today}
 \setlength{\parindent}{0pt}
 \newcommand{\pkg}{\textsf}
-\newcommand{\seewave}{\pkg{seewave}}
-\newcommand{\sound}{\pkg{sound}}
-\newcommand{\tuneR}{\pkg{tuneR}}
-\newcommand{\audio}{\pkg{audio}}
 \newcommand{\R}{\pkg{R}}
+\newcommand{\signal}{\pkg{signal}}
+\newcommand{\tuneR}{\pkg{tuneR}}
+\newcommand{\audio}{\pkg{sound}}
+\newcommand{\seewave}{\pkg{seewave}}
+\newcommand{\soundecology}{\pkg{soundecology}}
+\newcommand{\monitoR}{\pkg{monitoR}}
+
 
 \author{Jérôme Sueur\\
 Muséum national d'Histoire naturelle\\

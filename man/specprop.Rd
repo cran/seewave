@@ -7,8 +7,10 @@
 \description{
   This function returns a list of statistical properties of a frequency spectrum.}
 
-\usage{specprop(spec, f=NULL, str = FALSE, flim=NULL, plot = FALSE,
-type = "l", xlab=NULL, ylab = NULL,  col.mode = 2, col.quartiles = 4, ...)}
+\usage{specprop(spec, f=NULL,
+str = FALSE, flim=NULL, mel=FALSE,
+plot = FALSE, type = "l", xlab=NULL, ylab = NULL,
+col.mode = 2, col.quartiles = 4, ...)}
 
 \arguments{
   \item{spec}{a data set resulting of a spectral analysis obtained
@@ -16,6 +18,7 @@ type = "l", xlab=NULL, ylab = NULL,  col.mode = 2, col.quartiles = 4, ...)}
   \item{f}{sampling frequency of \code{spec} (in Hz).}
   \item{str}{logical, if \code{TRUE} returns the results in a structured table.}
   \item{flim}{a vector of length 2 to specifgy the frequency limits of the analysis (in kHz)}
+  \item{mel}{a logical, if \code{TRUE} the (htk-)mel scale is used.}
   \item{plot}{if \code{1} returns the spectrum , if \code{2} returns 
     the cumulative spectrum, both of them with the first quartile, the third quartile,
     the median and the mode plotted (by default \code{FALSE}).}
@@ -94,6 +97,13 @@ specprop(a,f=22050,flim=c(4,6),str=TRUE)
 # plots
 specprop(a,f=22050,plot=1)
 specprop(a,f=22050,plot=2)
+# (htk-)mel scale
+require(tuneR)
+mel <- melfcc(orni, nbands = 256, dcttype = "t3", fbtype = "htkmel", spec_out=TRUE)
+melspec.mean <- apply(mel$aspectrum, MARGIN=2, FUN=mean)
+specprop(melspec.mean, f=22050, mel=TRUE)
+# be aware that flim is always given in kHz even if mel=TRUE
+specprop(melspec.mean, f=22050, flim=c(4,6), mel=TRUE, plot=TRUE)
 }
 
 \keyword{dplot}

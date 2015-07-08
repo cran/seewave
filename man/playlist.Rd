@@ -17,11 +17,11 @@
   \item{loop}{a numeric vector of length 1, number of loops.}
 }
 
-\details{The succes of using this function depends on the wave player in
+\details{The success of using this function depends on the wave player in
 use. This works particularly well with SoX under Linux. The type of
 files (.mp3, .wav, .ogg etc) depends on the wave player as well)}
 
-\value{None. Listen!}
+\value{None. Listen and enjoy!}
 
 \author{Jérôme Sueur}
 
