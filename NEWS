@@ -2,6 +2,19 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 2.0.2 [28-July-2015]
+
+NEW FUNCTIONS
+	o duration(): a new function to get the duration (in s) of a time wave.
+	o ffilter(): a tiny bug fixed, default value of the arguments 'from' and 'to' are now 'NULL' ('FALSE' previously).
+	o spectro(): the argument 'trel' now works is 'osc=TRUE'.
+	o synth(): the argument 'signal' accepts now 'sawtooth'.
+
+
+OTHER CHANGES
+        o timer(): now works even if irrelevant values are provided for the argument 'dmin'.
+	o The demo now works properly.      
+
 
 		CHANGES IN SEEWAVE VERSION 2.0.1 [08-July-2015]
 
@@ -9,7 +22,7 @@ NEW FUNCTIONS
         o AR(): a new function to compute the Acoustic Richness index (contribution of M. Depraetere)
         o combfilter(): a new function to apply a frequency comb filter.
         o drawfilter(): a new function to draw interactively the frequency response of a filter (by Laurent Lellouch).
-        o M(): a new function to compute the Acoustic Richness index (contribution of M. Depraetere)
+        o M(): a new function to compute the amplitude index (contribution of M. Depraetere).
         o squarefilter(): a new function to generate the frequency response of a square filter (by Laurent Lellouch).
 
 NEW ARGUMENTS

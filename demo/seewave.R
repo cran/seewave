@@ -40,7 +40,7 @@ par(op)
 
 # spectrogram and dominant frequency overlaid of a bird song
 op <- par(op)
-spectro(tico, f=22050, ovlp=50, palette=rev.gray.colors.2, scale=FALSE)
+spectro(tico, f=22050, ovlp=50, palette=reverse.gray.colors.2, scale=FALSE)
 par(new=T)
 dfreq(tico, f=22050, ovlp=50, threshold=6, col="red", ann=FALSE, xaxs="i", yaxs="i")
 par(op)
@@ -48,7 +48,7 @@ par(op)
 # 2D spectrogram of a cricket song with colour modifications
 op <- par(op)
 pellu2<-cutw(pellucens,f=22050,from=1,plot=FALSE)
-spectro(pellu2,f=22050,wl=512,ovlp=85,collevels=seq(-25,0,1),osc=TRUE,palette=rev.heat.colors,
+spectro(pellu2,f=22050,wl=512,ovlp=85,collevels=seq(-25,0,1),osc=TRUE,palette=reverse.heat.colors,
 colgrid="white", colwave="white",colaxis="white",collab="white", colbg="black")
 par(op)
 
@@ -65,5 +65,3 @@ par(op)
 
 # 3D spectrogram of a tropical sparrow  song
 spectro3D(tico,f=22050,wl=512,ovlp=75,zp=16,maga=2)
-
-par(op1)

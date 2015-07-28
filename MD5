@@ -1,7 +1,7 @@
-70e865a01ee764c0fbf328f96fd2524b *DESCRIPTION
+2681ad9c1650b30248043903017f7b6e *DESCRIPTION
 073cff0cead26a970477bad08fdb0f1f *NAMESPACE
-ab976110af01ee7cd793d00c3d3ca950 *NEWS
-c8b6d51384f1770d89ab590bc261b648 *R/seewave.r
+8cb71d4b5f80b249c474c8c09cbd2dd3 *NEWS
+b72c9df5e8e1521f5629705846f32bf0 *R/seewave.r
 21f4ba8ef314beeb6bca437c135144bd *R/zzz.r
 7d54938956b666dfe1a9b96a95aad57a *build/vignette.rds
 2d4352c48eb8d366f156d0d474cecc57 *data/orni.RData
@@ -10,15 +10,15 @@ c8b6d51384f1770d89ab590bc261b648 *R/seewave.r
 defd31e9ccb35c01364f72354b208645 *data/sheep.RData
 41eda5241e7280746af9d9a2ff39a7d1 *data/tico.RData
 9e0e622839b069f607812c3bed77c764 *demo/00Index
-db7ad879beec73334b76d1e70f5542b9 *demo/seewave.R
+5a0d1ed835e4b10f81f9159bb94956b2 *demo/seewave.R
 4e90209827f6cfc4bb09ec081f1313e0 *inst/CITATION
 866a4f71db711a558c7e814b6bb7def4 *inst/doc/seewave_IO.R
-b97ab0260a02a6f55c6092e00529485d *inst/doc/seewave_IO.pdf
+39fd3360192a64abdec7e5f7394a3ccf *inst/doc/seewave_IO.pdf
 fe8bada220a52a05c598ede79829a403 *inst/doc/seewave_IO.rnw
 9b2c25078f4c7a7a8a3002b6091ffebc *inst/doc/seewave_analysis.R
-d605c27e046f8a087afab9ba751c2147 *inst/doc/seewave_analysis.pdf
+19239e12f5f5c044b4a060c346ce4175 *inst/doc/seewave_analysis.pdf
 8a778f82347cfb1aa3a4c3b655dbc57b *inst/doc/seewave_analysis.rnw
-440c00b561b9753dc432fef6de75758a *man/ACI.Rd
+c02c08fe20616b37df0264a697182be4 *man/ACI.Rd
 4283fa810c2896cbbcd0f30a4e65aa3b *man/AR.Rd
 58ba65f7e200f0cc0752cf95435ced42 *man/H.Rd
 c157565d7a78c7a5ab78b376766e3fd3 *man/M.Rd
@@ -30,7 +30,7 @@ fabfc9da5f0a400bd4100139c49334f3 *man/acoustat.Rd
 3135e2cb7e118c02830a14fcf2a9f9dc *man/addsilw.Rd
 4a8f506e4bf3c198c4bfbaec5e58f454 *man/afilter.Rd
 76be46442da90f9e0d39a8a0525b56d9 *man/akamatsu.Rd
-09ea14783c679a0670135b99066ded73 *man/ama.Rd
+c6eee1ba15be801e653d26b1758790e5 *man/ama.Rd
 2b8b9ef7157c0e8f1368bb517cdcdf9d *man/attenuation.Rd
 936a6755dd53d6cd432ab5491dbe302d *man/autoc.Rd
 834d01e9c1c5c360d07622f9f86f799e *man/ccoh.Rd
@@ -57,6 +57,7 @@ d93f423bf63327cadcfe4a2fb3ae4c92 *man/diffspec.Rd
 31d8bcd87f6d9665be8b333cfa9ac48d *man/discrets.Rd
 c6a2b3e345a4366d7a5657495b2a5ba8 *man/drawenv.Rd
 d78d975672741316476e11c3fb6bf374 *man/drawfilter.Rd
+1682f35f06e8dba014591e1eb43456e0 *man/duration.Rd
 1e2ed6d407671e3d788197f0180a19d6 *man/dynoscillo.Rd
 2faa7de5e2cd351f80a0c19606d47352 *man/dynspec.Rd
 3e9760c08100f7e4b8d4696103254ecd *man/echo.Rd
@@ -65,7 +66,7 @@ d78d975672741316476e11c3fb6bf374 *man/drawfilter.Rd
 01423dbd4d4815e9bcea27201159b872 *man/fadew.Rd
 30c67aab22d450827e027d3aa94ca2bf *man/fbands.Rd
 fe407abcd3f0a8b841d8e7efa79fecbb *man/fdoppler.Rd
-58410f91e2ce9d7e2b177531efc93bad *man/ffilter.Rd
+495dfa729bed8bf104c37a3eb5b22482 *man/ffilter.Rd
 1f208eb148f1f15550b33d1cfeb84250 *man/field.Rd
 7980528e6ce6858f7f424022fbc66f5d *man/fir.Rd
 12f8e14a13d3a6f0e9cde06695308f2f *man/fma.Rd
@@ -114,7 +115,7 @@ b1b39c6f7a3f1fde089c7b7389aa08e3 *man/savewav.Rd
 e180d46a7e6119fb747688dedd37bb98 *man/sddB.Rd
 2a2296b9a0d3b75f3529a1f90109f54a *man/seedata.Rd
 34fb8f28075fa94857702edff898d46a *man/seewave.internal.Rd
-de57a452d37edf4e27182595ca19daf0 *man/seewave.package.Rd
+e210f3fc86e379468f1d857f8712aa99 *man/seewave.package.Rd
 726fe89670cef0463e1acfd8e7a32ed6 *man/setenv.Rd
 a07b5cc54137609e111ff1c936017b2b *man/sfm.Rd
 d8f0ef469745ef83368e729e07a1f4e2 *man/sh.Rd
@@ -131,7 +132,7 @@ d4423bf87450a93857b6c3aa87c4308f *man/spectro3D.Rd
 fa1f8ceaac2270c0c71938064dd8011d *man/squarefilter.Rd
 cc3d19d9a8c241c492a3b1b50fa059e7 *man/stft.ext.Rd
 cd5cca1e1df4d238d182ab9508b7e759 *man/symba.Rd
-d5dc73c3b10c81445918bef9ab1fbe3d *man/synth.Rd
+a90432d417857696b2769152b1875d16 *man/synth.Rd
 7c74611c13178cc3076686cbe12adb72 *man/synth2.Rd
 3f02a9d2cc07cea5abbef36e255d3f9c *man/th.Rd
 8c8eba4ada16977cc953b718812568d6 *man/tico.Rd

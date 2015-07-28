@@ -1,8 +1,8 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.0.1
-Date: 2015-07-08
+Version: 2.0.2
+Date: 2015-07-28
 Author: Jerome Sueur <sueur@mnhn.fr> [cre, au], Thierry Aubin [au],
         Caroline Simonis [au], Laurent Lellouch [main ctrb]
         Ethan C. Brown [ctrb], Marion Depraetere [ctrb],
@@ -21,6 +21,6 @@ Description: Functions for analysing, manipulating, displaying, editing and synt
 License: GPL (>= 2)
 URL: http://rug.mnhn.fr/seewave
 NeedsCompilation: yes
-Packaged: 2015-07-08 09:17:42 UTC; root
+Packaged: 2015-07-28 09:12:48 UTC; root
 Repository: CRAN
-Date/Publication: 2015-07-08 13:21:59
+Date/Publication: 2015-07-28 12:02:38

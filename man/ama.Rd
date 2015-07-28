@@ -51,8 +51,7 @@ ama(wave, f, envt = "hil", wl = 512, plot = TRUE, type = "l", ...)
 
 \examples{
 data(orni)
-# detection of 2 main amplitude modulations in a cicada song:
-# one with a 0.020 kHz frequency (due to signal/silence periodicity)
+# detection of the main amplitude modulation in a cicada song:
 # one with a 0.258 kHz frequency (due to pulses in the echemes)
 # one with a 2.369 kHz frequency (fundamental frequency)
 ama(orni,f=22050,wl=1024)

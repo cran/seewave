@@ -50,6 +50,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
 	\item{"sine": for a sinus function}
 	\item{"tria": for a triangle function}
 	\item{"square": for a square function}
+	\item{"saw": for a square function}
       }
     }
     
@@ -79,7 +80,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
 	\item{the frequency of a sinusoidal frequency modulation (in Hz),}
 	\item{the maximum excursion of a linear frequency modulation (in
 Hz).}
-        \item{the pase of the frequency modulation (in radian).}
+        \item{the phase of the frequency modulation (in radian).}
       }
     }
 

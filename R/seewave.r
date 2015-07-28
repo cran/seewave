@@ -2100,6 +2100,16 @@ drawfilter <- function(f,
     return(cbind(freq=d,amp=g))  ## JS changed the name of the columns to make it more clear
 }
 
+
+################################################################################
+##                               DURATION
+################################################################################
+
+duration <- function(wave, f){
+    input <- inputw(wave=wave,f=f)
+    return(length(input$w) / input$f)
+}
+
 ################################################################################
 ##                               DYNOSCILLO
 ################################################################################
@@ -2641,8 +2651,8 @@ fdoppler<-function(
 ffilter <- function(
                   wave,
                   f,
-                  from = FALSE,
-                  to = FALSE,
+                  from = NULL,
+                  to = NULL,
                   bandpass = TRUE,
                   custom = NULL,
                   wl = 1024,
@@ -2669,14 +2679,12 @@ ffilter <- function(
     }
   else
     {
-      if(from == FALSE & to == FALSE)
-        stop("At least one of the 'from' and 'to' arguments has to be set")
-      if(from == to)
-        stop("'from' and 'to' have to be different")
-      if(from == FALSE) from<-0
-      if(to == FALSE) to<-f/2
-      F<-round(wl*(from/f))
-      T<-round(wl*(to/f))
+      if(is.null(from) && is.null(to)) stop("At least one of the 'from' and 'to' arguments has to be set")
+      if(is.null(from)) from<-0
+      if(is.null(to)) to<-f/2
+      if(from >= to) stop("'from' should be strictly inferior to 'to'")
+      F<-ceiling(wl*(from/f))
+      T<-floor(wl*(to/f))
       if(bandpass) {z[-c(F:T),]<-0} else {z[F:T,]<-0}
     }
 
@@ -5928,21 +5936,24 @@ spectro <- function(
                   widths = c(6,1),
                   heights = c(3,1),
                   oma = rep(0,4),
-                  listen = FALSE,
-                  ...)
-
+                  listen = FALSE, ...) 
 {
+    if (!is.null(dB) && all(dB != c("max0", "A", "B", "C", "D"))) 
+        stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+    if (complex & norm) {
+        norm <- FALSE
+        warning("\n'norm' was turned to 'FALSE'")
+    }
+    if (complex & !is.null(dB)) {
+        dB <- NULL
+        warning("\n'dB' was turned to 'NULL'")
+    }
 
-                                       #  STOP MESSAGES
-  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
-    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
-  if(complex & norm) {norm <- FALSE ; warning("\n'norm' was turned to 'FALSE'")}
-  if(complex & !is.null(dB)) {dB <- NULL ; warning("\n'dB' was turned to 'NULL'")}
-
-                                        # INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-
-                                        # TIME AND FREQUENCY LIMITS
+    input <- inputw(wave = wave, f = f)
+    if(!is.null(tlim) && trel && osc) {wave <- wave0 <- input$w} else {wave <- input$w} # necessary to use 'from' and 'to' of soscillo()
+    f <- input$f
+    rm(input)
+    
   if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
                                         # dynamic vertical zoom (modifications of analysis parameters)
   if(!is.null(flimd))                        
@@ -6020,8 +6031,10 @@ spectro <- function(
                   cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
           # OSCILLO
           par(mar=c(5,4.1,0,0))
-          soscillo(wave=wave,f=f,bty="u",collab=collab,colaxis=colaxis,
-                   colline=colaxis,ylim=c(-max(abs(wave)),max(abs(wave))),
+          if(!is.null(tlim) && trel) {wave<-wave0; from<-tlim[1]; to<-tlim[2]} else {from<-FALSE; to <- FALSE}
+          soscillo(wave=wave,f=f,bty="u", from=from, to=to,
+                   collab=collab,colaxis=colaxis,colline=colaxis,
+                   ylim=c(-max(abs(wave)),max(abs(wave))),
                    tickup=max(abs(wave),na.rm=TRUE),
                    tlab=tlab, alab=alab,
                    cexlab=cexlab,
@@ -6064,7 +6077,8 @@ spectro <- function(
           layout(matrix(c(2,1), nrow = 2, byrow=TRUE), heights=heights) 
           par(mar=c(5.1,4.1,0,2.1), las=0, oma=oma, bg=colbg)
           # OSCILLO
-          soscillo(wave=wave,f=f,bty="u",
+          if(!is.null(tlim) && trel) {wave <-wave0; from<-tlim[1]; to<-tlim[2]} else {from<-FALSE ; to<-FALSE}
+          soscillo(wave=wave,f=f,bty="u", from=from, to=to,  
                    collab=collab,colaxis=colaxis,colline=colaxis,
                    tickup=max(abs(wave),na.rm=TRUE),
                    ylim=c(-max(abs(wave)),max(abs(wave))),
@@ -6352,7 +6366,7 @@ synth <- function (f,
     l2 <- round(f*d)
     t <- array(0, c(l1,l2))
     for (i in 1:l1)
-        {t[i,] <- synth0(f, d, i*cf, a*harmonics[i], shape, i*p, am, fm, signal = signal)}
+        {t[i,] <- synth0(f, d, i*cf, a*harmonics[i], shape, i*p, am, fm, signal=signal)}
     sound <- apply(t, 2, sum)
     sound <- outputw(wave = sound, f = f, format = output)
     if (plot) {
@@ -6370,10 +6384,11 @@ synth <- function (f,
     }
 }
 
-aux <- function(x, signal)
-{if (signal == 'sine') {return (sin(x))}
+aux <- function(x, signal){
+ if (signal == 'sine')   {return (sin(x))}
  if (signal == 'square') {return ((-1)^floor(x/pi))}
- if (signal == 'tria') {return ((2*x/pi-2*round(x/pi))*(-1)^round(x/pi))}
+ if (signal == 'tria')   {return ((2*x/pi-2*round(x/pi))*(-1)^round(x/pi))}
+ if (signal == 'saw')    {return (2*(x/(2*pi)-floor((x/(2*pi))+0.5)))}
 }
 
 synth0 <- function (f, d, cf, a = 1, shape = NULL, p = 0, am = c(0, 0, 0), 
@@ -6515,12 +6530,6 @@ timer <- function(wave,
                    ...
                    )
 {
-    ## STOP MESSAGES
-    if(power == 0) stop("'power' cannot equal to 0")
-    if(!is.null(msmooth) && !is.null(ksmooth)) stop("'msmooth' and 'ksmooth' cannot be used together")
-    if(!is.null(msmooth) && !is.null(ssmooth)) stop("'msmooth' and 'ssmooth' cannot be used together")
-    if(!is.null(ksmooth) && !is.null(ssmooth)) stop("'ksmooth' and 'ssmooth' cannot be used together")
-
     ## INPUT
     input <- inputw(wave = wave, f = f)
     wave <- input$w
@@ -6528,9 +6537,22 @@ timer <- function(wave,
     rm(input)
     n <- length(wave)
     thres <- threshold/100
-       
+  
+    ## STOP MESSAGES
+    if(power == 0) stop("'power' cannot equal to 0")
+    if(!is.null(msmooth) && !is.null(ksmooth)) stop("'msmooth' and 'ksmooth' cannot be used together")
+    if(!is.null(msmooth) && !is.null(ssmooth)) stop("'msmooth' and 'ssmooth' cannot be used together")
+    if(!is.null(ksmooth) && !is.null(ssmooth)) stop("'ksmooth' and 'ssmooth' cannot be used together")
+    if(!is.null(dmin)){
+      if(length(dmin)!=1) stop("'dmin' should be a numeric vector of length 1") 
+      if(dmin <= 0) stop("'dmin' cannot be negative or equal to 0")
+      if(dmin >= n/f) stop("'dmin' cannot equal or be higher than the wave duration")
+    } 
     ## TIME LIMITS
-    if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])
+    if(!is.null(tlim)) {
+      wave <- cutw(wave, f=f, from=tlim[1], to=tlim[2])
+      n <- length(wave)
+    }
 
     ## ENVELOPE
     wave1 <- env(wave = wave, f = f, msmooth = msmooth, ksmooth =
@@ -6552,21 +6574,19 @@ timer <- function(wave,
     wave5 <- which(wave4 == 3)
     ## time threshold (dmin)
     if(!is.null(dmin)){
-        ## error messages
-        if(dmin <= 0) stop("'dmin' cannot be negative or equal to 0")
-        if(dmin >= n*f1) stop("'dmin' cannot equal or be higher than wave duration")
-        if(length(dim)!=1) stop("'dmin' should be a numeric vector of length 1")
-        ## look for events < dmin 
+        ## look for events < dmin that have to be excluded
         event.dur <- diff(wave5)
         event.idx <- which(event.dur < dmin*f1)
         ## condition to be sure that there are numeric values in event.idx
         if(length(event.idx)!=0){
-        for(i in event.idx) {wave4[(wave5[i]-1):(wave5[i]+event.dur[i]+1)] <- 2}
+        ## replaces all events to be exluded by 2 (= pause)
+        for(i in event.idx) {wave4[(wave5[i]):(wave5[i]+event.dur[i])] <- 2}
+##        for(i in event.idx) {wave4[(wave5[i]-1):(wave5[i]+event.dur[i]+1)] <- 2}
         wave4[which(abs(diff(wave4))==2)] <- 3
         wave4[c(1,n4)] <- 3
-        
-    }
-        wave5 <- which(wave4 == 3)   
+        }
+        wave5 <- which(wave4 == 3)
+        if(length(wave5)==2){stop("'dmin' was set to a too high value, there are no signal longer than 'dmin'")}
     }
     
     wave5[-1] <- wave5[-1] + 1 # +1 for all positions except the first one (position 1,  0 s).
@@ -6595,8 +6615,9 @@ timer <- function(wave,
     }
 
     ratio <- sum(signal)/sum(pause)
-    timer <- list(first = first, s = signal, p = pause, r = ratio,
-                  s.start = start.signal, s.end = end.signal)
+    timer <- list(s = signal, p = pause, r = ratio,
+                  s.start = start.signal, s.end = end.signal,
+                  first = first)
 
     ## PLOT
     if(plot) {

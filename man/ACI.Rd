@@ -29,9 +29,7 @@
   See the references for details on computation. }
 
 \note{Values returned were checked with the results provided by the
-  add-on Soundscapemeter
-  (\url{http://www.disbef.uniurb.it/biomia/soundscapemeter/}) for the
-  software Wavesurfer \url{http://www.speech.kth.se/wavesurfer/}.
+  add-on Soundscapemeter for the software Wavesurfer \url{http://www.speech.kth.se/wavesurfer/}.
 }
 
   

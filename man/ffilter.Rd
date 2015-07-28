@@ -9,7 +9,7 @@
   or bandstop frequency filter).}
 
 \usage{
-ffilter(wave, f, from = FALSE, to = FALSE, bandpass = TRUE,
+ffilter(wave, f, from = NULL, to = NULL, bandpass = TRUE,
 custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matrix")
 }
 
