@@ -23,7 +23,7 @@
 
 \note{This function can be used to prepare bandpass or bandstop filters to be used with \code{\link{fir}} and \code{\link{ffilter}}. See examples.}
 
-\seealso{\code{\link{fir}}, \code{\link{drawfilter}}, \code{\link{ffilter}}, \code{\link{combfilter}}}
+\seealso{\code{\link{fir}}, \code{\link{drawfilter}}, \code{\link{ffilter}}, \code{\link{combfilter}}, \code{\link{bwfilter}}}
 
 \examples{
 f <- 44100

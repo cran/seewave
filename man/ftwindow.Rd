@@ -9,7 +9,8 @@
 }
 
 \usage{
-ftwindow(wl, wn = "hamming")
+ftwindow(wl, wn = "hamming",
+        correction = c("none", "amplitude", "energy"))
 }
 
 \arguments{
@@ -17,6 +18,9 @@ ftwindow(wl, wn = "hamming")
   \item{wn}{window name: \code{bartlett}, \code{blackman},
     \code{flattop}, \code{hamming}, \code{hanning}, or \code{rectangle}
     (by default \code{hamming}).}
+  \item{correction}{a character vector of length 1 to apply an
+  amplitude ("amplitude") or an energy ("energy") correction
+  to the FT window. By default no correction is applied ("none").}    
 }
 
 

@@ -1,6 +1,7 @@
 \name{TKEO}
 
 \alias{TKEO}
+\alias{tkeo}
 
 \title{Teager-Kaiser energy tracking operator}
 
@@ -14,8 +15,8 @@ type = "l", bty = "l", ...)
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{m}{a numeric vector of length 1 for the lag parameter. See details.}
-  \item{M}{a numeric vector of length 1 for the exponent parameter. See details.}
+  \item{m}{a numeric vector of length 1 for the exponent parameter. See details.}
+  \item{M}{a numeric vector of length 1 for the lag parameter. See details.}
   \item{plot}{logical, if \code{TRUE} returns a plot of the TK energy
   along time (by default \code{TRUE}).}
   \item{xlab}{Label of time x-axis.}
@@ -30,10 +31,9 @@ type = "l", bty = "l", ...)
   according to: \cr
   \deqn{y_{n} = x_{n}^{2/m} - (x_{n-M} \times x_{n+M})^{1/m}}{%
     y[n] = x[n]^{2/m} - (x[n-M]*x[n+M])^{1/m}}, \cr
-  with \emph{M} the lag and \emph{m} the exponent which usually equal to 1 for
-  the conventional operator. \cr
-  The Teaser-Kaiser operator can be used to filter out a signal or to
-  track amplitude modulations (AM) and/or frequency modulations (FM).\cr
+  with \emph{m} the exponent parameter and \emph{M} the lag parameter
+  which both  are usually equal to 1 for a conventional operator. \cr
+  The Teaser-Kaiser operator can be used to track amplitude modulations (AM) and/or frequency modulations (FM).\cr
   See examples.
 }
 
@@ -56,27 +56,22 @@ op <- par(mfrow=c(2,1))
 s1 <- synth(f=8000, d=0.1, cf=200, am=c(100,10), output="Wave") 
 oscillo(s1)
 TKEO(s1)
-
 ## linear AM decrease
 s2 <- synth(f=8000, d=0.1, cf=200, shape="decr", output="Wave") 
 oscillo(s2)
 TKEO(s2)
-
 ## sinusoid FM
 s3 <- synth(f=8000, d=0.1, cf=200, fm=c(150,50,0), output="Wave") 
 oscillo(s3)
 TKEO(s3)
-
 ## linear FM increase
 s4 <- synth(f=8000, d=0.1, cf=200, fm=c(0,0,600), output="Wave") 
 oscillo(s4)
 TKEO(s4)
-
 ## AM and FM
 s5 <- synth(f=8000, d=0.1, cf=200, am=c(100,10), fm=c(150,50,0), output="Wave")
 oscillo(s5)
 TKEO(s5)
-
 par(op)
 }
 

@@ -13,7 +13,7 @@
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{shift}{positive or negative frequency shift to apply (in Hz).)}
+  \item{shift}{positive or negative frequency shift to apply (in Hz).}
   \item{wl}{window length for the analysis (even number of points, by
     default = 1024).}
   \item{ovlp}{overlap between successive FFT windows (in \%, by default 75\%).}

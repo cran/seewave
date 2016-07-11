@@ -44,7 +44,7 @@ cex1 = 0.75, cex2= 0.75, xlab = "index", ylab = "Amplitude", legend=TRUE, ...)
   \deqn{I = H_{x} + H_{y} - H{xy}}{% 
     I = Hx + Hy - Hxy}
   with \emph{Hx} the entropy of \code{x} symbol series,
-    \emph{Hy} the entropy of \code{y} symbol series, and \`emph{Hxy}$ the joint entropy
+    \emph{Hy} the entropy of \code{y} symbol series, and \emph{Hxy}$ the joint entropy
     of \code{x} and \code{y} symbol series.
 }
 
@@ -52,10 +52,10 @@ cex1 = 0.75, cex2= 0.75, xlab = "index", ylab = "Amplitude", legend=TRUE, ...)
   If \code{y} is \code{NULL} a list of three items is returned (s1, freq1, h1).\cr
   If \code{y} is not \code{NULL}, a list of 6 items is returned (s1, freq1, h1, s2, freq2, h2, I):
   \item{s1}{the sequence of symbols of \code{x},}
-  \item{freq1}{the absolute frequency of each \code{x} symbol,}
+  \item{freq1}{the relative frequency of each \code{x} symbol,}
   \item{h1}{the entropy of \code{x} symbol sequence,}
   \item{s2}{the sequence of symbols of \code{y},}
-  \item{freq2}{the absolute frequency of each \code{y} symbol,}
+  \item{freq2}{the relative frequency of each \code{y} symbol,}
   \item{h2}{the entropy of \code{y} symbol sequence,}
   \item{I}{the mutual information between \code{x} and \code{y}.}
 }
@@ -81,7 +81,7 @@ spec1<-spec(tico,f=22050,at=0.2,plot=FALSE)
 symba(spec1[,2],plot=TRUE)
 # it might be better to round the values
 symba(round(spec1[,2],2),plot=TRUE)
-# in that case the symbol entropy is almost similar to the spectral entropy
+# in that case the symbol entropy is close to the spectral entropy
 symba(round(spec1[,2],2),entrop="rel")$h1
 sh(spec1)
 # to compare two frequency spectra

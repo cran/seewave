@@ -1,17 +1,56 @@
 		*****************************************
 		*		SEEWAVE NEWS		*
 		*****************************************
+		CHANGES IN SEEWAVE VERSION 2.0.4 [11-July-2016]
+
+NEW FUNCTIONS
+	o bwfilter(): a new function to apply a Butterworth filter, based on butter() and filtfilt() of the package signal.
+	o melfilterbank(): a new function to compute and display mel-filters used to compute MFCCs.
+	o phaseplot2(): a new function to display a time wave against a delayed version of itself (phase-phase space).
+	o preemphasis(): a new function to apply a speech pre-emphasis filter.
+
+NEW ARGUMENTS
+	o ceps(): a new argument 'phase' to take into account the phase of the signal.
+	o meanspec(), spec(), spectro(), spectro3D(): a new argument 'correction' to apply a correction factor (either amplitude or energy correction) on the taper window so that either amplitude or energy is preserved from the time signal to the frequency spectrum.
+	o spec(): a new argument 'scaled' to scale the results to the length of the FFT ; a small bug regarding frequency scale fixed when 'at' is NULL.
+
+OTHER CHANGES
+        o attenuation(): a bug introduced in the previous version of seewave is now fixed.
+	o cepstro(): the value $amp is transposed such that columns correspond correctly to successive cepstra.
+	o cutspec(): is now more accurate.
+	o dfreq(): a small bug regarding frequency scale fixed.
+	o dynspec(): a bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
+	o echo(): is now faster.
+	o env(..., envt="hil",...): is now faster.
+	o fir(): is now faster.
+	o fma(): is now faster.
+	o hilbert(): is now faster.
+	o ifreq(): is now faster.
+	o Q(): a bug fixed when the input was a frequency spectrum cut with cutspec(). The interpolation is changed to increase to resolution. Thanks to Daniel Ridley-Ellis.
+	o rmam(): is now faster.
+	o SAX(): an improvement for unevenly broken segments. Thanks to Pavel Senin.
+	o songmeter(): now handles SM4 model.
+	o spectro(): a bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
+	o spectro3D(): a bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
+	o symba(): the value of the sequence of symbols of the 'y' is now correctly named 's2' instead of 's1'; the computation of the entropy of y has been corrected implying a correction in the computation of the mutual information I; the plot of y has been corrected; 'absolute frequency' has been corrected to 'relative frequency' in the documentation.
+	o TKEO(): a mistake in the documentation regarding the exponent and lag parameters is now fixed.
+	o wf(): it is now possible to combine different waterfall displays in a multiframe graphic (using for instance layout()). A bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
+	o zcr(): a mistake in the documentation regarding the definition of the sign function is now fixed.
+
+
 
 		CHANGES IN SEEWAVE VERSION 2.0.2 [28-July-2015]
 
 NEW FUNCTIONS
 	o duration(): a new function to get the duration (in s) of a time wave.
-	o ffilter(): a tiny bug fixed, default value of the arguments 'from' and 'to' are now 'NULL' ('FALSE' previously).
-	o spectro(): the argument 'trel' now works is 'osc=TRUE'.
-	o synth(): the argument 'signal' accepts now 'sawtooth'.
 
+NEW ARGUMENTS
+	o fpeaks(): a new argument 'digits' to control the number of digits of the frequency peak labels.
 
 OTHER CHANGES
+	o ffilter(): a tiny bug fixed, default value of the arguments 'from' and 'to' are now 'NULL' ('FALSE' previously).
+	o spectro(): the argument 'trel' now works when 'osc=TRUE'.
+	o synth(): the argument 'signal' accepts now 'sawtooth'.
         o timer(): now works even if irrelevant values are provided for the argument 'dmin'.
 	o The demo now works properly.      
 

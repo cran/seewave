@@ -6,7 +6,7 @@
 
 \description{Play a sound wave}
 
-\usage{listen(wave, f = NULL, from = NULL, to = NULL, choose = FALSE)}
+\usage{listen(wave, f, from = NULL, to = NULL, choose = FALSE)}
 
 \arguments{
   \item{wave}{an R object.}     

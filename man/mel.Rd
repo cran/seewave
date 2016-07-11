@@ -43,6 +43,8 @@
   with a pitch of 1000 mels. 
 }
 
+\seealso{\code{\link{melfilterbank}}}
+
 \examples{
 x<-seq(0,10000,by=50)
 y<-mel(x)

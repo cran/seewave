@@ -12,8 +12,8 @@
 }
 
 \usage{
-spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, norm = TRUE, PSD = FALSE,
-PMF = FALSE, dB = NULL, dBref = NULL,
+spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, norm = TRUE,
+scaled = FALSE, PSD = FALSE, PMF = FALSE, correction="none", dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL,
 identify = FALSE, col = "black", cex = 1,
 plot = 1, flab = "Frequency (kHz)",
@@ -30,12 +30,19 @@ alim = NULL, type="l",...)
     \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
     library \code{fftw} for faster computation. See Notes of the function \code{\link{spectro}}.}
-  \item{norm}{if \code{TRUE} the spectrum is normalised (i. e. scaled) by
+  \item{norm}{if \code{TRUE} the spectrum is normalised by
   its maximum.}
-  \item{PSD}{if \code{TRUE} return Power Spectra Density,
-    \emph{i. e.} the square of the spectra.}  
+  \item{scaled}{if \code{TRUE} the spectrum is scaled by the length of
+  the FFT.}
+  \item{PSD}{if \code{TRUE} return Power Spectrum Density,
+    \emph{i. e.} the square of the spectrum.}  
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
-    \emph{i. e.} the probability distribution of frequencie.}    
+    \emph{i. e.} the probability distribution of frequencies.}
+  \item{correction}{a character vector of length 1 to apply an
+  amplitude ("amplitude") or an energy ("energy") correction
+  to the FT window. This argument is useful only when one wish to obtain
+  absolute values that is when \code{norm=FALSE}, \code{scaled=FALSE},
+  and \code{PMF=FALSE}. By default no correction is applied ("none").}  
   \item{dB}{a character string specifying the type dB to return: "max0" for a
     maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default

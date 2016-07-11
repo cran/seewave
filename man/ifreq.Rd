@@ -41,12 +41,12 @@ ylim = NULL, type = "l", ...)
 
 \value{If \code{plot} is \code{FALSE}, \code{ifreq}
   returns a list of two components:
-  \item{p}{a two-column matrix, the first column corresponding to time in seconds
-    (\emph{x}-axis) and the second column corresponding to wrapped
-    instantaneous phase in radians (\emph{y}-axis).}
   \item{f}{a two-column matrix, the first column corresponding to time in seconds
     (\emph{x}-axis) and the second column corresponding to instantaneous
     frequency in kHz (\emph{y}-axis).}
+  \item{p}{a two-column matrix, the first column corresponding to time in seconds
+    (\emph{x}-axis) and the second column corresponding to wrapped
+    instantaneous phase in radians (\emph{y}-axis).}
 }
 
 \references{Mbu Nyamsi, R. G., Aubin, T. & Bremond, J. C. 1994

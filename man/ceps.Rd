@@ -8,7 +8,7 @@
   frequency detection.}
 
 \usage{
-ceps(wave, f, wl = 512, at = NULL, from = NULL, to = NULL,
+ceps(wave, f, phase = FALSE, wl = 512, at = NULL, from = NULL, to = NULL,
 tidentify = FALSE, fidentify = FALSE, col = "black", cex = 1, plot = TRUE,
 qlab = "Quefrency (bottom: s, up: Hz)", alab = "Amplitude",
 qlim = NULL, alim = NULL, type = "l", ...)
@@ -16,7 +16,10 @@ qlim = NULL, alim = NULL, type = "l", ...)
 
 \arguments{
   \item{wave}{an R object.}
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{phase}{if \code{TRUE} than the phase is taken into account in
+  the computation of the cepstrum.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{at}{position where to compute the cepstrum (in s).}
@@ -77,7 +80,11 @@ qlim = NULL, alim = NULL, type = "l", ...)
 
 \examples{
 data(sheep)
+par(mfrow=c(2,1))
+# phase not taken into account
 ceps(sheep,f=8000,at=0.4,wl=1024)
+# phase taken into account
+ceps(sheep,f=8000,at=0.4,wl=1024, phase=TRUE)
 }
 
 \keyword{dplot}

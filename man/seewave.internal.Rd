@@ -2,6 +2,7 @@
 \alias{aux}
 \alias{bartlett.w}
 \alias{blackman.w}
+\alias{cunwrap}
 \alias{filled.contour.modif2}
 \alias{flattop.w}
 \alias{hamming.w}

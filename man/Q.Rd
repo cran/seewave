@@ -52,7 +52,8 @@ alab = "Relative amplitude (dB)", type = "l", ...)
 
 \author{Jerome Sueur, improved by Laurent Lellouch}
 
-\note{This function is based on \code{\link{fft}}.} 
+\note{This function is based on an linear interpolation of the spectrum
+  so that the result should be considered as an estimation, not an exact measure.} 
 
 \seealso{\code{\link{spec}}, \code{\link{meanspec}}, \code{\link{corspec}},
   \code{\link{fft}}.}

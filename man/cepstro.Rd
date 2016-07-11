@@ -17,7 +17,7 @@ colcont = "black", colbg="white", colgrid = "black",
 colaxis = "black", collab = "black",
 xlab = "Time (s)", ylab = "Quefrency (ms)",
 scalelab = "Amplitude", main = NULL, scalefontlab = 1, scalecexlab = 0.75,
-axisX = TRUE, axisY = TRUE, ...)
+axisX = TRUE, axisY = TRUE, tlim = NULL, qlim = NULL, ...)
 }
 
 \arguments{
@@ -53,6 +53,8 @@ axisX = TRUE, axisY = TRUE, ...)
   \item{scalecexlab}{cex of the amplitude scale label.}
   \item{axisX}{if \code{TRUE} plots time X-axis (by default \code{TRUE}).}  
   \item{axisY}{if \code{TRUE} plots frequency Y-axis (by default \code{TRUE}).}  
+  \item{tlim}{modifications of the time X-axis limits.}
+  \item{qlim}{modifications of the quefrency Y-axis limits (in ms).} 
   \item{\dots}{other \code{\link{contour}} graphical parameters.}
 }
 

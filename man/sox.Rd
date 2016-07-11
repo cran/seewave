@@ -35,7 +35,7 @@ sox("mysound.wav", exe="play")
 ## Slows down  the  audio  tempo  (but  not  its  pitch)
 sox("mysound.wav myslowsound.wav tempo 0.5")
 ## Cuts the file
-sox("myslowsound.wav myslowcuttedsound.wav trim 0.25, 0.75")
+sox("myslowsound.wav myslowcuttedsound.wav trim 0.25 0.75")
 ## Deletes example files
 file.remove("mysound.wav", "myslowsound.wav", "myslowcuttedsound.wav")
 }

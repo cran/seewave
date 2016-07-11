@@ -101,7 +101,7 @@ segments(x0=x,y0=0, y1=y)
 
 
 ###################################################
-### code chunk number 9: DTFT
+### code chunk number 9: DFT
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 spec(tico, col="grey")
@@ -109,7 +109,7 @@ local <- spec(tico, wl = 512, at = 1.1, plot=FALSE)
 mean <- meanspec(tico, plot=FALSE)
 lines(local, col=2)
 lines(mean, col=4)
-legend("topright", legend=c("DTFT on complete sound", "DTFT on a sound section", "Mean spectrum (STFT)"), lty=1, col=c("grey", "red", "blue"), bty="n")
+legend("topright", legend=c("DFT on complete sound", "DFT on a sound section", "Mean spectrum (STFT)"), lty=1, col=c("grey", "red", "blue"), bty="n")
 
 
 ###################################################

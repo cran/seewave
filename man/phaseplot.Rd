@@ -39,12 +39,20 @@ zlab = "3rd derivative", ...)}
 
 \author{Jerome Sueur}
 
+\seealso{\code{\link{phaseplot2}}}
+
 \examples{
 \dontrun{
 require(rgl)
 data(tico)
 phaseplot(tico)
-}}
+}
+s <- synth(d=0.05, f=44100, cf=440, out="Wave")
+n <- noisew(d=0.05, f=44100, out="Wave")
+par(mfrow=c(2,1))
+phaseplot(s, dim=2)
+phaseplot(n, dim=2)
+}
 
 \keyword{dplot}
 \keyword{ts}

@@ -47,7 +47,8 @@ custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matri
 
 \author{Jerome Sueur}
 
-\seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}}}
+\seealso{\code{\link{afilter}},\code{\link{lfs}},\code{\link{fir}},
+  \code{\link{preemphasis}}, \code{\link{combfilter}}, \code{\link{bwfilter}}}
 
 \examples{
 a<-noisew(f=8000,d=1)
@@ -70,4 +71,4 @@ spectro(g,f=8000)
 }
 
 \keyword{ts}
-
+\keyword{filter}

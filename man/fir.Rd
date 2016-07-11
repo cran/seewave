@@ -37,16 +37,16 @@ wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
   wave to be filtered and the impulse filter.
 }
 
-\value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
+\value{A new wave is returned. The class
   of the returned object is set with the argument \code{output}.}
 
 \references{Stoddard, P. K. (1998). Application of filters in bioacoustics.
   \emph{In}: Hopp, S. L., Owren, M. J. and Evans, C. S. (Eds), \emph{Animal acoustic 
     communication}. Springer, Berlin, Heidelberg,pp. 105-127.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
-\seealso{\code{\link{ffilter}}, \code{\link{lfs}}, \code{\link{afilter}}}
+\seealso{\code{\link{ffilter}}, \code{\link{bwfilter}}, \code{\link{preemphasis}}, \code{\link{lfs}}, \code{\link{afilter}}}
 
 \examples{
 a<-noisew(f=8000,d=1)
@@ -75,4 +75,5 @@ spectro(h,f=22050)
 }
 
 \keyword{ts}
+\keyword{filter}
 

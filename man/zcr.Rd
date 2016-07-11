@@ -36,13 +36,13 @@
   and where:
   \deqn{sgn[x(t)] = 1}{%
   sgn(x(t)) = 1}
-  if \deqn{x(t) \leq 0}{%
+  if \deqn{x(t) \geq 0}{%
   x(t) >= 0
   }
   and \deqn{sgn[x(t)] = -1}{%
   sgn(x(t)) = -1}
-  if \deqn{x(t) > 0}{%
-  x(t) > 0.  
+  if \deqn{x(t) < 0}{%
+  x(t) < 0.  
     }
 }
 
@@ -54,6 +54,9 @@
     computed for for a window sliding along the time wave.}
   The ZCR is supposed to help in detection of voiced/unvoiced sound sections.
 }
+
+%% checked with matlab function
+%% https://www.mathworks.com/matlabcentral/fileexchange/31663-zero-crossing-rate/content/ZCR.m
 
 
 \value{The are two possibilities:
@@ -75,7 +78,7 @@
 data(tico)
 ## a single value for the complete signal, no plot
 zcr(tico, wl=NULL)
-## a series of values computed for a sliding window oof 512 samples, plot
+## a series of values computed for a sliding window of 512 samples, plot
 zcr(tico)
 }
 

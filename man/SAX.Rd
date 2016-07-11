@@ -51,7 +51,7 @@ Lin, J., Keogh, E., Lonardi, S., Chiu, B., June (2003). A symbolic representatio
 with implications for streaming algorithms. Proceedings of the 8th ACM SIGMOD Workshop on Research Issues in Data Mining and Knowledge Discovery. San Diego, California, USA.
 }
 
-\author{Laurent Lellouch}
+\author{Laurent Lellouch. An improvement added by Pavel Senin.}
 
 \note{SAX has been used recently to search similar times series in a
   soundcape data base (Kasten et al., 2012).}

@@ -27,7 +27,7 @@ The rugosity is then computed as following:
 
 \references{Mezquida DA, Martinez JL (2009) -
   Platform for bee-hives monitoring based on sound analysis.
-  A perpetual warehouse for swarm's daily acitvity.
+  A perpetual warehouse for swarm's daily activity.
   \emph{Spanish Journal of Agricultural Research} \bold{7}, 824-828.
 }
 

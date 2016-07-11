@@ -10,7 +10,7 @@ a specific part of a frequency spectrum.}
 \usage{cutspec(spec, f = NULL, flim, mel = FALSE, norm = FALSE, PMF = FALSE)}
 
 \arguments{
-  \item{spec}{a vector or a two-column matrix set resulting of a spectral analysis (not in dB)
+  \item{spec}{a vector or a two-column matrix set resulting of a spectral analysis.
 This can be the value obtained with \code{\link{spec}} or \code{\link{meanspec}}.}
   \item{f}{sampling frequency of \code{spec} (in Hz).}
   \item{flim}{a vector of length 2 to specify the new frequency range

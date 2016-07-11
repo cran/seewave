@@ -26,7 +26,7 @@ xlab = "Distance (m)", ylab = "dB", type = "l", ...)
   \item{ylab}{title of the y axis.}
   \item{type}{if \code{plot} is \code{TRUE}, type of plot that should be drawn.
       See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{\dots}{other \code{\link{plot}} graphical parameters.}ss
+  \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 
 \value{
@@ -42,7 +42,7 @@ experimental data collected in a real environment.}
 \references{
 Hartmann, W. M. 1998 \emph{Signals, sound and sensation}. New York: Springer.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
 \seealso{\code{\link{convSPL}}, \code{\link{moredB}}}
 

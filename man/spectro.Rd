@@ -11,9 +11,9 @@
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, complex = FALSE, norm = TRUE, fftw = FALSE,
-dB = "max0", dBref = NULL, plot = TRUE,
-grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
+ovlp = 0, complex = FALSE, norm = TRUE, correction="none",
+fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
+flog = FALSE, grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
 contlevels = NULL, colcont = "black",
 colbg = "white", colgrid = "black",
@@ -23,7 +23,7 @@ tlab = "Time (s)",
 flab = "Frequency (kHz)",
 alab = "Amplitude",
 scalelab = "Amplitude\n(dB)",
-main=NULL,
+main = NULL,
 scalefontlab = 1, scalecexlab =0.75,
 axisX = TRUE, axisY = TRUE, tlim = NULL, trel = TRUE,
 flim = NULL, flimd = NULL,
@@ -46,6 +46,11 @@ listen=FALSE,
   \item{complex}{if \code{TRUE} the STFT will be returned as complex
   numbers.}  
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
+  \item{correction}{a character vector of length 1 to apply an
+  amplitude ("amplitude") or an energy ("energy") correction
+  to each FT window. This argument is useful only when one wish to obtain
+  absolute values that is when \code{norm=FALSE}.
+  By default no correction is applied ("none").}  
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes.}
   \item{dB}{a character string specifying the type dB to return: "max0"
@@ -55,6 +60,7 @@ listen=FALSE,
     but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
     (by default \code{TRUE}).}
+  \item{flog}{a logical to plot the frequency on a logarithmic scale.}
   \item{grid}{logical, if \code{TRUE} plots a y-axis grid
     (by default \code{TRUE}).}
   \item{osc}{logical, if \code{TRUE} plots an oscillogram beneath
@@ -96,7 +102,7 @@ listen=FALSE,
   \item{heights}{a vector of length 2 to control the relative heights of rows on
     the device when \code{osc} is \code{TRUE}.}
   \item{oma}{a vector of length 4 to control the size of outer margins
-  when either \code{scale} or \code{osc} is \code{TRUE}.}
+    when either \code{scale} or \code{osc} is \code{TRUE}.}
   \item{listen}{if \code{TRUE} the sound is played back (by default
   \code{FALSE}).}
   \item{\dots}{other \code{\link{contour}} and \code{\link{oscillo}}

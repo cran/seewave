@@ -194,7 +194,7 @@ timer(tico,f=22050,threshold=5,msmooth=c(50,0))
 \end{figure}
 
 
-\section{Discrete-time Fourier Transform (DTFT)}
+\section{Discrete Fourier Transform (DFT)}
 
 \subsection{Definitions and principle}
 
@@ -210,7 +210,7 @@ Start first with some terminology:
 \begin{description}
 \item[Fourier transform (FT)] This is a reversible mathematical transform named after the French mathematician Joseph Fourier (1768-1830) (Figure \ref{fig:Fourier}). The transform decomposes a time series into a sum of finite series of sine or cosine functions.
 \item[Fast Fourier Transform (FFT)] This is an algorithm to compute quickly the FT. 
-\item[Discrete-time Fourier transform (DTFT)] This is a specific form of the FT applied to a time wave, typically a sound. Each sine / cosine function has a specified frequency and a relative amplitude. These two parameters are used to build the frequency spectrum of the original time wave. The DTFT is then a way to switch from the \textit{time domain} to the \textit{frequency domain}.
+\item[Discrete Fourier transform (DFT)] This is a specific form of the FT applied to a time wave, typically a sound. Each sine / cosine function has a specified frequency and a relative amplitude. These two parameters are used to build the frequency spectrum of the original time wave. The DFT is then a way to switch from the \textit{time domain} to the \textit{frequency domain}.
 \end{description}
 
 The signal \textit{s} depicted in the figure \ref{fig:s} was made by the addition of three original waves with three different carrier frequencies $\omega_{i}$: $\omega_{1} = 1$ kHz, $\omega_{2} = 2$ kHz, and $\omega_{3} = 3$ kHz. The waves were added in phase ($\Phi = 0$) but with three differrent relative amplitudes : $a_{1} = 1$, $a_{2} = 0.5$, and $a_{3} = 0.25$). The carrier frequencies $\omega_{i}$ and the relative amplitude of each sine function can be plotted in X-Y graph as shown in figure \ref{fig:s-decomposed}. This graph is a \textbf{frequency spectrum}.
@@ -266,19 +266,19 @@ segments(x0=x,y0=0, y1=y)
 \subsection{Complete sound}
 
 The number of sine functions $n$ is determined by the number of samples
-$N$ of the original time wave following $n = 0.5 \times N$. If the DTFT is computed on \texttt{tico} data, which includes 39,578 samples, the DTFT will decompose the sound into $0.5 \times 39578 = 19789$ sine functions. The first sine function will have a frequency $w_{1} = f_{s} / N = 22050 / 39578 = 0.557$ Hz (Figure \ref{fig:DTFT}). This is equivalent to the frequency resolution $\Delta_{f}$ of the decomposition.
+$N$ of the original time wave following $n = 0.5 \times N$. If the DFT is computed on \texttt{tico} data, which includes 39,578 samples, the DFT will decompose the sound into $0.5 \times 39578 = 19789$ sine functions. The first sine function will have a frequency $w_{1} = f_{s} / N = 22050 / 39578 = 0.557$ Hz (Figure \ref{fig:DFT}). This is equivalent to the frequency resolution $\Delta_{f}$ of the decomposition.
 
 \begin{figure}
 \centering
-<<DTFT, echo=FALSE, fig=TRUE>>=
+<<DFT, echo=FALSE, fig=TRUE>>=
 spec(tico, col="grey")
 local <- spec(tico, wl = 512, at = 1.1, plot=FALSE)
 mean <- meanspec(tico, plot=FALSE)
 lines(local, col=2)
 lines(mean, col=4)
-legend("topright", legend=c("DTFT on complete sound", "DTFT on a sound section", "Mean spectrum (STFT)"), lty=1, col=c("grey", "red", "blue"), bty="n")
+legend("topright", legend=c("DFT on complete sound", "DFT on a sound section", "Mean spectrum (STFT)"), lty=1, col=c("grey", "red", "blue"), bty="n")
 @
-\caption{\label{fig:DTFT} Three categories of frequency spectra computed on \texttt{tico} : (\textit{1}) the spectrum of complete sound, (\textit{2}) the spectrum computed at 1.1 s with a 512 samples window, and (\textit{3}) the mean spectrum computed with the STFT (see section \ref{sec:STFT}).}
+\caption{\label{fig:DFT} Three categories of frequency spectra computed on \texttt{tico} : (\textit{1}) the spectrum of complete sound, (\textit{2}) the spectrum computed at 1.1 s with a 512 samples window, and (\textit{3}) the mean spectrum computed with the STFT (see section \ref{sec:STFT}).}
 \end{figure}
 
 
@@ -286,15 +286,15 @@ legend("topright", legend=c("DTFT on complete sound", "DTFT on a sound section",
 
 Such a high frequency resolution is often not required, if not irrelevant. In addition, computing the FFT of the whole sound might not be appropriate if there is frequency modulation along time, \textit{i}. \textit{e}. the frequency of the sound is not constant along the time scale. \par
 
-A first solution is to compute the DTFT locally, on a specific sound section. The size of this section, or window, can be set up in seconds or in number of samples, a more accurate solution. \par
+A first solution is to compute the DFT locally, on a specific sound section. The size of this section, or window, can be set up in seconds or in number of samples, a more accurate solution. \par
 
-We can, for instance, compute the DTFT in the middle of the third note produced by the tico bird that is at 1.1 s (Figure \ref{fig:DTFT}). The length of the FFT is controlled with the argument \texttt{wl} for \textbf{w}indow \textbf{l}ength. If we choose a window size of 512 samples, we will end up with a decomposition into $0.5 \times 512 = 256$ sine functions with a frequency precision $\Delta_{f} = 22050 / 512 = 43.07$ Hz. \par
+We can, for instance, compute the DFT in the middle of the third note produced by the tico bird that is at 1.1 s (Figure \ref{fig:DFT}). The length of the FFT is controlled with the argument \texttt{wl} for \textbf{w}indow \textbf{l}ength. If we choose a window size of 512 samples, we will end up with a decomposition into $0.5 \times 512 = 256$ sine functions with a frequency precision $\Delta_{f} = 22050 / 512 = 43.07$ Hz. \par
 
 Increasing the window size will increase frequency resolution but the decomposition will be less accurate in terms of time as more signal will be selected. Inversely, reducing the window size will be more specific in terms of time (position) but the frequency resolution will decrease. This trade-off is an example of the uncertainty or Heisenberg principle that stipulates that there is a limit in the precision of pairs of parameters, here the time and frequency parameters. 
 
 \subsubsection{Window shape}
 
-When computing the DTFT, the shape of analysis window is by default a rectangle. However this shape is not always appropriate as it induces artefacts like side frequency lobes. A way to avoid this is to multiply the original window with a function of the same length with a particular shape. This shape can be rectangular -- in that case nothing is changed to the original signal -- triangular (Bartlett window), or sinusoidal (Blackman, Hamming, flat top, and Hanning windows) (see figure \ref{fig:ftwindow} for three examples of window shapes and figure \ref{fig:ftwindow-test} for a test on a simple signal). \par
+When computing the DFT, the shape of analysis window is by default a rectangle. However this shape is not always appropriate as it induces artefacts like side frequency lobes. A way to avoid this is to multiply the original window with a function of the same length with a particular shape. This shape can be rectangular -- in that case nothing is changed to the original signal -- triangular (Bartlett window), or sinusoidal (Blackman, Hamming, flat top, and Hanning windows) (see figure \ref{fig:ftwindow} for three examples of window shapes and figure \ref{fig:ftwindow-test} for a test on a simple signal). \par
 
 The default window shape used in \seewave{} is the Hanning window but other windows could be more appropriate depending on main signal features.
 
@@ -323,7 +323,7 @@ hamming <- spec(s, wn="hanning", dB=dB, plot=FALSE)
 lines(hamming, col="blue")
 legend("topright", legend=c("Rectangle", "Bartlett", "Hanning"), col=c("darkgreen", "red", "blue"), lty=1, bty="n", cex=0.75)
 @
-\caption{\label{fig:ftwindow-test} Using different DTFT window shapes can lead to different spectral profiles. The frequency spectrum of the signal $s$ (see figure \ref{fig:s}) was computed with three different window shapes. Side lobes differ between the three spectra}
+\caption{\label{fig:ftwindow-test} Using different DFT window shapes can lead to different spectral profiles. The frequency spectrum of the signal $s$ (see figure \ref{fig:s}) was computed with three different window shapes. Side lobes differ between the three spectra}
 \end{figure}
 
 \section{Short-time Fourier Transform (STFT)}
@@ -331,11 +331,11 @@ legend("topright", legend=c("Rectangle", "Bartlett", "Hanning"), col=c("darkgree
 
 \subsection{Principle}
 
-Computing the FFT on the whole sound or a single section might not be informative enough. An intuitive solution is to compute the DTFT on
-successive sections along the signal. A window is then slided along the signal and a DTFT is computed at each slide or jump. This is what the short-time Fourier
+Computing the FFT on the whole sound or a single section might not be informative enough. An intuitive solution is to compute the DFT on
+successive sections along the signal. A window is then slided along the signal and a DFT is computed at each slide or jump. This is what the short-time Fourier
 transform (STFT) does.\par
 
-A good way to understand how it works is to use the function \texttt{dynspec()}. The successive DTFT can be tracked when moving along the signal with a sliding cursor. Here is an example with a DTFT window of 1024 samples: \par
+A good way to understand how it works is to use the function \texttt{dynspec()}. The successive DFT can be tracked when moving along the signal with a sliding cursor. Here is an example with a DFT window of 1024 samples: \par
 
 <<dynspec, eval=FALSE>>=
 dynspec(tico, wl=1024, osc=TRUE)
@@ -363,7 +363,7 @@ This matrix is nice but a plot of it would even be better. There are three ways 
 \subsection{Spectrogram}
 
 \subsubsection{3D in a 2D plot}
-The density plot option, or \textbf{spectrogram}, is the most popular representation used in bioacoustics. It has the main advantage not to be based on a 3D representation that is not appropriate for human eye inspection. The principle is quite simple: the successive DTFT are plotted against time with the relative amplitude of each sine function of each DTFT being depicted in reference to a colour scale. The usual way is to use a dB scale for amplitudes with negative dB values refering to a maximum of 0 dB. \par
+The density plot option, or \textbf{spectrogram}, is the most popular representation used in bioacoustics. It has the main advantage not to be based on a 3D representation that is not appropriate for human eye inspection. The principle is quite simple: the successive DFT are plotted against time with the relative amplitude of each sine function of each DFT being depicted in reference to a colour scale. The usual way is to use a dB scale for amplitudes with negative dB values refering to a maximum of 0 dB. \par
 
 If we keep the \texttt{tico} example, applying a STFT with a sliding window of 512 samples will result in the computation of $39578 / 512 = 77$ FFTs. The spectrogram will therefore be made of 77 sections (columns) as shown in figure \ref{fig:spectro-grid}. \par
 
@@ -384,10 +384,10 @@ The temporal and the frequency resolutions of the spectrogram are linked, with $
 resolution is $22050 / 512 = 43.06$ Hz and the time resolution is $512/22050 = 0.0232 s$. As mentionned above, increasing the size of the window will increase
 frequency resolution but decrease time resolution.  \par
 
-However, there is a trick to counteract this two-dimension precision limit. In the first example, the DTFT window was coarsely jumping from
+However, there is a trick to counteract this two-dimension precision limit. In the first example, the DFT window was coarsely jumping from
 a position to another but we can make the jump slightly better. The solution is to simply allow an overlap between successive
 windows. This overlap is usually set up in percentage: the default value is 0\% as in figure \ref{fig:spectro-grid}. A percentage of 50\%
-will double the number of DTFTs, hence increasing the time resolution by a factor of 2 (now 153 FFTs) when the frequency resolution is not reduced. The overlap parameter is set up with the argument \texttt{ovlp} of
+will double the number of DFTs, hence increasing the time resolution by a factor of 2 (now 153 FFTs) when the frequency resolution is not reduced. The overlap parameter is set up with the argument \texttt{ovlp} of
 the function \texttt{spectro()}(see figure \ref{fig:spectro-grid-ovlp}). A value of 100\% is of course a non-sense as the sliding window will stay on the spot. Increasing the
 overlap inscrease computing time as more FFT are computed. We advice to keep reasonable values for computing efficiency. \par
 
@@ -413,7 +413,7 @@ along the three scales can be saved. The value of
   decompositions or spectra.
 \end{itemize}
 
-These components can be used to plot the spectrogram manually (Figure \ref{fig:spectro-components}). The successive spectra computed by the successive DTFT can also be picked up and plot as the function \texttt{spec()} would do (Figure \ref{fig:spectro-spec}). \par
+These components can be used to plot the spectrogram manually (Figure \ref{fig:spectro-components}). The successive spectra computed by the successive DFT can also be picked up and plot as the function \texttt{spec()} would do (Figure \ref{fig:spectro-spec}). \par
 
 \begin{figure}
    \centering
@@ -440,7 +440,7 @@ plot(x=spectro$freq, y=spectro$amp[,15], type="o", xlab="Frequency (kHz)", ylab=
 
 \subsection{Mean spectrum}
 
-The columns of the STFT matrix can be averaged giving the so-called mean or average spectrum as shown in the figure \ref{fig:DTFT}. The frequency resolution and the shape of the mean spectrum will of course change when changing the window size (\texttt{wl}) and overlap (\texttt{ovlp}) arguments. \par
+The columns of the STFT matrix can be averaged giving the so-called mean or average spectrum as shown in the figure \ref{fig:DFT}. The frequency resolution and the shape of the mean spectrum will of course change when changing the window size (\texttt{wl}) and overlap (\texttt{ovlp}) arguments. \par
 
 The function to compute the mean spectrum is \texttt{meanspec()}.
 

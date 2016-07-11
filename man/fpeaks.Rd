@@ -12,7 +12,8 @@ nmax = NULL, amp = NULL, freq = NULL, threshold = NULL,
 mel =FALSE,
 plot = TRUE, title = TRUE,
 xlab = NULL, ylab = "Amplitude",
-labels = TRUE, legend = TRUE, collab = "red", ...)
+labels = TRUE, digits = 2,
+legend = TRUE, collab = "red", ...)
 }
 
 \arguments{
@@ -20,8 +21,8 @@ labels = TRUE, legend = TRUE, collab = "red", ...)
     with \code{\link{spec}} or \code{\link{meanspec}}. Can be in dB.}
   \item{f}{sampling frequency of \code{spec} (in Hz). Not requested if
   the first column of \code{spec} contains the frequency axis.}
-  \item{nmax}{maximal number of peaks detected. Overrides \code{amp},
-    \code{freq} and \code{threshold}. See details.}
+  \item{nmax}{maximal number of peaks detected. Overrides \code{amp} and
+    \code{freq}. See details.}
   \item{amp}{amplitude slope parameter, a numeric vector of length
     2. Refers to the amplitude slopes of the peak. The first value is the
     left slope and the second value is the right slope. Only peaks with
@@ -38,6 +39,8 @@ labels = TRUE, legend = TRUE, collab = "red", ...)
   \item{xlab}{label of the x-axis.}
   \item{ylab}{label of the y-axis.}
   \item{labels}{logical, if \code{TRUE} peak labels are plotted.}
+  \item{digits}{if \code{labels} is \code{TRUE}, the number of decimal
+  places (\code{\link{round}}) for the peak labels.}
   \item{legend}{logical, if \code{TRUE} a legend returning the different
   selection parameters (\code{nmax}, \code{amp}, \code{freq},
   \code{threshold}, \code{threshold}) is added to the plot.}

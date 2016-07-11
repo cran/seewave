@@ -53,7 +53,7 @@ layout(matrix(c(1, 2), nc = 2), widths = c(1, 5))
 par(mar=c(5,3,4,2))
 dBscale(collevels=seq(-30,0,1),side=2)
 par(mar=c(5,4,4,2))
-spectro(pellucens, f=22050,wl=512,scale=FALSE)
+spectro(pellucens, f=22050,wl=512,scale=FALSE, on.exi=FALSE)
 par(def.par)
 # place the scale on the top and not on the right as spectro() does
 def.par <- par(no.readonly = TRUE)

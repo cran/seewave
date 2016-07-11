@@ -14,13 +14,13 @@ SongMeters, audio digal recorders produced by the society Wildlife Acoustics.}
     \code{.wav}}
 }
 
-\details{The digital recorder SongMeter (either SM2 or SM3 device model)
+\details{The digital recorder SongMeter (either SM2, SM3, or SM4 device model)
   produced by the society 'Wildlife Acoustics' generates '.wav' or
   '.wac' files which names include useful information. Here are the
   character format of the files:\cr
 
 \itemize{
-    \item{\bold{SM2}: \code{PREFIX_YYYYMMDD_HHMMSS.wav}}
+    \item{\bold{SM2 or SM4}: \code{PREFIX_YYYYMMDD_HHMMSS.wav}}
     \item{\bold{SM3}:
       \itemize{
 	\item{\emph{without geolocalisation} \code{PREFIX_XXX_YYYYMMDD_HHMMSS.wav}}
@@ -50,7 +50,7 @@ SongMeters, audio digal recorders produced by the society Wildlife Acoustics.}
 
 \value{The function returns a \code{data.frame} with the following
   columns:
-  \item{model}{device model, either "SM2" or "SM3"}
+  \item{model}{device model, either "SM2/SM4" or "SM3"}
   \item{prefix}{prefix of the file, specifying for instance to
     recording site}
   \item{mic}{microphone information specifying if the recording is mono left channel ("monoL"),
@@ -67,7 +67,7 @@ SongMeters, audio digal recorders produced by the society Wildlife Acoustics.}
 }
 
 \references{See Wildlife Acoustics website for details regarding the
-  SongMeter 2 and 3: \url{http://www.wildlifeacoustics.com/}}
+  SongMeters 2, 3 and 4: \url{http://www.wildlifeacoustics.com/}}
 
 \author{Jerome Sueur}
 

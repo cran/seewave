@@ -11,7 +11,8 @@
 
 \usage{
 spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, norm = TRUE, fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
+ovlp = 0, norm = TRUE, correction = "none", fftw = FALSE,
+dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
 palette = reverse.terrain.colors)
 }
@@ -25,6 +26,11 @@ palette = reverse.terrain.colors)
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
+  \item{correction}{a character vector of length 1 to apply an
+  amplitude ("amplitude") or an energy ("energy") correction
+  to the FT window. This argument is useful only when one wish to obtain
+  absolute values that is when \code{norm=FALSE}, \code{scaled=FALSE},
+  and \code{PMF=FALSE}. By default no correction is applied ("none").}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return:

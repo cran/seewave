@@ -32,7 +32,7 @@ plot = FALSE, output = "matrix", ...)}
   \deqn{y(n) = x(n) + \alpha \times x(n - K)}{%
     y(n) = x(n) + alpha * x(n - K)
   }
-  where alpha is the scaling factor and K the dealy length.
+  where alpha is the scaling factor and K the delay length.
   The frequency response of the filter is obtained with:
   \deqn{H(f) = \sqrt{(1+\alpha^2)+2 \times \cos(\omega K)}}{%
     H(f) = sqrt((1+alpha^2)+2*cos(omega*K))}
@@ -46,10 +46,11 @@ plot = FALSE, output = "matrix", ...)}
 \note{Setting K to high values may generate unwanted results. \cr
   The feedback form of the combfilter is not implemented yet.}
 
-\seealso{\code{\link{fir}}, \code{\link{squarefilter}}, \code{\link{drawfilter}}, \code{\link{ffilter}}}
+\seealso{\code{\link{combfilter}}, \code{\link{fir}}, \code{\link{squarefilter}}, \code{\link{drawfilter}}, \code{\link{ffilter}}, \code{\link{bwfilter}}}
 
 \examples{
-\dontrun{f <- 44100
+\dontrun{
+f <- 44100
 ## chirp
 s1 <- synth(f=f, cf=1, d=2, fm=c(0,0,f/2), out="Wave")
 combfilter(s1, alpha=1, K=50, plot=TRUE)

@@ -37,7 +37,7 @@ following functions: \code{\link{autoc}}, \code{\link{csh}},
 \code{\link{dfreq}}, \code{\link{timer}} and \code{\link{zc}}.   
 }
 
-\seealso{\code{\link{ffilter}}, \code{\link{oscillo}}}
+\seealso{\code{\link{oscillo}}}
 
 \examples{
 data(orni)
@@ -50,3 +50,4 @@ par(op)
 }
 
 \keyword{ts}
+\keyword{filter}
