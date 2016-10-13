@@ -46,7 +46,7 @@ data(tico)
 AR(orni, tico)
 ## give names to objects if you wish to have them as row names of the returned data.frame
 AR(orni=orni, tico=tico)
-## input as files, here stored in the working directory
+## input as files stored in the working directory
 ## file names will be used as row names of the returned data.frame
 \dontrun{
 require(tuneR)

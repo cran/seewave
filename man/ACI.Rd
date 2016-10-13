@@ -16,7 +16,7 @@
     (even number of points) (by default = 512)}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
-  \item{flim}{a numeric vector of legnth 2 to select a frequency band (in kHz).}
+  \item{flim}{a numeric vector of length 2 to select a frequency band (in kHz).}
   \item{nbwindows}{a numeric vector of length 1 specifying the number of
   windows (by default 1, ie a single window including the complete \code{wave} object.}
 }

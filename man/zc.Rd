@@ -25,7 +25,7 @@ warning = TRUE, ...)
   \item{ylab}{title of the y axis.}
   \item{ylim}{the range of y values.}
   \item{warning}{a logial to specify if warning message should be
-  displayed or not when \code{interpol} is > 5.}
+  displayed or not when \code{interpol} is > 100.}
   \item{\dots}{other \code{\link{plot}} graphical parameters.}
 }
 

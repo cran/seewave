@@ -1,6 +1,19 @@
 		*****************************************
 		*		SEEWAVE NEWS		*
 		*****************************************
+
+
+		CHANGES IN SEEWAVE VERSION 2.0.5 [12-10-2017]
+
+OTHER CHANGES
+        o autoc(): a bug fixed when using 'threshold'.
+	o drawfilter(): a bug of the axis labels fixed.
+	o fma(): slighty improved by trying to remove DC component.
+	o fund(): the default value of 'fmax' is now f/2.
+	o NDSI(): the argument 'anthrophony' is renamed 'anthropophony'.
+	o spectro(): a bug introduced in the last version regarding the display of the time axis fixed.
+
+
 		CHANGES IN SEEWAVE VERSION 2.0.4 [11-July-2016]
 
 NEW FUNCTIONS
@@ -15,7 +28,7 @@ NEW ARGUMENTS
 	o spec(): a new argument 'scaled' to scale the results to the length of the FFT ; a small bug regarding frequency scale fixed when 'at' is NULL.
 
 OTHER CHANGES
-        o attenuation(): a bug introduced in the previous version of seewave is now fixed.
+        o attenuation(): a bug introduced in the previous version is now fixed.
 	o cepstro(): the value $amp is transposed such that columns correspond correctly to successive cepstra.
 	o cutspec(): is now more accurate.
 	o dfreq(): a small bug regarding frequency scale fixed.
@@ -30,7 +43,7 @@ OTHER CHANGES
 	o rmam(): is now faster.
 	o SAX(): an improvement for unevenly broken segments. Thanks to Pavel Senin.
 	o songmeter(): now handles SM4 model.
-	o spectro(): a bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
+	o spectro(): a bug with the zero padding (argument 'zp') fixed, Thanks to Andrey Anikin. A new logical argument 'flog' to plot the frequency axis on a log scale.
 	o spectro3D(): a bug with the zero padding (argument 'zp') fixed. Thanks to Andrey Anikin.
 	o symba(): the value of the sequence of symbols of the 'y' is now correctly named 's2' instead of 's1'; the computation of the entropy of y has been corrected implying a correction in the computation of the mutual information I; the plot of y has been corrected; 'absolute frequency' has been corrected to 'relative frequency' in the documentation.
 	o TKEO(): a mistake in the documentation regarding the exponent and lag parameters is now fixed.

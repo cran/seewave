@@ -2,7 +2,7 @@
 
 \alias{smoothw}
 
-\title{A function to tentavily smooth a time wave}
+\title{A function to tentativily smooth a time wave}
 
 \description{This function tries to smooth with a sum sliding window a time wave, and then to remove residual noise.}
 

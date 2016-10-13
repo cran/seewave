@@ -23,7 +23,7 @@ custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matri
     between \code{from} and  \code{to} (by default \code{TRUE}).}
   \item{custom}{a vector describing the frequency response of a custom filter.
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
-    The legnth of the vector should be half the length of \code{wl}. See examples.}
+    The length of the vector should be half the length of \code{wl}. See examples.}
   \item{wl}{window length for the analysis (even number of points).}
   \item{ovlp}{overlap between successive FFT windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

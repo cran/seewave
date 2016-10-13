@@ -41,9 +41,9 @@
 \seealso{\code{\link{ifreq}}, \code{\link{hilbert}}, \code{\link{spec}}, \code{\link{ama}}}
 
 \examples{
-# a sound with a 1 Khz sinusoid FM
-a<-synth(d=1, f=8000, cf=1500, fm=c(1000,1000,0))
-fma(a,f=8000)
+# a sound with a 1 kHz sinusoid FM
+a<-synth(d=1, f=8000, cf=1500, fm=c(1000,1000,0,0), output="Wave")
+fma(a)
 }
 
 \keyword{dplot}

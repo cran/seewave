@@ -14,8 +14,8 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 2.0.4\cr
-    Date: \tab 2016-07-11\cr
+    Version: \tab 2.0.5\cr
+    Date: \tab 2016-10-12\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
                    \tab Marion Depraetere, Francois Fabianek, \cr

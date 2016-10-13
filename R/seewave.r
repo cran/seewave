@@ -4,7 +4,7 @@
 ################################################################################
 
 ################################################################################
-##                                ACI
+## ACI
 ################################################################################
 
 ACI <- function (
@@ -298,7 +298,7 @@ ama<-function(
 
 
 ################################################################################
-##                                AR                                        
+## AR                                        
 ################################################################################
 
 AR <- function(...,
@@ -312,7 +312,7 @@ AR <- function(...,
 {
     ## data as R objects
     if(datatype=="objects"){
-        if(is.character(list(...)[[1]])) stop("The first argument should not be a character string with 'datatype=object'")
+        if(is.character(list(...)[[1]])) stop("The first argument should not be a character string if 'datatype=object'")
         ## number of objects = number of arguments - missing arguments
         n <- nargs() - !missing(datatype) - !missing(envt) - !missing(pattern) 
         ## number of objects = number of arguments - NULL arguments
@@ -320,7 +320,7 @@ AR <- function(...,
         if(is.null(ksmooth)) k <- 0 else k <- 1
         if(is.null(ssmooth)) s <- 0 else s <- 1
         n <- n - m - k- s
-        if(n <= 1) warning("Computing the AR index on a single object does not make a lot of sense as AR is ranked index")
+        if(n <= 1) warning("Computing the AR index on a single object does not make a lot of sense as AR is a ranked index")
         name <- M <- Ht <- AR <- numeric(n)
         for(i in 1:n){ # does not use the function M() to avoid to compute the envelope twice
             wave <- list(...)[[i]]
@@ -339,6 +339,7 @@ AR <- function(...,
         if(!is.character(...)) stop("The first argument should be character string when 'datatype='files''")
         files <- dir(..., pattern=pattern)
         n <- length(files)
+        if(n <= 1) warning("Computing the AR index on a single object does not make a lot of sense as AR is a ranked index")
         name <- M <- Ht <- AR <- numeric(n)
         for(i in 1:n){ # does not use the function M() to avoid to compute the envelope twice
             filename <- basename(files[i])
@@ -391,7 +392,7 @@ attenuation <- function(lref,
 
 
 ################################################################################
-##                                AUTOC                                         
+## AUTOC                                         
 ################################################################################
 
 autoc <- function(
@@ -414,19 +415,18 @@ autoc <- function(
   if(!is.null(threshold)) wave <- afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
 
   lag.min <- round(wl*(fmin/(f/2)))
-  lag.max <- round(wl*(fmax/(f/2)))   # in that case we consider 2*fmax to be sure to get a result 
+  lag.max <- round(wl*(fmax/(f/2)))
   if(lag.max==wl) {lag.max <- lag.max-1}
   n <- nrow(wave)
   step <- seq(1,n-2*wl,wl)
   N <- length(step) 
   if(pb) {pbar <- txtProgressBar(min=0, max=N, style = 3)}
   R <- matrix(data=numeric((lag.max+1)*N), lag.max+1, N)
-  R[is.nan(R)] <- 0  # the use of 'threshold' can produce NaN
   for (i in step)
     {
       R[,which(step==i)] <- as.vector(acf(wave[i:(wl+i-1)], lag.max=lag.max, plot=FALSE)$acf)
     }
-  R[is.nan(R)] <- 0 # need to do it twice as acf() can produce NaN
+  R[is.nan(R)|is.na(R)] <- 0 # acf() can produce NaN or NA
   tfond <- numeric(N)
   excl <- 1:lag.min
 
@@ -435,11 +435,9 @@ autoc <- function(
     tfond[i] <- fpeaks(R[-excl,i], f=NA, nmax=1)[1]
     if(pb) {setTxtProgressBar(pbar, i)}
     }
-#  for (k in 1:N) {tfond[k]<-which.max(R[-excl, k])}
-#  tfond <- ifelse(tfond==1 | tfond==nrow(R), yes=NA, no=tfond)
+
   tfond <- tfond + length(excl)
   y<-f/tfond/1000
-
   x<-seq(0,n/f,length.out=N)  
 
   if(plot)
@@ -451,9 +449,7 @@ autoc <- function(
            ...)
       invisible(cbind(x,y))
     }
-
-  else return(cbind(x,y))
-  if(pb) close(pbar)
+  else {return(cbind(x,y))}
 }
 
 
@@ -904,7 +900,7 @@ combfilter <- function(wave,
        def.par <- par(no.readonly = TRUE)
        on.exit(par(def.par))
        layout(matrix(c(1, 2), ncol = 2, byrow=TRUE), widths = c(4, 1))
-        spectro(wave2, f=f, scale=FALSE, osc=FALSE, on.exit=FALSE, ...)
+        spectro(wave2, f=f, scale=FALSE, osc=FALSE, ...)
         par(mar=c(5.1,0,4.1,1))
         freq <- seq(0, f/2000, length.out=n)
         plot(x=H, y=freq, xlim=c(0, max(H)), type="l", xaxs="i", yaxs="i", xlab="Linear amplitude", ylab="", yaxt="n")
@@ -1618,7 +1614,7 @@ deletew<-function(
 
 
 ################################################################################
-##                                DFREQ                                         
+## DFREQ                                         
 ################################################################################
 
 dfreq <- function(
@@ -1659,8 +1655,8 @@ dfreq <- function(
        {
        step <- at*f
        N <- length(step)
-       if(step[1]==0) {step[1] <- 1}
-       if(step[N] == n | step[N] == n+1 | step[N] == n-1) {step[N] <- n-wl}
+       if(step[1]<=0) {step[1] <- 1}
+       if(step[N]+(wl/2) >= n) {step[N] <- n-wl}
        x <- c(0, at, n/f)
        }
   else {
@@ -1942,7 +1938,7 @@ diffspec <- function(spec1,
                     lines(x=x, y=s2, type=type, lty=lty[2], col=col[2])
                     box()
                     if(legend) legend("topleft", col=c(col[1],col[2]),lty=c(lty[1],lty[2]),legend=leg, bty="n")
-                    if(title) title(main=paste("dspec = ", round(dspec, 3)))
+                    if(title) title(main=paste("D = ", round(dspec, 3)))
                     invisible(dspec)
                 }
             else return(dspec)
@@ -2120,7 +2116,7 @@ drawfilter <- function(f,
     f <- f/2000 
     plot.new()
     par(xaxs="i", yaxs="i", las=1)  
-    plot(x=NA, xlim=c(0,f), ylim=c(0,1), type="n", xlab="toto", ylab="tata") 
+    plot(x=NA, xlim=c(0,f), ylim=c(0,1), type="n", xlab="Frequency (kHz)", ylab="Amplitude") 
     grid() 
     axis(1)
     axis(2)
@@ -2890,20 +2886,28 @@ fir <- function(
 
 
 ################################################################################
-##                                FMA
+## FMA
 ################################################################################
 
-fma<-function(
-              wave,
-              f,
-              threshold = NULL,
-              plot = TRUE,
-              ...)
+fma <- function(
+                 wave,
+                 f,
+                 threshold = NULL,
+                 plot = TRUE,
+                 ...
+                 )
 
 {
-  ifreq<-ifreq(wave, f=f, threshold=threshold, plot = FALSE)$f
-  ifreq<-na.omit(ifreq)
-  spec(ifreq[,2],f=f,plot=plot,...)
+  ## INPUT
+  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
+  ## INSTANTANEOUS FREQUENCY  
+  ifreq <- ifreq(wave, f=f, threshold=threshold, plot=FALSE)$f
+  ## remove NAs
+  ifreq <- na.omit(ifreq)
+  ## scale around 0 Hz to avoid high Fourier coefficient at 0 hz
+  ifreq[,2] <- ifreq[,2] - mean(ifreq[,2])
+  ## SPECTRUM OF THE INSTANTANEOUS FREQUENCY  
+  spec(ifreq[,2], f=f, plot=plot, ...)
 }
 
 
@@ -3146,25 +3150,25 @@ ftwindow <- function(
 }
 
 ################################################################################
-##                                   FUND
+## FUND
 ################################################################################
 
 fund <- function (
-    wave,
-    f,
-    wl = 512,
-    ovlp = 0,
-    fmax,
-    threshold = NULL, 
-    at = NULL,
-    from = NULL,
-    to = NULL,
-    plot = TRUE,
-    xlab = "Time (s)",
-    ylab = "Frequency (kHz)", 
-    ylim = c(0, f/2000),
-    pb = FALSE,
-    ...)
+                  wave,
+                  f,
+                  wl = 512,
+                  ovlp = 0,
+                  fmax = f/2,
+                  threshold = NULL, 
+                  at = NULL,
+                  from = NULL,
+                  to = NULL,
+                  plot = TRUE,
+                  xlab = "Time (s)",
+                  ylab = "Frequency (kHz)", 
+                  ylim = c(0, f/2000),
+                  pb = FALSE,
+                  ...)
     
 {
         ## ERROR MESSAGES
@@ -3318,16 +3322,18 @@ H<-function(
 
 
 ################################################################################
-##                                HILBERT
+## HILBERT
 ################################################################################
 
-hilbert <- function(wave,
-                     f,
-                     fftw = FALSE 
-                     )    
+hilbert <- function(
+                    wave,
+                    f,
+                    fftw = FALSE 
+                   )
+    
 {
     ## input
-    wave <- inputw(wave = wave,f = f)$w
+    input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
     n <- n1 <- nrow(wave)
     ## change the length of wave to reach a power of 2
     ## test on wave length n
@@ -3364,24 +3370,25 @@ hilbert <- function(wave,
 
 
 ################################################################################
-##                                IFREQ
+## IFREQ
 ################################################################################
 
 ifreq <- function(
-                   wave,
-                   f,
-                   phase = FALSE,
-                   threshold = NULL,
-                   plot = TRUE,
-                   xlab = "Time (s)",
-                   ylab = NULL,
-                   ylim = NULL,
-                   type = "l",
-                   ...
-                   )
+                  wave,
+                  f,
+                  phase = FALSE,
+                  threshold = NULL,
+                  plot = TRUE,
+                  xlab = "Time (s)",
+                  ylab = NULL,
+                  ylim = NULL,
+                  type = "l",
+                  ...
+                  )
 
 {
-  if(class(wave)=="Wave") {f <- wave@samp.rate}
+  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f
+  rm(input)
   wave <- hilbert(wave, f=f)
   n <- nrow(wave)
   ## instantaneous phase
@@ -3434,7 +3441,7 @@ ifreq <- function(
 
 
 ################################################################################
-##                                ISTFT
+## ISTFT
 ################################################################################
 
 istft <- function(
@@ -3473,7 +3480,7 @@ istft <- function(
         ## find W0
         W0 <- sum(win^2)
         ## scale the weighted-OLA
-        x  <- x*h/W0                     
+        x  <- x*h/W0
         ## return
         x <- outputw(wave = x, f = f, format = output)
     }
@@ -3704,19 +3711,19 @@ listen <- function(
 
 
 ################################################################################
-##                                LFS
+## LFS
 ################################################################################
 
 lfs <- function(
-    wave,
-    f,
-    shift,
-    wl = 1024,
-    ovlp = 75,
-    wn="hanning",
-    fftw = FALSE,
-    output = "matrix"
-    )
+                wave,
+                f,
+                shift,
+                wl = 1024,
+                ovlp = 75,
+                wn="hanning",
+                fftw = FALSE,
+                output = "matrix"
+                )
 
 {
     ## STOP MESSAGES
@@ -4261,7 +4268,7 @@ mutew<-function(
 
 NDSI <- function(
                 x,
-                anthrophony = 1,
+                anthropophony = 1,
                 biophony = 2:8
                 )
     
@@ -4270,7 +4277,7 @@ NDSI <- function(
     if(!is.matrix(x)) stop("'x' should be a two-column matrix obtained with the function sounscapespec().")
     else if(ncol(x) <1 | ncol(x) > 2) stop("'x' should be a two-column matrix obtained with the function sounscapespec().")
     ## INDEX
-    alpha <- x[anthrophony, 2]
+    alpha <- x[anthropophony, 2]
     beta <- sum(x[biophony, 2])
     res <- (beta - alpha) / (beta + alpha)
     names(res) <- NULL # to remove the colnames 'amplitude' of the soundscapespec result
@@ -4848,7 +4855,7 @@ preemphasis <- function(wave,
        def.par <- par(no.readonly = TRUE)
        on.exit(par(def.par))
        layout(matrix(c(1, 2), ncol = 2, byrow=TRUE), widths = c(4, 1))
-        spectro(wave, f=f, scale=FALSE, osc=FALSE, on.exit=FALSE, ...)
+        spectro(wave, f=f, scale=FALSE, osc=FALSE, ...)
         par(mar=c(5.1,0,4.1,1))
         plot(x=response, y=freq, xlim=c(0, max(response)), type="l", xaxs="i", yaxs="i", xlab="Linear amplitude", ylab="", yaxt="n")
         invisible(wave)
@@ -6236,16 +6243,14 @@ spectro <- function(
                    tlab=tlab, alab=alab,
                    cexlab=cexlab,
                    cexaxis=cexaxis,
+                   xaxt={if(!axisX) {"n"}},
                    ...)
           # SPECTRO
           par(mar=c(0,4.1,1,0), las=1, cex.lab=cexlab+0.2)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab="",ylab=flab),
-                                plot.axes={
-                                    axis(1, at=xat, labels=xlabel);
-                                    axis(2, at=yat, labels=ylabel)},
-                                color.palette=palette,
-                                axisX=FALSE, axisY=axisY
+                                plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
+                                color.palette=palette
                                 )
           if(grid) abline(h=yat, col=colgrid, lty="dotted")
           if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
@@ -6265,10 +6270,10 @@ spectro <- function(
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab),
                                 plot.axes={
-                                    axis(1, at=xat, labels=xlabel);
-                                    axis(2, at=yat, labels=ylabel)},
-                                color.palette=palette,
-                                axisX=axisX, axisY=axisY)
+                                    if(axisX) {axis(1, at=xat, labels=xlabel)}
+                                    if(axisY) {axis(2, at=yat, labels=ylabel)}
+                                },
+                                color.palette=palette)
           if(grid) abline(h=yat, col=colgrid, lty="dotted")
           if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
           if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
@@ -6287,12 +6292,14 @@ spectro <- function(
                    ylim=c(-max(abs(wave)),max(abs(wave))),
                    tlab=tlab, alab=alab,
                    cexlab=cexlab, cexaxis=cexaxis,
+                   xaxt={if(!axisX) {"n"}},
                    ...)
           # SPECTRO
           par(mar=c(0,4.1,2.1,2.1), las=1, cex.lab=cexlab)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab="",ylab=flab),
-                                color.palette=palette, axisX=FALSE, axisY=axisY,
+                                color.palette=palette,
+                                plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
                                 col.lab=collab,colaxis=colaxis,...)		
           if(grid) abline(h=yat, col=colgrid, lty="dotted")
           if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
@@ -6305,10 +6312,11 @@ spectro <- function(
           par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab, bg=colbg, cex.axis=cexaxis, cex.lab=cexlab,...)
           filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
                                 plot.title=title(main=main,xlab=tlab,ylab=flab),
-                                plot.axes={
-                                    axis(1, at=xat, labels=xlabel);
-                                    axis(2, at=yat, labels=ylabel)},
-                                color.palette=palette, axisX=axisX, axisY=axisY,
+                                plot.axes = {
+                                    if(axisX) {axis(1, at=xat, labels=xlabel)}
+                                    if(axisY) {axis(2, at=yat, labels=ylabel)}
+                                },
+                                color.palette=palette,
                                 col.lab=collab,colaxis=colaxis)		
           if(grid) abline(h=yat, col=colgrid, lty="dotted")
           if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
@@ -7170,7 +7178,7 @@ zc<-function(
 {
   input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(isTRUE(warning) & interpol > 5)
+  if(isTRUE(warning) & interpol > 100)
     {
       cat("please wait...")
       if(.Platform$OS.type == "windows") flush.console()

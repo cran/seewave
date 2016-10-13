@@ -7,31 +7,31 @@
 \description{This function computes the Normalized Difference Soundscape
   Index as described by Kasten et al. (2012).}
 
-\usage{NDSI(x, anthrophony = 1, biophony = 2:8)}
+\usage{NDSI(x, anthropophony = 1, biophony = 2:8)}
 
 \arguments{
   \item{x}{a two-column numeric matrix computed with \code{\link{soundscapespec}}.}
-  \item{anthrophony}{a numeric vector defining the frequency band(s) of
-  the anthrophony (in kHz).}
+  \item{anthropophony}{a numeric vector defining the frequency band(s) of
+  the anthropophony (in kHz).}
   \item{biophony}{a numeric vector defining the frequency band(s) of the
   biophony (in kHz).}
 }
 
 \details{
 NDSI aims at estimating the level of anthropogenic disturbance on the soundscape by
-computing the ratio of human-generated (anthrophony) to biological
+computing the ratio of human-generated (anthropophony) to biological
 (biophony) acoustic components found in field collected sound
-samples. In terms of frequency, the anthrophony is defined as the [1-2[
+samples. In terms of frequency, the anthropophony is defined as the [1-2[
 kHz frequency bin and the biophony as the [2-8[ kHz frequency bins of a
 soundscape frequency spectrum (see \code{\link{soundscapespec}}). \cr
 
 NDSI is computed according to:
-\deqn{NDSI = \frac{(biophony - anthrophony)}{(biophony + anthrophony)}}{%
-  NDSI = (biophony - anthrophony) / (biophony + anthrophony)
+\deqn{NDSI = \frac{(biophony - anthropophony)}{(biophony + anthropophony)}}{%
+  NDSI = (biophony - anthropophony) / (biophony + anthropophony)
    }
 \cr
 NDSI varies between -1 and +1, where +1 indicates a signal containing
-no anthrophony.
+no anthropophony.
 }
 
 \value{A numeric vector of length 1 giving the NDSI value.}

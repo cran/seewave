@@ -4,7 +4,7 @@
 
 \title{Butterworth frequency filter}
 
-\description{This functin is a Butterworth frequency filter that filters
+\description{This function is a Butterworth frequency filter that filters
   out a selected frequency section of of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass or bandstop frequency filter).}
 
 \usage{

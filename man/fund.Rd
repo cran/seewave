@@ -8,7 +8,7 @@
   short-term cepstral transform.
 }
 
-\usage{fund(wave, f, wl = 512, ovlp = 0, fmax, threshold = NULL,
+\usage{fund(wave, f, wl = 512, ovlp = 0, fmax = f/2, threshold = NULL,
 at = NULL, from = NULL, to = NULL, 
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), pb = FALSE, ...)}
