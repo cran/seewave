@@ -14,25 +14,28 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 2.0.5\cr
-    Date: \tab 2016-10-12\cr
+    Version: \tab 2.1.0\cr
+    Date: \tab 2018-03-02\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
                    \tab Marion Depraetere, Francois Fabianek, \cr
-                   \tab Amandine Gasc, Laurent Lellouch, \cr
-		   \tab Stefanie LaZerte, Jonathan Lees, \cr
-		   \tab Jean Marchal, Sandrine Pavoine,  \cr
+                   \tab Amandine Gasc, Eric Kasten, \cr
+		   \tab Laurent Lellouch, Stefanie LaZerte, \cr
+		   \tab Jonathan Lees, Jean Marchal \cr
+		   \tab Sandrine Pavoine, David Pinaud \cr
                    \tab Luis J. Villanueva-Rivera, Zev Ross, \cr
 		   \tab Carl G. Witthoft, Hristo Zhivomirov \cr
     Acknowledgments: \tab Andrey Anikin, Michel Baylac,\cr
 		     \tab Charlotte Cure, Denis Dupeyron,\cr
-                     \tab Krut Fristrup, Arnold Fertin, \cr
-		     \tab Kurt Hornik, Eric Kasten, \cr
+                     \tab Kurt Fristrup, Arnold Fertin, \cr
+		     \tab Kurt Hornik, \cr
 		     \tab Emiliano A. Laca, Uwe Ligges, \cr
+		     \tab Morgane Paprin, \cr
 		     \tab Emmanuel Paradis, Daniel Ridley-Ellis, \cr
 		     \tab Brian Ripley, Jesse Ross, \cr
 		     \tab Zev Ross, Pavel Senin, \cr
 		     \tab Arvind Sowmyan, Simon Urbanek \cr
+		     \tab George Zhang \cr
     Webpage: \tab \url{http://rug.mnhn.fr/seewave}\cr
     Discussion group : \tab \url{http://groups.google.com/group/seewave}\cr
     Reference: \tab Sueur J, Aubin T, Simonis C - Seewave: a free

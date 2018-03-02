@@ -52,7 +52,7 @@ plot = FALSE, output = "matrix", ...)}
 \dontrun{
 f <- 44100
 ## chirp
-s1 <- synth(f=f, cf=1, d=2, fm=c(0,0,f/2), out="Wave")
+s1 <- synth(f=f, cf=1, d=2, fm=c(0,0,f/2,0,0), out="Wave")
 combfilter(s1, alpha=1, K=50, plot=TRUE)
 ## harmonic sound
 s2 <- synth(f=f, d=2, cf=600, harmonics=rep(1, 35), output="Wave")

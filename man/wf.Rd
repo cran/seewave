@@ -8,7 +8,7 @@
   a short-term Fourier transform or of any matrix.}
 
 \usage{
-wf(wave, f = NULL, wl = 512, zp = 0, ovlp = 0, fftw= FALSE, dB = "max0",
+wf(wave, f, wl = 512, zp = 0, ovlp = 0, fftw= FALSE, dB = "max0",
 dBref = NULL, wn = "hanning", x = NULL,
 hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)",

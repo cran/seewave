@@ -43,8 +43,7 @@
 \newcommand{\R}{\pkg{R}}
 \author{Jérôme Sueur\\
 Muséum national d'Histoire naturelle\\
-CNRS UMR 7205 OSEB, Paris, France\\
-\href{http://sueur.jerome.perso.neuf.fr}{http://sueur.jerome.perso.neuf.fr}
+CNRS UMR 7205 ISYEB, Paris, France\\
 }
 
 \title{\includegraphics[width=0.4\textwidth]{seewave_logo}  \\
@@ -66,6 +65,10 @@ This document shortly details how to import and export sound with \R using the p
 
 \tableofcontents
 \newpage
+
+<<warnings>>=
+options(warn=-1)
+@ 
 
 %%%%%%%%%%%%%%%%%%%%
 %% IN
@@ -151,16 +154,17 @@ There are three object classes corresponding to the binary \texttt{wav} format o
 The class \texttt{Wave} comes with the package \tuneR managed by Uwe Ligges.
 This S4 class includes different slots with the data (left or right channel), the sampling frequency (or rate), the number of bits (8 \slash 16 \slash 24 \slash 32) and the type of sound (mono \slash stereo). High sampled sound (\emph{i.e.} > 44100 Hz) can be read. \par
 The function to import \texttt{.wav} files from the hard-disk is \texttt{readWave}:
-<<readWave, echo=false,quiet=true>>=
+
+<<readWave, echo=false, quiet=true>>=
 library(tuneR)
 mysong<-synth(d=60,f=8000,cf=1000,output="Wave")
-savewav(mysong)
+writeWave(mysong, file="mysong.wav")
 @
 
 <<s6>>=
 s6<-readWave("mysong.wav")
-s6
 @
+
 The other advantage of using \texttt{readWave} is for reading part of long files. It is indeed possible to import only a section of the \texttt{.wav} file using the arguments \texttt{from} and \texttt{to} and by specifying the time units with the arguments \texttt{units}. The units can be turned to "samples", "minutes" or "hours". For instance, to read only the section starting at 1s and ending at 5s of the file "mysong.wav" :
 <<s7a>>=
 s7<-readWave("mysong.wav", from = 1, to = 5, units = "seconds")
@@ -245,12 +249,14 @@ header="f=22050; ch=left")
 
 \subsection{.wav format}
 \tuneR and \audio have a function to write \texttt{.wav} files: \texttt{writeWave},  and \texttt{save.wave} respectively.  Within \seewave, the function \texttt{savewav}, which is based on \texttt{writeWAve}, can be used to save data as \texttt{.wav}. By default, the name of the object will be used for the name of the \texttt{.wav} file:
-<<savewave>>=
+
+<<savewave, eval=false>>=
 savewav(tico, f=22050)
 @
 
 As seen before, if the object to be saved is of class \texttt{ts} or \texttt{Wave}, there is no need to specify the argument \texttt{f}. Here we use the argument \texttt{filename} to change the name of the \texttt{wav} file:
-<<savewavb>>=
+
+<<savewavb, eval=false>>=
 ticofirst<-cutw(tico, f=22050, to=0.5, output="Wave")
 savewav(ticofirst, filename = "tico_firstnote.wav")
 @

@@ -25,7 +25,7 @@ alim = NULL, type="l",...)
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
-    (even number of points, by defaults = 512).}
+    (by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the

@@ -6,7 +6,7 @@
 
 \description{Save sound data as .wav file}
 
-\usage{savewav(wave, f = NULL, filename = NULL, rescale = NULL)}
+\usage{savewav(wave, f, filename = NULL, rescale = NULL, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
@@ -14,7 +14,9 @@
   \item{filename}{name of the new file. (by default the name of
     \code{wave}).}
   \item{rescale}{a numeric vector of length 2 giving the lower (negative
-  value) and upper (positive value) amplitude limits of the .wav file to be exported.}
+  value) and upper (positive value) amplitude limits of the .wav file to
+  be exported.}
+  \item{...}{other arguments to be passed to \code{\link[tuneR]{writeWave}}}.
 }
 
 \details{

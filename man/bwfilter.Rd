@@ -58,22 +58,14 @@ a <- noisew(f=f, d=1)
 ## low-pass
 # 1st order filter
 res <- bwfilter(a, f=f, n=1, to=1500)
-spectro(res, f=f)
-res <- bwfilter(a, f=f, n=2, to=1500)
-# 2nd order filter
-spectro(res,f=f)
 # 8th order filter
 res <- bwfilter(a, f=f, n=8, to=1500)
-spectro(res,f=f)
 ## high-pass
 res <- bwfilter(a, f=f, from=2500)
-spectro(res,f=f)
 ## band-pass
 res <- bwfilter(a, f=f, from=1000, to=2000)
-spectro(res,f=f)
 ## band-stop
 res <- bwfilter(a, f=f, from=1000, to=2000,bandpass=FALSE)
-spectro(res,f=f)
 }
 
 \keyword{ts}

@@ -2,7 +2,7 @@
 ### Encoding: UTF-8
 
 ###################################################
-### code chunk number 1: seewave_analysis.rnw:77-79
+### code chunk number 1: seewave_analysis.rnw:76-78
 ###################################################
 options(SweaveHooks=list(fig=function()
 par(mar=c(5.1, 4.1, 1, 1))))

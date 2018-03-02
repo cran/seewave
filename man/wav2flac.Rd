@@ -17,11 +17,11 @@ exename = NULL, path2exe = NULL)}
   \item{path2exe}{a character string giving the path to the FLAC binary file. If \code{NULL}, the dedault path "c:/Program Files/FLAC/" will be used for Windows OS.}
 }
 
-\details{The function runs FLAC. FLAC has then to be installed first: \url{http://flac.sourceforge.net/}, if not the function will not work.}
+\details{The function runs FLAC. FLAC has then to be installed first, if not the function will not work.}
 
 \value{A new file is created.}
 
-\references{FLAC website: \url{http://flac.sourceforge.net/}}
+\references{FLAC website: \url{https://xiph.org/flac/}}
 
 \note{FLAC must be installed to use this function but not to install the
   package \code{seewave}. Free Lossless Audio Codec (FLAC) is a file format by Josh Coalson for lossless audio data compression. FLAC reduces bandwidth and storage requirements without sacrificing the integrity of the audio source. Audio sources encoded to FLAC are typically reduced in size 40 to 50 percent.}

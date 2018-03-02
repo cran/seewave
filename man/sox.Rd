@@ -14,9 +14,9 @@
   \item{path2exe}{a character string giving the path to the SoX binary file. If \code{NULL}, the default path "c:\\sox-14-4-0\\" will be used for Windows OS.}
 }
 
-\details{See the documentation of SoX for proper use: \url{http://sox.sourceforge.net/Docs/Documentation}}
+\details{See the documentation of SoX for proper use.}
 
-\references{SoX website: \url{http://sox.sourceforge.net/}}
+\references{\url{https://en.wikipedia.org/wiki/SoX}}
 
 \author{Jerome Sueur and Stefanie LaZerte}
 

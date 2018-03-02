@@ -74,8 +74,7 @@ plot = TRUE, type = "l", ...)
 
   \references{Fristrup, K. M. and Watkins, W. A. 1992. Characterizing
     acoustic features of marine animal sounds.
-    Woods Hole Oceanographic Institution Technical Report WHOI-92-04.\cr
-    Details of the principles can be found at \url{http://www.birds.cornell.edu/brp/research/algorithm/automated-and-robust-measurement-of-signal-features}}
+    Woods Hole Oceanographic Institution Technical Report WHOI-92-04.}
 
   \author{Jerome Sueur}
 

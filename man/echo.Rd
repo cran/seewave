@@ -43,7 +43,7 @@ input wave and a pulse echo filter.}
 
 \examples{
 # generation of the input wave
-a <- synth(f=11025,d=1,cf=2000,shape="tria",am=c(50,10),fm=c(1000,10,1000))
+a <- synth(f=11025,d=1,cf=2000,shape="tria",am=c(50,10),fm=c(1000,10,1000,0,0))
 # generation of three echoes
 # with respectively a relative amplitude of 0.8, 0.4, and 0.2
 # and with a delay of 1s, 2s, and 3s  from the beginning of the input wave

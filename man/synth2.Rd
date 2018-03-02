@@ -6,8 +6,8 @@
 
 \description{
   This functions synthesizes pure tone sound based on an amplitude
-  envelope and instantaneous frequency. The function can also be
-  used to modified a reference sound.
+  envelope and an instantaneous frequency contour. The function can also be
+  used to modify a reference sound.
 }
 
 \usage{

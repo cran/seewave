@@ -42,7 +42,7 @@ singing activity of an avian community: the Acoustic Complexity Index
 Farina A, Pieretti N, Piccioli L (2011) The soundscape methodology for long-term bird monitoring: a Mediterranean Europe case-study. \emph{Ecological Informatics}, 6, 354-363.
 }
 
-\author{Laurent Lellouch}
+\author{Laurent Lellouch, improved by Amandine Gasc and Morgane Paprin}
 
 \seealso{\code{\link{spectro}}}
 

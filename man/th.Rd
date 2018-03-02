@@ -6,10 +6,14 @@
 
 \description{Compute the entropy of a temporal envelope.}
 
-\usage{th(env)}
+\usage{th(env, breaks)}
 
-\arguments{\item{env}{a data set resulting of an envelope obtained
-    using \code{\link{env}}}}
+\arguments{
+  \item{env}{a data set resulting of an envelope obtained
+    using \code{\link{env}}}
+  \item{breaks}{'breaks' argument of \code{\link{hist}} to compute the
+  entropy on the distribution obtained with an histogram.}
+}
 
 \details{
   Temporal entropy is calculated according to:\cr
@@ -26,14 +30,16 @@
 \value{A single value varying between 0 and 1 is returned.
   The value has no unit.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur, George Zhan for the idea and implementation of the
+argument \code{breaks}.}
 
 \note{
   The temporal entropy of a noisy signal with many amplitude modulations
   will tend towards 1 whereas the temporal entropy of quiet signal
   will tend towards 0. \cr
   Note, however, that a sustained sound with an almost
-  flat envelope will also show a very high temporal entropy. See examples.}
+  flat envelope will also show a very high temporal entropy except if
+  you compute the entropy on the distribution obtained with the histogram. See examples.}
 
 \seealso{\code{\link{sh}}, \code{\link{csh}}, \code{\link{H}}}
 
@@ -58,6 +64,8 @@ th(enva)
 b<-synth(f=8000,d=1,cf=2000,plot=FALSE)
 envb<-env(b,f=8000,plot=FALSE)
 th(envb)
+# except if you use the distribution of the histogram
+th(envb, breaks="Sturges")
 }
 
 \keyword{ts}

@@ -2,7 +2,13 @@
 ### Encoding: UTF-8
 
 ###################################################
-### code chunk number 1: s1
+### code chunk number 1: warnings
+###################################################
+options(warn=-1)
+
+
+###################################################
+### code chunk number 2: s1
 ###################################################
 s1<-sin(2*pi*440*seq(0,1,length.out=8000))
 is.vector(s1)
@@ -12,7 +18,7 @@ oscillo(s1,f=8000)
 
 
 ###################################################
-### code chunk number 2: s2
+### code chunk number 3: s2
 ###################################################
 s2<-as.matrix(s1)
 is.matrix(s2)
@@ -21,7 +27,7 @@ oscillo(s2,f=8000)
 
 
 ###################################################
-### code chunk number 3: s3
+### code chunk number 4: s3
 ###################################################
 x<-rnorm(8000)
 s3<-cbind(s2,x)
@@ -31,34 +37,34 @@ oscillo(s3,f=8000)
 
 
 ###################################################
-### code chunk number 4: s4a
+### code chunk number 5: s4a
 ###################################################
 s4<-ts(data=s1, start=0, frequency=8000)
 str(s4)
 
 
 ###################################################
-### code chunk number 5: s4b
+### code chunk number 6: s4b
 ###################################################
 s4<-ts(data=runif(4000), start=0, end=0.5, frequency=8000)
 str(s4)
 
 
 ###################################################
-### code chunk number 6: s4c
+### code chunk number 7: s4c
 ###################################################
 frequency(s4)
 deltat(s4)
 
 
 ###################################################
-### code chunk number 7: s4d
+### code chunk number 8: s4d
 ###################################################
 oscillo(s4)
 
 
 ###################################################
-### code chunk number 8: s5
+### code chunk number 9: s5
 ###################################################
 s5<-ts(data=s3,f=8000)
 class(s5)
@@ -66,29 +72,28 @@ oscillo(s5)
 
 
 ###################################################
-### code chunk number 9: readWave
+### code chunk number 10: readWave
 ###################################################
 library(tuneR)
 mysong<-synth(d=60,f=8000,cf=1000,output="Wave")
-savewav(mysong)
+writeWave(mysong, file="mysong.wav")
 
 
 ###################################################
-### code chunk number 10: s6
+### code chunk number 11: s6
 ###################################################
 s6<-readWave("mysong.wav")
-s6
 
 
 ###################################################
-### code chunk number 11: s7a
+### code chunk number 12: s7a
 ###################################################
 s7<-readWave("mysong.wav", from = 1, to = 5, units = "seconds")
 s7
 
 
 ###################################################
-### code chunk number 12: s7b
+### code chunk number 13: s7b
 ###################################################
 s7@samp.rate
 s7@bit
@@ -96,53 +101,53 @@ s7@stereo
 
 
 ###################################################
-### code chunk number 13: rangereadWave
+### code chunk number 14: rangereadWave
 ###################################################
 range(s7@left)
 
 
 ###################################################
-### code chunk number 14: s11 (eval = FALSE)
+### code chunk number 15: s11 (eval = FALSE)
 ###################################################
 ## s11 <- rep(NA_real_, 16000*5)
 ## record(s11, 16000, 1)
 
 
 ###################################################
-### code chunk number 15: exporta
+### code chunk number 16: exporta
 ###################################################
 data(tico)
 export(tico, f=22050, header=FALSE)
 
 
 ###################################################
-### code chunk number 16: exportb
+### code chunk number 17: exportb
 ###################################################
 export(tico, f=22050, filename="tico_Gold.txt")
 
 
 ###################################################
-### code chunk number 17: exportc
+### code chunk number 18: exportc
 ###################################################
 export(tico, f=22050, filename="tico_ext.txt",
 header="f=22050; ch=left")
 
 
 ###################################################
-### code chunk number 18: savewave
+### code chunk number 19: savewave (eval = FALSE)
 ###################################################
-savewav(tico, f=22050)
+## savewav(tico, f=22050)
 
 
 ###################################################
-### code chunk number 19: savewavb
+### code chunk number 20: savewavb (eval = FALSE)
 ###################################################
-ticofirst<-cutw(tico, f=22050, to=0.5, output="Wave")
-savewav(ticofirst, filename = "tico_firstnote.wav")
+## ticofirst<-cutw(tico, f=22050, to=0.5, output="Wave")
+## savewav(ticofirst, filename = "tico_firstnote.wav")
 
 
 ###################################################
-### code chunk number 20: s12
+### code chunk number 21: s12
 ###################################################
 left<-sine(440)
 right<-sine(2000)
@@ -151,19 +156,19 @@ s12
 
 
 ###################################################
-### code chunk number 21: s13
+### code chunk number 22: s13
 ###################################################
 s13<-mono(s12,"left")
 
 
 ###################################################
-### code chunk number 22: seewave_IO.rnw:288-289
+### code chunk number 23: seewave_IO.rnw:294-295
 ###################################################
 s14<-channel(s12,"right")
 
 
 ###################################################
-### code chunk number 23: s14
+### code chunk number 24: s14
 ###################################################
 s13<-s12@left
 is.vector(s13)

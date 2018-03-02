@@ -2,8 +2,31 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 2.0.9 [17-January-2018]
 
-		CHANGES IN SEEWAVE VERSION 2.0.5 [12-10-2017]
+NEW FUNCTION
+	o dynspectro(): a new function to dynamically explore the spectrogram of a wave with a time slider. By David Pinaud.
+
+NEW ARGUMENTS
+	o corenv(): a new argument 'ssmooth' for using a sum smooth on the amplitude envelope.
+	o dynspec(): a new argument 'tlab' to control the title of the time axis.
+	o fir(), ffilter(): a new argument 'rescale' to rescale the sample values of the ouput according to the sample values of the input.
+        o ffilter(): a new argument 'listen' to listen to the output.
+	o meanspec(): a new argument 'FUN' to control the mathematical function to be applied on the STFT rows. For instance, this argument could be set to 'median' to obtain a median spectrum rather than a mean spectrum.
+
+OTHER CHANGES
+	o now handles the class 'sound' of the package phonTools.
+	o ACI(): bug regarding 'wl' fixed thanks to Del Bohnenstiehl ; bug fixed when silence occurs thanks to Morgane Papin and Amandine Gasc.
+	o fir(): better localisation of the cutoff frequencies. 
+	o notefreq(): a small bug related to input fixed.
+	o NDSI(): a bug fiwed when anthropophony!=1. Thanks to George Zhang.
+	o savewav(): a new argument '...' for controlling writeWave() arguments in particular 'extensible'. Thanks to Glenn Seeholzer.
+	o spec(): now can handle signals of FFT window of even or odd length. Thanks to Dan Ridley-Ellis.
+	o stft(): renamed stdft() due to a conflit with the stft C object. Required by CRAN checks.
+	o timer(): a new stop error message when there is no signal/pause event to detect. Thanks to George Zhang.
+
+
+		CHANGES IN SEEWAVE VERSION 2.0.5 [12-October-2016]
 
 OTHER CHANGES
         o autoc(): a bug fixed when using 'threshold'.

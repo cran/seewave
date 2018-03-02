@@ -10,7 +10,7 @@
 \usage{octaves(x, below = 3, above = 3)}
 
 \arguments{
-  \item{x}{a numeric vector, frequency of the note in Hz or Khz.}
+  \item{x}{a numeric vector, frequency of the note in Hz or kHz.}
   \item{below}{the number of octaves below \code{x}.}
   \item{above}{the number of octaves above \code{x}.}
 }

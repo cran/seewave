@@ -10,7 +10,7 @@
 }
 \usage{
 corenv(wave1, wave2, f, envt="hil", msmooth = NULL, ksmooth = NULL,
-plot = TRUE, plotval = TRUE,
+ssmooth = NULL, plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red",
 cexval = 1, fontval = 1, xlab = "Time (s)",
 ylab = "Coefficient of correlation (r)", type = "l", pb = FALSE, ...)
@@ -27,6 +27,7 @@ ylab = "Coefficient of correlation (r)", type = "l", pb = FALSE, ...)
     (in number of points). The second component is the overlap between
     successive windows (in \%). See \code{\link{env}}.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
+  \item{ssmooth}{sum smooth. See \code{\link{env}}.}
   \item{plot}{logical, if \code{TRUE} plots r values against frequency shift
     (by default \code{TRUE}).}
   \item{plotval}{logical, if \code{TRUE} adds to the plot maximum r value

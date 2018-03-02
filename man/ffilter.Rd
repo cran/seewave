@@ -10,7 +10,8 @@
 
 \usage{
 ffilter(wave, f, from = NULL, to = NULL, bandpass = TRUE,
-custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matrix")
+custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE,
+rescale=FALSE, listen=FALSE, output="matrix")
 }
 
 \arguments{
@@ -28,7 +29,11 @@ custom = NULL, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output="matri
   \item{ovlp}{overlap between successive FFT windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
-  library \code{fftw}. See Notes of the \code{spectro}.}
+    library \code{fftw}. See Notes of the \code{spectro}.}
+  \item{rescale}{a logical, if \code{TRUE} then the sample values of new
+  wave (output) are rescaled according to the sample values of
+  \code{wave} (input).}
+  \item{listen}{a logical, if \code{TRUE} the new sound is played back.}
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"audioSample"} or \code{"ts"}.}
 }

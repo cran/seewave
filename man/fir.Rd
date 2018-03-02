@@ -10,7 +10,7 @@
 
 \usage{
 fir(wave, f, from = NULL, to = NULL, bandpass = TRUE, custom = NULL,
-wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
+wl = 512, wn = "hanning", rescale=FALSE, listen = FALSE, output = "matrix")
 }
 
 \arguments{
@@ -25,8 +25,12 @@ wl = 512, wn = "hanning", listen = FALSE, output = "matrix")
     This can be manually generated or obtained with \code{\link{spec}} and \code{\link{meanspec}}.
     \code{wl} is no more required. See examples.}
   \item{wl}{window length of the impulse filter (even number of points).}
-  \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
-  \item{listen}{if \code{TRUE} the new sound is played back.}
+  \item{wn}{window name, see \code{\link{ftwindow}} (by default
+    \code{"hanning"}).}
+  \item{rescale}{a logical, if \code{TRUE} then the sample values of new
+  wave (output) are rescaled according to the sample values of
+  \code{wave} (input).}
+  \item{listen}{a logical, if \code{TRUE} the new sound is played back.}
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
 }

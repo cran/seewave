@@ -12,7 +12,7 @@
 
 \usage{
 meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE,
-norm = TRUE, PSD = FALSE, PMF = FALSE, correction = "none", dB = NULL,
+norm = TRUE, PSD = FALSE, PMF = FALSE, FUN = mean, correction = "none", dB = NULL,
 dBref = NULL, from = NULL, to = NULL, identify = FALSE,
 col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
 alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
@@ -31,6 +31,9 @@ alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
     \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
     \emph{i. e.} the probability distribution of frequencie.}
+  \item{FUN}{The function to apply on the rows of the STFT matrix, by
+  default \code{mean} for a mean spectrum but could be other as
+  \code{median} or \code{var} for a median spectrum or variance spectrum.}
   \item{correction}{a character vector of length 1 to apply an
   amplitude ("amplitude") or an energy ("energy") correction
   to the FT window. This argument is useful only when one wish to obtain
@@ -126,6 +129,10 @@ title("meanspec()")
 par(op)
 # log scale on frequency axis
 meanspec(orni, f=22050, log="x")
+# median spectrum
+meanspec(orni,f=22050, FUN=median)
+# variance spectrum
+meanspec(orni,f=22050, FUN=var)
 }
 
 \keyword{dplot}

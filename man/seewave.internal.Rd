@@ -21,6 +21,7 @@
 \alias{soscillo}
 \alias{sspectro}
 \alias{spectro.colors}
+\alias{stdft}
 \alias{stft}
 \alias{synth0}
 \alias{temp.colors}

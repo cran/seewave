@@ -11,7 +11,7 @@
 
 \usage{
 synth(f, d, cf, a = 1, signal = "sine", shape = NULL, p = 0,
-am = c(0, 0, 0), fm = c(0, 0, 0, 0), harmonics = 1, 
+am = c(0, 0, 0), fm = c(0, 0, 0, 0, 0), harmonics = 1, 
 plot = FALSE, listen = FALSE, output = "matrix",...)
 }
 
@@ -27,7 +27,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
   \item{p}{phase (in radians).}
   \item{am}{a numeric vector of length 3 describing amplitude modulation parameters,
     see \code{details}.}
-  \item{fm}{a numeric vector of length 4 describing frequency modulation parameters,
+  \item{fm}{a numeric vector of length 5 describing frequency modulation parameters,
     see \code{details}.}
   \item{harmonics}{a numeric specifying the number and the relative
     amplitude of harmonics, see \code{details}.}
@@ -73,7 +73,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
       }
     }
 
-    \item{\code{fm} is a numeric vector of length 3 including:
+    \item{\code{fm} is a numeric vector of length 5 including:
       \enumerate{
 	\item{the maximum excursion of a sinusoidal frequency modulation (in
 	  Hz),}
@@ -81,6 +81,8 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
 	\item{the maximum excursion of a linear frequency modulation (in
 Hz).}
         \item{the phase of the frequency modulation (in radian).}
+	\item{the maximum excursion of an exponential frequency modulation (in
+Hz).}
       }
     }
 
@@ -136,29 +138,29 @@ s <- synth(f=f,d=d,cf=cf,am=c(50,10))
 # and phase shift of pi radian (180 degrees)
 s <- synth(f=f,d=d,cf=cf,am=c(50,10,pi))
 # pure tone with +1000 Hz linear fm 
-s <- synth(f=f,d=d,cf=cf,fm=c(0,0,1000))
+s <- synth(f=f,d=d,cf=cf,fm=c(0,0,1000,0,0))
 # pure tone with sinusoidal fm
 # (maximum excursion of 250 Hz, frequency of 10 Hz)
-s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0))
+s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0,0,0))
 # pure tone with sinusoidal fm
 # (maximum excursion of 250 Hz, frequency of 10 Hz,
 # phase shift of pi radian (180 degrees))
-s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0, pi))
+s <- synth(f=f,d=d,cf=cf,fm=c(250,10,0, pi,0))
 # pure tone with sinusoidal am
 # (maximum excursion of 250 Hz, frequency of 10 Hz)
 # and linear fm (maximum excursion of 500 Hz)
-s <- synth(f=f,d=d,cf=cf,fm=c(250,10,500))
+s <- synth(f=f,d=d,cf=cf,fm=c(250,10,500,0,0))
 # the same with am
-s <- synth(f=f,d=d,cf=cf,am=c(50,10), fm=c(250,10,250))
+s <- synth(f=f,d=d,cf=cf,am=c(50,10), fm=c(250,10,250,0,0))
 # the same with am and a triangular overall shape 
-s <- synth(f=f,d=d,cf=cf,shape="tria",am=c(50,10), fm=c(250,10,250))
+s <- synth(f=f,d=d,cf=cf,shape="tria",am=c(50,10), fm=c(250,10,250,0,0))
 # an harmonic sound
 s <- synth(f=f,d=d,cf=cf, harmonics=c(1, 0.5, 0.25))
 # a clarinet-like sound
 clarinet <- c(1, 0, 0.5, 0, 0.14, 0, 0.5, 0, 0.12, 0, 0.17)
 s <- synth(f=f, d=d, cf = 235.5, harmonics=clarinet)
 # inharmonic FM sound built 'manually'
-fm <- c(250,5,0)
+fm <- c(250,5,0,0,0)
 F1<-synth(f=f,d=d,cf=cf,fm=fm)
 F2<-synth(f=f,d=d,a=0.8,cf=cf*2,fm=fm)
 F3<-synth(f=f,d=d,a=0.6,cf=cf*3.5,fm=fm)

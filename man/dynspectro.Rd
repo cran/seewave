@@ -1,22 +1,20 @@
-\name{dynspec}
+\name{dynspectro}
 
-\alias{dynspec}
+\alias{dynspectro}
 
-\title{Dynamic sliding spectrum}
+\title{Dynamic sliding spectrogramn}
 
-\description{
-  This function plots dynamically a sliding spectrum along a time wave. 
-  This basically corresponds to a short-term Fourier transform.
-}
+\description{This function plots dynamically a sliding spectrogram along a time wave.}
 
 \usage{
-dynspec(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, fftw = FALSE, norm = FALSE, dB = NULL,  dBref = NULL, plot = TRUE,
-title = TRUE, osc = FALSE, 
-tlab = "Time (s)", flab = "Frequency (kHz)",
-alab = "Amplitude", alim = NULL, flim = c(0, f/2000),
-type = "l", from = NULL, to = NULL, envt = NULL,
-msmooth = NULL, ksmooth = NULL, colspec = "black",
+dynspectro(wave, f, slidframe = 10,
+wl = 512, wn = "hanning", zp = 0, ovlp = 75,
+fftw = FALSE, dB = TRUE, plot = TRUE,
+title = TRUE, osc = FALSE,
+tlab = "Time (s)", flab = "Frequency (kHz)", alab = "Amplitude",
+from = NULL, to = NULL,
+collevels = NULL, palette = spectro.colors,
+envt = NULL, msmooth = NULL, ksmooth = NULL,
 coltitle = "black", colbg = "white", colline = "black",
 colaxis = "black", collab = "black", cexlab = 1,
 fontlab = 1, colwave = "black",
@@ -26,6 +24,7 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{slidframe}{size of the sliding frame (in percent of the wave duration).}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
@@ -33,27 +32,23 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
   \item{ovlp}{overlap between two successive windows (in \% ).}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
-  \item{norm}{logical, if \code{TRUE} compute a normalised sliding spectrum.}
-  \item{dB}{a character string specifying the type dB to return: "max0" for a
-    maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
-  \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default
-    but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
+  \item{dB}{a logical, if \code{TRUE} then uses dB values}
   \item{plot}{logical, if \code{TRUE} plots in an ew graphics device the successive
-    spectra sliding along the time wave (by default \code{TRUE}).}
+    spectrograms sliding along the time wave (by default \code{TRUE}).}
   \item{title}{logical, if \code{TRUE} adds a title with the time position of the current
-    spectrum along the time wave.}
+    spectrogram along the time wave.}
   \item{osc}{logical, if \code{TRUE} plots an oscillogram beneath
-    the sliding spectrum with a cursor showing the position of the 
+    the sliding spectrogram with a cursor showing the position of the 
     current spectrum (by default \code{FALSE}).}
   \item{tlab}{title of the time axis.}
   \item{flab}{title of the frequency axis.}
   \item{alab}{title of the amplitude axis.}
-  \item{flim}{range of frequency axis.}
-  \item{alim}{range of amplitude axis.}
-  \item{type}{type of plot that should be drawn for the sliding spectrum.
-    See \code{\link{plot}} for details (by default "l" for lines).}
-  \item{from}{start mark where  to compute the sliding spectrum (in s).}
-  \item{to}{end mark where to compute the sliding spectrum (in s).}
+  \item{from}{start mark where  to compute the sliding spectrogram (in s).}
+  \item{to}{end mark where to compute the sliding spectrogram (in s).}
+  \item{collevels}{a set of levels which are used to partition
+    the amplitude range of the spectrogram.}
+  \item{palette}{a color palette function to be used to assign colors in
+    the plot.}
   \item{envt}{the type of envelope to be plooted:
     either "abs" for absolute amplitude envelope or "hil" for Hilbert amplitude envelope.
     See \code{\link{env}}.}
@@ -64,7 +59,6 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
     successive windows (in \%). See \code{\link{env}}.}
   \item{ksmooth}{when \code{env} is not \code{NULL},
     kernel smooth via \code{\link{kernel}}. See \code{\link{env}}.}
-  \item{colspec}{colour of the sliding spectrum.}
   \item{coltitle}{if \code{title} is \code{TRUE}, colour of the title.}
   \item{colbg}{background colour.}
   \item{colline}{colour of axes line.}
@@ -80,11 +74,16 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
 }
 
 \details{
-  Use the slider panel to move along the time wave.\cr
-  Use the argument \code{norm} if you wish to have each spectrum normalised, \emph{i.e.}
-  with values between 0 and 1 or maximised to 0 dB when \code{dB} is \code{TRUE}.\cr
-  The function requires the package \pkg{rpanel} that is based on the package \pkg{tcltk}.
+  Use the slider panel to move along the time wave. \cr
+  The function requires the package \pkg{rpanel} that is based on the
+  package \pkg{tcltk}.\cr
+  The function is mainly written for inspecting long sounds.\cr
+  The function is based on \code{\link{image}} for fast display when
+  \code{\link{spectro}} is based on \code{\link{filled.contour}}.
+  Displaying the amplitude envelope with the argument \code{envt} can
+  slow down significantly the display.
 }
+
 
 \value{
   This function returns a list of three items:
@@ -94,23 +93,22 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
    Each column is a Fourier transform of length \code{wl/2}.}
 }
 
-\author{Jerome Sueur and Caroline Simonis}
+\author{David Pinaud and Jerome Sueur}
 
 \note{This function is very similar to a spectrogram. See the \code{Details} of
   \code{\link{spectro}} for some information regarding the short term Fourier 
   transform.}
 
 \seealso{\code{\link{spectro}}, \code{\link{spectro3D}},
-  \code{\link{wf}}, \code{\link{spec}}, \code{\link{dynspectro}},
+  \code{\link{wf}}, \code{\link{spec}}, \code{\link{dynspec}},
   \code{\link{fft}}, \code{\link{oscillo}}, \code{\link{env}}.}
 
 \examples{
 \dontrun{
 data(sheep)
 require(rpanel)
-dynspec(sheep,f=8000,wl=1024,ovlp=50,osc=TRUE)
-}
-}
+dynspectro(sheep, ovlp=95, osc=TRUE)
+}}
 
 \keyword{dplot}
 \keyword{ts}

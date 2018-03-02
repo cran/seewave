@@ -1,2 +1,3 @@
 import("graphics", "grDevices", "stats", "utils", "tuneR")
+useDynLib(seewave, .registration = TRUE)
 exportPattern(".+")
