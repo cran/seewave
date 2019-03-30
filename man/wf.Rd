@@ -26,7 +26,7 @@ density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return: "max0" for a
-    maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

@@ -7,14 +7,16 @@
 \description{This function computes the Normalized Difference Soundscape
   Index as described by Kasten et al. (2012).}
 
-\usage{NDSI(x, anthropophony = 1, biophony = 2:8)}
+\usage{NDSI(x, anthropophony = 1, biophony = 2:8, max = FALSE)}
 
 \arguments{
   \item{x}{a two-column numeric matrix computed with \code{\link{soundscapespec}}.}
   \item{anthropophony}{a numeric vector defining the frequency band(s) of
   the anthropophony (in kHz).}
   \item{biophony}{a numeric vector defining the frequency band(s) of the
-  biophony (in kHz).}
+    biophony (in kHz).}
+  \item{max}{a logical, if \code{TRUE} then defines the biophony as the
+  maximum - not the sum - of the 2 and 8 kHz frequency bands}
 }
 
 \details{
@@ -51,6 +53,7 @@ studying soundscape ecology. \emph{Ecological Informatics}, 12, 50-67.\cr
 data(tico)
 spec <- soundscapespec(tico, plot=FALSE)
 NDSI(spec)
+NDSI(spec, max=TRUE)
 }
 
 \keyword{ts}

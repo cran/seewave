@@ -39,6 +39,7 @@ xlab = "Time (s)", ylab = "Amplitude", ylim = NULL, legend = TRUE, ...)
 }
 
 \details{
+  D is a Manhattan distance (l1 norm). \cr
   Envelopes of both waves are first transformed as probability mass functions (PMF).\cr
   Envelope difference is then computed according to:\cr
   \deqn{D = \frac{\sum{|env1-env2|}}{2}, with D \in [0,1].}{% 

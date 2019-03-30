@@ -6,11 +6,15 @@
 
 \description{Play a sound wave}
 
-\usage{listen(wave, f, from = NULL, to = NULL, choose = FALSE)}
+\usage{listen(wave, f, channel, from = NULL, to = NULL, choose = FALSE)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{a numeric to choose the channel to listen to, \code{1}
+  (resp. \code{2}) for left (resp. right) channel of a stereo file, any
+  other value for multi-channel object.}
   \item{from}{start of play (in s).}
   \item{to}{end of play (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})

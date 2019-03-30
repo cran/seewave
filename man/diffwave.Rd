@@ -30,6 +30,7 @@ msmooth = NULL, ksmooth = NULL)
 }
 
 \details{
+  D is a Manhattan distance (l1 norm). \cr
   This function computes the product between the values obtained with
   \code{\link{diffspec}} and \code{\link{diffenv}} functions. \cr
   This then gives a global (time and frequency) estimation of dissimilarity.\cr

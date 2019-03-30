@@ -34,7 +34,7 @@ palette = reverse.terrain.colors)
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes of the \code{spectro}.}
   \item{dB}{a character string specifying the type dB to return:
-    "max0" for a maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is \code{TRUE}. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference.}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
@@ -81,7 +81,7 @@ palette = reverse.terrain.colors)
   See examples of \code{\link{spectro}} for analysis arguments
   (\code{wl},\code{zp}, \code{ovlp}).}
 
-\seealso{\code{\link{spectro}}, \code{\link{dynspec}},
+\seealso{\code{\link{spectro}}, \code{\link{ggspectro}}, \code{\link{lts}}, \code{\link{dynspec}},
   \code{\link{wf}}, \code{\link{fft}}.}
 
 \examples{

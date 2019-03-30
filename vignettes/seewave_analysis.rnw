@@ -81,7 +81,7 @@ par(mar=c(5.1, 4.1, 1, 1))))
 
 \maketitle
 
-This document is a very brief introduction to sound analysis principles. It is mainly written for students starting with bioacoustics. The content should be updated regularly. Demonstrations are based on the package \seewave.
+This document is a very brief introduction to sound analysis principles. It is mainly written for students starting with bioacoustics. The content should be updated regularly. Demonstrations are based on the package \seewave. For more details see the book \href{Sound analysis and synthesis with R}{https://www.springer.com/us/book/9783319776453}.
 
 \tableofcontents
 \newpage
@@ -546,6 +546,7 @@ Hopp, SL, Oweren MJ, Evan CS (1998) \textit{Animal acoustic communication}, Spri
 Marler P, Slabbekoorn H (2004) \textit{Nature´s Music. The Science of Birdsong}, Academic Press, Elsevier.\\
 Rossing TD (2007) \textit{Handbook of acoustics}, Springer.\\
 Rumsey F, McCormick T (2002) \textit{Sound and recording - an introduction}, Elsevier.\\
+Sueur J (2018) \textit{Sound analysis and synthesis with R}, Springer. \\
 Speaks CE (1999) \textit{Introduction to sound}, Singular.\\
 
 \subsection{Dedicated journals}

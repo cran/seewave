@@ -1,14 +1,14 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.1.0
-Date: 2018-03-02
+Version: 2.1.3
+Date: 2019-03-26
 Author: Jerome Sueur <sueur@mnhn.fr> [cre, au], Thierry Aubin [au],
         Caroline Simonis [au], Laurent Lellouch [main ctrb],
         Ethan C. Brown [ctrb], Marion Depraetere [ctrb],
         Camille Desjonqueres [ctrb], Francois Fabianek [ctrb], 
         Amandine Gasc [ctrb], Eric Kasten [ctrb], Stefanie LaZerte [ctrb], Jonathan Lees [ctrb],
-        Jean Marchal [ctrb], Sandrine Pavoine [ctrb], David Pinaud [ctrb], Alicia Stotz [ctrb],
+        Jean Marchal [ctrb], Andre Mikulec [ctrb], Sandrine Pavoine [ctrb], David Pinaud [ctrb], Alicia Stotz [ctrb],
         Luis J. Villanueva-Rivera [ctrb], Zev Ross [ctrb], 
         Carl G. Witthoft [ctrb], Hristo Zhivomirov [ctrb].
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
@@ -20,7 +20,7 @@ ZipData: no
 Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
 License: GPL (>= 2)
 URL: http://rug.mnhn.fr/seewave
-NeedsCompilation: yes
-Packaged: 2018-03-02 15:31:58 UTC; root
+NeedsCompilation: no
+Packaged: 2019-03-27 12:07:08 UTC; root
 Repository: CRAN
-Date/Publication: 2018-03-02 16:49:05 UTC
+Date/Publication: 2019-03-30 14:30:03 UTC

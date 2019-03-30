@@ -44,7 +44,7 @@ alim = NULL, type="l",...)
   absolute values that is when \code{norm=FALSE}, \code{scaled=FALSE},
   and \code{PMF=FALSE}. By default no correction is applied ("none").}  
   \item{dB}{a character string specifying the type dB to return: "max0" for a
-    maximum dB value at 0, "A", "B", "C" and "D" for common dB weights.}
+    maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights.}
   \item{dBref}{a dB reference value when \code{dB} is not \code{NULL}. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference (SPL).}
   \item{at}{position where to compute the spectrum (in s).}

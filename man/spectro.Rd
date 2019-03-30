@@ -11,7 +11,7 @@
 
 \usage{
 spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, complex = FALSE, norm = TRUE, correction="none",
+ovlp = 0, fastdisp = FALSE, complex = FALSE, norm = TRUE, correction="none",
 fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 flog = FALSE, grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
@@ -43,6 +43,9 @@ listen=FALSE,
     \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{fastdisp}{faster graphic display for long \code{wave}. The
+  spectrogram/oscillogram is displayed/saved faster in the graphic device/
+  graphic file when set to \code{TRUE}, with a cost on graphical resolution.}
   \item{complex}{if \code{TRUE} the STFT will be returned as complex
   numbers.}  
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
@@ -54,7 +57,7 @@ listen=FALSE,
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
   library \code{fftw}. See Notes.}
   \item{dB}{a character string specifying the type dB to return: "max0"
-    (default) for a maximum dB value at 0, "A", "B", "C" and "D" for
+    (default) for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for
   common dB weights. If set to \code{NULL}, then a linear scale is used.}
   \item{dBref}{a dB reference value. \code{NULL} by default
     but should be set to 2*10e-5 for a 20 microPa reference.}
@@ -154,7 +157,8 @@ listen=FALSE,
 \note{This function is based on \code{\link{fft}}, \code{\link{contour}} and
   \code{\link{filled.contour}}}
 
-\seealso{\code{\link{ggspectro}}, \code{\link{spectro3D}}, \code{\link{dynspec}}, \code{\link{wf}}, 
+\seealso{\code{\link{ggspectro}}, \code{\link{spectro3D}},
+  \code{\link{lts}}, \code{\link{dynspec}}, \code{\link{wf}}, 
   \code{\link{oscillo}}, \code{\link{dBscale}}, \code{\link{fft}}.}
 
 \examples{

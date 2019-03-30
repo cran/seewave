@@ -30,7 +30,7 @@ ACI <- function (wave, f, wl = 512, ovlp = 0, wn = "hamming", flim = NULL, nbwin
 				for (i in 1:(dim(t)[1]))
 				{ 
 					mp <- (diff(z1[i, ]))/sum(z1[i, ])
-                                        if(mp=='-1' || mp=='NaN'){t[i, ] <- as.numeric(NaN)}
+                                        if(any(mp)=='-1' | any(mp)=='NaN'){t[i, ] <- as.numeric(NaN)}
                                         else {t[i, ] <- abs(mp)}
 				}
 			acis[j] <- sum(t)
@@ -293,7 +293,7 @@ ama<-function(
 ################################################################################
 
 AR <- function(...,
-               datatype = "objects",    # if "file" -> only .wav and .mp3 read by tuneR functions redWave and readMP3
+               datatype = "objects",    # if "file" -> only .wav and .mp3 read by tuneR functions readWave and readMP3
                envt = "hil",
                msmooth = NULL,
                ksmooth = NULL,
@@ -1515,35 +1515,46 @@ dBweight <- function(
                     )
   
 {
-                                        # dBA
+  # dBA
   num <- (12200^2*f^4)
   den <- (f^2 + 20.6^2)* sqrt((f^2 + 107.7^2)*(f^2 + 737.9^2))*(f^2 + 12200^2)
   A <- 2 + 20*log10(num/den)
   A <- ifelse(is.infinite(A), yes=NA, no=A)
 
-                                        # dBB
+  # dBB
   num <- (12200^2*f^3);
   den <- (f^2 + 20.6^2)*sqrt((f^2 + 158.5^2))*(f^2 + 12200^2)
   B <- 0.17 + 20*log10(num/den)
   B <- ifelse(is.infinite(B), yes=NA, no=B)
 
-                                        #dBC
+  # dBC
   num <- (12200^2*f^2);
   den <- (f^2 + 20.6^2)*(f^2 + 12200^2)
   C <- 0.06 + 20*log10(num/den)
   C <- ifelse(is.infinite(C), yes=NA, no=C)
 
-                                        #dBD
+  # dBD
   a <- f/(6.8966888496476*10^-5);
   h <- ((1037918.48 - f^2)^2 + (1080768.16*f^2))/((9837328 - f^2)^2 + (11723776*f^2))
   b <- sqrt(h/((f^2 + 79919.29)*(f^2 + 1345600)))
   D <- 20*log10(a*b)
   D <- ifelse(is.infinite(D), yes=NA, no=D)
 
+  # dB ITU-R 468
+  # added @ 20108-06-18 by Andrey Anikin
+  # https://en.wikipedia.org/wiki/ITU-R_468_noise_weighting
+  h1 <- -4.737338981378384 * 10^(-24) * f^6 + 
+      2.04382833606125 * 10^(-15) * f^4 - 
+      1.363894795463638 * 10^(-7) * f^2 + 1
+  h2 <- 1.306612257412824 * 10^(-19) * f^5 - 
+      2.118150887518656 * 10^(-11) * f^3 + 
+      5.559488023498642 * 10^(-4) * f
+  R_ITU <- 1.246332637532143 * 10^(-4) * f / sqrt(h1^2 + h2^2)
+  ITU <- 18.2 + 20 * log10(R_ITU)
 
-                                        # result
-  result <- list(A=A, B=B, C=C, D=D)
-  if(!is.null(dBref)) result <- list(A=dBref+A, B=dBref+B, C=dBref+C, D=dBref+D)
+  # result
+  result <- list(A=A, B=B, C=C, D=D, ITU=ITU)
+  if(!is.null(dBref)) result <- list(A=dBref+A, B=dBref+B, C=dBref+C, D=dBref+D, ITU=dBref+ITU)
   return(result)
 }
 
@@ -2596,24 +2607,32 @@ echo <- function(
 ################################################################################
 
 env <- function(wave,
-                 f,
-                 envt = "hil",
-                 msmooth = NULL,   
-                 ksmooth = NULL,
-                 ssmooth = NULL,
-                 fftw = FALSE,
-                 norm = FALSE,	
-                 plot = TRUE,
-                 k=1,
-                 j=1,
-                 ...)
+                f,
+                envt = "hil",
+                msmooth = NULL,   
+                ksmooth = NULL,
+                ssmooth = NULL,
+                asmooth = NULL,
+                fftw = FALSE,
+                norm = FALSE,	
+                plot = TRUE,
+                k=1,
+                j=1,
+                ...)
 
 {
     ## STOP MESSAGES
-    if(!is.null(msmooth) & !is.null(ksmooth) & !is.null(ssmooth)) stop("Please use one of the smoothing arguments, not all of them together.") 
+    if(!is.null(msmooth) & !is.null(ksmooth) & !is.null(ssmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not all of them together.") 
+    if(!is.null(msmooth) & !is.null(ksmooth) & !is.null(ssmooth)) stop("Please use one of the smoothing arguments, not three of them.") 
+    if(!is.null(msmooth) & !is.null(ssmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not three of them.") 
+    if(!is.null(msmooth) & !is.null(ksmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not three of them.") 
+    if(!is.null(ksmooth) & !is.null(ssmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not three of them.") 
     if(!is.null(msmooth) & !is.null(ksmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
     if(!is.null(msmooth) & !is.null(ssmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
+    if(!is.null(msmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
     if(!is.null(ksmooth) & !is.null(ssmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
+    if(!is.null(ksmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
+    if(!is.null(ssmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
 
     ## INPUT
     input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
@@ -2666,7 +2685,20 @@ env <- function(wave,
     if(!is.null(ssmooth))
         {
             wave <- as.matrix(sumsmooth(wave, wl=ssmooth))
-        } 
+        }
+
+    if (!is.null(asmooth))
+        {
+            i <- seq(asmooth, n, by=asmooth)
+            i.s <- c(1, i + 1)
+            i.e <- c(i, n)
+            i <- cbind(i.s, i.e)
+            win <- apply(i, MARGIN = 1, function(x) wave[x[1]:x[2]])
+            wave <- lapply(win, function(x) convolve(x, rev(x)))
+            wave <- unlist(wave)
+            wave <- wave/max(wave)
+        }
+
 
     if(plot)
         {
@@ -2680,6 +2712,7 @@ env <- function(wave,
             return(wave)
         }
 }
+
 
 
 ################################################################################
@@ -2917,7 +2950,9 @@ ffilter <- function(
   res <- istft(z, wl=wl, ovlp = ovlp, wn=wn, output=output, f=f)
 
   ## RESCALE
-  if(rescale) {res <- rescale(res@left, lower=min(wave), upper=max(wave))
+  if(rescale) {
+      res <- inputw(res, f=f)$w
+      res <- rescale(res, lower=min(wave), upper=max(wave))
       res <- outputw(wave=res, f=f, format=output)
    }
 
@@ -3825,6 +3860,7 @@ ks.dist <- function(spec1,
 listen <- function(
                    wave,
                    f,
+                   channel,
                    from = NULL,
                    to = NULL,
                    choose = FALSE
@@ -4025,6 +4061,66 @@ logspec.dist <- function(spec1,
 
 
 ################################################################################
+##                                LTS
+################################################################################
+
+
+lts <- function(dir,            # directory path where to find the .wav files
+                f,              # sampling frequency (not necessary)
+                wl = 512,       # window length
+                wn = "hanning", # window tapper type
+                ovlp = 0,       # ovlp
+                col = spectro.colors(30), # palette and number of colors
+                fftw = FALSE,   # use fftw to decrease computation time
+                norm = FALSE,   # normalisation of each meanspectrum
+                verbose = TRUE, # print the file number processed
+                tlab = "Time",  # time label
+                ntann = NULL,   # number of time axis annotations (should be > 1)
+                flab = "Frequency (kHz)", # frequency label
+                plot = TRUE,    # to plot or not
+                ...             # arguments to be passed to image
+                )
+{
+
+    ## INPUT AND STOP MESSAGES
+    files <- dir(dir, pattern="[wav]$")
+    n <- length(files)
+    if(n == 0) stop("It seems that there is no .wav files in the directory")
+    if(!is.null(ntann)){
+       if(ntann <= 1) stop("The argument 'ntann' cannot be inferior to 2") 
+       if(ntann > n) stop("The argument 'ntann' cannot be superior to the number of files stored in the directory") 
+    }
+    if(missing(f)) {f <- readWave(paste(dir,files[1],sep="/"), header=TRUE)$sample.rate}
+    time <- songmeter(files)$time
+    freq <- seq(0, f/2-f/wl, length=wl/2)/1000
+    
+    ## SUCCESSIVE MEANSPEC
+    amp <- matrix(rep(NA, n*wl/2), ncol=n, nrow=wl/2)
+    for(i in 1:n){
+        tmp <- readWave(paste(dir,files[i],sep="/"))
+        amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, norm=norm, plot=FALSE)[,2]
+        if(verbose) {print(paste("File #", i, " processed", sep=""))}
+    }
+    amp <- 20*log10(amp/max(amp)) 
+    res <- list(time=time, freq=freq, amp=amp)
+
+    ## PLOT
+    if(plot){
+        par(mar=c(10,4.1,4.1,2.1), las=2)
+        image(x=time, xaxt="n", xlab="",
+              y=freq, ylab=flab,
+              z=t(amp), col=col)#,...)
+        if(is.null(ntann)) ntann <- n
+        taxis <- time[seq(1, n, length.out=ntann)]
+        axis(side=1, at=taxis, labels=taxis)
+        mtext(tlab, side=1, las=0, line=9)
+        box()
+        invisible(res)
+    }
+    else {return(res)}
+}
+
+################################################################################
 ##                                M
 ################################################################################
 
@@ -4134,6 +4230,7 @@ meanspec <-function(
                                         # DB
     if(!is.null(dB))
     {
+      y <- ifelse(y==0, yes=1e-6, no=y)  # replaces 0 values in spectra that cannot be processed by log10()
       if(is.null(dBref)) {y <- 20*log10(y)} else {y <- 20*log10(y/dBref)}
       if(dB!="max0")
           {
@@ -4424,7 +4521,8 @@ mutew<-function(
 NDSI <- function(
                 x,
                 anthropophony = 1,
-                biophony = 2:8
+                biophony = 2:8,
+                max = FALSE
                 )
     
 {
@@ -4433,7 +4531,7 @@ NDSI <- function(
     else if(ncol(x) <1 | ncol(x) > 2) stop("'x' should be a two-column matrix obtained with the function sounscapespec().")
     ## INDEX
     alpha <- sum(x[anthropophony, 2])
-    beta <- sum(x[biophony, 2])
+    if(max){beta <- max(x[biophony, 2])} else {beta <- sum(x[biophony, 2])}
     res <- (beta - alpha) / (beta + alpha)
     names(res) <- NULL # to remove the colnames 'amplitude' of the soundscapespec result
     return(res)
@@ -4511,43 +4609,49 @@ octaves <- function(x, below=3, above=3)
 ################################################################################
 
 oscillo <- function(
-    wave,
-    f,
-    from = NULL,
-    to = NULL,
-    scroll = NULL,
-    zoom = FALSE,
-    k=1,
-    j=1,
-    cex = NULL,
-    labels = TRUE,
-    tlab = "Time (s)",
-    alab = "Amplitude",            
-    byrow = TRUE,
-    identify = FALSE,
-    nidentify = NULL, 
-    plot = TRUE,
-    colwave = "black",
-    coltitle = "black",
-    cextitle = 1.2,
-    fonttitle = 2,
-    collab = "black",
-    cexlab = 1,
-    fontlab = 1,
-    colline = "black",
-    colaxis = "black",
-    cexaxis = 1,
-    fontaxis = 1,
-    coly0 = "lightgrey",
-    tcl = 0.5,
-    title = FALSE,
-    xaxt= "s",
-    yaxt= "n",
-    type = "l",
-    bty = "l"
-)
+                     wave,
+                     f,
+                     from = NULL,
+                     to = NULL,
+                     fastdisp = FALSE,
+                     scroll = NULL,
+                     zoom = FALSE,
+                     k=1,
+                     j=1,
+                     cex = NULL,
+                     labels = TRUE,
+                     tlab = "Time (s)",
+                     alab = "Amplitude",            
+                     byrow = TRUE,
+                     identify = FALSE,
+                     nidentify = NULL, 
+                     plot = TRUE,
+                     colwave = "black",
+                     coltitle = "black",
+                     cextitle = 1.2,
+                     fonttitle = 2,
+                     collab = "black",
+                     cexlab = 1,
+                     fontlab = 1,
+                     colline = "black",
+                     colaxis = "black",
+                     cexaxis = 1,
+                     fontaxis = 1,
+                     coly0 = "lightgrey",
+                     tcl = 0.5,
+                     title = FALSE,
+                     xaxt= "s",
+                     yaxt= "n",
+                     type = "l",
+                     bty = "l"
+                     )
 
 {
+
+    ## computation time start
+    ptm.start <- proc.time()
+
+    ## input
     input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
     p<-k*j
@@ -4558,203 +4662,216 @@ oscillo <- function(
     if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f); from<-0}
     if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave); to<-length(wave)/f}
     if(!is.null(from) && !is.null(to))
-        {
-            if(from>to) stop("'from' cannot be superior to 'to'")
-            if(from==0) {a<-1} else {a<-round(from*f)}
-            b<-round(to*f)
-        }
+    {
+        if(from>to) stop("'from' cannot be superior to 'to'")
+        if(from==0) {a<-1} else {a<-round(from*f)}
+        b<-round(to*f)
+    }
     wave<-as.matrix(wave[a:b,])
     n<-nrow(wave)
 
+    if(isTRUE(fastdisp) & n > 20000) {
+        res <- round(n/20000)
+        res <- round(log2(res))
+        res <- 2^res
+        wave <- as.matrix(wave[seq(0,n,by=res),])
+        n <- nrow(wave)
+    }
+
+    
     if(plot)
+    {
+        alim<-max(abs(wave))
+        ## to get a single window view
+        if(k==1 & j==1)
         {
-            alim<-max(abs(wave))
-                                        # to get a single window view
-            if(k==1 & j==1)
+            if(!is.null(scroll))
+            {
+                if(!is.numeric(scroll)) stop("scroll has to a numeric")
+                if(length(scroll)>1) stop("length of scroll cannot be superior to 1")
+                if(zoom) stop("zoom and scroll cannot be used together")
+                if(identify) stop("identify and scroll cannot be used together")
+                step<-round(seq(0,n,length.out=scroll+1))
+                lstep<-length(step)
+                pos<-1:(lstep-1)
+                plot.dynosc<-function(panel)
                 {
-                    if(!is.null(scroll))
-                        {
-                            if(!is.numeric(scroll)) stop("scroll has to a numeric")
-                            if(length(scroll)>1) stop("length of scroll cannot be superior to 1")
-                            if(zoom) stop("zoom and scroll cannot be used together")
-                            if(identify) stop("identify and scroll cannot be used together")
-                            step<-round(seq(0,n,length.out=scroll+1))
-                            lstep<-length(step)
-                            pos<-1:(lstep-1)
-                            plot.dynosc<-function(panel)
-                                {
-                                    with(panel,
-                                         {
-                                             soscillo(wave = wave, f = f, from = step[pos]/f,
-                                                      to=step[pos+1]/f,
-                                                      colwave = colwave, collab = collab, tlab=tlab, alab=alab,
-                                                      cexlab = cexlab, fontlab = fontlab, colline = colline,
-                                                      colaxis = colaxis, cexaxis = cexaxis, fontaxis=fontaxis, coly0 = coly0, bty = bty,
-                                                      tickup=max(abs(wave),na.rm=TRUE), ylim=c(-max(abs(wave)),max(abs(wave))))
-                                             title(main=pos,col.main=coltitle,cex.main=cextitle,font.main=fonttitle)
-                                         }
-                                         )
-                                    panel
-                                }
-                            osc.panel <- rpanel::rp.control("Window")
-                            rpanel::rp.slider(osc.panel,pos,from=1,to=lstep-1,resolution=1,
-                                              title = "Window", action=plot.dynosc)
-                        }
-
-                    else
-                        {
-                            if(zoom)
-                                {
-                                    par(tcl=0.5, col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline,las=0)
-                                    plot(x=seq(from,to,length.out=n), y=wave,
-                                         col=colwave, type=type, cex=cex,
-                                         xaxs="i", yaxs="i",
-                                         xlab="", ylab="", ylim=c(-alim,alim),
-                                         xaxt=xaxt, yaxt=yaxt,
-                                         cex.lab=0.8, font.lab=2,
-                                         bty=bty
-                                         )
-                                    if(bty == "l" | bty == "o")
-                                        {axis(side=1, col=colline,labels=FALSE)
-                                         axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)}
-                                    mtext(tlab,col=collab, font=fontlab, cex=cexlab, side=1,line=3)
-                                    mtext(alab,col=collab, font=fontlab, cex=cexlab,side=2,line=2.5)
-                                    abline(h=0,col=coly0,lty=2)
-
-                                    cat("choose start and end positions on the wave\n")
-                                    if(.Platform$OS.type == "windows") flush.console()
-                                    coord<-locator(n=2)
-                                    from<-coord$x[1]; c<-from*f-a
-                                    to<-coord$x[2]; d<-to*f-a
-                                    if(d<c) {c<-d; d<-c}
-                                    wave<-as.matrix(wave[c:d,1])
-                                    n<-nrow(wave)
-                                }
-
-                            op<-par(tcl=tcl, col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline,las=0)
-
-                            plot(x=seq(from,to,length.out=n), y=wave,
-                                 col=colwave, type=type, cex=cex,
-                                 xaxs="i", yaxs="i",
-                                 xlab="", ylab="", ylim=c(-alim,alim),
-                                 xaxt=xaxt, yaxt=yaxt,
-                                 cex.lab=0.8, font.lab=2,
-                                 bty=bty)
-
-                            if(bty == "l" | bty == "o")
-                                {
-                                    axis(side=1, col=colline,labels=FALSE)
-                                    axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)
-                                }
-
-                            if(labels)
-                                {
-                                    mtext(tlab,col=collab, font=fontlab,side=1,line=3,cex=cexlab)
-                                    mtext(alab,col=collab, font=fontlab, cex=cexlab,side=2,line=3)
-                                }
-
-                            abline(h=0,col=coly0,lty=2)
-
-                            if(is.expression(title)) {title <- title}
-                            else{
-                                 if(title == FALSE) {title <- ""}
-                                 else {
-                                        if(is.character(title)) {title <- title}
-                                        else {title <- paste("Total time =",as.character(round(n/f,3)), "s - f =",as.character(f),"Hz") }
-                            }
-                        }
-                            title(main=title, col.main=coltitle, cex.main=cextitle, font.main=fonttitle)
-
-                            if(identify)
-                                {
-                                    cat("choose points on the wave\n")
-                                    if(.Platform$OS.type == "windows") flush.console()
-                                    x<-seq(from=from,to=to,length.out=n)
-                                    y<-wave
-                                    if(is.null(nidentify)) {nidentify <- length(x)}
-                                    id<-identify(x=x, y=y, labels=round(x,3), col="red", n=nidentify, plot=TRUE)
-                                    time <- x[id]
-                                    abline(v=time, col="red")
-                                    amp <- y[id,1]
-                                    res <- cbind(time, amp)
-                                    return(res)
-                                }
-                            par(op)
-                        }
+                    with(panel,
+                    {
+                        soscillo(wave = wave, f = f, from = step[pos]/f,
+                                 to=step[pos+1]/f,
+                                 colwave = colwave, collab = collab, tlab=tlab, alab=alab,
+                                 cexlab = cexlab, fontlab = fontlab, colline = colline,
+                                 colaxis = colaxis, cexaxis = cexaxis, fontaxis = fontaxis, coly0 = coly0, bty = bty,
+                                 tickup=max(abs(wave),na.rm=TRUE), ylim=c(-max(abs(wave)),max(abs(wave))))
+                        title(main=pos,col.main=coltitle,cex.main=cextitle,font.main=fonttitle)
+                    }
+                    )
+                    panel
                 }
+                osc.panel <- rpanel::rp.control("Window")
+                rpanel::rp.slider(osc.panel,pos,from=1,to=lstep-1,resolution=1,
+                                  title = "Window", action=plot.dynosc)
+            }
 
-                                        # to get a multi-window view
             else
+            {
+                if(zoom)
                 {
-                    if(!is.null(scroll)) stop("scroll cannot be used with a multi-frame window")
-                    if(zoom) stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
-                    if(identify) stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
-                    x<-n%/%p
-                    def.par <- par(no.readonly = TRUE)
-                    on.exit(par(def.par))
-                    m<-matrix(1:p,k,j,byrow=byrow)
-                    layout(m)
-                    par(tcl=tcl,oma=c(3,2,2,0.5),
-                        mar=rep(0,4)+0.8, mgp=c(0,0.15,0),
-                        col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline, las=0)
-
-                                        # plots the first window
-                    wave1<-as.matrix(wave[0:x,]); n1<-nrow(wave1)
-                    plot(x=seq(from,from+(x/f),length.out=n1), y=wave1,
+                    par(tcl=0.5, col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline,las=0)
+                    plot(x=seq(from,to,length.out=n), y=wave,
                          col=colwave, type=type, cex=cex,
                          xaxs="i", yaxs="i",
                          xlab="", ylab="", ylim=c(-alim,alim),
                          xaxt=xaxt, yaxt=yaxt,
-                         bty=bty)
-                    axis(side=1, col=colline,labels=FALSE)
+                         cex.lab=0.8, font.lab=2,
+                         bty=bty
+                         )
                     if(bty == "l" | bty == "o")
-                        {axis(side=2, at=max(abs(wave)), col=colline,labels=FALSE)
-                         axis(side=1, col=colline,labels=FALSE)}
+                    {axis(side=1, col=colline,labels=FALSE)
+                        axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)}
+                    mtext(tlab,col=collab, font=fontlab, cex=cexlab, side=1,line=3)
+                    mtext(alab,col=collab, font=fontlab, cex=cexlab,side=2,line=2.5)
                     abline(h=0,col=coly0,lty=2)
 
-                                        # title
-                    if(is.character(title)) title<-paste(title)
-                    if(title == FALSE) {title <- paste("")}
-                    else
-                        {
-                            title<-paste("Window time =",
-                                         as.character(round(n/(p*f),3)),"s - Total time =",
-                                         as.character(round(n/f,3)), "s - f =",
-                                         as.character(f),"Hz")
-                        }
-                    mtext(paste(title),side=3,line=0.4,col=coltitle,cex=cextitle,font=fonttitle,outer=TRUE)
-
-                                        # X-Y labels
-                    if(labels)
-                        {
-                            mtext(tlab, col=collab, side=1,line=1.5, font=fontlab,cex=cexlab,outer=TRUE)
-                            mtext(alab, col=collab, side=2, font=fontlab,cex=cexlab,
-                                  line=0.4,outer=TRUE)
-                        }
-
-                                        # plots following windows
-                    for(i in 1:(p-1))
-                        {
-                            xx<-((i*n)%/%p)+1
-                            yy<-((i+1)*n)%/%p
-                            wave2<-as.matrix(wave[xx:yy,]); n2<-nrow(wave2)
-                            plot(x=seq(from+(xx/f),from+(yy/f),length.out=n2), y=wave2,
-                                 col=colwave, type=type, cex=cex,
-                                 xaxs="i", yaxs="i",
-                                 xlab="", ylab="", ylim=c(-alim,alim),
-                                 xaxt=xaxt, yaxt=yaxt,
-                                 bty=bty)
-
-                            if(bty == "l" | bty == "o")
-                                {axis(side=2, at = max(abs(wave)), col=colline,labels=FALSE)
-                                 axis(side=1, col=colline,labels=FALSE)}
-                            abline(h=0,col=coly0,lty=2)
-                        }
+                    cat("choose start and end positions on the wave\n")
+                    if(.Platform$OS.type == "windows") flush.console()
+                    coord<-locator(n=2)
+                    from<-coord$x[1]; c<-from*f-a
+                    to<-coord$x[2]; d<-to*f-a
+                    if(d<c) {c<-d; d<-c}
+                    wave<-as.matrix(wave[c:d,1])
+                    n<-nrow(wave)
                 }
-            invisible(wave)
+
+                op<-par(tcl=tcl, col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline,las=0)
+
+                plot(x=seq(from,to,length.out=n), y=wave,
+                     col=colwave, type=type, cex=cex,
+                     xaxs="i", yaxs="i",
+                     xlab="", ylab="", ylim=c(-alim,alim),
+                     xaxt=xaxt, yaxt=yaxt,
+                     cex.lab=0.8, font.lab=2,
+                     bty=bty)
+
+                if(bty == "l" | bty == "o")
+                {
+                    axis(side=1, col=colline,labels=FALSE)
+                    axis(side=2, at=max(abs(wave),na.rm=TRUE), col=colline,labels=FALSE)
+                }
+
+                if(labels)
+                {
+                    mtext(tlab,col=collab, font=fontlab,side=1,line=3,cex=cexlab)
+                    mtext(alab,col=collab, font=fontlab, cex=cexlab,side=2,line=3)
+                }
+
+                abline(h=0,col=coly0,lty=2)
+
+                if(is.expression(title)) {title <- title}
+                else{
+                    if(title == FALSE) {title <- ""}
+                    else {
+                        if(is.character(title)) {title <- title}
+                        else {title <- paste("Total time =",as.character(round(n/f,3)), "s - f =",as.character(f),"Hz") }
+                    }
+                }
+                title(main=title, col.main=coltitle, cex.main=cextitle, font.main=fonttitle)
+
+                if(identify)
+                {
+                    cat("choose points on the wave\n")
+                    if(.Platform$OS.type == "windows") flush.console()
+                    x<-seq(from=from,to=to,length.out=n)
+                    y<-wave
+                    if(is.null(nidentify)) {nidentify <- length(x)}
+                    id<-identify(x=x, y=y, labels=round(x,3), col="red", n=nidentify, plot=TRUE)
+                    time <- x[id]
+                    abline(v=time, col="red")
+                    amp <- y[id,1]
+                    res <- cbind(time, amp)
+                    return(res)
+                }
+                par(op)
+            }
         }
+
+        ## to get a multi-window view
+        else
+        {
+            if(!is.null(scroll)) stop("scroll cannot be used with a multi-frame window")
+            if(zoom) stop ("'zoom' does work with a single-frame window only ('k'=1 and 'j'=1)")
+            if(identify) stop ("'identify' does work with a single-frame window only ('k'=1 and 'j'=1)")
+            x<-n%/%p
+            def.par <- par(no.readonly = TRUE)
+            on.exit(par(def.par))
+            m<-matrix(1:p,k,j,byrow=byrow)
+            layout(m)
+            par(tcl=tcl,oma=c(3,2,2,0.5),
+                mar=rep(0,4)+0.8, mgp=c(0,0.15,0),
+                col.axis=colaxis, cex.axis = cexaxis, font.axis=fontaxis, col=colline, las=0)
+
+            ## plots the first window
+            wave1<-as.matrix(wave[0:x,]); n1<-nrow(wave1)
+            plot(x=seq(from,from+(x/f),length.out=n1), y=wave1,
+                 col=colwave, type=type, cex=cex,
+                 xaxs="i", yaxs="i",
+                 xlab="", ylab="", ylim=c(-alim,alim),
+                 xaxt=xaxt, yaxt=yaxt,
+                 bty=bty)
+            axis(side=1, col=colline,labels=FALSE)
+            if(bty == "l" | bty == "o")
+            {axis(side=2, at=max(abs(wave)), col=colline,labels=FALSE)
+                axis(side=1, col=colline,labels=FALSE)}
+            abline(h=0,col=coly0,lty=2)
+
+            ## title
+            if(is.character(title)) title<-paste(title)
+            if(title == FALSE) {title <- paste("")}
+            else
+            {
+                title<-paste("Window time =",
+                             as.character(round(n/(p*f),3)),"s - Total time =",
+                             as.character(round(n/f,3)), "s - f =",
+                             as.character(f),"Hz")
+            }
+            mtext(paste(title),side=3,line=0.4,col=coltitle,cex=cextitle,font=fonttitle,outer=TRUE)
+
+            ## X-Y labels
+            if(labels)
+            {
+                mtext(tlab, col=collab, side=1,line=1.5, font=fontlab,cex=cexlab,outer=TRUE)
+                mtext(alab, col=collab, side=2, font=fontlab,cex=cexlab,
+                      line=0.4,outer=TRUE)
+            }
+
+            ## plots following windows
+            for(i in 1:(p-1))
+            {
+                xx<-((i*n)%/%p)+1
+                yy<-((i+1)*n)%/%p
+                wave2<-as.matrix(wave[xx:yy,]); n2<-nrow(wave2)
+                plot(x=seq(from+(xx/f),from+(yy/f),length.out=n2), y=wave2,
+                     col=colwave, type=type, cex=cex,
+                     xaxs="i", yaxs="i",
+                     xlab="", ylab="", ylim=c(-alim,alim),
+                     xaxt=xaxt, yaxt=yaxt,
+                     bty=bty)
+
+                if(bty == "l" | bty == "o")
+                {axis(side=2, at = max(abs(wave)), col=colline,labels=FALSE)
+                    axis(side=1, col=colline,labels=FALSE)}
+                abline(h=0,col=coly0,lty=2)
+            }
+        }
+        ## process time and warning
+        ptm <- proc.time() - ptm.start
+        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+        invisible(wave)
+    }
     else return (wave)
 }
+
 
 
 ################################################################################
@@ -4767,6 +4884,7 @@ oscilloST <- function(
                     f,
                     from = NULL,
                     to = NULL,
+                    fastdisp = FALSE,
                     identify = FALSE,
                     plot = TRUE,
                     colwave1 = "black",
@@ -4784,6 +4902,8 @@ oscilloST <- function(
                     )
 
 {
+  ## computation time start
+  ptm.start <- proc.time()
 
   if(class(wave1)=="Wave" && wave1@stereo==TRUE) {
       wave2 <- mono(wave1, which="right")
@@ -4802,12 +4922,12 @@ oscilloST <- function(
     {
       op<-par(mfrow=c(2,1),oma=c(5,3,2,2),mar=rep(0,4), cex.axis=cexaxis)
       
-      oscillo(wave=wave1,f=f,
+      oscillo(wave=wave1,f=f, fastdisp=fastdisp,
               from=from,to=to,zoom=FALSE,labels=FALSE,xaxt="n",
               colaxis=colaxis,colwave=colwave1,coly0=coly01,
               bty=bty)
       
-      oscillo(wave=wave2,f=f,
+      oscillo(wave=wave2,f=f, fastdisp=fastdisp,
               from=from,to=to,identify=identify,zoom=FALSE,labels=FALSE,
               colaxis=colaxis,colwave=colwave2,coly0=coly02,
               bty=bty)
@@ -4816,9 +4936,11 @@ oscilloST <- function(
       mtext("Amplitude",col=collab,font=fontlab,cex=cexlab,side=2,line=1.5,outer=TRUE)
 
       par(op)
-      invisible(cbind(wave1,wave2))
+      ## end process time and warning
+     ptm <- proc.time() - ptm.start
+     if(ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+     invisible(cbind(wave1,wave2))
     }
-
   else return(cbind(wave1,wave2))
 }
 
@@ -5855,7 +5977,7 @@ soundscapespec <- function(wave,
         y <- y / (n_recs*f) # EPK: normalize for number of records and frequency
         ## frequency bining 
         freq <- trunc(x)  ## truncate frequency digits to get only 0, 1 etc values
-        freq <- freq[freq!=0]  ## eliminate frequency values between 0 and 1 kHz
+        freq <- freq[freq!=0]   ## eliminate frequency values between 0 and 1 kHz
         spec <- y[trunc(x)!=0]  ## eliminate amplitude values between 0 and 1 kHz
         ## 1 kHz frequency bins
         bin  <- unique(freq) 
@@ -5886,25 +6008,44 @@ soundscapespec <- function(wave,
 ##                                SOX
 ################################################################################
 
-sox <- function(command, exename = NULL, path2exe = NULL)
-  
-  {
+sox <- function (command, exename = NULL, path2exe = NULL, option = NULL, shQuote_type = NULL)
+{
 
-    if(.Platform$OS.type == "unix")
-      {
-        if(missing(exename)) exename <- "sox"
-        if(missing(path2exe)) {exe <- exename} else {exe <- paste(path2exe, exename ,sep="/")}
-        system(paste(exename, command),ignore.stderr = TRUE)
-      }
+    if (is.null(exename)) {
+      exename <- "sox"
+    } else {
+      exename = exename
+    }
+    
+    if (is.null(path2exe)) {
+      exe <- exename
+    } else {
+      path2exe <- normalizePath(path = path2exe, winslash = "/", mustWork = TRUE)
+      exe <- paste(path2exe, exename, sep = "/")
+    }
+      
+    if (.Platform$OS.type == "windows") {
+    
+        if(is.null(shQuote_type)) {
+          shQuote_type = "cmd"
+        } else {
+          shQuote_type = "cmd2"
+        }
 
-   if(.Platform$OS.type == "windows")
-     {
-      if(missing(exename)) exename <- "sox.exe"
-      if(missing(path2exe)) {exe <- paste("c:\\sox-14-4-0\\", exename, sep="")} else {exe <- paste(path2exe,exename,sep="/")} 
-      e <- system(paste(exe, command, sep=" "), ignore.stderr = TRUE) 
+    } else {  # .Platform$OS.type == "unix" # + Apple OS X + other
+    
+        if(is.null(shQuote_type)) {
+          shQuote_type = "sh"
+        } else {
+          shQuote_type = "csh"
+        }
+        
      }
-
-  }
+    
+    exe <- shQuote(exe, type = shQuote_type)
+    system(paste(exe, command, option, sep = " "), ignore.stderr = TRUE)
+    
+}
 
 
 ################################################################################
@@ -5989,10 +6130,17 @@ spec <- function(
   # take half of the FFT
   # multiply by 2 and by a scaling factor related to the window shape, this saves the total energy see http://www.ni.com/white-paper/4278/en/, section Converting from a Two-Sided Power Spectrum to a Single-Sided Power Spectrum
   y <- 2*y[1:(n%/%2)]  
+
   # PSD, NORM, PMF, SCALED OPTIONS
   if(PSD)    {y <- y^2}
   if(norm)   {y <- y/max(y)}
   if(PMF)    {y <- y/sum(y)}
+    
+  # FREQUENCY DATA  changed @ 2017-12-29 to take into account odd and even n or wl
+  #                 moved above DB @ 2018-06-18 bug fixed by Andrey Anikin 
+  if(is.null(at)) {x <- ((0:(n-1))*f/n/1000)[1:(n%/%2)]} # if at null then complete signal
+    else {x <- ((0:(wl-1))*f/wl/1000)[1:(wl%/%2)]} # if at not null then use of a wl
+
   # DB
   if(!is.null(dB))
     {
@@ -6013,11 +6161,7 @@ spec <- function(
       if(is.null(dB)) {alim<-c(0,1.1)} else {alim <- c(min(y, na.rm=TRUE), max(y, na.rm=TRUE) + 20)}
       if(PMF | !isTRUE(norm)) alim<-c(0,max(y, na.rm=TRUE))
     }
-
-                                        # FREQUENCY DATA  changed @ 2017-12-29 to take into account odd and even n or wl
-  if(is.null(at)) {x <- ((0:(n-1))*f/n/1000)[1:(n%/%2)]} # if at null then complete signal
-    else {x <- ((0:(wl-1))*f/wl/1000)[1:(wl%/%2)]} # if at not null then use of a wl
-
+    
                                         # HORIZONTAL PLOT
   if(plot == 1)
     {
@@ -6252,6 +6396,7 @@ spectro <- function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
+                  fastdisp = FALSE,
                   complex = FALSE,
                   norm = TRUE,
                   correction = "none",
@@ -6292,6 +6437,9 @@ spectro <- function(
                   oma = rep(0,4),
                   listen = FALSE, ...) 
 {
+    ## computation time start
+    ptm.start <- proc.time()
+    ## error messages
     if(wl%%2 == 1) stop("'wl' has to be an even number.")
     if (!is.null(dB) && all(dB != c("max0", "A", "B", "C", "D"))) 
         stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
@@ -6301,185 +6449,201 @@ spectro <- function(
         if(!is.null(dB)) {dB <- NULL ; warning("\n'dB' was turned to 'NULL'")}
     }
 
+    ## input
     input <- inputw(wave = wave, f = f)
     if(!is.null(tlim) && trel && osc) {wave <- wave0 <- input$w} else {wave <- input$w} # necessary to use 'from' and 'to' of soscillo()
     f <- input$f
     rm(input)
     
-  if(!is.null(tlim)) wave <- cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
-                                        # dynamic vertical zoom (modifications of analysis parameters)
-  if(!is.null(flimd))                        
+    if(!is.null(tlim)) wave <- cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
+    ## dynamic vertical zoom (modifications of analysis parameters)
+    if(!is.null(flimd))                        
     {
-                                        # zoom magnification
-      mag <- round((f/2000)/(flimd[2]-flimd[1]))
-                                        # new parameters
-      wl <- wl*mag                              
-      if(ovlp==0) ovlp <- 100
-      ovlp <- 100-round(ovlp/mag)
-                                        # use of normal flim to follow axis modifications
-      flim <- flimd     
+        ## zoom magnification
+        mag <- round((f/2000)/(flimd[2]-flimd[1]))
+        ## new parameters
+        wl <- wl*mag                              
+        if(ovlp==0) ovlp <- 100
+        ovlp <- 100-round(ovlp/mag)
+        ## use of normal flim to follow axis modifications
+        flim <- flimd     
     }
-  
+    
 
-                                        # STFT
-  n <- nrow(wave)
-  step <- seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
-  z <- stdft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,scale=norm,complex=complex,correction=correction)
+    ## STFT
+    n <- nrow(wave)
+    step <- seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
+    z <- stdft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,scale=norm,complex=complex,correction=correction)
 
-                                        # X axis settings
-  if(!is.null(tlim) && trel) { X<- seq(tlim[1],tlim[2],length.out=length(step))}
-  else {X <- seq(0,n/f,length.out=length(step))}
-  xat <- xlabel <- pretty(X)
+    ## X axis settings
+    if(!is.null(tlim) && trel) { X<- seq(tlim[1],tlim[2],length.out=length(step))}
+    else {X <- seq(0,n/f,length.out=length(step))}
+    xat <- xlabel <- pretty(X)
 
-                                        # Y axis settings
-  if(is.null(flim)) {Y <- seq(0, (f/2)-(f/(wl+zp)), by=f/(wl+zp))/1000}
-  else
+    ## Y axis settings
+    if(is.null(flim)) {Y <- seq(0, (f/2)-(f/(wl+zp)), by=f/(wl+zp))/1000}
+    else
     {
-      fl1<-flim[1]*nrow(z)*2000/f
-      fl2<-flim[2]*nrow(z)*2000/f
-      z<-z[(fl1:fl2)+1,]
-      Y<-seq(flim[1],flim[2],length.out=nrow(z))
+        fl1 <- flim[1]*nrow(z)*2000/f
+        fl2 <- flim[2]*nrow(z)*2000/f
+        z <- z[(fl1:fl2)+1,]
+        Y <- seq(flim[1],flim[2],length.out=nrow(z))
     }
-  yat <- ylabel <- pretty(Y)
-  if(flog) {
-      Y <- log(Y+1) # because Y has values between 0 and 1 that are negative in log
-      yat <- log(yat+1)
-  }
+    yat <- ylabel <- pretty(Y)
+    if(flog) {
+        Y <- log(Y+1) # because Y has values between 0 and 1 that are negative in log
+        yat <- log(yat+1)
+    }
 
-                                        # DB
-  if(!is.null(dB))
+    ## DB
+    if(!is.null(dB))
     {
-      if(is.null(dBref)) {z <- 20*log10(z)} else {z <- 20*log10(z/dBref)}
-      if(dB!="max0")
-          {
+        if(is.null(dBref)) {z <- 20*log10(z)} else {z <- 20*log10(z/dBref)}
+        if(dB!="max0")
+        {
             if(dB == "A") z <- dBweight(Y*1000, dBref = z)$A 
             if(dB == "B") z <- dBweight(Y*1000, dBref = z)$B 
             if(dB == "C") z <- dBweight(Y*1000, dBref = z)$C 
             if(dB == "D") z <- dBweight(Y*1000, dBref = z)$D
-          }
+        }
     }
- 
-  Z<-t(z)
-  
-  if(plot)
+    
+    Z<-t(z)
+    
+    if(plot)
     {
-      if(!isTRUE(norm) && isTRUE(scale)) stop("dB colour scale cannot be plot when 'norm' is FALSE")
-      maxz <- round(max(z, na.rm=TRUE))
-      if(!is.null(dB))
+        if(!isTRUE(norm) && isTRUE(scale)) stop("dB colour scale cannot be plot when 'norm' is FALSE")
+        maxz <- round(max(z, na.rm=TRUE))
+        if(!is.null(dB))
         {
-         if(is.null(collevels)) collevels <- seq(maxz-30, maxz, by = 1)
-         if(is.null(contlevels)) contlevels <- seq(maxz-30, maxz, by = 10)
+            if(is.null(collevels)) collevels <- seq(maxz-30, maxz, by = 1)
+            if(is.null(contlevels)) contlevels <- seq(maxz-30, maxz, by = 10)
         }
-      else
+        else
         {
-         if(is.null(collevels)) collevels <- seq(0, maxz, length = 30)
-         if(is.null(contlevels)) contlevels <- seq(0, maxz, length = 3)
+            if(is.null(collevels)) collevels <- seq(0, maxz, length = 30)
+            if(is.null(contlevels)) contlevels <- seq(0, maxz, length = 3)
         }        
-      
-      Zlim<-range(Z, finite = TRUE, na.rm=TRUE)
-      # SPECTRO + OSC + SCALE
-      if(osc & scale)
+        
+        Zlim <- range(Z, finite = TRUE, na.rm=TRUE)
+        if(isTRUE(fastdisp) & length(step) > 300) {res <- 300} else {res=length(step)} #+ 2018-06-26
+        ## SPECTRO + OSC + SCALE
+        if(osc & scale)
         {            
-          layout(matrix(c(3, 1 ,2, 0), ncol = 2, byrow=TRUE), widths = widths, heights = heights)
-          par(las=0, oma=oma, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis, bg=colbg)
-          # SCALE
-          par(mar=c(0,1,4.5,3))
-          dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
-                  cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
-          # OSCILLO
-          par(mar=c(5,4.1,0,0))
-          if(!is.null(tlim) && trel) {wave<-wave0; from<-tlim[1]; to<-tlim[2]} else {from<-FALSE; to <- FALSE}
-          soscillo(wave=wave,f=f,bty="u", from=from, to=to,
-                   collab=collab,colaxis=colaxis,colline=colaxis,
-                   ylim=c(-max(abs(wave)),max(abs(wave))),
-                   tickup=max(abs(wave),na.rm=TRUE),
-                   tlab=tlab, alab=alab,
-                   cexlab=cexlab,
-                   cexaxis=cexaxis,
-                   xaxt={if(!axisX) {"n"}},
-                   ...)
-          # SPECTRO
-          par(mar=c(0,4.1,1,0), las=1, cex.lab=cexlab+0.2)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab="",ylab=flab),
-                                plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
-                                color.palette=palette
-                                )
-          if(grid) abline(h=yat, col=colgrid, lty="dotted")
-          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
-          if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+            layout(matrix(c(3, 1 ,2, 0), ncol = 2, byrow=TRUE), widths = widths, heights = heights)
+            par(las=0, oma=oma, col="white", col=colaxis, col.lab=collab, cex.lab=cexlab, cex.axis=cexaxis, bg=colbg)
+            ## SCALE
+            par(mar=c(0,1,4.5,3))
+            dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
+                    cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
+            ## OSCILLO
+            par(mar=c(5,4.1,0,0))
+            if(!is.null(tlim) && trel) {wave<-wave0; from<-tlim[1]; to<-tlim[2]} else {from <- FALSE ; to <- FALSE}
+            soscillo(wave=wave, f=f,bty="u", from=from, to=to,
+                      fastdisp=fastdisp, # 2018-06-26
+                      collab=collab,colaxis=colaxis,colline=colaxis,
+                      ylim=c(-max(abs(wave)),max(abs(wave))),
+                      tickup=max(abs(wave),na.rm=TRUE),
+                      tlab=tlab, alab=alab,
+                      cexlab=cexlab,
+                      cexaxis=cexaxis,
+                      xaxt={if(!axisX) {"n"}},
+                      ...)
+            ## SPECTRO
+            par(mar=c(0,4.1,1,0), las=1, cex.lab=cexlab+0.2)
+            filled.contour.modif2(x=X[seq(1,length(X),length=res)],
+                                  y=Y, z=Z[seq(1,nrow(Z),length=res),], #mod 2018-06-26
+                                  levels=collevels, nlevels=20,
+                                  plot.title=title(main=main,xlab="",ylab=flab),
+                                  plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
+                                  color.palette=palette
+                                  )
+            if(grid) abline(h=yat, col=colgrid, lty="dotted")
+            if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+            if(colaxis != colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         }
-           
-      # SPECTRO + SCALE
-      if(osc==FALSE & scale)
+        
+        ## SPECTRO + SCALE
+        if(osc==FALSE & scale)
         {
-          layout(matrix(c(2, 1), ncol=2, byrow=TRUE), widths=widths)
-          # SCALE
-          par(mar=c(5,1,4.5,3), oma=oma, las=0, bg=colbg)
-          dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
-                  cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
-          # SPECTRO
-          par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg,cex.lab=cexlab+0.2)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab=tlab,ylab=flab),
-                                plot.axes={
-                                    if(axisX) {axis(1, at=xat, labels=xlabel)}
-                                    if(axisY) {axis(2, at=yat, labels=ylabel)}
-                                },
-                                color.palette=palette)
-          if(grid) abline(h=yat, col=colgrid, lty="dotted")
-          if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
-          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
-        }
-
-      # SPECTRO + OSCILLO
-      if(osc & scale==FALSE)
-        {
-          layout(matrix(c(2,1), nrow = 2, byrow=TRUE), heights=heights) 
-          par(mar=c(5.1,4.1,0,2.1), las=0, oma=oma, bg=colbg)
-          # OSCILLO
-          if(!is.null(tlim) && trel) {wave <-wave0; from<-tlim[1]; to<-tlim[2]} else {from<-FALSE ; to<-FALSE}
-          soscillo(wave=wave,f=f,bty="u", from=from, to=to,  
-                   collab=collab,colaxis=colaxis,colline=colaxis,
-                   tickup=max(abs(wave),na.rm=TRUE),
-                   ylim=c(-max(abs(wave)),max(abs(wave))),
-                   tlab=tlab, alab=alab,
-                   cexlab=cexlab, cexaxis=cexaxis,
-                   xaxt={if(!axisX) {"n"}},
-                   ...)
-          # SPECTRO
-          par(mar=c(0,4.1,2.1,2.1), las=1, cex.lab=cexlab)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab="",ylab=flab),
-                                color.palette=palette,
-                                plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
-                                col.lab=collab,colaxis=colaxis,...)		
-          if(grid) abline(h=yat, col=colgrid, lty="dotted")
-          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
-          if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+            layout(matrix(c(2, 1), ncol=2, byrow=TRUE), widths=widths)
+            ## SCALE
+            par(mar=c(5,1,4.5,3), oma=oma, las=0, bg=colbg)
+            dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
+                    cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
+            ## SPECTRO
+            par(mar=c(5,4.1,1,0),las=1,cex=1,col=colaxis,col.axis=colaxis,col.lab=collab,bg=colbg,cex.lab=cexlab+0.2)
+            filled.contour.modif2(x=X[seq(1,length(X),length=res)],
+                                  y=Y, z=Z[seq(1,nrow(Z),length=res),], #mod 2018-06-26
+                                  levels=collevels, nlevels=20,
+                                  plot.title=title(main=main,xlab=tlab,ylab=flab),
+                                  plot.axes={
+                                      if(axisX) {axis(1, at=xat, labels=xlabel)}
+                                      if(axisY) {axis(2, at=yat, labels=ylabel)}
+                                  },
+                                  color.palette=palette)
+            if(grid) abline(h=yat, col=colgrid, lty="dotted")
+            if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+            if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
         }
 
-      # SPECTRO ONLY
-      if(osc==FALSE & scale==FALSE)
+        ## SPECTRO + OSCILLO
+        if(osc & scale==FALSE)
         {
-          par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab, bg=colbg, cex.axis=cexaxis, cex.lab=cexlab,...)
-          filled.contour.modif2(x=X ,y=Y, z=Z, levels=collevels, nlevels=20,
-                                plot.title=title(main=main,xlab=tlab,ylab=flab),
-                                plot.axes = {
-                                    if(axisX) {axis(1, at=xat, labels=xlabel)}
-                                    if(axisY) {axis(2, at=yat, labels=ylabel)}
-                                },
-                                color.palette=palette,
-                                col.lab=collab,colaxis=colaxis)		
-          if(grid) abline(h=yat, col=colgrid, lty="dotted")
-          if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
-          if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+            layout(matrix(c(2,1), nrow = 2, byrow=TRUE), heights=heights) 
+            par(mar=c(5.1,4.1,0,2.1), las=0, oma=oma, bg=colbg)
+            ## OSCILLO
+            if(!is.null(tlim) && trel) {wave <-wave0; from<-tlim[1]; to<-tlim[2]} else {from<-FALSE ; to<-FALSE}
+            soscillo(wave=wave,f=f,bty="u", from=from, to=to,
+                      fastdisp=fastdisp, #+ 2018-06-26
+                      collab=collab,colaxis=colaxis,colline=colaxis,
+                      tickup=max(abs(wave),na.rm=TRUE),
+                      ylim=c(-max(abs(wave)),max(abs(wave))),
+                      tlab=tlab, alab=alab,
+                      cexlab=cexlab, cexaxis=cexaxis,
+                      xaxt={if(!axisX) {"n"}},
+                      ...)
+            ## SPECTRO
+            par(mar=c(0,4.1,2.1,2.1), las=1, cex.lab=cexlab)
+            filled.contour.modif2(x=X[seq(1,length(X),length=res)],
+                                  y=Y, z=Z[seq(1,nrow(Z),length=res),], #mod 2018-06-26
+                                  levels=collevels, nlevels=20,
+                                  plot.title=title(main=main,xlab="",ylab=flab),
+                                  color.palette=palette,
+                                  plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
+                                  col.lab=collab,colaxis=colaxis,...)		
+            if(grid) abline(h=yat, col=colgrid, lty="dotted")
+            if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+            if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
+        }
+
+        ## SPECTRO ONLY
+        if(osc==FALSE & scale==FALSE)
+        {
+            par(las=1, col=colaxis, col.axis=colaxis, col.lab=collab, bg=colbg, cex.axis=cexaxis, cex.lab=cexlab,...)
+            filled.contour.modif2(x=X[seq(1,length(X),length=res)],
+                                  y=Y, z=Z[seq(1,nrow(Z),length=res),], #mod 2018-06-26
+                                  levels=collevels, nlevels=20,
+                                  plot.title=title(main=main,xlab=tlab,ylab=flab),
+                                  plot.axes = {
+                                      if(axisX) {axis(1, at=xat, labels=xlabel)}
+                                      if(axisY) {axis(2, at=yat, labels=ylabel)}
+                                  },
+                                  color.palette=palette,
+                                  col.lab=collab,colaxis=colaxis)		
+            if(grid) abline(h=yat, col=colgrid, lty="dotted")
+            if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
+            if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
         } 
-      if(listen) {listen(wave, f=f)}
-      invisible(list(time=X, freq=Y, amp=z))
+        if(listen) {listen(wave, f=f)}
+        ## end process time and warning
+        ptm <- proc.time() - ptm.start
+        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+        invisible(list(time=X, freq=Y, amp=z))
     }
-  else return(list(time=X, freq=Y, amp=z))
+    else return(list(time=X, freq=Y, amp=z))
 }
+
 
 
 
@@ -6908,38 +7072,37 @@ th <- function(
 ##                                TIMER
 ################################################################################
 
-timer <- function(wave,
-                   f,
-                   threshold = 5,
-                   dmin = NULL, 
-                   envt = "abs",
-                   power = 1,
-                   msmooth = NULL,
-                   ksmooth = NULL,
-                   ssmooth = NULL,
-                   tlim = NULL,
-                   plot = TRUE,
-                   plotthreshold = TRUE,
-                   col = "black",
-                   colval = "red",
-                   xlab = "Time (s)",
-                   ylab = "Amplitude",
-                   ...
-                   )
+timer <- function(
+                  wave,
+                  f,
+                  threshold = 5,
+                  dmin = NULL, 
+                  envt = "abs",
+                  power = 1,
+                  msmooth = NULL,
+                  ksmooth = NULL,
+                  ssmooth = NULL,
+                  asmooth = NULL,
+                  tlim = NULL,
+                  plot = TRUE,
+                  plotthreshold = TRUE,
+                  col = "black",
+                  colval = "red",
+                  xlab = "Time (s)",
+                  ylab = "Amplitude",
+                  ...
+                  )
+    
 {
     ## INPUT
     input <- inputw(wave = wave, f = f)
     wave <- input$w
     f <- input$f
     rm(input)
-    n <- length(wave)
-    thres <- threshold/100
+    n <- length(wave)    
   
     ## STOP MESSAGES
     if(power == 0) stop("'power' cannot equal to 0")
-    if(!is.null(msmooth) && !is.null(ksmooth)) stop("'msmooth' and 'ksmooth' cannot be used together")
-    if(!is.null(msmooth) && !is.null(ssmooth)) stop("'msmooth' and 'ssmooth' cannot be used together")
-    if(!is.null(ksmooth) && !is.null(ssmooth)) stop("'ksmooth' and 'ssmooth' cannot be used together")
     if(!is.null(dmin)){
       if(length(dmin)!=1) stop("'dmin' should be a numeric vector of length 1") 
       if(dmin <= 0) stop("'dmin' cannot be negative or equal to 0")
@@ -6953,9 +7116,19 @@ timer <- function(wave,
 
     ## ENVELOPE
     wave1 <- env(wave = wave, f = f, msmooth = msmooth, ksmooth =
-             ksmooth, ssmooth=ssmooth, envt = envt, norm = TRUE, plot = FALSE)
+             ksmooth, ssmooth=ssmooth, asmooth=asmooth, envt = envt, norm = TRUE, plot = FALSE)
     n1 <- length(wave1)
     f1 <- f*(n1/n)
+
+    ## THRESHOLD
+    if(is.numeric(threshold)) {
+       thres <- threshold/100
+       thres.lab <- paste(as.character(threshold), "%")
+     }
+    else if(is.function(threshold)) {
+       thres <- apply(wave1, MARGIN=2, FUN=threshold)
+       thres.lab <- paste(as.character(round(100*thres, digits=1)), "%")
+     }
 
     ## SIGNAL DETECTION
     if(power!=1) wave1 <- wave1^power
@@ -6995,22 +7168,21 @@ timer <- function(wave,
     npos <- length(positions)
     if(npos<=2) stop("It seems that the sound is continuous, there are not signal/pause events.")
     ## the wave starts with a pause
-    if(wave2[1] == 1) {
-      first <- "pause"
-      pause <- durations[seq(1, npos - 1, by = 2)]
-      signal <- durations[seq(2, npos - 1, by = 2)]
-      start.signal <- positions[seq(2, npos - 1, by = 2)]
-      end.signal <- positions[seq(3, npos - 1, by = 2)]
+    if (wave2[1] == 1) {
+        first <- "pause"
+        pause <- durations[seq(1, npos - 1, by = 2)]
+        signal <- durations[seq(2, npos - 1, by = 2)]
+        start.signal <- positions[seq(2, npos - 1, by = 2)]
+        end.signal <- positions[seq(3, npos - 1, by = 2)]
     }
     ## the wave starts with a signal
     else {
-      first <- "signal"
-      pause <- durations[seq(2, npos - 1, by = 2)]
-      signal <- durations[seq(1, npos - 1, by = 2)]
-      start.signal <- positions[seq(1, npos - 1, by = 2)]
-      end.signal <- positions[seq(2, npos - 1, by = 2)]
+        first <- "signal"
+        pause <- durations[seq(2, npos - 1, by = 2)]
+        signal <- durations[seq(1, npos - 1, by = 2)]
+        start.signal <- positions[seq(1, npos - 1, by = 2)]
+        end.signal <- positions[seq(2, npos - 1, by = 2)]
     }
-
     ratio <- sum(signal)/sum(pause)
     timer <- list(s = signal, p = pause, r = ratio,
                   s.start = start.signal, s.end = end.signal,
@@ -7022,7 +7194,8 @@ timer <- function(wave,
              ylim = c(0, 1 + 0.1), col = col, type = "l", xaxs ="i", ...)
         if(plotthreshold) {
             abline(h = thres, col = colval, lty = 2)
-            mtext(paste(as.character(threshold), "%"), side = 2,
+            mtext(thres.lab, side = 2,    #@mod 2018-06-18 
+#            mtext(paste(as.character(threshold), "%"), side = 2,
                 line = 0.5, at = thres, las = 1, col = colval,
                 cex = 0.8)
         }
@@ -7053,6 +7226,8 @@ timer <- function(wave,
         return(timer)
     }
 }
+
+
 
 
 ################################################################################
@@ -7657,8 +7832,8 @@ hanning.w<-function (n)
 inputw <- function(
                   wave,
                   f,
-                  channel=1,
-                  bit=16
+                  channel = 1,
+                  bit = 16
                   )
     
 {
@@ -7871,61 +8046,68 @@ sumsmooth <- function(x, wl, padding=TRUE, norm=FALSE){
 ##                                SOSCILLO
 ################################################################################
 
-soscillo<-function
-(
- wave,
- f,
- from = FALSE,
- to =FALSE,
- colwave = "black",
- coltitle = "black",
- collab = "black",
- colline = "black",
- colaxis = "black",
- cexaxis = 1,
- coly0 = "grey47",
- tlab = "Times (s)",
- alab = "Amplitude",
- cexlab = 1,
- fontlab = 1,
- title = FALSE,
- xaxt="s",
- yaxt="n",
- tickup = NULL,
- ... 
- )
+soscillo <- function(
+                      wave,
+                      f,
+                      from = FALSE,
+                      to = FALSE,
+                      fastdisp = TRUE,
+                      colwave = "black",
+                      coltitle = "black",
+                      collab = "black",
+                      colline = "black",
+                      colaxis = "black",
+                      fontaxis = 1,
+                      cexaxis = 1,
+                      coly0 = "grey47",
+                      tlab = "Times (s)",
+                      alab = "Amplitude",
+                      cexlab = 1,
+                      fontlab = 1,
+                      title = FALSE,
+                      xaxt="s",
+                      yaxt="n",
+                      tickup = NULL,
+                      ... 
+                      )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+    input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
 
-  if(from|to)
+    if(from|to)
     {
-      if(from == 0) {a<-1; b<-round(to*f)}
-      if(from == FALSE) {a<-1; b<-round(to*f);from<-0}
-      if(to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
-      else {a<-round(from*f); b<-round(to*f)}
-      wave<-as.matrix(wave[a:b,])
-      n<-nrow(wave)
+        if(from == 0) {a<-1; b<-round(to*f)}
+        if(from == FALSE) {a<-1; b<-round(to*f);from<-0}
+        if(to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
+        else {a<-round(from*f); b<-round(to*f)}
+        wave<-as.matrix(wave[a:b,])
+        n<-nrow(wave)
     }
-  else {n<-nrow(wave) ; from<-0 ; to<-n/f}
+    else {n <- nrow(wave) ; from <- 0 ; to <- n/f}
 
-  par(tcl=0.5, col.axis=colaxis, cex.axis = cexaxis, col=colline, col.lab=collab,las=0)
+    par(tcl=0.5, col.axis=colaxis, cex.axis=cexaxis, font.axis=fontaxis, col=colline, col.lab=collab,las=0)
 
-  wave<-ts(wave[0:n,], start=from, end=to, frequency = f)
+    if(isTRUE(fastdisp) & n > 20000) {
+        res <- round(n/20000)
+        res <- round(log2(res))
+        res <- 2^res
+        wave <- ts(wave[seq(0,n,by=res),], start=round(from), end=round(to), frequency=round(f/res))
+    }
+    else {wave <- ts(wave[0:n,], start=from, end=to, frequency=f)}
 
-  plot(wave,
-       col=colwave, type="l",
-       xaxs="i", yaxs="i",
-       xlab="", ylab="",
-       xaxt=xaxt, yaxt=yaxt, bty="l",
-       ...)
-  axis(side=1, col=colline,labels=FALSE)
-  axis(side=2, at=tickup, col=colline,labels=FALSE)
+    plot(wave,
+         col=colwave, type="l",
+         xaxs="i", yaxs="i",
+         xlab="", ylab="",
+         xaxt=xaxt, yaxt=yaxt, bty="l",
+         ...)
+    axis(side=1, col=colline,labels=FALSE)
+    axis(side=2, at=tickup, col=colline,labels=FALSE)
 
-  mtext(tlab,col=collab,font=fontlab,cex=cexlab,side=1,line=3)
-  mtext(alab,col=collab,font=fontlab,cex=cexlab,side=2,line=3)
+    mtext(tlab,col=collab,font=fontlab,cex=cexlab,side=1,line=3)
+    mtext(alab,col=collab,font=fontlab,cex=cexlab,side=2,line=3)
 
-  abline(h=0,col=coly0,lty=2)
+    abline(h=0,col=coly0,lty=2)
 }
 
 
@@ -8021,21 +8203,6 @@ stdft <- function(
 }
 
 
-################################################################################
-## STFT.EXT
-################################################################################
-
-stft.ext <- function(
-                  file,
-                  wl = 512,
-                  ovlp = 0,
-                  mean = FALSE,
-                  norm = FALSE,
-                  dB = FALSE,
-                  verbose = FALSE)
-{
-  .Call("stft", file, ovlp, wl, mean, norm, dB, verbose, PACKAGE = "seewave") 
-}
 
 
 

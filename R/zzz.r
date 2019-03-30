@@ -1,5 +1,5 @@
 .onLoad <- function(lib, pkg) {
-library.dynam("seewave", pkg, lib)
+#library.dynam("seewave", pkg, lib)
 }
 
 ## .onAttach <- function(...){

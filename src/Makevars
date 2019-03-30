@@ -1,1 +1,0 @@
-PKG_LIBS=-lfftw3 -lsndfile

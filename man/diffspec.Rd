@@ -46,6 +46,7 @@ flim = NULL, alim = NULL, title = TRUE, legend = TRUE, ...)
 }
 
 \details{
+  D is a Manhattan distance (l1 norm). \cr
   Both spectra are first transformed as probability mass functions (PMF).\cr
   Spectral difference is then computed according to:\cr
   \deqn{D = \frac{\sum{|spec1-spec2|}}{2}, with D \in [0,1].}{% 

@@ -2,7 +2,31 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
-		CHANGES IN SEEWAVE VERSION 2.0.9 [17-January-2018]
+
+		CHANGES IN SEEWAVE VERSION 2.1.3 [26-March-2019]
+
+NEW FUNCTION
+	o lts(): long-term spectrogram, a function to produce a spectrogram over several survey files (obtained with a Wildlife Acoustics SongMeter recorder).
+
+OTHER CHANGES
+	o dBweight(): returns now the ITU-R 468 noise weighting. Added by Andrey Anikin.
+	o dynspec(), meanspec(), spec(), spectro(), spectro3D(), wf(): the argument 'dB' can now take the value 'ITU' for the the ITU-R 468 noise weighting. Added by Andrey Anikin.
+	o env(), timer(): a new argument 'asmooth' for a smooth based on autocorrelation. By Thibaut Marin-Cudraz.
+	o ffilter(): a bug fied when 'wave' is not a Wave object and when 'rescale=TRUE'
+	o listen(): a new argument, 'channel', to choose the channel to listen to.
+	o NDSI(): a new argument, 'max', to compute the maximum, rather than the sum, of the biophony frequency band. Thanks to Stuart Gage.
+	o sox(): improved by Andre Mikulec for a better OS implementation, new argument 'option' and 'shQuote_type'. 
+	o spec(): bug fixed when dB!=NULL or dB!="max0". Thanks to Andrey Anikin.
+	o spectro(), oscillo(), oscilloST(): a new argument 'fastdisp' (by default FALSE) to speed up the graphic display of long sounds (with more than 20,000 samples). This also increases the display of all functions that include an oscillogram. Important: this new feature should be kept to FALSE to produce high-quality figures.
+	o stft.ext(): a .C code change following CRAN request.
+        o timer(): the argument 'threshold' can now take a function so that the threshold can be defined according to the mean, median, standard deviation or any parameter describing the amplitude envelope. Thanks to Jens Piontkowski for the suggestion.
+
+DEPRECATED & DEFUNCT
+	o stft.ext(): this function based on C code does not pass R CRAN check anymore. 
+
+
+
+		CHANGES IN SEEWAVE VERSION 2.1.0 [02-March-2018]
 
 NEW FUNCTION
 	o dynspectro(): a new function to dynamically explore the spectrogram of a wave with a time slider. By David Pinaud.

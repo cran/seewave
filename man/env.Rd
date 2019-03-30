@@ -9,6 +9,7 @@ amplitude envelope of a time wave.}
 
 \usage{env(wave, f, envt = "hil", 
 msmooth = NULL, ksmooth = NULL, ssmooth = NULL,
+asmooth = NULL,
 fftw = FALSE, norm = FALSE,
 plot = TRUE, k = 1, j = 1, ...)}
 
@@ -22,7 +23,8 @@ plot = TRUE, k = 1, j = 1, ...)}
     (in number of points). The second component is the overlap between
     successive windows (in \%). See examples.}
   \item{ksmooth}{kernel smooth via \code{\link{kernel}}. See examples.}
-  \item{ssmooth}{sum smooth.}
+  \item{ssmooth}{length of the sliding window used for a sum smooth.}
+  \item{asmooth}{length of the sliding window used for an autocorrelation smooth.}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
     library \code{fftw} for faster computation for the Hilbert amplitude
   envelope (\code{envt="hil"}) and/or for kernell smoothing
@@ -48,7 +50,8 @@ obtained through the Hilbert transform (\code{\link{hilbert}}).
 
 \value{Data are returned as one-column matrix when \code{plot} is \code{FALSE}.}
 
-\author{Jerome Sueur. Implementation of 'fftw' argument by Jean Marchal and Francois Fabianek.}
+\author{Jerome Sueur. Implementation of 'fftw' argument by Jean Marchal
+  and Francois Fabianek. Implementation of 'asmooth' by Thibaut Marin-Cudraz.}
 
 \note{Be aware that smoothing with either \code{msmooth} or \code{ksmooth}
 changes the original number of points describing \code{wave}.}
@@ -67,6 +70,8 @@ env(tico, msmooth=c(10,50))
 env(tico, ksmooth=kernel("daniell",10))
 # sum smooth
 env(tico, ssmooth=50)
+# autocorrelation smooth
+env(tico, asmooth=50)
 # overplot of oscillographic and envelope representations
 oscillo(tico)
 par(new=TRUE)

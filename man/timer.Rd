@@ -12,7 +12,7 @@
 \usage{
 timer(wave, f, threshold = 5, dmin = NULL, envt="abs",
 power = 1, msmooth = NULL, ksmooth = NULL,
-ssmooth = NULL, tlim = NULL, plot = TRUE, plotthreshold = TRUE,
+ssmooth = NULL, asmooth=NULL, tlim = NULL, plot = TRUE, plotthreshold = TRUE,
 col = "black", colval = "red", 
 xlab = "Time (s)", ylab = "Amplitude", ...)
 }
@@ -20,7 +20,9 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{threshold}{amplitude threshold for signal detection (in \%).}
+  \item{threshold}{amplitude threshold for signal detection (in \%), or
+  alternatively a function to be applied on the waveform scaled between
+  0 and 1. See examples.}
   \item{dmin}{time threshold (minimum duration) for signal detection (in s).}  
   \item{envt}{the type of envelope to be used: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}
@@ -34,6 +36,7 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
     successive windows (in \%).  See \code{\link{env}}.}
   \item{ksmooth}{kernel smooth for the amplitude enveloppe via \code{\link{kernel}}. See \code{\link{env}}.}
   \item{ssmooth}{sum smooth for the amplitude enveloppe. See \code{\link{env}}.}
+  \item{asmooth}{autocorrelation smooth for the amplitude enveloppe. See \code{\link{env}}.}
   \item{tlim}{modifications of the time X-axis limits.}
   \item{plot}{logical, if \code{TRUE} plots the envelope and the measurements 
     (by default \code{TRUE}).}
@@ -58,25 +61,9 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
   }
 
 \section{Warning}{Setting to high values to \code{msmooth} or
-  \code{ssmooth} might return unaccurate results. Double check your
+  \code{ssmooth} might return inaccurate results. Double check your
   results if so.}
 
-  \author{Jerome Sueur}
+\author{Jerome Sueur}
 
-\seealso{\code{\link{env}}, \code{\link{cutw}},  \code{\link{pastew}}.}
-
-\examples{
-data(tico)
-timer(tico,f=22050,threshold=5,msmooth=c(50,0))
-# to compare with an oscillographic representation
-data(orni)
-op<-par(mfrow=c(2,1))
-timer(orni,f=22050,threshold=5,msmooth=c(40,0),tck=0.05,
-        bty="l",colval="blue")
-title(main="A cicada song made of five echemes",col="blue")
-oscillo(orni,f=22050,k=1,j=1)
-par(op)
-}
-
-\keyword{dplot}
-\keyword{ts}
+\seealso{\code{\link{env}}, \code{\link{cutw}}, \code{\link{pastew}}.}

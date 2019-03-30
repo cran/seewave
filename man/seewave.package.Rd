@@ -14,23 +14,25 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 2.1.0\cr
-    Date: \tab 2018-03-02\cr
+    Version: \tab 2.1.3\cr
+    Date: \tab 2019-03-26\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
                    \tab Marion Depraetere, Francois Fabianek, \cr
                    \tab Amandine Gasc, Eric Kasten, \cr
 		   \tab Laurent Lellouch, Stefanie LaZerte, \cr
-		   \tab Jonathan Lees, Jean Marchal \cr
-		   \tab Sandrine Pavoine, David Pinaud \cr
-                   \tab Luis J. Villanueva-Rivera, Zev Ross, \cr
-		   \tab Carl G. Witthoft, Hristo Zhivomirov \cr
+		   \tab Jonathan Lees, Jean Marchal, \cr
+		   \tab Thibaut Marin-Cudraz, \cr
+		   \tab Andre Mikulec, Sandrine Pavoine, \cr
+		   \tab David Pinaud, Luis J. Villanueva-Rivera \cr
+		   \tab Zev Ross, Carl G. Witthoft, \cr
+		   \tab Hristo Zhivomirov \cr
     Acknowledgments: \tab Andrey Anikin, Michel Baylac,\cr
 		     \tab Charlotte Cure, Denis Dupeyron,\cr
                      \tab Kurt Fristrup, Arnold Fertin, \cr
 		     \tab Kurt Hornik, \cr
 		     \tab Emiliano A. Laca, Uwe Ligges, \cr
-		     \tab Morgane Paprin, \cr
+		     \tab Morgane Papin, \cr
 		     \tab Emmanuel Paradis, Daniel Ridley-Ellis, \cr
 		     \tab Brian Ripley, Jesse Ross, \cr
 		     \tab Zev Ross, Pavel Senin, \cr
@@ -38,9 +40,10 @@
 		     \tab George Zhang \cr
     Webpage: \tab \url{http://rug.mnhn.fr/seewave}\cr
     Discussion group : \tab \url{http://groups.google.com/group/seewave}\cr
-    Reference: \tab Sueur J, Aubin T, Simonis C - Seewave: a free
+    Source reference: \tab Sueur J, Aubin T, Simonis C (2008) - seewave: a free
     modular tool for sound analysis and synthesis.\cr
-               \tab Bioacoustics, 18: 213-226.\cr
+    \tab Bioacoustics, 18: 213-226.\cr
+    Book: \tab Sueur J (2018) - Sound analysis and synthesis with R. Springer.
   }
 }
 

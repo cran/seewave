@@ -10,8 +10,8 @@
 }
 
 \usage{
-oscillo(wave, f, from = NULL, to = NULL, scroll = NULL,
-zoom = FALSE, k=1, j=1, cex,
+oscillo(wave, f, from = NULL, to = NULL, fastdisp = FALSE,
+scroll = NULL, zoom = FALSE, k=1, j=1, cex,
 labels = TRUE,  tlab = "Time (s)", alab = "Amplitude",            
 byrow = TRUE, identify = FALSE, nidentify = NULL, 
 plot = TRUE, colwave = "black", 
@@ -28,6 +28,9 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
+  \item{fastdisp}{faster graphic display for long \code{wave}. The
+  oscillogram is displayed/saved faster in the graphic device/
+  graphic file when set to \code{TRUE}, with a cost on graphic resolution.}
   \item{scroll}{a numeric of length 1 allowing to move along the time wave using a slider panel.
     This numeric corresponds to the number of successive windows dividing the time wave.}
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  

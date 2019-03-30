@@ -11,6 +11,7 @@
 
 \usage{
 oscilloST(wave1, wave2 = NULL, f, from = NULL, to = NULL,
+fastdisp = FALSE,
 identify = FALSE, plot = TRUE, colwave1 = "black",
 colwave2 = "blue", coltitle = "black",
 collab = "black", cexlab = 1, fontlab = 1, colaxis = "black",
@@ -24,6 +25,9 @@ bty = "l")
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
+  \item{fastdisp}{faster graphic display for long \code{wave}. The stereo
+  oscillogram is displayed/saved faster in the graphic device/
+  graphic file when set to \code{TRUE}, with a cost on the graphic resolution.}
   \item{identify}{returns the time coordinate of points chosen  with a cursor 
     on the bottom oscillogram.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic or envelope plot

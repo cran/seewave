@@ -19,17 +19,18 @@
   \code{dBref} is not \code{NULL} then the function returns the
   conversion from a dB reference level to four dB weighting levels.}
 
-\value{\code{dBweight} returns a list of four items corresponding to four
+\value{\code{dBweight} returns a list of five items corresponding to five
   dB weightings.
 \item{A}{dB (A)}
 \item{B}{dB (B)}
 \item{C}{dB (C)}
 \item{D}{dB (D)}
+\item{ITU}{dB ITU-R 468}
 }
 
-\references{\url{http://en.wikipedia.org/wiki/A-weighting}.}
+\references{\url{http://en.wikipedia.org/wiki/A-weighting}, \url{https://en.wikipedia.org/wiki/ITU-R_468_noise_weighting}}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr} and Zev Ross}
+\author{Jerome Sueur \email{sueur@mnhn.fr},  Zev Ross, and Andrey Anikin}
 
 \note{The transfer equations used here come from Wipipedia but they were originally coming
   from the appendix of an international standard on the design

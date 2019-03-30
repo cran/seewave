@@ -42,6 +42,8 @@
 \value{A numeric vector of length 1 is returned.
   The value has no unit.}
 
+\note{The Shannon entropy scaled between 0 and 1 is also known as Pielou's evenness index}
+
 \references{
   Han, NC, Muniandy SV, Dayou J (2011) Acoustic classification of
   Australian anurans based on hybrid spectral-entropy approach.  \emph{Applied
