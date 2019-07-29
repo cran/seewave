@@ -10,7 +10,7 @@
 }
 
 \usage{
-cutw(wave, f, from = NULL, to = NULL, choose = FALSE,
+cutw(wave, f, channel=1, from = NULL, to = NULL, choose = FALSE,
 plot = FALSE, marks = TRUE, output="matrix", ...)
 }
 
@@ -18,6 +18,7 @@ plot = FALSE, marks = TRUE, output="matrix", ...)
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{from}{start mark (in s).}
   \item{to}{end mark (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})

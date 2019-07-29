@@ -6,11 +6,13 @@
 
 \description{This graphical function displays a time wave as an windowed oscillogram.}
 
-\usage{dynoscillo(wave, f, wd = NULL, wl = NULL, wnb = NULL, title = TRUE, ...)}
+\usage{dynoscillo(wave, f, channel = 1, wd = NULL, wl = NULL, wnb = NULL, title = TRUE, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wd}{a numerical vector, duration of the window (in seconds)}
   \item{wl}{a numerical vector, length of the window (in number of points).}
   \item{wnb}{a numerical vector, number of windows (no unit).}

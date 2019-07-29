@@ -6,11 +6,13 @@
 
 \description{This function computes an acoustic index based on the median of the amplitude envelope.}
 
-\usage{M(wave, f, envt = "hil", plot = FALSE, ...)}
+\usage{M(wave, f, channel = 1, envt = "hil", plot = FALSE, ...)}
 
 \arguments{
   \item{wave}{an \code{R} object.}
-  \item{f}{sampling frequency of wave (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of wave (in Hz). Does not need to be
+    specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{envt}{the type of envelope to be used: either \code{"abs"} for absolute amplitude envelope or \code{"hil"} for Hilbert amplitude envelope. See \code{\link{env}}.}
   \item{plot}{logical, if TRUE returns a plot of the amplitude envelope of wave (by default \code{FALSE}).}
   \item{\dots}{other env parameters, in particular smoothing parameters. See \code{\link{env}}.}

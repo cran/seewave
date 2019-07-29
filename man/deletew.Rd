@@ -8,13 +8,15 @@
   Original section and section after deletion can be plotted as oscillograms for comparison. 
 }
 \usage{
-deletew(wave, f, from = NULL, to = NULL, choose = FALSE, plot = FALSE,
+deletew(wave, f, channel = 1, from = NULL, to = NULL, choose = FALSE, plot = FALSE,
 marks = TRUE, output = "matrix", ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{from}{start position (in s).}
   \item{to}{end position (in s).}
   \item{choose}{logical, if \code{TRUE} start (=\code{from}) and end (=\code{to})

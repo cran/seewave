@@ -8,13 +8,15 @@
   out a selected frequency section of of a time wave (low-pass, high-pass, low-stop, high-stop, bandpass or bandstop frequency filter).}
 
 \usage{
-bwfilter(wave, f, n = 1, from = NULL, to = NULL,
+bwfilter(wave, f, channel = 1, n = 1, from = NULL, to = NULL,
 bandpass = TRUE, listen = FALSE, output = "matrix")
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{n}{Order of the filter. See details.}
   \item{from}{start frequency (in Hz) where to apply the filter.}
   \item{to}{end frequency (in Hz) where to apply the filter.}

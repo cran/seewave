@@ -10,7 +10,7 @@
 }
 
 \usage{
-timer(wave, f, threshold = 5, dmin = NULL, envt="abs",
+timer(wave, f, channel = 1, threshold = 5, dmin = NULL, envt="abs",
 power = 1, msmooth = NULL, ksmooth = NULL,
 ssmooth = NULL, asmooth=NULL, tlim = NULL, plot = TRUE, plotthreshold = TRUE,
 col = "black", colval = "red", 
@@ -19,7 +19,9 @@ xlab = "Time (s)", ylab = "Amplitude", ...)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{threshold}{amplitude threshold for signal detection (in \%), or
   alternatively a function to be applied on the waveform scaled between
   0 and 1. See examples.}

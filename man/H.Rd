@@ -8,11 +8,13 @@
 This function estimates the total entropy of a time wave.
 }
 
-\usage{H(wave, f, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)}
+\usage{H(wave, f, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length for spectral entropy analysis
     (even number of points). See \code{\link{sh}}.}
   \item{envt}{the type of envelope to be used: either "abs" for absolute

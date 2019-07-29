@@ -6,12 +6,14 @@
 
 \description{Reverse the wave along the time axis.}
 
-\usage{revw(wave, f, env = TRUE, ifreq = TRUE,
+\usage{revw(wave, f, channel = 1, env = TRUE, ifreq = TRUE,
 plot = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{env}{logical, if \code{TRUE} the amplitude envelope is reversed.}
   \item{ifreq}{logical, if \code{TRUE} the instantaneous frequency is reversed.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of

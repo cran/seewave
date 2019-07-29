@@ -11,7 +11,7 @@
 }
 
 \usage{
-pastew(wave1, wave2, f, at = "end",
+pastew(wave1, wave2, f, channel = c(1,1), at = "end",
 join = FALSE, tjunction=0,
 choose = FALSE, plot = FALSE,
 marks = TRUE, output = "matrix", ...)
@@ -21,7 +21,9 @@ marks = TRUE, output = "matrix", ...)
   \item{wave1}{a first R object.}
   \item{wave2}{a second R object.}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-  \item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
+  \item{channel}{channel of the R objects, by default left channel (1)
+  for each object.}
+\item{at}{\code{wave2} position in seconds where \code{wave1} will be pasted into.
     Can be also specified as \code{"start"}, \code{"middle"} or
     \code{"end"}.}
   \item{join}{if \code{TRUE} the two waves will be pasted and jointed by

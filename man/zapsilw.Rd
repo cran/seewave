@@ -8,11 +8,13 @@
   This function simply deletes the silence periods of a time wave. 
 }
 
-\usage{zapsilw(wave, f, threshold = 5, plot = TRUE, output = "matrix", ...)}
+\usage{zapsilw(wave, f, channel = 1, threshold = 5, plot = TRUE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{threshold}{amplitude threshold (in \%) between silence and signal.}
   \item{plot}{logical, if \code{TRUE} plots the orginal and the new oscillograms
     (by default \code{TRUE}).}

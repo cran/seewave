@@ -8,13 +8,15 @@
   al. (2012) for the description of a soundscape.}
 
 \usage{
-soundscapespec(wave, f, wl = 1024, wn = "hamming", ovlp = 50,
+soundscapespec(wave, f, channel = 1, wl = 1024, wn = "hamming", ovlp = 50,
 plot = TRUE, xlab = "Frequency (kHz)", ylim = c(0, 1), ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{wl}{length of the window for the analysis (even number of points, by default = 1024).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hamming"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%),

@@ -10,12 +10,14 @@
 }
 
 \usage{
-export(wave, f = NULL, filename = NULL, header=TRUE, ...)
+export(wave, f = NULL, channel = 1, filename = NULL, header=TRUE, ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{filename}{name of the new file. (by default the name of \code{wave}).}
   \item{header}{either a logical or a character vector, 
     if \code{TRUE} add a header to be read by Goldwave,

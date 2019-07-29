@@ -8,12 +8,13 @@
   of a time wave by drawing it with the graphics device }
 
 \usage{
-drawenv(wave, f, n = 20, plot = FALSE, listen = FALSE, output = "matrix")
+drawenv(wave, f, channel = 1, n = 20, plot = FALSE, listen = FALSE, output = "matrix")
 }
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{n}{the maximum number of points to draw the new envelope. Valid values start at 1.}
   \item{plot}{if \code{TRUE} returns the oscillogram
     of the new time wave (by default \code{FALSE}).}

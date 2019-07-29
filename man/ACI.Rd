@@ -7,13 +7,15 @@
 \description{This function computes the Acoustic Complexity Index (ACI)
   as described in Pieretti \emph{et al}. (2011)}
 
-\usage{ACI(wave, f, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)}
+\usage{ACI(wave, f, channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length for the analysis
-    (even number of points) (by default = 512)}
+    (even number of points) (by default = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{flim}{a numeric vector of length 2 to select a frequency band (in kHz).}

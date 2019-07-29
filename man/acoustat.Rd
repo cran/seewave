@@ -8,7 +8,7 @@
   frequency contours.}
 
 \usage{
-acoustat(wave, f, wl = 512, ovlp = 0, wn = "hanning",
+acoustat(wave, f, channel = 1, wl = 512, ovlp = 0, wn = "hanning",
 tlim = NULL, flim = NULL,
 aggregate = sum, fraction = 90,
 plot = TRUE, type = "l", ...)
@@ -16,7 +16,9 @@ plot = TRUE, type = "l", ...)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length for the analysis
     (even number of points) (by default = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}

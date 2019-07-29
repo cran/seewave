@@ -7,14 +7,17 @@
 \description{This function computes the continuous spectral entropy (H) of a time wave.}
 
 \usage{
-csh(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE, threshold = NULL,
+csh(wave, f, channel = 1, wl = 512, wn = "hanning", ovlp = 0,
+fftw = FALSE, threshold = NULL,
 plot = TRUE, xlab = "Times (s)", ylab = "Spectral Entropy",
 ylim = c(0, 1.1), type = "l", ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

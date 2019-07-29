@@ -6,12 +6,14 @@
 
 \description{Add or insert a silence section to a time wave.}
 
-\usage{addsilw(wave, f, at = "end", choose = FALSE, d = NULL,
+\usage{addsilw(wave, f, channel = 1, at = "end", choose = FALSE, d = NULL,
 plot = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{at}{position where to add the silence section (in s).
   Can be also specified as \code{"start"}, \code{"middle"} or \code{"end"}.}
   \item{choose}{logical, if \code{TRUE} the point where silence will

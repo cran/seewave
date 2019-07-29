@@ -11,7 +11,7 @@
 }
 
 \usage{
-meanspec(wave, f, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE,
+meanspec(wave, f, channel = 1, wl = 512, wn = "hanning", ovlp = 0, fftw = FALSE,
 norm = TRUE, PSD = FALSE, PMF = FALSE, FUN = mean, correction = "none", dB = NULL,
 dBref = NULL, from = NULL, to = NULL, identify = FALSE,
 col = "black", cex = 1, plot = 1, flab = "Frequency (kHz)",
@@ -20,7 +20,9 @@ alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{length of the window for the analysis (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{ovlp}{overlap between two successive analysis windows (in \%).}

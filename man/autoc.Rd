@@ -11,14 +11,16 @@ after a time delay.
 }
 
 \usage{
-autoc(wave, f, wl = 512, fmin, fmax, threshold = NULL, plot = TRUE,
+autoc(wave, f, channel = 1, wl = 512, fmin, fmax, threshold = NULL, plot = TRUE,
 xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000), pb =
 FALSE, ...)
 }
 
 \arguments{
 \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{wl}{length of the window for the analysis (even number of points,
   by default = 512).}
   \item{fmin}{the minimum frequency to detect (in Hz). See details.}

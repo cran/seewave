@@ -9,14 +9,17 @@
   waves.}
 
 \usage{
-coh(wave1, wave2, f, plot =TRUE, xlab = "Frequency (kHz)",
+coh(wave1, wave2, f, channel=c(1,1), plot =TRUE, xlab = "Frequency (kHz)",
 ylab = "Coherence", xlim = c(0,f/2000), type = "l",...)
 }
 
 \arguments{
   \item{wave1}{a first R object.}     
   \item{wave2}{a second R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R objects, by default left channel (1)
+  for each object.}
   \item{plot}{logical, if \code{TRUE} plots the continuous coherence function
     (by default \code{TRUE}).}
   \item{xlab}{title of the frequency X-axis.}

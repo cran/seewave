@@ -7,14 +7,16 @@
 
 \description{This function computes the Teager-Kaiser energy operator.}
 \usage{
-TKEO(wave, f, m = 1, M = 1, plot = TRUE,
+TKEO(wave, f, channel = 1, m = 1, M = 1, plot = TRUE,
 xlab = "Time (s)", ylab = "Energy",
 type = "l", bty = "l", ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{m}{a numeric vector of length 1 for the exponent parameter. See details.}
   \item{M}{a numeric vector of length 1 for the lag parameter. See details.}
   \item{plot}{logical, if \code{TRUE} returns a plot of the TK energy

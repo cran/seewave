@@ -8,11 +8,14 @@
   This function linearly shifts all the frequency content of a time wave. 
 }
 
-\usage{lfs(wave, f, shift, wl = 1024, ovlp = 75, wn = "hanning", fftw = FALSE, output = "matrix")}
+\usage{lfs(wave, f, channel = 1, shift, wl = 1024, ovlp = 75,
+wn = "hanning", fftw = FALSE, output = "matrix")}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{shift}{positive or negative frequency shift to apply (in Hz).}
   \item{wl}{window length for the analysis (even number of points, by
     default = 1024).}

@@ -10,7 +10,7 @@
 }
 
 \usage{
-spectro3D(wave, f, wl = 512, wn = "hanning", zp = 0,
+spectro3D(wave, f, channel = 1, wl = 512, wn = "hanning", zp = 0,
 ovlp = 0, norm = TRUE, correction = "none", fftw = FALSE,
 dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
@@ -19,7 +19,9 @@ palette = reverse.terrain.colors)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{wl}{length of the window for the analysis
     (even number of points).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

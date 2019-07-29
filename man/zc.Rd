@@ -9,14 +9,16 @@
 }
 
 \usage{
-zc(wave, f, plot = TRUE, interpol = 1, threshold = NULL,
+zc(wave, f, channel = 1,  plot = TRUE, interpol = 1, threshold = NULL,
 xlab = "Time (s)", ylab = "Frequency (kHz)", ylim = c(0, f/2000),
 warning = TRUE, ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{plot}{logical, if \code{TRUE} plots the dominant frequency along
     the time wave(by default \code{TRUE}).}
   \item{interpol}{a numeric vector of length 1, interpolation factor.}

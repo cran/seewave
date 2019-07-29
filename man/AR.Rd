@@ -9,7 +9,7 @@ M and Ht indices}
 
 \usage{AR(..., datatype = "objects", envt = "hil",
 msmooth = NULL, ksmooth = NULL, ssmooth = NULL,
-pattern = "[wav]$|[mp3]$")}
+pattern = "[wav]$|[WAV]$|[mp3]$")}
 
 \arguments{
 \item{\dots}{\code{Wave}, \code{WaveMC}, \code{audioSample} objects if \code{datatype="objects"}, or a path as a character string to a directory including \code{.wav} and/or \code{.mp3} files if \code{datatype="files"}.}

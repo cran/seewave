@@ -7,12 +7,13 @@
 \description{This function resamples (down- or over-samples) a time wave. This
   corresponds to a sampling frequency change.}
 
-\usage{resamp(wave, f, g, output="matrix")}
+\usage{resamp(wave, f, g, channel = 1, output="matrix")}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
   \item{g}{new sampling frequency of \code{wave} (in Hz).}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{output}{character string, the class of the object to return, either
     \code{"matrix"}, \code{"Wave"}, \code{"Sample"}, \code{"audioSample"} or \code{"ts"}.}
 }

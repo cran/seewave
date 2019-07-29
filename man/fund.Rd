@@ -8,14 +8,16 @@
   short-term cepstral transform.
 }
 
-\usage{fund(wave, f, wl = 512, ovlp = 0, fmax = f/2, threshold = NULL,
+\usage{fund(wave, f, channel = 1, wl = 512, ovlp = 0, fmax = f/2, threshold = NULL,
 at = NULL, from = NULL, to = NULL, 
 plot = TRUE, xlab = "Time (s)", ylab = "Frequency (kHz)",
 ylim = c(0, f/2000), pb = FALSE, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}

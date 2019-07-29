@@ -11,12 +11,14 @@
 }
 
 \usage{
-ama(wave, f, envt = "hil", wl = 512, plot = TRUE, type = "l", ...)
+ama(wave, f, channel = 1, envt = "hil", wl = 512, plot = TRUE, type = "l", ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{envt}{the type of envelope to be used: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope.}
   \item{wl}{length of the window for the analysis (even number of points,

@@ -9,11 +9,13 @@
   frequency of a time wave. This allows to detect periodicity 
   in frequency modulation.}
 
-\usage{fma(wave, f, threshold = NULL, plot = TRUE, ...)}
+\usage{fma(wave, f, channel = 1, threshold = NULL, plot = TRUE, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{threshold}{amplitude threshold for signal detection (in \% ).}
   \item{plot}{logical, if \code{TRUE} the spectrum of the instantaneous frequency 
     (by default \code{TRUE}).}

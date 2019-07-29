@@ -7,7 +7,7 @@
 \description{This function plots dynamically a sliding spectrogram along a time wave.}
 
 \usage{
-dynspectro(wave, f, slidframe = 10,
+dynspectro(wave, f, channel = 1, slidframe = 10,
 wl = 512, wn = "hanning", zp = 0, ovlp = 75,
 fftw = FALSE, dB = TRUE, plot = TRUE,
 title = TRUE, osc = FALSE,
@@ -23,7 +23,9 @@ coly0 = "lightgrey", colcursor = "red", bty = "l")
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{slidframe}{size of the sliding frame (in percent of the wave duration).}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (even number of points, by defaults = 512).}

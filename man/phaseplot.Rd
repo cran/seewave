@@ -7,7 +7,7 @@
 \description{This function returns a 2D or 3D representation of a time
   wave according to its first, second and possibly third derivatives.}
 
-\usage{phaseplot(wave, f, dim = 3, plot = TRUE, type = "l",
+\usage{phaseplot(wave, f, channel = 1, dim = 3, plot = TRUE, type = "l",
 xlab = "1st derivative",
 ylab = "2nd derivative",
 zlab = "3rd derivative", ...)}
@@ -15,6 +15,7 @@ zlab = "3rd derivative", ...)}
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{dim}{a vector of lenght 1, the number of dimensions of the
   plot. Can be either 2 or 3.}
   \item{plot}{logical, if \code{TRUE} plots phase-phase plot (by default \code{TRUE}).}

@@ -10,7 +10,7 @@
   An amplitude contour plot can be overlaid.}
 
 \usage{
-spectro(wave, f, wl = 512, wn = "hanning", zp = 0,
+spectro(wave, f, channel = 1, wl = 512, wn = "hanning", zp = 0,
 ovlp = 0, fastdisp = FALSE, complex = FALSE, norm = TRUE, correction="none",
 fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 flog = FALSE, grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
@@ -37,6 +37,7 @@ listen=FALSE,
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in \code{wave}.}  
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length for the analysis
     (even number of points) (by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default

@@ -7,12 +7,14 @@
 \description{This function deletes all signal which amplitude
   is below a selected threshold.}
 
-\usage{afilter(wave, f, threshold = 5, plot = TRUE,
+\usage{afilter(wave, f, channel = 1, threshold = 5, plot = TRUE,
 listen = FALSE, output = "matrix", ...)}
 
 \arguments{
 \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{threshold}{amplitude threshold (in \%).}
   \item{plot}{logical, if \code{TRUE} plots the new oscillogram
       (by default \code{TRUE}).}

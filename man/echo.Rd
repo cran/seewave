@@ -5,12 +5,14 @@
 \title{Echo generator}
 \description{This function generate echoes of a time wave.}
 
-\usage{echo(wave, f, amp, delay, plot = FALSE,
+\usage{echo(wave, f, channel = 1, amp, delay, plot = FALSE,
 listen = FALSE, output = "matrix", ...)}
 
 \arguments{
 \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{amp}{a vector describing the relative amplitude
     of the successive echoes. Each value of the vector should be in [0,1]}
   \item{delay}{a vector describing the time delays of the successive echoes

@@ -8,14 +8,16 @@
   against a delayed version of itself.}
 
 \usage{
-phaseplot2(wave, f, tau = 1, type = "l",
+phaseplot2(wave, f, channel = 1, tau = 1, type = "l",
 xlab = "x(t)",
 ylab = paste("x(t+", tau, ")", sep = ""), ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{tau}{the time delay to apply in number of samples.}
   \item{type}{type of plot that should be drawn. See \code{\link{plot}} for details (by default "l" for lines).}
   \item{xlab}{title of the x axis.}

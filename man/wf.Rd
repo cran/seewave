@@ -8,7 +8,7 @@
   a short-term Fourier transform or of any matrix.}
 
 \usage{
-wf(wave, f, wl = 512, zp = 0, ovlp = 0, fftw= FALSE, dB = "max0",
+wf(wave, f, channel = 1, wl = 512, zp = 0, ovlp = 0, fftw= FALSE, dB = "max0",
 dBref = NULL, wn = "hanning", x = NULL,
 hoff = 1, voff = 1, col = heat.colors,
 xlab = "Frequency (kHz)", ylab = "Amplitude (dB)",
@@ -18,7 +18,9 @@ density = NULL, border = NULL, lines = FALSE, lwd=NULL, ...)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length for the analysis
     (even number of points). (by default = 512)}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}

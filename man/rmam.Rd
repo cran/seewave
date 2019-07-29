@@ -7,11 +7,13 @@
 \description{This functions removes the amplitude modulation of a time wave
   through the Hilbert amplitude envelope.}
 
-\usage{rmam(wave, f, plot = FALSE, listen = FALSE, output = "matrix", ...)}
+\usage{rmam(wave, f, channel = 1, plot = FALSE, listen = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot
     of the nwe time wave (by default \code{FALSE}).}
   \item{listen}{if \code{TRUE} the new sound is played back.}

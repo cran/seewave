@@ -8,7 +8,7 @@
   frequency detection.}
 
 \usage{
-ceps(wave, f, phase = FALSE, wl = 512, at = NULL, from = NULL, to = NULL,
+ceps(wave, f, channel = 1, phase = FALSE, wl = 512, at = NULL, from = NULL, to = NULL,
 tidentify = FALSE, fidentify = FALSE, col = "black", cex = 1, plot = TRUE,
 qlab = "Quefrency (bottom: s, up: Hz)", alab = "Amplitude",
 qlim = NULL, alim = NULL, type = "l", ...)
@@ -18,6 +18,7 @@ qlim = NULL, alim = NULL, type = "l", ...)
   \item{wave}{an R object.}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{phase}{if \code{TRUE} than the phase is taken into account in
   the computation of the cepstrum.}
   \item{wl}{if \code{at} is not null, length of the window for the analysis

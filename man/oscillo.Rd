@@ -10,7 +10,7 @@
 }
 
 \usage{
-oscillo(wave, f, from = NULL, to = NULL, fastdisp = FALSE,
+oscillo(wave, f, channel = 1, from = NULL, to = NULL, fastdisp = FALSE,
 scroll = NULL, zoom = FALSE, k=1, j=1, cex,
 labels = TRUE,  tlab = "Time (s)", alab = "Amplitude",            
 byrow = TRUE, identify = FALSE, nidentify = NULL, 
@@ -25,7 +25,9 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{from}{start of the oscillogram (in s).}
   \item{to}{end of the oscillogram (in s).}
   \item{fastdisp}{faster graphic display for long \code{wave}. The

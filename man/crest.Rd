@@ -9,11 +9,12 @@
 \description{This function returns the crest factor and localizes the
   different crest(s).}
 
-\usage{crest(wave, f, plot = FALSE, col = 2, cex = 3, symbol = "*", ...)}
+\usage{crest(wave, f, channel = 1, plot = FALSE, col = 2, cex = 3, symbol = "*", ...)}
 
 \arguments{
 \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{plot}{if \code{TRUE} plots the oscillogram of \code{wave} and
   indicates the location of the crest(s)}
   \item{col}{color of the symbol indicating the localisation of the crest(s)}

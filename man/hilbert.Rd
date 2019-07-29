@@ -7,12 +7,13 @@
 \description{This function returns the analytic signal of a time wave
   through Hilbert transform.}
 
-\usage{hilbert(wave, f, fftw = FALSE)}
+\usage{hilbert(wave, f, channel = 1, fftw = FALSE)}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
     library \code{fftw} for faster computation. See Notes of the function \code{spectro}.}
 }

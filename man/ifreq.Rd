@@ -10,14 +10,16 @@
 }
 
 \usage{
-ifreq(wave, f, phase = FALSE, threshold = NULL,
+ifreq(wave, f, channel = 1, phase = FALSE, threshold = NULL,
 plot = TRUE, xlab = "Time (s)", ylab = NULL,
 ylim = NULL, type = "l", ...)
 }
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{phase}{if \code{TRUE} and  \code{plot} is also \code{TRUE}
     plots the instantaneous phase instead of the instantaneous frequency.}
   \item{threshold}{amplitude threshold for signal detection (in \% ).}

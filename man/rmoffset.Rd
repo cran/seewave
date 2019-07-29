@@ -6,12 +6,13 @@
 
 \description{This function removes the offset of a time wave.}
 
-\usage{rmoffset(wave, f, FUN = mean, plot = FALSE, output = "matrix", ...)}
+\usage{rmoffset(wave, f, channel = 1, FUN = mean, plot = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{FUN}{a function used to apply the offset correction. See Details.}
   \item{plot}{logical, if \code{TRUE} returns an oscillographic plot of the wave
     after removing the offset (by default \code{FALSE}).}

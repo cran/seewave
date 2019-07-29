@@ -10,7 +10,7 @@
 }
 
 \usage{
-covspectro(wave1, wave2, f, wl = 512, wn = "hanning", n,
+covspectro(wave1, wave2, f, channel = c(1,1), wl = 512, wn = "hanning", n,
 plot = TRUE, plotval = TRUE,
 method = "spearman", col = "black", colval = "red", cexval = 1,
 fontval = 1, xlab = "Time (s)",
@@ -20,7 +20,10 @@ ylab = "Normalised covariance (cov)", type = "l", pb = FALSE, ...)
 \arguments{
   \item{wave1}{a first R object.}     
   \item{wave2}{a second R object.}
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R objects, by default left channel (1)
+  for each object.}
   \item{wl}{length of the window for the analysis
     (even number of points, by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}

@@ -10,7 +10,7 @@
 }
 
 \usage{
-diffwave(wave1, wave2, f, wl = 512, envt = "hil",
+diffwave(wave1, wave2, f, channel = c(1,1), wl = 512, envt = "hil",
 msmooth = NULL, ksmooth = NULL)
 }
 
@@ -18,7 +18,8 @@ msmooth = NULL, ksmooth = NULL)
   \item{wave1}{a first R object.}     
   \item{wave2}{a second R object.}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
-
+  \item{channel}{channel of the R objects, by default left channel (1)
+  for each object.}
   \item{wl}{window length for spectral analysis (even number of points).}  
   \item{envt}{the type of envelope to be used: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See \code{\link{env}}.}

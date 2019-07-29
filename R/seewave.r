@@ -7,9 +7,9 @@
 ## ACI
 ################################################################################
 
-ACI <- function (wave, f, wl = 512, ovlp = 0, wn = "hamming", flim = NULL, nbwindows = 1) 
+ACI <- function (wave, f, channel = 1, wl = 512, ovlp = 0, wn = "hamming", flim = NULL, nbwindows = 1) 
 	{
-		input <- inputw(wave = wave, f = f)
+		input <- inputw(wave = wave, f = f, channel = channel)
 		wave <- input$w
 		f <- input$f
 		rm(input)
@@ -30,7 +30,7 @@ ACI <- function (wave, f, wl = 512, ovlp = 0, wn = "hamming", flim = NULL, nbwin
 				for (i in 1:(dim(t)[1]))
 				{ 
 					mp <- (diff(z1[i, ]))/sum(z1[i, ])
-                                        if(any(mp)=='-1' | any(mp)=='NaN'){t[i, ] <- as.numeric(NaN)}
+                                        if(any(mp=='-1') | any(mp=='NaN')){t[i, ] <- as.numeric(NaN)}
                                         else {t[i, ] <- abs(mp)}
 				}
 			acis[j] <- sum(t)
@@ -47,6 +47,7 @@ ACI <- function (wave, f, wl = 512, ovlp = 0, wn = "hamming", flim = NULL, nbwin
 acoustat <- function (
             wave,
             f,
+            channel = 1,
             wl = 512,
             ovlp = 0,
             wn = "hanning",
@@ -60,7 +61,7 @@ acoustat <- function (
 
 {
     ## INPUT
-    input <- inputw(wave = wave, f = f)
+    input <- inputw(wave = wave, f = f, channel = channel)
     wave <- input$w
     f <- input$f
     if (!is.null(tlim)) {
@@ -149,6 +150,7 @@ acoustat <- function (
 addsilw<-function(
                   wave,
                   f,
+                  channel = 1,
                   at = "end",
                   choose = FALSE,
                   d = NULL,
@@ -157,7 +159,7 @@ addsilw<-function(
                   ...)
 
 {
-  input<-inputw(wave=wave,f=f); wave<-input$w; f<-input$f; bit <- input$bit; rm(input)
+  input<-inputw(wave=wave,f=f, channel=channel);wave<-input$w; f<-input$f; bit <- input$bit; rm(input)
 
   switch(at,
          start = {at<-0},
@@ -200,6 +202,7 @@ addsilw<-function(
 afilter<-function(
                   wave,
                   f,
+                  channel = 1,
                   threshold = 5,
                   plot = TRUE,
                   listen = FALSE,                  
@@ -208,7 +211,7 @@ afilter<-function(
                   )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   t1<-max(abs(wave))*(threshold/100)
   wave1 <- ifelse(abs(wave)<=t1,yes=0,no=1)
@@ -275,6 +278,7 @@ akamatsu <- function(Lx,         # L in cm
 ama<-function(
               wave,
               f,
+              channel = 1,
               envt = "hil",
               wl = 512,
               plot = TRUE,
@@ -282,7 +286,7 @@ ama<-function(
               ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
   enve<-env(wave=wave, f=f, envt = envt, plot = FALSE)
   meanspec(wave=enve, f=f, wl=wl, plot=plot, type=type,...)
 }
@@ -298,7 +302,7 @@ AR <- function(...,
                msmooth = NULL,
                ksmooth = NULL,
                ssmooth = NULL,
-               pattern = "[wav]$|[mp3]$")
+               pattern = "[wav]$|[WAV]$|[mp3]$")
     
 {
     ## data as R objects
@@ -337,7 +341,7 @@ AR <- function(...,
             nch <- nchar(filename)
             extension <- substr(filename, start = nch-3, stop = nch)
             name[i] <- substr(filename, start=1, stop=nch-4)
-            if(extension == ".wav") {wave <- readWave(files[i])}
+            if(extension == ".wav" | extension == ".WAV") {wave <- readWave(files[i])}
             else if (extension == ".mp3") {wave <- readMP3(files[i])}
             env <- env(wave, envt=envt, msmooth=msmooth, ksmooth=ksmooth, ssmooth=ssmooth, plot=FALSE)
             env.norm <- env/sum(env)
@@ -389,6 +393,7 @@ attenuation <- function(lref,
 autoc <- function(
                 wave,
                 f,
+                channel = 1,
                 wl = 512,
                 fmin = 1,
                 fmax = f/2,
@@ -401,7 +406,7 @@ autoc <- function(
                 ...)
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
   if(!is.null(threshold)) wave <- afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
 
@@ -450,7 +455,8 @@ autoc <- function(
 
 bwfilter <- function(
                     wave,
-                    f, 
+                    f,
+                    channel = 1,
                     n = 1,
                     from = NULL,
                     to = NULL,
@@ -461,7 +467,7 @@ bwfilter <- function(
     
 {
   ## input
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   ## Butterworth filter
   if(isTRUE(bandpass)){
@@ -495,6 +501,7 @@ ccoh<-function(
                wave1,
                wave2,
                f,
+               channel = c(1,1),
                wl = 512,
                ovlp = 0,
                plot = TRUE,
@@ -522,8 +529,9 @@ ccoh<-function(
                ...)
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  if(length(channel)!=2) stop("'channel' should be a numeric vector of length 2")
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
   n1<-nrow(wave1)
   n2<-nrow(wave2)
@@ -623,6 +631,7 @@ ccoh<-function(
 ceps <- function(
                  wave,
                  f,
+                 channel = 1,
                  phase = FALSE,
                  wl = 512,
                  at = NULL,
@@ -642,7 +651,7 @@ ceps <- function(
                  )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
   if(!is.null(from)|!is.null(to))
     {
@@ -721,6 +730,7 @@ ceps <- function(
 cepstro <- function(
                   wave,
                   f,
+                  channel = 1,
                   wl = 512,
                   ovlp = 0,
                   plot = TRUE,
@@ -748,7 +758,7 @@ cepstro <- function(
                   ...)
 
 {
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
   wave <- ifelse(wave==0,yes=1e-6,no=wave)
 
   if(!is.null(tlim)) wave <- cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
@@ -830,6 +840,7 @@ coh<-function(
               wave1,
               wave2,
               f,
+              channel = c(1,1),
               plot =TRUE,
               xlab = "Frequency (kHz)",
               ylab = "Coherence",
@@ -839,8 +850,9 @@ coh<-function(
               )
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  if(length(channel)!=2) stop("'channel' should be a numeric vector of length 2")
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
   n1<-nrow(wave1)
   n2<-nrow(wave2)
@@ -864,16 +876,17 @@ coh<-function(
 ###############################################################################
 
 combfilter <- function(wave,
-                 f,
-                 alpha,
-                 K,
-                 units = c("samples", "seconds"),
-                 plot = FALSE,
-                 output="matrix",
-                 ...)
+                       f,
+                       channel = 1,
+                       alpha,
+                       K,
+                       units = c("samples", "seconds"),
+                       plot = FALSE,
+                       output="matrix",
+                       ...)
 {
     ## INPUT
-    input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+    input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
     wave <- wave/max(wave)
     n <- length(wave)
     K <- switch(match.arg(units), samples = K, seconds = round(K*f))
@@ -929,6 +942,7 @@ corenv <- function(
                    wave1,
                    wave2,
                    f,
+                   channel = c(1,1),
                    envt="hil",
                    msmooth = NULL,
                    ksmooth = NULL,
@@ -948,9 +962,9 @@ corenv <- function(
 
 {
   options(warn=-1) ## to remove warning messages from cor.test()
-
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  if(length(channel)!=2) stop("'channel' should be a numeric vector of length 2")
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
   n<-nrow(wave1)
 
@@ -1151,6 +1165,7 @@ covspectro<-function(
                      wave1,
                      wave2,
                      f,
+                     channel = c(1,1),
                      wl = 512,
                      wn = "hanning",
                      n,
@@ -1169,8 +1184,8 @@ covspectro<-function(
                      )
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
   if(n>21)
     {
@@ -1261,6 +1276,7 @@ covspectro<-function(
 crest <- function(
                   wave,
                   f,
+                  channel = 1,
                   plot = FALSE,
                   col = 2,
                   cex = 3,
@@ -1269,7 +1285,7 @@ crest <- function(
                   )
 
 {  
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f, channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
   max <- max(abs(wave))
   loc.max <- which(wave == max(wave))/f
   c <- max/rms(wave)
@@ -1292,6 +1308,7 @@ crest <- function(
 csh<-function(
               wave,
               f,
+              channel = 1,
               wl = 512,
               wn = "hanning",
               ovlp = 0,
@@ -1305,7 +1322,7 @@ csh<-function(
               ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
                                         # threshold
   if(!is.null(threshold)) wave<-afilter(wave=wave,f=f,threshold=threshold,plot=FALSE)
@@ -1396,6 +1413,7 @@ cutspec <- function(spec,
 cutw<-function(
                wave,
                f,
+               channel = 1,
                from = NULL,
                to = NULL,
                choose = FALSE,
@@ -1405,7 +1423,7 @@ cutw<-function(
                ...)
 
 {
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
 
   if(choose)
     { 
@@ -1566,6 +1584,7 @@ dBweight <- function(
 deletew<-function(
                   wave,
                   f,
+                  channel = 1,
                   from = NULL,
                   to = NULL,
                   choose = FALSE,
@@ -1575,7 +1594,7 @@ deletew<-function(
                   ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   if(choose)
     { 
@@ -1628,6 +1647,7 @@ deletew<-function(
 dfreq <- function(
                 wave,
                 f,
+                channel = 1,
                 wl = 512,
                 wn = "hanning",
                 ovlp = 0,
@@ -1649,7 +1669,7 @@ dfreq <- function(
   if(!is.null(clip)) {if(clip <=0 | clip >= 1) stop("'clip' value has to be superior to 0 and inferior to 1")}
 
   # input
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
   # time limits
   if(!is.null(tlim)) wave<-cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
@@ -1811,6 +1831,7 @@ diffenv <- function(
                   wave1,
                   wave2,
                   f,
+                  channel = c(1,1),
                   envt = "hil",
                   msmooth = NULL,
                   ksmooth = NULL,
@@ -1828,10 +1849,12 @@ diffenv <- function(
                   )
 
 {
+  if(length(channel)!=2) stop("'channel' should be a numeric vector of length 2")
+    
   leg<-c(as.character(deparse(substitute(wave1))),as.character(deparse(substitute(wave2))))
 
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
   env1<-env(wave=wave1,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
   env2<-env(wave=wave2,f=f,envt=envt,msmooth=msmooth,ksmooth=ksmooth,plot=FALSE)
@@ -1963,6 +1986,7 @@ diffwave<-function(
                    wave1,
                    wave2,
                    f,
+                   channel = c(1,1),
                    wl = 512,
                    envt= "hil",
                    msmooth = NULL,
@@ -1970,8 +1994,8 @@ diffwave<-function(
                    )
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel=channel[2])$w
 
                                         # spectral difference
   spec1<-meanspec(wave=wave1,f=f,wl=wl,PMF=TRUE,plot=FALSE)
@@ -2052,6 +2076,7 @@ discrets <- function (x,
 drawenv<-function(
                   wave,
                   f,
+                  channel = 1, 
                   n=20,
                   plot=FALSE,
                   listen = FALSE,                  
@@ -2060,7 +2085,7 @@ drawenv<-function(
 
 {
                                         # input
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave<-wave/max(abs(wave))
   wave<-rmoffset(wave, f=f)
@@ -2181,8 +2206,8 @@ drawfilter <- function(f,
 ##                               DURATION
 ################################################################################
 
-duration <- function(wave, f){
-    input <- inputw(wave=wave,f=f)
+duration <- function(wave, f, channel = 1){
+    input <- inputw(wave=wave,f=f, channel=channel)
     return(length(input$w) / input$f)
 }
 
@@ -2193,6 +2218,7 @@ duration <- function(wave, f){
 dynoscillo <- function(
                   wave,
                   f,
+                  channel = 1,
                   wd = NULL,
                   wl = NULL,
                   wnb = NULL,
@@ -2208,7 +2234,7 @@ dynoscillo <- function(
   if(!is.null(wnb) && !is.null(wd)) stop("'wnb' and 'wd' cannot be used in the same time. Please choose one.")
   
 # INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f, channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
 # SECTIONS
   n <- nrow(wave)
@@ -2245,6 +2271,7 @@ dynoscillo <- function(
 dynspec<-function(
                   wave,
                   f,
+                  channel = 1,
                   wl = 512,
                   wn = "hanning",
                   zp = 0,
@@ -2290,7 +2317,7 @@ dynspec<-function(
   
 
 ## INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
   if(!is.null(from)|!is.null(to))
     {
@@ -2401,6 +2428,7 @@ dynspec<-function(
 dynspectro <- function(
                        wave,
                        f,
+                       channel = 1,
                        slidframe = 10,
                        wl = 512,
                        wn = "hanning",
@@ -2439,7 +2467,7 @@ dynspectro <- function(
     if (slidframe > 90) stop("'slidframe' is too large")
     if (!is.null(envt) && osc) stop("'envt' and 'osc' cannot be used together") 
     ## INPUT
-    input <- inputw(wave = wave, f = f) ; wave <- input$w ; f <- input$f ; rm(input)
+    input <- inputw(wave = wave, f = f, channel = channel) ; wave <- input$w ; f <- input$f ; rm(input)
     ## FROM/TO
     if(!is.null(from)|!is.null(to))
     {
@@ -2542,6 +2570,7 @@ dynspectro <- function(
 echo <- function(
                 wave,
                 f,
+                channel = 1,
                 amp,
                 delay,
                 plot= FALSE,
@@ -2551,7 +2580,7 @@ echo <- function(
                 )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
 
   wave <- wave/max(abs(wave))
   n <- nrow(wave)
@@ -2608,6 +2637,7 @@ echo <- function(
 
 env <- function(wave,
                 f,
+                channel = 1,
                 envt = "hil",
                 msmooth = NULL,   
                 ksmooth = NULL,
@@ -2635,7 +2665,7 @@ env <- function(wave,
     if(!is.null(ssmooth) & !is.null(asmooth)) stop("Please use one of the smoothing arguments, not two of them.") 
 
     ## INPUT
-    input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+    input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
     n <- nrow(wave)
 
     if(envt=="hil"){
@@ -2722,6 +2752,7 @@ env <- function(wave,
 export<-function(
                  wave,
                  f = NULL,
+                 channel = 1,
                  filename = NULL,
                  header = TRUE, 
                  ...)
@@ -2729,7 +2760,7 @@ export<-function(
 {
   if(is.null(filename)) {filename <- paste(as.character(deparse(substitute(wave))),".txt",sep="")}
 
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ;
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ;
   if(is.null(f)) {f<-input$f}
   rm(input)
 
@@ -2752,6 +2783,7 @@ export<-function(
 fadew<-function(
                 wave,
                 f,
+                channel = 1,
                 din = 0,
                 dout = 0,
                 shape = "linear",
@@ -2762,7 +2794,7 @@ fadew<-function(
                 )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave<-wave/max(abs(wave))
   n<-nrow(wave)
@@ -2907,6 +2939,7 @@ fdoppler<-function(
 ffilter <- function(
                   wave,
                   f,
+                  channel = 1,
                   from = NULL,
                   to = NULL,
                   bandpass = TRUE,
@@ -2921,7 +2954,7 @@ ffilter <- function(
                   )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   n <- nrow(wave)
   step <- seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
@@ -2990,6 +3023,7 @@ field<-function(f,d)
 fir <- function(
                  wave,
                  f,
+                 channel = 1,
                  from = NULL,
                  to = NULL,
                  bandpass = TRUE,
@@ -3003,7 +3037,7 @@ fir <- function(
 
 {
     ## input
-    input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+    input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
     ## frequency limits of the filter (changed 2017-04-19)
     freq <- seq(0, f/2-f/wl, length.out=wl/2)
@@ -3080,14 +3114,15 @@ fir <- function(
 fma <- function(
                  wave,
                  f,
+                 channel = 1,
                  threshold = NULL,
                  plot = TRUE,
                  ...
-                 )
+                )
 
 {
   ## INPUT
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f, channel=channel) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
   ## INSTANTANEOUS FREQUENCY  
   ifreq <- ifreq(wave, f=f, threshold=threshold, plot=FALSE)$f
   ## remove NAs
@@ -3344,6 +3379,7 @@ ftwindow <- function(
 fund <- function (
                   wave,
                   f,
+                  channel = 1,
                   wl = 512,
                   ovlp = 0,
                   fmax = f/2,
@@ -3371,7 +3407,7 @@ fund <- function (
         }
         
         ## INPUT
-        input <- inputw(wave = wave, f = f)
+        input <- inputw(wave = wave, f = f, channel = channel)
         wave <- input$w
         f <- input$f
         rm(input)
@@ -3484,9 +3520,10 @@ ggspectro <- function(wave, f, tlab = "Time (s)", flab = "Frequency (kHz)", alab
 ##                                   H
 ################################################################################
 
-H<-function(
+H <- function(
             wave,
             f,
+            channel = 1,
             wl = 512,
             envt = "hil",
             msmooth = NULL,
@@ -3494,7 +3531,7 @@ H<-function(
             )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f, channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
                                         # spectral entropy
   spec<-meanspec(wave=wave,f=f,wl=wl,plot=FALSE)
   SH<-sh(spec)
@@ -3516,12 +3553,13 @@ H<-function(
 hilbert <- function(
                     wave,
                     f,
+                    channel = 1,
                     fftw = FALSE 
                    )
     
 {
     ## input
-    input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+    input <- inputw(wave=wave,f=f, channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
     n <- n1 <- nrow(wave)
     ## change the length of wave to reach a power of 2
     ## test on wave length n
@@ -3564,6 +3602,7 @@ hilbert <- function(
 ifreq <- function(
                   wave,
                   f,
+                  channel = 1,
                   phase = FALSE,
                   threshold = NULL,
                   plot = TRUE,
@@ -3575,7 +3614,7 @@ ifreq <- function(
                   )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f
   rm(input)
   wave <- hilbert(wave, f=f)
   n <- nrow(wave)
@@ -3860,14 +3899,14 @@ ks.dist <- function(spec1,
 listen <- function(
                    wave,
                    f,
-                   channel,
+                   channel = 1,
                    from = NULL,
                    to = NULL,
                    choose = FALSE
                   )
 
 {
-  input <- inputw(wave=wave, f=f) ; wave <- input$w ; f <- input$f
+  input <- inputw(wave=wave, f=f,channel=channel) ; wave <- input$w ; f <- input$f
   rm(input)
 
   if(choose)
@@ -3906,6 +3945,7 @@ listen <- function(
 lfs <- function(
                 wave,
                 f,
+                channel=1,
                 shift,
                 wl = 1024,
                 ovlp = 75,
@@ -3916,7 +3956,7 @@ lfs <- function(
 
 {
     ## STOP MESSAGES
-    input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+    input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
     n <- nrow(wave)
 
     if(shift == 0) stop("'shift' value cannot be equal to 0")
@@ -4064,7 +4104,6 @@ logspec.dist <- function(spec1,
 ##                                LTS
 ################################################################################
 
-
 lts <- function(dir,            # directory path where to find the .wav files
                 f,              # sampling frequency (not necessary)
                 wl = 512,       # window length
@@ -4083,21 +4122,30 @@ lts <- function(dir,            # directory path where to find the .wav files
 {
 
     ## INPUT AND STOP MESSAGES
-    files <- dir(dir, pattern="[wav]$")
+    if(!is.vector(dir) | !is.character(dir)) stop("The argument 'dir' should be a character vector")
+    if(length(dir)==1) {
+        files <- dir(dir, pattern="[wav]$|[WAV]$")
+        sep="/"
+    }
+    else {
+            files <- dir
+            dir <- NULL
+            sep <- ""
+    }
     n <- length(files)
-    if(n == 0) stop("It seems that there is no .wav files in the directory")
+    if(n==0 | n==1) stop("It seems that there is not enough .wav files to consider")    
     if(!is.null(ntann)){
        if(ntann <= 1) stop("The argument 'ntann' cannot be inferior to 2") 
        if(ntann > n) stop("The argument 'ntann' cannot be superior to the number of files stored in the directory") 
     }
-    if(missing(f)) {f <- readWave(paste(dir,files[1],sep="/"), header=TRUE)$sample.rate}
+    if(missing(f)) {f <- readWave(paste(dir,files[1],sep=sep), header=TRUE)$sample.rate}
     time <- songmeter(files)$time
     freq <- seq(0, f/2-f/wl, length=wl/2)/1000
     
     ## SUCCESSIVE MEANSPEC
     amp <- matrix(rep(NA, n*wl/2), ncol=n, nrow=wl/2)
     for(i in 1:n){
-        tmp <- readWave(paste(dir,files[i],sep="/"))
+        tmp <- tuneR::readWave(paste(dir,files[i],sep=sep))
         amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, norm=norm, plot=FALSE)[,2]
         if(verbose) {print(paste("File #", i, " processed", sep=""))}
     }
@@ -4126,13 +4174,14 @@ lts <- function(dir,            # directory path where to find the .wav files
 
 M <- function(wave,
               f,
+              channel = 1,
               envt = "hil",
               plot = FALSE,
               ...)
     
 {
     ## INPUT
-    input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
+    input <- inputw(wave=wave,f=f,channel) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
     ## ENVELOPE
     env <- env(wave, f=f, envt=envt, plot=plot, ...)
     ## INDEX
@@ -4159,6 +4208,7 @@ meandB<-function(x, level="IL")
 meanspec <-function(
                     wave,
                     f,
+                    channel = 1,
                     wl = 512,
                     wn = "hanning",
                     ovlp = 0,
@@ -4195,7 +4245,7 @@ meanspec <-function(
   if(!is.null(wl) & wl%%2 == 1) stop("'wl' has to be an even number.")
   
                                         # INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+    input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
                                         # FROM-TO SELECTION
   if(!is.null(from)|!is.null(to))
@@ -4450,6 +4500,7 @@ moredB<-function(x, level="IL")
 mutew<-function(
                 wave,
                 f,
+                channel = 1,
                 from = NULL,
                 to = NULL,
                 choose = FALSE,
@@ -4459,7 +4510,7 @@ mutew<-function(
                 )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+    input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   n<-nrow(wave)
   
@@ -4611,6 +4662,7 @@ octaves <- function(x, below=3, above=3)
 oscillo <- function(
                      wave,
                      f,
+                     channel = 1,
                      from = NULL,
                      to = NULL,
                      fastdisp = FALSE,
@@ -4652,7 +4704,7 @@ oscillo <- function(
     ptm.start <- proc.time()
 
     ## input
-    input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+    input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
     p<-k*j
 
@@ -4866,7 +4918,7 @@ oscillo <- function(
         }
         ## process time and warning
         ptm <- proc.time() - ptm.start
-        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this graphic, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
         invisible(wave)
     }
     else return (wave)
@@ -4938,7 +4990,7 @@ oscilloST <- function(
       par(op)
       ## end process time and warning
      ptm <- proc.time() - ptm.start
-     if(ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+     if(ptm[3] > 10) cat("This took quite a lot of time to display this graphic, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
      invisible(cbind(wave1,wave2))
     }
   else return(cbind(wave1,wave2))
@@ -4952,6 +5004,7 @@ oscilloST <- function(
 pastew <- function (wave1,
                     wave2,
                     f,
+                    channel = c(1,1),
                     at = "end",
                     join = FALSE,
                     tjunction = 0,
@@ -4963,12 +5016,12 @@ pastew <- function (wave1,
                     )
     
 {
-    input1 <- inputw(wave = wave1, f = f)
+    input1 <- inputw(wave = wave1, f = f, channel=channel[1])
     wave1 <- input1$w
     f <- input1$f
     bit <- input1$bit
     rm(input1)
-    wave2 <- inputw(wave = wave2, f = f)$w
+    wave2 <- inputw(wave = wave2, f = f, channel=channel[2])$w
     n <- nrow(wave2)
     if (choose) {
         cat("choose position on the wave\n")
@@ -5033,6 +5086,7 @@ pastew <- function (wave1,
 
 phaseplot <- function(wave,
                       f,
+                      channel = 1,
                       dim = 3,
                       plot = TRUE,
                       type = "l",
@@ -5044,7 +5098,7 @@ phaseplot <- function(wave,
   ## Error messages
   if(dim <= 1 | dim > 3) stop("'dim' has to be set to 2 or 3.")
   ## Input
-  wave <- inputw(wave = wave, f = f)$w
+  wave <- inputw(wave = wave, f = f, channel=channel)$w
   wave <- wave/max(wave) 
   ## Derivatives  
   z <- matrix(nrow = nrow(wave)-3, ncol = 3)
@@ -5066,19 +5120,20 @@ phaseplot <- function(wave,
 ################################################################################
 
 phaseplot2 <- function(wave,
-                      f,
-                      tau = 1,
-                      type = "l",
-                      xlab = "x(t)",
-                      ylab = paste("x(t+", tau,")", sep=""),
-                      ...)
+                       f,
+                       channel = 1,
+                       tau = 1,
+                       type = "l",
+                       xlab = "x(t)",
+                       ylab = paste("x(t+", tau,")", sep=""),
+                       ...)
 
 {
   ## Error messages
   if(tau!=floor(tau)) stop("'tau' must be a whole number.")  
   if(tau <= 0) stop("'tau' must be positive and superior or equal to 1.")
   ## Input
-  wave <- inputw(wave = wave, f = f)$w
+  wave <- inputw(wave = wave, f = f, channel = channel)$w
   wave <- wave/max(wave)
   n <- length(wave)
   wave.delayed <- wave[(tau+1):n]  
@@ -5092,7 +5147,7 @@ phaseplot2 <- function(wave,
 
 playlist <- function(directory, sample=FALSE, loop=1)
   {
-    files <- dir(directory, pattern={".wav|.mp3|.ogg|.aiff"})
+    files <- dir(directory, pattern={".wav|.WAV|.mp3|.ogg|.aiff"})
     n <- length(files)
     if(isTRUE(sample)) {files <- sample(files, size=n, replace=FALSE)}
     i <- 1
@@ -5110,13 +5165,14 @@ playlist <- function(directory, sample=FALSE, loop=1)
 
 preemphasis <- function(wave,
                         f,
+                        channel = 1,
                         alpha = 0.9,
                         plot = FALSE,
                         output="matrix",
                         ...)
 {
     ## INPUT
-    input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+    input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
     l <- length(wave)
     
     ## FILTER
@@ -5249,6 +5305,7 @@ Q <- function (spec,
 repw<-function(
                wave,
                f,
+               channel = 1,
                times = 2,
                join = FALSE,
                plot = FALSE,
@@ -5257,7 +5314,7 @@ repw<-function(
                )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   n <- nrow(wave)
   if(join) wave1 <- rep(wave[-n],times=times) else wave1 <- rep(wave,times=times)
   wave1 <- outputw(wave=wave1, f=f, format=output)
@@ -5278,6 +5335,7 @@ repw<-function(
 revw<-function(
                wave,
                f,
+               channel = 1,
                env = TRUE,
                ifreq = TRUE,
                plot = FALSE,
@@ -5285,7 +5343,7 @@ revw<-function(
                ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   if(env == FALSE & ifreq == FALSE) stop ("Both arguments 'env' and 'ifreq' cannot be set to FALSE.")
 
@@ -5319,11 +5377,12 @@ resamp<-function(
                  wave,
                  f,
                  g,
+                 channel = 1,
                  output = "matrix"
                  )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)$w
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)$w
 
   n<-nrow(wave)
   if(g==f) stop ("'f' and 'g' must be different")
@@ -5343,6 +5402,7 @@ resamp<-function(
 rmam <- function(
                wave,
                f,
+               channel = 1,
                plot = FALSE,
                listen = FALSE,
                output = "matrix",
@@ -5350,7 +5410,7 @@ rmam <- function(
                )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   wave <- wave/Mod(hilbert(wave,f=f))
   wave <- outputw(wave=wave, f=f, format=output)
 
@@ -5375,6 +5435,7 @@ rmam <- function(
 rmoffset <-function(
                    wave,
                    f,
+                   channel = 1,
                    FUN = mean,
                    plot = FALSE,
                    output = "matrix",
@@ -5382,7 +5443,7 @@ rmoffset <-function(
                    )
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f, channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
   m <- apply(wave, MARGIN=2, FUN=FUN)
   wave <- wave-m
 
@@ -5401,22 +5462,20 @@ rmoffset <-function(
 ##                               RMNOISE
 ################################################################################
 
-
 rmnoise<-function(
                   wave,
                   f,
+                  channel = 1,
                   output = "matrix",
                   ...                  
                   )
 
   {
-    input <- inputw(wave=wave, f=f); wave<-input$w; f<-input$f; bit <- input$bit ; rm(input)
+    input <- inputw(wave=wave, f=f, channel=channel); wave<-input$w; f<-input$f; bit <- input$bit ; rm(input)
     wave2 <- smooth.spline(wave, all.knots=TRUE,...)$y  
     wave2 <- outputw(wave=wave2, f=f, format=output)
     return(wave2)
   }
-
-
 
 
 ################################################################################
@@ -5469,6 +5528,7 @@ rugo <- function(
 savewav <- function(
                   wave,
                   f,
+                  channel = 1,
                   filename = NULL,
                   rescale = NULL,
                   ...
@@ -5485,7 +5545,7 @@ savewav <- function(
   if(is.null(filename)) filename <- paste(as.character(deparse(substitute(wave))),".wav",sep="")
   
   ## INPUT
-  input <- inputw(wave=wave, f=f); wave<-input$w; f<-input$f; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave, f=f, channel=channel); wave<-input$w; f<-input$f; bit <- input$bit ; rm(input)
 
   ## OUTPUT
   if(!is.null(rescale))
@@ -5642,6 +5702,7 @@ setenv<-function(
                  wave1,
                  wave2,
                  f,
+                 channel = c(1,1),
                  envt="hil",
                  msmooth = NULL,
                  ksmooth = NULL,
@@ -5652,8 +5713,8 @@ setenv<-function(
                  )
 
 {
-  input1<-inputw(wave=wave1,f=f) ; wave1<-input1$w ; f<-input1$f ; bit <- input1$bit ; rm(input1)
-  wave2<-inputw(wave=wave2,f=f)$w
+  input1<-inputw(wave=wave1,f=f,channel=channel[1]) ; wave1<-input1$w ; f<-input1$f ; bit <- input1$bit ; rm(input1)
+  wave2<-inputw(wave=wave2,f=f,channel[2])$w
 
   wave1<-rmoffset(wave1,f=f)
   wave1<-rmam(wave1,f=f)
@@ -5840,12 +5901,13 @@ simspec <- function(spec1,
 smoothw <- function(
                     wave,
                     f,
+                    channel = 1,
                     wl,
                     padding=TRUE,
                     output="matrix"
                     )
 {
-   input <- inputw(wave = wave, f = f)
+   input <- inputw(wave = wave, f = f, channel = channel)
    wave <- input$w
    f <- input$f
    rm(input)
@@ -5947,13 +6009,102 @@ songmeter <- function(
         options(stringsAsFactors = TRUE)
             }
 
+################################################################################
+## SONGMETERDIAG
+################################################################################
+
+songmeterdiag <- function(dir,           # a character vector specifying the directory path(s) to the directory-ies where the .wav files have been stored by the SMx device (typically in a 'Data' directory)
+                          start,         # start date/time of the program scheduled on the SMx device in the format "year-month-day hour:minute:second"
+                          end,           # end date/time of the program scheduled on the SMx device in the format "year-month-day hour:minute:second"
+                          frequency,     # frequency of the recording in minutes for a regular schedule, for instance a recording made every 15'
+                          pch.exi=1,     # symbol for plotting the existing file(s)
+                          pch.mis=19,    # symbol for plotting the missings file(s)
+                          col.exi=1,     # colour of the symbol for plotting the existing file(s)
+                          col.mis=2,     # colour of the symbol for plotting the missing file(s)
+                          cex.exi=NULL,  # size of the symbol for plotting the existing file(s), by default NULL so that the size of the symbol corresponds to the size of the .wav file in Mb divided by the average size of all .wav files found in the directory. If not NA then symbol size as in plot().
+                          cex.mis=0.5,   # size of the symbol for plotting the missing file(s)
+                          limits=FALSE,  # a logical to show the start and en date/time on the plot
+                          output="file", # output format, either "file" or "time"
+                          plot=FALSE     # a logical to plot the results as time series plot
+                          )
+{    
+    ## internal function to get the files information, the files size in Mb and the missing files
+    diagnostic <- function(dir){
+        files <- dir(dir, pattern="[wav]$|[WAV]$")
+        if(length(files)==0) stop(paste("There is no .wav files in", dir))
+        size <- file.info(paste(dir, files, sep="/"))$size/10^6
+        data <- songmeter(files)
+        ##  missing .wav files
+        missing <- schedule[!schedule %in% data$time]
+        ## NA if no missing files
+        if(length(missing)==0) missing <- NA
+        return(list(data=data, missing=missing, size=size))
+    }
+    
+    ## time sequence (schedule programmed on the SMx device)
+    format <- "%Y-%m-%d %H:%M:%S"
+    start  <- strptime(start, format) 
+    end <- strptime(end, format)
+    if(is.na(start)) stop("The 'start' date is not given in the appropriate format.")
+    if(is.na(end)) stop("The 'end' date is not given in the appropriate format.")
+    if(!is.numeric(frequency)) stop("The 'frequency' value is not given in the appropriate format.")
+    if(!output%in%c("file","time")) stop("The 'output' format should be either 'file' or 'time'.")
+    schedule <- seq(start, end, by=frequency*60)
+    n <- length(dir)
+
+    ## data
+    data <- missing <- size <- res <- list()
+    for(i in 1:n){
+        tmp <- diagnostic(dir[i])
+        data[[i]] <- tmp$data
+        missing[[i]] <- tmp$missing
+        size[[i]]  <- tmp$size
+        if(output=="time") {res[[i]] <- tmp$missing}
+        else if(output=="file") {
+            if(is.na(tmp$missing[i])) {res[[i]] <- NA} 
+            else {res[[i]] <- paste(tmp$data$prefix[1], "_", format(tmp$missing, format="%Y%m%d_%H%M%S"), ".wav", sep="")}
+        }        
+       rm(tmp)
+    }
+    names(res) <- dir
+
+    ## plot (visualization of the existing and missing files with relative size according to file size in Mb
+    if(plot){
+        m <- rep(NA, n)
+        for(i in 1:n) m[i] <- nchar(unique(data[[i]]$prefix))
+        m <- max(m)
+        par(las=2, mar=c(5.1, m-2, 4.1, 2.1))
+        plot(x=schedule, y=rep(1, length(schedule)),
+             xlab="",
+             yaxt="n", ylab="", ylim=c(0, n+1),
+             type="n")
+        labels <- rep(NA, n)
+        for(i in 1:n){
+            if(is.null(cex.exi)) cex.exi <- size[[i]]/mean(size[[i]])
+            points(x=data[[i]]$time,
+                   y=rep(i,length(data[[i]]$time)),
+                   pch=pch.exi, cex=cex.exi, col=col.exi)
+            points(x=missing[[i]],
+                   y=rep(i, length(missing[[i]])),
+                   pch=pch.mis, cex=cex.mis, col=col.mis)
+            labels[i] <- data[[i]]$prefix[1]
+        }
+        if(limits) abline(v=as.POSIXct(c(start,end)), col="grey")
+        legend("top", legend=c("existing files", "missing files"), pch=c(pch.exi,pch.mis), col=c(col.exi,col.mis), pt.cex=c(cex.exi,cex.mis), bty="n")
+        axis(side=2, at=1:n, labels=labels)
+        invisible(res)
+    }
+    else return(res)
+}
+
 
 ################################################################################
 ## SOUNDSCAPESPEC
 ################################################################################
 
 soundscapespec <- function(wave, 
-                           f,    
+                           f,
+                           channel = 1,
                            wl = 1024,
                            wn = "hamming", 
                            ovlp = 50,
@@ -5965,7 +6116,7 @@ soundscapespec <- function(wave,
     
     {
         ## INPUT
-        input <- inputw(wave=wave,f=f) ; wave <- input$w ; f <- input$f ; rm(input)
+        input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
         ## WELCH SPEC
         n <- nrow(wave)   ## number of samples in wave
         step <- seq(1, n+1-wl, wl-(ovlp * wl/100))   ## positions of the sliding window for the STFT # +1 added @ 2017-04-20
@@ -6055,6 +6206,7 @@ sox <- function (command, exename = NULL, path2exe = NULL, option = NULL, shQuot
 spec <- function(
                wave,
                f,
+               channel = 1,
                wl = 512,
                wn = "hanning",
                fftw = FALSE,
@@ -6092,7 +6244,7 @@ spec <- function(
     stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
 
                                         # INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
                                         # FROM-TO SELECTION
   if(!is.null(from)|!is.null(to))
@@ -6392,6 +6544,7 @@ specprop <- function (spec,
 spectro <- function(
                   wave,
                   f,
+                  channel = 1,
                   wl = 512,
                   wn = "hanning",
                   zp = 0,
@@ -6450,7 +6603,7 @@ spectro <- function(
     }
 
     ## input
-    input <- inputw(wave = wave, f = f)
+    input <- inputw(wave = wave, f = f, channel = channel)
     if(!is.null(tlim) && trel && osc) {wave <- wave0 <- input$w} else {wave <- input$w} # necessary to use 'from' and 'to' of soscillo()
     f <- input$f
     rm(input)
@@ -6638,7 +6791,7 @@ spectro <- function(
         if(listen) {listen(wave, f=f)}
         ## end process time and warning
         ptm <- proc.time() - ptm.start
-        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this spectrogram, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
+        if(isTRUE(plot) && ptm[3] > 10) cat("This took quite a lot of time to display this graphic, you may set 'fastdisp=TRUE' for a faster, but less accurate, display\n")
         invisible(list(time=X, freq=Y, amp=z))
     }
     else return(list(time=X, freq=Y, amp=z))
@@ -6654,6 +6807,7 @@ spectro <- function(
 spectro3D<-function(
                     wave,
                     f,
+                    channel = 1,
                     wl = 512,
                     wn = "hanning",
                     zp = 0,
@@ -6677,7 +6831,7 @@ spectro3D<-function(
   if(wl%%2 == 1) stop("'wl' has to be an even number.")
   
                                         # INPUT
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
   
                                         # STFT
   n <- nrow(wave)
@@ -7075,6 +7229,7 @@ th <- function(
 timer <- function(
                   wave,
                   f,
+                  channel = 1,
                   threshold = 5,
                   dmin = NULL, 
                   envt = "abs",
@@ -7095,7 +7250,7 @@ timer <- function(
     
 {
     ## INPUT
-    input <- inputw(wave = wave, f = f)
+    input <- inputw(wave = wave, f = f, channel = channel)
     wave <- input$w
     f <- input$f
     rm(input)
@@ -7237,6 +7392,7 @@ timer <- function(
 TKEO <- function(
                  wave,
                  f,
+                 channel = 1,
                  m=1,
                  M=1,
                  plot = TRUE,
@@ -7248,7 +7404,7 @@ TKEO <- function(
                  )
     
 {
-    input <- inputw(wave = wave, f = f)
+    input <- inputw(wave = wave, f = f, channel = 1)
     wave <- input$w
     f <- input$f
     n <- length(wave)
@@ -7369,6 +7525,7 @@ wav2flac <- function(file,
 wf <- function(
                wave,
                f,
+               channel = 1,
                wl = 512,
                zp = 0,
                ovlp = 0,
@@ -7404,7 +7561,7 @@ wf <- function(
                                         # INPUT
   if(is.null(x))
     {
-      input <- inputw(wave=wave, f=f)
+      input <- inputw(wave=wave, f=f, channel=channel)
       wave <- input$w
       f <- input$f
       rm(input)
@@ -7504,13 +7661,14 @@ wf <- function(
 zapsilw<-function(
                   wave,
                   f,
+                  channel = 1,
                   threshold = 5,
                   plot = TRUE,                  
                   output = "matrix",
                   ...)
 
 {
-  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
+  input <- inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   wave1 <- afilter(wave,f=f,threshold=threshold,plot=FALSE)
   wave2 <- wave1[wave1!=0]
@@ -7538,9 +7696,10 @@ zapsilw<-function(
 ##                                ZC
 ################################################################################
 
-zc<-function(
+zc <- function(
              wave,
              f,
+             channel = 1,
              plot = TRUE,
              interpol = 1,
              threshold = NULL,
@@ -7551,7 +7710,7 @@ zc<-function(
              ...)
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
 
   if(isTRUE(warning) & interpol > 100)
     {
@@ -7613,6 +7772,7 @@ zc<-function(
 
 zcr <- function(wave,
                 f,
+                channel = 1,
                 wl = 512,
                 ovlp = 0,
                 plot = TRUE,
@@ -7624,7 +7784,7 @@ zcr <- function(wave,
     {
         
         ## INPUT
-        input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+        input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
         n <- nrow(wave)
 
         ## function to compute the zero-crossing rate
@@ -8116,8 +8276,7 @@ soscillo <- function(
 ## SSPECTRO
 ################################################################################
 
-sspectro <- function
-(
+sspectro <- function(
     wave,
     f,
     wl = 512,

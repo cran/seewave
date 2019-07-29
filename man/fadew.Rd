@@ -9,12 +9,13 @@
   a linear, exponential or cosinus-like shape.}
 
 \usage{
-fadew(wave, f, din = 0, dout = 0, shape = "linear", plot = FALSE,
+fadew(wave, f, channel = 1, din = 0, dout = 0, shape = "linear", plot = FALSE,
 listen = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{din}{fade in duration.}
   \item{dout}{fade out duration.}
   \item{shape}{fade shape, \code{"linear"}, \code{"exp"} for exponential,

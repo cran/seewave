@@ -6,11 +6,12 @@
 
 \description{This function tries to smooth with a sum sliding window a time wave, and then to remove residual noise.}
 
-\usage{smoothw(wave, f, wl, padding=TRUE, output = "matrix")}
+\usage{smoothw(wave, f, channel = 1, wl, padding=TRUE, output = "matrix")}
 
 \arguments{
   \item{wave}{an R object.}     
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{window length in number of points (samples).}
   \item{padding}{a logical, if \code{TRUE} add 0 values at the start and
   end of the file to match \code{wave} length (duration).}

@@ -7,7 +7,7 @@
 \description{This function returns the absolute or Hilbert
 amplitude envelope of a time wave.}
 
-\usage{env(wave, f, envt = "hil", 
+\usage{env(wave, f, channel = 1, envt = "hil", 
 msmooth = NULL, ksmooth = NULL, ssmooth = NULL,
 asmooth = NULL,
 fftw = FALSE, norm = FALSE,
@@ -15,7 +15,9 @@ plot = TRUE, k = 1, j = 1, ...)}
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{envt}{the type of envelope to be returned: either "abs" for absolute
     amplitude envelope or "hil" for Hilbert amplitude envelope. See Details section.}
   \item{msmooth}{a vector of length 2 to smooth the amplitude envelope with a 

@@ -12,7 +12,7 @@
 }
 
 \usage{
-spec(wave, f, wl = 512, wn = "hanning", fftw = FALSE, norm = TRUE,
+spec(wave, f, channel = 1, wl = 512, wn = "hanning", fftw = FALSE, norm = TRUE,
 scaled = FALSE, PSD = FALSE, PMF = FALSE, correction="none", dB = NULL, dBref = NULL,
 at = NULL, from = NULL, to = NULL,
 identify = FALSE, col = "black", cex = 1,
@@ -23,7 +23,9 @@ alim = NULL, type="l",...)
 
 \arguments{
   \item{wave}{an R object.}     
-  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
+    be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}
   \item{wl}{if \code{at} is not null, length of the window for the analysis
     (by default = 512).}
   \item{wn}{window name, see \code{\link{ftwindow}} (by default

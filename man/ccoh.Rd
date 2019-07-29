@@ -11,7 +11,7 @@
   An amplitude contour plot can be overlaid.}
 
 \usage{
-ccoh(wave1, wave2, f, wl = 512, ovlp = 0, plot = TRUE,
+ccoh(wave1, wave2, f, channel = c(1,1), wl = 512, ovlp = 0, plot = TRUE,
 grid = TRUE, scale = TRUE, cont = FALSE,
 collevels = seq(0, 1, 0.01), palette = reverse.heat.colors,
 contlevels = seq(0, 1, 0.01), colcont = "black",
@@ -29,6 +29,8 @@ flim = NULL, flimd = NULL,
   \item{wave1}{a first R object}
   \item{wave2}{a second R object}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to be specified if embedded in \code{wave}.}
+  \item{channel}{channel of the R objects, by default left channel (1)
+  for each object.}
   \item{wl}{window length for the analysis
     (even number of points, by default = 512).}
   \item{ovlp}{overlap between two successive windows (in \%).}

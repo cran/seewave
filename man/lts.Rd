@@ -17,7 +17,7 @@ plot = TRUE, ...)
 
 \arguments{
   \item{dir}{a character vector, the path to the directory where the
-    .wav files are stored.}
+    .wav files are stored or directly the names of the .wav files to be processed.}
   \item{f}{sampling frequency of \code{wave} (in Hz). Does not need to
     be specified if embedded in the .wav files contained in \code{dir}.}  
   \item{wl}{window length for the analysis
@@ -69,7 +69,7 @@ plot = TRUE, ...)
 
 \examples{
 \dontrun{
-# if 'dir' contains a set of files recorded with a Wildlife Acoustics
+## if 'dir' contains a set of files recorded with a Wildlife Acoustics
 # songmeter recorder then a direct way to obtain
 # the spectrogram of all .wav files is
 dir <- "pathway-to-directory-containing-wav-files"
@@ -80,6 +80,13 @@ lts(dir, norm=TRUE)
 lts(dir, wl=1024, wn="hamming", ovlp=50)
 # to change the colors and the number of time labels and to make it quiet
 lts(dir, col=cm.colors(20), ntann=10, verbose=FALSE)
+## direct use of files names stored in the working directory
+files <- c("S4A09154_20190213_150000.wav", "S4A09154_20190213_153000.wav",
+"S4A09154_20190213_160000.wav", "S4A09154_20190213_163000.wav",
+"S4A09154_20190213_170000.wav", "S4A09154_20190213_173000.wav",
+"S4A09154_20190213_180000.wav", "S4A09154_20190213_183000.wav",
+"S4A09154_20190213_190000.wav", "S4A09154_20190213_193000.wav")
+lts(files)
 }
 }
 

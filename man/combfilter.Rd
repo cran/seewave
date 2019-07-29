@@ -7,13 +7,14 @@
 \description{This function processes a feedforward comb filter and plots a spectrogram of the filtered wave asso-
 ciated with the frequency response of the filter.}
 
-\usage{combfilter(wave, f, alpha, K, units = c("samples", "seconds"),
+\usage{combfilter(wave, f, channel = 1, alpha, K, units = c("samples", "seconds"),
 plot = FALSE, output = "matrix", ...)}
 
 \arguments{
   \item{wave}{an \code{R} object}
   \item{f}{sampling frequency (in Hz). Does not need to be specified if
-  embedded in \code{wave}}
+    embedded in \code{wave}.}
+  \item{channel}{channel of the R object, by default left channel (1).}  
   \item{alpha}{a numeric vector of length 1 for the scaling factor. See Details.}
   \item{K}{a numeric vector of lenght 1 for the delay length, in
   \code{units}. See Details.}
