@@ -319,8 +319,8 @@ AR <- function(...,
         name <- M <- Ht <- AR <- numeric(n)
         for(i in 1:n){ # does not use the function M() to avoid to compute the envelope twice
             wave <- list(...)[[i]]
-            if(class(wave)=="Wave"|class(wave)=="WaveMC") {bit <- wave@bit}
-            else if(class(wave)=="audioSample") {bit <- wave$bits}
+            if(class(wave)[1]=="Wave"|class(wave)[1]=="WaveMC") {bit <- wave@bit}
+            else if(class(wave)[1]=="audioSample") {bit <- wave$bits}
             if(!is.null(names(list(...))[i])) {name[i] <- names(list(...))[i]}
             env <- env(wave, envt=envt, msmooth=msmooth, ksmooth=ksmooth, ssmooth=ssmooth, plot=FALSE)
             env.norm <- env/sum(env)
@@ -4109,6 +4109,7 @@ lts <- function(dir,            # directory path where to find the .wav files
                 wl = 512,       # window length
                 wn = "hanning", # window tapper type
                 ovlp = 0,       # ovlp
+                FUN = mean,     # computing function
                 col = spectro.colors(30), # palette and number of colors
                 fftw = FALSE,   # use fftw to decrease computation time
                 norm = FALSE,   # normalisation of each meanspectrum
@@ -4146,7 +4147,7 @@ lts <- function(dir,            # directory path where to find the .wav files
     amp <- matrix(rep(NA, n*wl/2), ncol=n, nrow=wl/2)
     for(i in 1:n){
         tmp <- tuneR::readWave(paste(dir,files[i],sep=sep))
-        amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, norm=norm, plot=FALSE)[,2]
+        amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, FUN=FUN, norm=norm, plot=FALSE)[,2]
         if(verbose) {print(paste("File #", i, " processed", sep=""))}
     }
     amp <- 20*log10(amp/max(amp)) 
@@ -4957,12 +4958,12 @@ oscilloST <- function(
   ## computation time start
   ptm.start <- proc.time()
 
-  if(class(wave1)=="Wave" && wave1@stereo==TRUE) {
+  if(class(wave1)[1]=="Wave" && wave1@stereo==TRUE) {
       wave2 <- mono(wave1, which="right")
       wave1 <- mono(wave1, which="left")
   }
   
-  if(class(wave1)=="audioSample" && nrow(wave1 > 1)) {
+  if(class(wave1)[1]=="audioSample" && nrow(wave1 > 1)) {
       wave2 <- audio::audioSample(wave1[2,], rate=wave1$rate)
       wave1 <- audio::audioSample(wave1[1,], rate=wave1$rate)
   }
@@ -5579,7 +5580,7 @@ SAX <- function (
     
 {
     ## INPUT
-    if (class(x) == "Wave") {x <- soundscapespec(x)[,2]}
+    if (class(x)[1] == "Wave") {x <- soundscapespec(x)[,2]}
     pos <- function(t,v) {which.max(v[v<=t])}
 
     if (alphabet_size > PAA_number)
@@ -5597,7 +5598,7 @@ SAX <- function (
 
     for (i in 1:PAA_number){PAA[i] <- mean(x[round((i-1)*l/PAA_number+1):round(i*l/PAA_number)])}
 
-    if (class(breakpoints) == 'character')
+    if (class(breakpoints)[1] == 'character')
         {
             if (breakpoints == 'gaussian') {q <- (qnorm(seq(0,1,1/alphabet_size)))*sd(x)+mean(x)}
             else if (breakpoints == 'quantiles') {q <- as.numeric(quantile(x, probs = seq(0, 1, 1/alphabet_size)))}
@@ -5605,7 +5606,7 @@ SAX <- function (
             else {stop ('this method is not implemented')}
         }
 
-    else if (class(breakpoints) == 'numeric') {
+    else if (class(breakpoints)[1] == 'numeric') {
         if(length(breakpoints) != alphabet_size-1) stop('The number of breakpoints should not be different from the (alphabet_size - 1)')
         q <- c(-Inf,breakpoints, Inf)}
     else {stop ('breakpoints class must be character or numeric')}
@@ -8000,20 +8001,20 @@ inputw <- function(
   if(is.data.frame(wave))   {f <- f ; wave <- as.matrix(wave[,channel])}
   if(is.vector(wave))       {f <- f ; wave <- as.matrix(wave)}
   ## WaveMC and mts objects are matrix by default, there is then a conflict between is.matrix and is.mts
-  if(is.matrix(wave) && !is.mts(wave) && class(wave) != "WaveMC") {f <- f ; wave <- wave[,channel,drop=FALSE]}
+  if(is.matrix(wave) && !is.mts(wave) && class(wave)[1] != "WaveMC") {f <- f ; wave <- wave[,channel,drop=FALSE]}
   if(is.ts(wave))           {if(missing(f) || is.null(f)) {f <- frequency(wave)} ; wave <- as.matrix(wave)} 
   if(is.mts(wave))          {if(missing(f) || is.null(f)) {f <- frequency(wave)} ; wave <- as.matrix(wave[, channel])} 
-  if(class(wave)=="Sample") {if(missing(f) | is.null(f)) {f <- wave$rate} ; wave <- as.matrix(wave$sound[channel, ]) ; bit=wave@bits}
-  if(class(wave)=="audioSample"){if(missing(f) || is.null(f)) {f <- wave$rate} ; bit=wave$bits; wave <- as.matrix(wave)}
-  if(class(wave)=="sound")  {if(missing(f) || is.null(f)) {f <- wave$fs} ; wave <- as.matrix(wave$sound)}
-  if(class(wave)=="Wave")
+  if(class(wave)[1]=="Sample") {if(missing(f) || is.null(f)) {f <- wave$rate} ; wave <- as.matrix(wave$sound[channel, ]) ; bit=wave@bits}
+  if(class(wave)[1]=="audioSample"){if(missing(f) || is.null(f)) {f <- wave$rate} ; bit=wave$bits; wave <- as.matrix(wave)}
+  if(class(wave)[1]=="sound")  {if(missing(f) || is.null(f)) {f <- wave$fs} ; wave <- as.matrix(wave$sound)}
+  if(class(wave)[1]=="Wave")
     {
       if(missing(f) || is.null(f)) {f <- wave@samp.rate}
       bit <- wave@bit
       if(channel==1) {wave <- as.matrix(wave@left)}   
       if(channel==2) {wave <- as.matrix(wave@right)}     
     }
-  if(class(wave)=="WaveMC")
+  if(class(wave)[1]=="WaveMC")
     {
       if(missing(f) || is.null(f)) {f <- wave@samp.rate}
       bit <- wave@bit

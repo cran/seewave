@@ -9,7 +9,7 @@
 
 \usage{
 lts(dir, f, wl = 512,
-wn = "hanning", ovlp = 0, col = spectro.colors(30),
+wn = "hanning", ovlp = 0, FUN = mean, col = spectro.colors(30),
 fftw = FALSE, norm = FALSE, verbose = TRUE,
 tlab = "Time", ntann = NULL, flab = "Frequency (kHz)",
 plot = TRUE, ...)
@@ -25,6 +25,9 @@ plot = TRUE, ...)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{FUN}{the function to apply to compute the successive frequency spectra, by
+    default \code{mean} for a mean spectrum but could be other as
+    \code{median} or \code{var} for a median spectrum or variance spectrum.}
   \item{col}{a list of colors or the color palette with a number of colors}
   \item{fftw}{if \code{TRUE} calls the function \code{FFT} of the
     library \code{fftw}. See Notes.}

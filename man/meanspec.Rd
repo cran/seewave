@@ -33,7 +33,7 @@ alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
     \emph{i. e.} the square of the spectra.}   
   \item{PMF}{if \code{TRUE} return Probability Mass Function,
     \emph{i. e.} the probability distribution of frequencie.}
-  \item{FUN}{The function to apply on the rows of the STFT matrix, by
+  \item{FUN}{the function to apply on the rows of the STFT matrix, by
   default \code{mean} for a mean spectrum but could be other as
   \code{median} or \code{var} for a median spectrum or variance spectrum.}
   \item{correction}{a character vector of length 1 to apply an

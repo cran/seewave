@@ -1,9 +1,9 @@
-5d708649cd42286030e630afc3e49188 *DESCRIPTION
+54d4697522bc6387818c1c7d1aa2e9af *DESCRIPTION
 073cff0cead26a970477bad08fdb0f1f *NAMESPACE
-28d528ccefcc5c5d7f62482f1237ce79 *NEWS
-61112fe5f0038826fd7a85f7acaf67ae *R/seewave.r
+8c5765f47ca5bcb362e083da3135e7bf *NEWS
+6d088249b2611f9603695e64fa307250 *R/seewave.r
 9504a6f1eca610d7dc18a0c85a880e9e *R/zzz.r
-da7ace8f92be1098e11494c7d1a53a2d *build/vignette.rds
+456708c336030c2f187df579acd9a062 *build/vignette.rds
 2d4352c48eb8d366f156d0d474cecc57 *data/orni.RData
 863718cc7d960b8fc0f64350bfb4c2f4 *data/peewit.RData
 18ae0c8de3d8870ea2aadce858195eb2 *data/pellucens.RData
@@ -13,10 +13,10 @@ defd31e9ccb35c01364f72354b208645 *data/sheep.RData
 5a0d1ed835e4b10f81f9159bb94956b2 *demo/seewave.R
 54b4c91ccb6d8dc3eb8e504e2d31a29b *inst/CITATION
 5c68c4b21101afc15e4f2d74ceb06b3a *inst/doc/seewave_IO.R
-179f98ece096a528ea28f6df98d6e242 *inst/doc/seewave_IO.pdf
+c7704db7b12826c55f773d019f149b29 *inst/doc/seewave_IO.pdf
 5b3871933ae3f244edf0f2bb25e3ad38 *inst/doc/seewave_IO.rnw
 1fadbd6027b6228d182e5ed1c98dabcd *inst/doc/seewave_analysis.R
-7808b308d1653179cacd4197bf4e3969 *inst/doc/seewave_analysis.pdf
+eb3877324fb1aedbd69ead58b62975cf *inst/doc/seewave_analysis.pdf
 abc341ed868ee8113e3ee938c1efb0f8 *inst/doc/seewave_analysis.rnw
 cc5fbb9c86d9a6a9d4012eb1457324c9 *man/ACI.Rd
 73a8912cc641bb53c008eca140f2b06f *man/AR.Rd
@@ -86,9 +86,9 @@ fd985fb277f0a235d0a82cf0f26b26f7 *man/ks.dist.Rd
 31299c638ff085c52745e696ba4a4d81 *man/listen.Rd
 edc03aecbf43ec5f510d36f849515f41 *man/localpeaks.Rd
 a1b5e75a4962162637cbd62609126bef *man/logspec.dist.Rd
-7aa5de58c0333c79413761485470bd3b *man/lts.Rd
+65c30fc924d06bd292d96a1840e0f963 *man/lts.Rd
 45db40700c761e83722c7b5677e0031d *man/meandB.Rd
-8dd89b5c6b1aaa3a5d1285dc5a8a5c2f *man/meanspec.Rd
+5c0ffb5cef05b001f37496eab3ae7cfb *man/meanspec.Rd
 3bcd3d8c77a50fad1b53195ba75bdef4 *man/mel.Rd
 3f3e425050a42abfc9e8b0ca7c1df720 *man/melfilterbank.Rd
 28d2dca0da6d6925763c451343093b3b *man/micsens.Rd
@@ -121,7 +121,7 @@ df8059bf7e1c44f67fd99c8f691ee6ff *man/savewav.Rd
 e180d46a7e6119fb747688dedd37bb98 *man/sddB.Rd
 2a2296b9a0d3b75f3529a1f90109f54a *man/seedata.Rd
 0a8021c03753f02a035aed8f4e893094 *man/seewave.internal.Rd
-55fcac26202d7090e75976a979864915 *man/seewave.package.Rd
+2def312beb3abed9a3abd7fbcc24b2f2 *man/seewave.package.Rd
 84085e818f95b3889158b24d8d189dfc *man/setenv.Rd
 a07b5cc54137609e111ff1c936017b2b *man/sfm.Rd
 c72523d2cd14698a482d858737caa3a3 *man/sh.Rd
