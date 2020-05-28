@@ -1,5 +1,4 @@
 ### R code from vignette source 'seewave_IO.rnw'
-### Encoding: UTF-8
 
 ###################################################
 ### code chunk number 1: warnings

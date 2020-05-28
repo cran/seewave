@@ -9,10 +9,10 @@
 
 \usage{
 lts(dir, f, wl = 512,
-wn = "hanning", ovlp = 0, FUN = mean, col = spectro.colors(30),
+wn = "hanning", ovlp = 0, rmoffset = TRUE, FUN = mean, col = spectro.colors(30),
 fftw = FALSE, norm = FALSE, verbose = TRUE,
 tlab = "Time", ntann = NULL, flab = "Frequency (kHz)",
-plot = TRUE, ...)
+recorder = c("songmeter", "audiomoth"), plot = TRUE, ...)
 }
 
 \arguments{
@@ -25,6 +25,8 @@ plot = TRUE, ...)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default
     \code{"hanning"}).}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{rmoffset}{a logical to sepcify whether DC offset should be
+  removed. By default \code{TRUE}.}
   \item{FUN}{the function to apply to compute the successive frequency spectra, by
     default \code{mean} for a mean spectrum but could be other as
     \code{median} or \code{var} for a median spectrum or variance spectrum.}
@@ -34,19 +36,21 @@ plot = TRUE, ...)
   \item{norm}{a logical, to specify if each mean
     spectrum should be normalised between 0 and 1 (default \code{FALSE})
     before to concatenate the image.}
-  \item{verbose}{a logical, if \code{TRUE} (default) the file number
-    just processed in displayed in the console.}
+  \item{verbose}{a logical, if \code{TRUE} (default) the file number and name
+    processed are displayed in the console.}
   \item{tlab}{label of the time axis.}
   \item{ntann}{a numeric of length 1, the number of axis annotations (all
     annotations by default).}
   \item{flab}{label of the frequency axis.}
+  \item{recorder}{the type of automatic recorder used, either a Wildlife
+  SongMeter or a Open Audio deveices Audiomoth.}
   \item{plot}{logical, if \code{TRUE} plots the spectrogram
     (by default \code{TRUE}).}
   \item{\dots}{other \code{\link{image}} graphical parameters.}
 }
 
 \details{
-  The function reads each file and computes its mean spectrum with
+  The function reads each .wav file and computes its mean spectrum with
   \code{\link{meanspec}}. The successive mean spectra are then
     concatenated into a single image with the function
     \code{\link{image}}.
@@ -67,7 +71,8 @@ plot = TRUE, ...)
 \seealso{
   \code{\link{spectro}}, \code{\link{meanspec}},
   \code{\link{image}},
-  \code{\link{spectro3D}}, \code{\link{ggspectro}}
+  \code{\link{spectro3D}}, \code{\link{ggspectro}},
+  \code{\link{songmeter}}, \code{\link{audiomoth}}
 }
 
 \examples{

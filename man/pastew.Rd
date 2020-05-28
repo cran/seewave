@@ -12,7 +12,7 @@
 
 \usage{
 pastew(wave1, wave2, f, channel = c(1,1), at = "end",
-join = FALSE, tjunction=0,
+join = FALSE, tjunction = 0,
 choose = FALSE, plot = FALSE,
 marks = TRUE, output = "matrix", ...)
 }
@@ -52,7 +52,8 @@ marks = TRUE, output = "matrix", ...)
 
 \seealso{\code{\link{oscillo}}, \code{\link{addsilw}}, \code{\link{cutw}},
   \code{\link{deletew}}, \code{\link{fadew}}, \code{\link{mutew}}
-  , \code{\link{revw}}, \code{\link{repw}}, \code{\link{zapsilw}}}
+  , \code{\link{revw}}, \code{\link{repw}}, \code{\link{timelapse}}
+, \code{\link{zapsilw}}}
 
 \examples{
 data(tico)

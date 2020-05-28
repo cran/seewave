@@ -16,8 +16,9 @@
 }
 
 \details{The digital recorder SongMeter (either SM2, SM3, or SM4 device model)
-  produced by the society 'Wildlife Acoustics' generates '.wav' or
-  '.wac' files which names include useful information. Here are the
+  produced by the society 'Wildlife Acoustics'
+  (\url{https://www.wildlifeacoustics.com/}) generates '.wav' files
+  which names include useful information. Here are the
   character format of the files:\cr
 
 \itemize{
@@ -57,13 +58,13 @@
   \item{mic}{microphone information specifying if the recording is mono left channel ("monoL"),
   mono right ("monoR") or stereo ("stereo"). This works for SM3
   only, NA for SM2}
-\item{year}{year of recording}
-\item{month}{month of recording}
-\item{day}{day of recording}
-\item{hour}{hour of recording}
-\item{min}{minute of recording}
-\item{sec}{second of recording}
-\item{time}{all time of recording information in \code{POSIX} format}
+\item{year}{year of recording, numeric}
+\item{month}{month of recording, numeric}
+\item{day}{day of recording, numeric}
+\item{hour}{hour of recording, numeric}
+\item{min}{minute of recording, numeric}
+\item{sec}{second of recording, numeric}
+\item{time}{time in \code{POSIX} format}
 \item{geo}{logical, \code{TRUE} if the device was GPS synchronized}
 }
 
@@ -73,16 +74,16 @@
 \author{Jerome Sueur}
 
 \note{The file names of Songmeters may change with time. There is no
-  guarantee that the function will be perfectly updated.}
+  guarantee that the function will be updated on time.}
 
-\seealso{\code{\link{songmeterdiag}}, \code{\link{strptime}} for the POSIX time format.}
+\seealso{\code{\link{songmeterdiag}}, \code{\link{audiomoth}}, \code{\link{strptime}} for the POSIX time format.}
 
 \examples{
-file1 <- "MNHN_20141225_234500.wav"   ## SM2 file
+file1 <- "MNHN_20141225_234500.wav"      # SM2 file
 file2 <- "CNRS_0+1_20130824_153000.wav"  # SM3 file without geolocalisation
-file3 <- "PARIS_-0-_20150410$195550.wav"  # SM3 file with geolocalisation
-file4 <- "MNHN_20141225_234500.txt" # not a .wav or a .wac file
-file5 <- "myfile.wav"  # not a Wildlife Acoustics filename
+file3 <- "PARIS_-0-_20150410$195550.wav" # SM3 file with geolocalisation
+file4 <- "MNHN_20141225_234500.txt"      # not a .wav or a .wac file
+file5 <- "myfile.wav"                    # not a Wildlife Acoustics filename
 files <- c(file1, file2, file3, file4, file5)
 songmeter(files)
 }

@@ -24,7 +24,7 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
     see \code{details}.}
   \item{shape}{modification of the whole amplitude shape of the wave,
     see \code{details}.}
-  \item{p}{phase (in radians).}
+  \item{p}{initial phase (in radians).}
   \item{am}{a numeric vector of length 3 describing amplitude modulation parameters,
     see \code{details}.}
   \item{fm}{a numeric vector of length 5 describing frequency modulation parameters,
@@ -47,10 +47,10 @@ plot = FALSE, listen = FALSE, output = "matrix",...)
       the function used to synthesize the
       signal. There are three options:
       \enumerate{
-	\item{"sine": for a sinus function}
-	\item{"tria": for a triangle function}
-	\item{"square": for a square function}
-	\item{"saw": for a square function}
+	\item{"sine": for a sinus function,}
+	\item{"tria": for a triangle function,}
+	\item{"square": for a square function,}
+	\item{"saw": for a square function.}
       }
     }
     

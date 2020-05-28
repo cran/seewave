@@ -11,7 +11,8 @@
 
 \usage{
 spectro(wave, f, channel = 1, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, fastdisp = FALSE, complex = FALSE, norm = TRUE, correction="none",
+ovlp = 0, noisereduction = FALSE, fastdisp = FALSE,
+complex = FALSE, norm = TRUE, correction="none",
 fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 flog = FALSE, grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
 collevels = NULL, palette = spectro.colors,
@@ -44,6 +45,7 @@ listen=FALSE,
     \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
+  \item{noisereduction}{a logical, if \code{TRUE} a noise reduction is applied. See \code{Details}.}
   \item{fastdisp}{faster graphic display for long \code{wave}. The
   spectrogram/oscillogram is displayed/saved faster in the graphic device/
   graphic file when set to \code{TRUE}, with a cost on graphical resolution.}
@@ -133,11 +135,15 @@ listen=FALSE,
   \code{reverse.cm.colors} corresponding to the reverse of \code{heat.colors}, 
   \code{terrain.colors}, \code{topo.colors}, \code{cm.colors}.\cr
   Use \code{\link{locator}} to identify  points.
+  The noise reduction using the argument \code{noisereduction} is an
+  image filter, not a signal filter. The principle consists in
+  subtracting each spectrogram row by its median. Noise reduction alters
+  energy conservation, it should then be used for visual display only. 
 }
 
 \note{The argument \code{fftw} can be used to try to speed up process
   time. When set to \code{TRUE}, the Fourier transform is computed
-  through the function \code{FFT} of the package {fftw}. This pacakge is a
+  through the function \code{FFT} of the package \code{fftw}. This pacakge is a
   wrapper around the fastest Fourier transform of the free C subroutine
   library FFTW (\url{http://www.fftw.org/}). FFT should be then installed on your OS.} 
 

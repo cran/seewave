@@ -46,7 +46,7 @@ Farina A, Pieretti N, Piccioli L (2011) The soundscape methodology for long-term
 
 \author{Laurent Lellouch, improved by Amandine Gasc and Morgane Papin}
 
-\seealso{\code{\link{spectro}}}
+\seealso{\code{\link{spectro}}, \code{\link{specflux}}}
 
 \examples{
 data(tico)

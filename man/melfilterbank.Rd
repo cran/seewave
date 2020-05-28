@@ -38,7 +38,7 @@ palette, alpha = 0.5, plot = FALSE)
 
 \note{These triangular filters are used for computing MFCCs.}
 
-\seealso{\code{\link{mel}}}
+\seealso{\code{\link{mel}}, \code{\link{gammatone}}}
 
 \examples{
 ## default values

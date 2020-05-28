@@ -14,8 +14,8 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 2.1.5\cr
-    Date: \tab 2019-12-06\cr
+    Version: \tab 2.1.6\cr
+    Date: \tab 2020-06-28\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Ethan C. Brown, Camille Desjonqueres, \cr
                    \tab Marion Depraetere, Francois Fabianek, \cr
@@ -35,7 +35,7 @@
 		     \tab Morgane Papin, \cr
 		     \tab Emmanuel Paradis, Daniel Ridley-Ellis, \cr
 		     \tab Brian Ripley, Jesse Ross, \cr
-		     \tab Zev Ross, Pavel Senin, \cr
+		     \tab Zev Ross, Pavel Senin, David Savage, \cr
 		     \tab Arvind Sowmyan, Simon Urbanek \cr
 		     \tab George Zhang \cr
     Webpage: \tab \url{http://rug.mnhn.fr/seewave}\cr
@@ -56,4 +56,3 @@
 
 \keyword{dplot}
 \keyword{ts}
-

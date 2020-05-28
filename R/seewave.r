@@ -293,6 +293,72 @@ ama<-function(
 
 
 ################################################################################
+##                                AUDIOMOTH
+################################################################################
+
+audiomoth <- function(x,                 # a character vector, not a Wave object
+                      tz = ""            # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
+                      )
+  {
+    ## INPUT
+    if (!is.character(x)) stop("'x' should be of mode character.")
+ 
+    ## PREPARE RESULTS
+    options(stringsAsFactors = FALSE)
+    res <- data.frame(year = numeric(0), month = numeric(0), day = numeric(0),
+                      hour = numeric(0), min = numeric(0), sec = numeric(0),
+                      time = numeric(0))
+    N <- length(x)  ## number of file names    
+    ## LOOP
+    for (i in 1:N)
+    {
+      tmp <- x[i]
+      n <- nchar(tmp)
+      extension <- substr(tmp, start = n-3, stop = n)
+      if(extension != ".wav" & extension != ".WAV"){warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
+      else
+      {
+        hex <- unlist(strsplit(tmp, extension))
+        num <- strtoi(hex, base = 16)
+        time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
+        year <- as.numeric(format(time, "%Y"))
+        month <- as.numeric(format(time, "%m"))
+        day <- as.numeric(format(time, "%d"))
+        hour <- as.numeric(format(time, "%H"))
+        min <- as.numeric(format(time, "%M"))
+        sec <- as.numeric(format(time, "%S"))
+        res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
+      }
+    }
+    return(res)    
+    options(stringsAsFactors = TRUE)
+}
+
+
+################################################################################
+##                                AUDIOMOTH.RENAME
+################################################################################
+
+audiomoth.rename <- function(
+                             dir,
+                             overwrite = FALSE,
+                             tz = "",
+                             prefix = ""
+                             )
+{
+    if(!is.character(dir)) stop("'dir' should be a character vector giving the path to a directory")
+    files <- dir(dir, pattern="[WAV]$")
+    from <- audiomoth(files, tz=tz)
+    if(prefix!="") prefix  <- paste(prefix, "_", sep="")
+    out <- function(x) formatC(x, flag="0", digits=1, format="d")
+    to <- paste(prefix, out(from$year), out(from$month), out(from$day), "_", out(from$hour), out(from$min), out(from$sec), ".wav", sep="")
+    from <- paste(dir, files, sep="/")
+    to <- paste(dir, to, sep="/")
+    if(overwrite) {res <- file.rename(from=from, to=to)} else {res <- file.copy(from=from, to=to)}
+    return(res)
+}
+
+################################################################################
 ## AR                                        
 ################################################################################
 
@@ -331,7 +397,7 @@ AR <- function(...,
     ## data as .wav or .mp3 files
     ## data should be a path to a directory containing either .wav or .mp3 files
     else if(datatype=="files"){
-        if(!is.character(...)) stop("The first argument should be character string when 'datatype='files''")
+        if(!is.character(...)) stop("The first argument should be a character string when 'datatype='files''")
         files <- dir(..., pattern=pattern)
         n <- length(files)
         if(n <= 1) warning("Computing the AR index on a single object does not make a lot of sense as AR is a ranked index")
@@ -383,6 +449,49 @@ attenuation <- function(lref,
             invisible(dB)
         }
     else {return(dB)}
+}
+
+
+################################################################################
+## AUDIOMOTH
+################################################################################
+
+audiomoth <- function(x,                 # a character vector, not a Wave object
+                      tz = ""            # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
+                      )
+  {
+    ## INPUT
+    if (!is.character(x)) stop("'x' should be of mode character.")
+ 
+    ## PREPARE RESULTS
+    options(stringsAsFactors = FALSE)
+    res <- data.frame(year = numeric(0), month = numeric(0), day = numeric(0),
+                      hour = numeric(0), min = numeric(0), sec = numeric(0),
+                      time = numeric(0))
+    N <- length(x)  ## number of file names    
+    ## LOOP
+    for (i in 1:N)
+    {
+      tmp <- x[i]
+      n <- nchar(tmp)
+      extension <- substr(tmp, start = n-3, stop = n)
+      if(extension != ".wav" & extension != ".WAV") {warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
+      else
+      {
+        hex <- unlist(strsplit(tmp, extension))
+        num <- strtoi(hex, base = 16)
+        time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
+        year <- as.numeric(format(time, "%Y"))
+        month <- as.numeric(format(time, "%m"))
+        day <- as.numeric(format(time, "%d"))
+        hour <- as.numeric(format(time, "%H"))
+        min <- as.numeric(format(time, "%M"))
+        sec <- as.numeric(format(time, "%S"))
+        res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
+      }
+    }
+    return(res)    
+    options(stringsAsFactors = TRUE)
 }
 
 
@@ -446,6 +555,16 @@ autoc <- function(
       invisible(cbind(x,y))
     }
   else {return(cbind(x,y))}
+}
+
+
+################################################################################
+##  BEEP                                       
+################################################################################
+
+beep <- function(d=0.5, f=8000, cf=1000){
+    s <- synth(d=d, f=f, cf=cf, output="matrix")
+    listen(s, f=f)
 }
 
 
@@ -1410,17 +1529,17 @@ cutspec <- function(spec,
 ##                                CUTW                                         
 ################################################################################
 
-cutw<-function(
-               wave,
-               f,
-               channel = 1,
-               from = NULL,
-               to = NULL,
-               choose = FALSE,
-               plot = FALSE,
-               marks = TRUE,               
-               output = "matrix",
-               ...)
+cutw <- function(
+                 wave,
+                 f,
+                 channel = 1,
+                 from = NULL,
+                 to = NULL,
+                 choose = FALSE,
+                 plot = FALSE,
+                 marks = TRUE,               
+                 output = "matrix",
+                 ...)
 
 {
   input <- inputw(wave=wave,f=f,channel=channel) ; wave <- input$w ; f <- input$f ; bit <- input$bit ; rm(input)
@@ -1430,24 +1549,23 @@ cutw<-function(
       cat("choose start and end positions on the wave\n")
       if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
-      coord<-locator(n=2)
-      from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
-      to<-coord$x[2]; b<-round(to*f); abline(v=to,col=2,lty=2)
+      coord <- locator(n=2)
+      from <- coord$x[1] ; a <- round(from*f)+1 ; abline(v=from,col=2,lty=2)
+      to <- coord$x[2]   ; b <- round(to*f)     ; abline(v=to,col=2,lty=2)
     }
   else if(!is.null(from)|!is.null(to))
     {
-      if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(is.null(from) && !is.null(to)) {a <- 1 ; b <- round(to*f)}
+      if(!is.null(from) && is.null(to)) {a <- round(from*f)+1 ; b <- length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from>to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
-          b<-round(to*f)
+          if(from==0) {a <- 1} else a <- round(from*f)+1
+          b <- round(to*f)
         }
     }
 
   wavecut <- as.matrix(wave[a:b,])
-#  wavecut<-wavecut1/max(abs(wavecut1))
 
   wavecut <- outputw(wave=wavecut, f=f, bit=bit, format=output)
 
@@ -1602,17 +1720,17 @@ deletew<-function(
       if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
-      from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
-      to<-coord$x[2]; b<-round(to*f); abline(v=to,col=2,lty=2)
+      from<-coord$x[1]; a<-round(from*f)+1 ; abline(v=from,col=2,lty=2)
+      to<-coord$x[2];   b<-round(to*f)     ; abline(v=to,col=2,lty=2)
     }
   else if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1 ; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from>to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
+          if(from==0) {a<-1} else a<-round(from*f)+1
           b<-round(to*f)
         }
     }
@@ -2322,11 +2440,11 @@ dynspec<-function(
   if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from > to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
+          if(from==0) {a<-1} else {a<-round(from*f)+1}
           b<-round(to*f)
         }
       wave<-as.matrix(wave[a:b,])
@@ -2472,11 +2590,11 @@ dynspectro <- function(
     if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from > to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
+          if(from==0) {a<-1} else {a<-round(from*f)+1}
           b<-round(to*f)
         }
       wave<-as.matrix(wave[a:b,])
@@ -3366,7 +3484,8 @@ ftwindow <- function(
   if(wn=="hamming")   w <- hamming.w(wl)
   if(wn=="hanning")   w <- hanning.w(wl)
   if(wn=="rectangle") w <- rectangle.w(wl)
-  # http://www.originlab.com/doc/Origin-Help/STFT-Dialog
+  if(wn=="gaussian")  w <- gaussian.w(wl)
+  ## http://www.originlab.com/doc/Origin-Help/STFT-Dialog
   if(correction=="amplitude") w <- w*(1/mean(w))             # amplitude correction factor
   if(correction=="energy")    w <- w*sqrt(1/sqrt(mean(w^2))) # power correction factor  
   return(w)
@@ -3420,7 +3539,7 @@ fund <- function (
                 b <- round(to * f)
             }
             if (!is.null(from) && is.null(to)) {
-                a <- round(from * f)
+                a <- round(from * f) + 1
                 b <- length(wave)
             }
             if (!is.null(from) && !is.null(to)) {
@@ -3430,7 +3549,7 @@ fund <- function (
                     a <- 1
                 }
                 else {
-                    a <- round(from * f)
+                    a <- round(from * f) + 1
                 }
                 b <- round(to * f)
             }
@@ -3495,6 +3614,24 @@ fund <- function (
         if (pb) close(pbar)
     }
 
+
+################################################################################
+##                                   GAMMATONE
+################################################################################
+
+gammatone <- function(f,
+                      d,
+                      cfreq,
+                      n=4,
+                      a=1,
+                      p=0,
+                      output="matrix"){
+    erb <- 24.7*(4.37*cfreq/1000+1)                                ## equivalent rectangular bandwidth (ERB)
+    t <- seq(0, d, length.out=f*d)                                 ## time
+    s <-  a * t^(n-1) * exp(-2*pi*erb*t) * cos(2*pi*cfreq*t + p)   ## gammatone function
+    s <- outputw(wave=s, f=f, format=output)                       ## output
+    return(s)
+}
 
 ################################################################################
 ##                                   GGSPECTRO
@@ -3915,18 +4052,18 @@ listen <- function(
       if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
-      from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
+      from<-coord$x[1]; a<-round(from*f)+1 ; abline(v=from,col=2,lty=2)
       to<-coord$x[2]; b<-round(to*f); abline(v=to,col=2,lty=2)
       wave<-wave[a:b]
     }
   else if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from>to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
+          if(from==0) {a<-1} else {a<-round(from*f)+1}
           b<-round(to*f)
         }
       wave<-as.matrix(wave[a:b])
@@ -4104,53 +4241,68 @@ logspec.dist <- function(spec1,
 ##                                LTS
 ################################################################################
 
-lts <- function(dir,            # directory path where to find the .wav files
-                f,              # sampling frequency (not necessary)
-                wl = 512,       # window length
-                wn = "hanning", # window tapper type
-                ovlp = 0,       # ovlp
-                FUN = mean,     # computing function
+lts <- function(dir,             # directory path where to find the .wav files
+                f,               # sampling frequency (not necessary)
+                wl = 512,        # window length
+                wn = "hanning",  # window tapper type
+                ovlp = 0,        # ovlp
+                rmoffset = TRUE, # remove DC offset
+                FUN = mean,      # computing function
                 col = spectro.colors(30), # palette and number of colors
-                fftw = FALSE,   # use fftw to decrease computation time
-                norm = FALSE,   # normalisation of each meanspectrum
-                verbose = TRUE, # print the file number processed
-                tlab = "Time",  # time label
-                ntann = NULL,   # number of time axis annotations (should be > 1)
+                fftw = FALSE,    # use fftw to decrease computation time
+                norm = FALSE,    # normalisation of each meanspectrum
+                verbose = TRUE,  # print the file number processed
+                tlab = "Time",   # time label
+                ntann = NULL,    # number of time axis annotations (should be > 1)
                 flab = "Frequency (kHz)", # frequency label
-                plot = TRUE,    # to plot or not
-                ...             # arguments to be passed to image
+                recorder = c("songmeter", "audiomoth"),
+                plot = TRUE,     # to plot or not
+                ...              # arguments to be passed to image
                 )
 {
-
     ## INPUT AND STOP MESSAGES
     if(!is.vector(dir) | !is.character(dir)) stop("The argument 'dir' should be a character vector")
     if(length(dir)==1) {
         files <- dir(dir, pattern="[wav]$|[WAV]$")
-        sep="/"
+        sep <- "/"
     }
     else {
-            files <- dir
-            dir <- NULL
-            sep <- ""
+        files <- dir
+        dir <- NULL
+        sep <- ""
     }
     n <- length(files)
-    if(n==0 | n==1) stop("It seems that there is not enough .wav files to consider")    
+    if(n==0 | n==1) stop("It seems that there are not enough .wav files to consider")    
     if(!is.null(ntann)){
-       if(ntann <= 1) stop("The argument 'ntann' cannot be inferior to 2") 
-       if(ntann > n) stop("The argument 'ntann' cannot be superior to the number of files stored in the directory") 
+        if(ntann <= 1) stop("The argument 'ntann' cannot be inferior to 2") 
+        if(ntann > n) stop("The argument 'ntann' cannot be superior to the number of files stored in the directory") 
     }
-    if(missing(f)) {f <- readWave(paste(dir,files[1],sep=sep), header=TRUE)$sample.rate}
-    time <- songmeter(files)$time
+    if(missing(f)) {
+        test <- try(expr={f <- readWave(paste(dir,files[1],sep=sep), header=TRUE)$sample.rate}, silent=TRUE)
+        if(class(test)=="try-error") stop("It seems that the first .wav file is corrupted so that the sampling frequency cannot be retrieved. Please try to use the argument 'f'.")
+    }
+
+    time <- switch(match.arg(recorder), songmeter = songmeter(files)$time, audiomoth= audiomoth(files)$time)
+    
     freq <- seq(0, f/2-f/wl, length=wl/2)/1000
     
-    ## SUCCESSIVE MEANSPEC
+    ## SUCCESSIVE SPEC
     amp <- matrix(rep(NA, n*wl/2), ncol=n, nrow=wl/2)
+    diag <- rep(NA, n)
     for(i in 1:n){
-        tmp <- tuneR::readWave(paste(dir,files[i],sep=sep))
-        amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, FUN=FUN, norm=norm, plot=FALSE)[,2]
-        if(verbose) {print(paste("File #", i, " processed", sep=""))}
+        test <- try(expr = tmp <- tuneR::readWave(paste(dir, files[i], sep=sep)), silent=TRUE)
+        if(class(test)=="try-error"){
+            if(verbose) message("Error when reading file # ", paste(files[i]))
+            diag[i] <- "not processed"
+        } else diag[i] <- "processed"
+        if(diag[i]=="processed") {
+            if(rmoffset) tmp <- rmoffset(tmp, output="Wave")
+            amp[,i] <- meanspec(tmp, wl=wl, ovlp=ovlp, wn=wn, fftw=fftw, FUN=FUN, norm=norm, plot=FALSE)[,2]
+            }
+        else {amp[,i] <- rep(NA, wl%/%2)}
+        if(verbose) {print(paste("File #", i, files[i], diag[i], sep=" "))}
     }
-    amp <- 20*log10(amp/max(amp)) 
+    amp <- 20*log10(amp/max(amp,na.rm=TRUE)) 
     res <- list(time=time, freq=freq, amp=amp)
 
     ## PLOT
@@ -4158,7 +4310,7 @@ lts <- function(dir,            # directory path where to find the .wav files
         par(mar=c(10,4.1,4.1,2.1), las=2)
         image(x=time, xaxt="n", xlab="",
               y=freq, ylab=flab,
-              z=t(amp), col=col)#,...)
+              z=t(amp), col=col)
         if(is.null(ntann)) ntann <- n
         taxis <- time[seq(1, n, length.out=ntann)]
         axis(side=1, at=taxis, labels=taxis)
@@ -4252,11 +4404,11 @@ meanspec <-function(
   if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from>to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else {a<-round(from*f)}
+          if(from==0) {a<-1} else {a<-round(from*f)+1}
           b<-round(to*f)
         }
       wave<-as.matrix(wave[a:b,])
@@ -4521,7 +4673,7 @@ mutew<-function(
       if(.Platform$OS.type == "windows") flush.console()
       oscillo(wave,f=f)
       coord<-locator(n=2)
-      from<-coord$x[1]; a<-round(from*f) ; abline(v=from,col=2,lty=2)
+      from<-coord$x[1]; a<-round(from*f)+1 ; abline(v=from,col=2,lty=2)
       to<-coord$x[2]; b<-round(to*f); abline(v=to,col=2,lty=2)
       wave.muted<-as.matrix(c(wave[1:(a-1),],rep(0,length(a:b)),wave[(b+1):n,]))
     }
@@ -4536,7 +4688,7 @@ mutew<-function(
 
       if(!is.null(from) && is.null(to)) 
         {
-          a<-round(from*f)
+          a<-round(from*f)+1
           wave.muted<-as.matrix(c(wave[1:(a-1),],rep(0,length(a:n))))
         }
 
@@ -4545,9 +4697,9 @@ mutew<-function(
           if(from > to) stop("'from' cannot be superior to 'to'")
           if(from == 0) {a<-1; b<-round(to*f)}
           else {
-            a<-round(from*f)
+            a<-round(from*f)+1
             b<-round(to*f)}
-          wave.muted<-as.matrix(c(wave[1:(a-1),],rep(0,length(a:b)),wave[(b+1):n,]))
+            wave.muted<-as.matrix(c(wave[1:(a-1),],rep(0,length(a:b)),wave[(b+1):n,]))
         }
     }
 
@@ -4713,11 +4865,11 @@ oscillo <- function(
     if(!is.null(to) && is.na(to))     {to <- NULL}
     if(is.null(from) && is.null(to))  {a<-0; b<-length(wave); from<-0; to<-length(wave)/f}
     if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f); from<-0}
-    if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave); to<-length(wave)/f}
+    if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave); to<-length(wave)/f}
     if(!is.null(from) && !is.null(to))
     {
         if(from>to) stop("'from' cannot be superior to 'to'")
-        if(from==0) {a<-1} else {a<-round(from*f)}
+        if(from==0) {a<-1} else {a<-round(from*f)+1}
         b<-round(to*f)
     }
     wave<-as.matrix(wave[a:b,])
@@ -5296,6 +5448,61 @@ Q <- function (spec,
         invisible(results)
     }
     return(results)
+}
+
+
+################################################################################
+##                                READ.AUDACITY
+################################################################################
+
+read.audacity <- function(file, format=c("dir","base")){
+    ## FORMAT FOR OUTPUT FILE NAME
+    switch(match.arg(format),
+         dir = {f.format <- file},
+         base = {f.format <- basename(file)}
+         )
+    ## INPUT
+    x <- grep(pattern="\\", paste(readLines(file), collapse=""), fixed=TRUE)
+    ## time and frequency data
+    if(isTRUE(x[1]!=0)){
+        options(warn=-1) # warnings when "NA" are coerced in numeric
+        x <- readLines(file)
+        n <- length(x)
+        odd <- seq(1, n, by=2)
+        even <- seq(2, n, by=2)
+        ## time data
+        time <- x[odd]
+        time <- gsub("\t", replacement="\t ", x=time) ## issue with empty labels
+        time <- unlist(strsplit(time, split="\t"))
+        time <- data.frame(matrix(time, ncol=3, byrow=TRUE), stringsAsFactors=FALSE)
+        time[,1]  <- as.numeric(time[,1])
+        time[,2]  <- as.numeric(time[,2])
+        ## frequency data
+        freq <- x[even]
+        freq <- gsub("\\\\\t", replacement="", x=freq)
+        freq <- unlist(strsplit(freq, split="\t"))
+        freq <- data.frame(matrix(freq, ncol=2, byrow=TRUE), stringsAsFactors=FALSE)
+        freq[,1]  <- as.numeric(freq[,1])
+        freq[,2]  <- as.numeric(freq[,2])
+        ## value
+        res <- cbind(rep(f.format, nrow(time)), time[,3], time[,1:2], freq)
+        res[,1] <- as.character(res[,1])
+        res[,2] <- as.character(res[,2])
+        res[,2] <- substring(res[,2], 2)
+        colnames(res) <- c("file", "label", "t1", "t2", "f1", "f2")
+    }
+    ## time data only
+    else {
+        res <- read.table(file, header=FALSE, sep="\t", dec=".")
+        res <- cbind(rep(f.format, nrow(res)), res[,3], res[,-3])
+        res[,1] <- as.character(res[,1])
+        res[,2] <- as.character(res[,2])
+        res[,2] <- substring(res[,2], 2)
+        colnames(res) <- c("file", "label", "t1", "t2")
+        res
+    }
+    ## OUTPUT
+    return(res)
 }
 
 
@@ -6251,11 +6458,11 @@ spec <- function(
   if(!is.null(from)|!is.null(to))
     {
       if(is.null(from) && !is.null(to)) {a<-1; b<-round(to*f)}
-      if(!is.null(from) && is.null(to)) {a<-round(from*f); b<-length(wave)}
+      if(!is.null(from) && is.null(to)) {a<-round(from*f)+1; b<-length(wave)}
       if(!is.null(from) && !is.null(to))
         {
           if(from>to) stop("'from' cannot be superior to 'to'")
-          if(from==0) {a<-1} else a<-round(from*f)
+          if(from==0) {a<-1} else {a<-round(from*f)+1}
           b<-round(to*f)
         }
       wl <- (b - a) + 1    ## fixed by Arvind Sowmyan, 2014-03-10
@@ -6423,6 +6630,60 @@ spec <- function(
 
 
 ################################################################################
+## SPECFLUX
+################################################################################
+
+specflux <- function(
+                     wave,
+                     f,
+                     channel = 1,
+                     wl = 512,
+                     ovlp = 0,
+                     wn = "rectangle",
+                     flim = NULL,
+                     norm = FALSE,
+                     p = 2,
+                     plot = TRUE,
+                     xlab = "Times (s)",
+                     ylab = "Flux",
+                     type="l",
+                     ...)
+{
+    ## INPUT
+    input <- inputw(wave = wave, f = f, channel = channel)
+    wave <- input$w
+    f <- input$f
+    n <- length(wave)
+    rm(input)
+    ## SUCCESSIVE SPECTRA
+    z <- sspectro(wave, f, wl = wl, ovlp = ovlp, wn = wn, norm = TRUE, correction = "energy")
+    z <- z^2                                        # squared to get energy values
+    if(norm){                                       # normalization of each DFT by the sum
+       z.sum <- apply(X = z, MARGIN = 2, FUN = sum) # maximum of each column
+       z <- t(t(z)/z.sum)                           # division of each column by its maximum, need to tranpose the matrix
+    }
+    ## FREQUENCY LIMITS
+    if (!is.null(flim))
+    {
+        flim <- flim * 1000 * wl/f
+        z <- z[flim[1]:flim[2], ]
+    }
+    ## FLUX
+    flux <- rowSums(abs(diff(t(z)))^p)^(1/p)    # sum of the column derivate, p-norm
+    flux <- c(0, flux)                          # add a 0 for the first frame and to keep the same number of colums as z
+    ## RES
+    t <- seq(0, n/f, length.out = length(flux)) # time
+    res <- cbind(t, flux)
+    ## PLOT / RETURN
+    if(plot){
+        plot(res, xlab=xlab, ylab=ylab, type=type, ...)
+        invisible(res)
+    }
+    else return(res)
+}
+
+
+################################################################################
 ## SPECPROP
 ################################################################################
 
@@ -6550,6 +6811,7 @@ spectro <- function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
+                  noisereduction = FALSE,
                   fastdisp = FALSE,
                   complex = FALSE,
                   norm = TRUE,
@@ -6608,7 +6870,7 @@ spectro <- function(
     if(!is.null(tlim) && trel && osc) {wave <- wave0 <- input$w} else {wave <- input$w} # necessary to use 'from' and 'to' of soscillo()
     f <- input$f
     rm(input)
-    
+    ## time limits
     if(!is.null(tlim)) wave <- cutw(wave,f=f,from=tlim[1],to=tlim[2])                                      
     ## dynamic vertical zoom (modifications of analysis parameters)
     if(!is.null(flimd))                        
@@ -6623,11 +6885,16 @@ spectro <- function(
         flim <- flimd     
     }
     
-
     ## STFT
     n <- nrow(wave)
     step <- seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
     z <- stdft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,scale=norm,complex=complex,correction=correction)
+
+    ## image noise reduction, ! energy conservation is lost
+    if(noisereduction){
+        noise <- apply(z, MARGIN=1, FUN=median) ## median of each row
+        z <- abs(z-noise)
+    }
 
     ## X axis settings
     if(!is.null(tlim) && trel) { X<- seq(tlim[1],tlim[2],length.out=length(step))}
@@ -6662,7 +6929,7 @@ spectro <- function(
         }
     }
     
-    Z<-t(z)
+    Z <- t(z)
     
     if(plot)
     {
@@ -6813,6 +7080,7 @@ spectro3D<-function(
                     wn = "hanning",
                     zp = 0,
                     ovlp = 0,
+                    noisereduction = FALSE,
                     norm = TRUE,
                     correction = "none",
                     fftw = FALSE,
@@ -6826,70 +7094,76 @@ spectro3D<-function(
                     )
 
 {
-                                        # STOP MESSAGES
-  if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
-    stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
-  if(wl%%2 == 1) stop("'wl' has to be an even number.")
-  
-                                        # INPUT
-  input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
-  
-                                        # STFT
-  n <- nrow(wave)
-  step <- seq(1, n+1-wl, wl-(ovlp * wl/100)) # +1 added @ 2017-04-20
-  z <- stdft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw, scale=norm, correction=correction)
+    ## STOP MESSAGES
+    if(!is.null(dB) && all(dB!=c("max0","A","B","C","D")))
+        stop("'dB' has to be one of the following character strings: 'max0', 'A', 'B', 'C' or 'D'")
+    if(wl%%2 == 1) stop("'wl' has to be an even number.")
+    
+    ## INPUT
+    input<-inputw(wave=wave,f=f,channel=channel) ; wave<-input$w ; f<-input$f ; rm(input)
+    
+    ## STFT
+    n <- nrow(wave)
+    step <- seq(1, n+1-wl, wl-(ovlp * wl/100)) # +1 added @ 2017-04-20
+    z <- stdft(wave = wave, f = f, wl = wl, zp = zp, step = step, wn = wn, fftw=fftw, scale=norm, correction=correction)
 
-                                       # FREQUENCY DATA
-  F <- seq(0, (f/2)-(f/(wl+zp)), by=f/(wl+zp))/1000
-  
-                                        # DB
-  if(!is.null(dB))
+    ## image noise reduction
+    if(noisereduction){
+        noise <- apply(z, MARGIN=1, FUN=median) ## median of each row
+        z <- abs(z-noise) 
+    }
+    
+    ## FREQUENCY DATA
+    F <- seq(0, (f/2)-(f/(wl+zp)), by=f/(wl+zp))/1000
+    
+    ## DB
+    if(!is.null(dB))
     {
-      if(is.null(dBref)) {z <- 20*log10(z)} else {z <- 20*log10(z/dBref)}
-      if(dB!="max0")
-          {
+        if(is.null(dBref)) {z <- 20*log10(z)} else {z <- 20*log10(z/dBref)}
+        if(dB!="max0")
+        {
             if(dB == "A") z <- dBweight(Y*1000, dBref = z)$A 
             if(dB == "B") z <- dBweight(Y*1000, dBref = z)$B 
             if(dB == "C") z <- dBweight(Y*1000, dBref = z)$C 
             if(dB == "D") z <- dBweight(Y*1000, dBref = z)$D
-          }
+        }
     }
- 
-  if(plot)
+    
+    if(plot)
     {        
-      X <- magt * (1:ncol(z))
-      Y <- magf * (1:nrow(z))
-      Z <- maga * z
-      Xat <- seq(magt, magt * ncol(z), by = (magt * ncol(z))/4)
-      Yat <- seq(magf, magf * nrow(z), by = (magf * nrow(z))/4)
-      if(is.null(dB))
+        X <- magt * (1:ncol(z))
+        Y <- magf * (1:nrow(z))
+        Z <- maga * z
+        Xat <- seq(magt, magt * ncol(z), by = (magt * ncol(z))/4)
+        Yat <- seq(magf, magf * nrow(z), by = (magf * nrow(z))/4)
+        if(is.null(dB))
         {
-         Zat <- seq(min(Z, na.rm=TRUE), max(Z, na.rm=TRUE), length.out = 5)
-         Zlab <- as.character(round(seq(min(Z, na.rm=TRUE)/maga, max(Z, na.rm=TRUE)/maga, length.out=5), 1))
+            Zat <- seq(min(Z, na.rm=TRUE), max(Z, na.rm=TRUE), length.out = 5)
+            Zlab <- as.character(round(seq(min(Z, na.rm=TRUE)/maga, max(Z, na.rm=TRUE)/maga, length.out=5), 1))
         }
-      else
+        else
         {
-         Zat <- seq(min(Z, na.rm=TRUE), maga, by = abs(min(Z, na.rm=TRUE))/4)
-         Zlab <- as.character(round(seq(min(Z, na.rm=TRUE)/maga, 0, by = abs(min(Z, na.rm=TRUE))/(4*maga)), 1))
+            Zat <- seq(min(Z, na.rm=TRUE), maga, by = abs(min(Z, na.rm=TRUE))/4)
+            Zlab <- as.character(round(seq(min(Z, na.rm=TRUE)/maga, 0, by = abs(min(Z, na.rm=TRUE))/(4*maga)), 1))
         }
-      Xlab <- as.character(round(seq(0, n/f, by = n/(4 * f)),1))
-      Ylab <- as.character(round(seq((f/1000)/(wl + zp), f/2000, by = f/(4*2000)), 1))
-      Zlim <- range(Z, na.rm=TRUE)
-      Zlen <- Zlim[2] - Zlim[1] + 1
-      colorlut <- palette(Zlen)
-      col <- colorlut[Z - Zlim[1] + 1]
-      rgl::rgl.clear()
-      rgl::rgl.bbox(color = "white", emission = "gray8", specular = "gray",
-               shininess = 50, alpha = 0.8, xat = Yat, xlab = Ylab,
-               xunit = 0, yat = Zat, ylab = Zlab, yunit = 0, zat = Xat,
-               zlab = Xlab, zunit = 0)
-      rgl::rgl.texts(x = 1, z = magt * ncol(Z)/2, y = min(Z), text = "Time (s)", color = "white")
-      rgl::rgl.texts(z = 1, x = magf * nrow(Z)/2, y = min(Z), text = "Frequency (kHz)", color = "white")
-      rgl::rgl.texts(x = 1, z = 0, y = 0, text = "Amplitude (dB)", color = "white")
-      rgl::rgl.surface(Y, X, Z, color = col, back = "lines")
-      invisible(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
+        Xlab <- as.character(round(seq(0, n/f, by = n/(4 * f)),1))
+        Ylab <- as.character(round(seq((f/1000)/(wl + zp), f/2000, by = f/(4*2000)), 1))
+        Zlim <- range(Z, na.rm=TRUE)
+        Zlen <- Zlim[2] - Zlim[1] + 1
+        colorlut <- palette(Zlen)
+        col <- colorlut[Z - Zlim[1] + 1]
+        rgl::rgl.clear()
+        rgl::rgl.bbox(color = "white", emission = "gray8", specular = "gray",
+                      shininess = 50, alpha = 0.8, xat = Yat, xlab = Ylab,
+                      xunit = 0, yat = Zat, ylab = Zlab, yunit = 0, zat = Xat,
+                      zlab = Xlab, zunit = 0)
+        rgl::rgl.texts(x = 1, z = magt * ncol(Z)/2, y = min(Z), text = "Time (s)", color = "white")
+        rgl::rgl.texts(z = 1, x = magf * nrow(Z)/2, y = min(Z), text = "Frequency (kHz)", color = "white")
+        rgl::rgl.texts(x = 1, z = 0, y = 0, text = "Amplitude (dB)", color = "white")
+        rgl::rgl.surface(Y, X, Z, color = col, back = "lines")
+        invisible(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
     }
-  else return(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
+    else return(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
 }
 
 
@@ -7224,6 +7498,55 @@ th <- function(
 
 
 ################################################################################
+##                                TIMELAPSE
+################################################################################
+
+timelapse <- function(dir,                                                 # as in seewave::lts()
+                      from = 1,                                            # as in tuneR::readWave()
+                      to = Inf,                                            # as in tuneR::readWave()
+                      units = c("samples", "seconds", "minutes", "hours"), # as in tuneR::readWave()
+                      verbose = TRUE                                       # as in seewave::lts()
+                      )    
+{
+    ## INPUT AND STOP MESSAGES
+    if(!is.vector(dir) | !is.character(dir)) stop("The argument 'dir' should be a character vector")
+    if(length(dir)==1) {
+        files <- dir(dir, pattern="[wav]$|[WAV]$")
+        sep <- "/"
+    }
+    else {
+        files <- dir
+        dir <- NULL
+        sep <- ""
+    }
+    n <- length(files)
+    if(n==0 | n==1) stop("It seems that there are not enough .wav files to consider")    
+    test <- try(expr={info <- tuneR::readWave(paste(dir,files[1],sep=sep), header=TRUE)}, silent=TRUE)
+    if(class(test)=="try-error") stop("It seems that there is no .wav file or that the first .wav file is corrupted so that information about files could not be retried (ie sampling frequency, bits, mono/stero.")
+
+    ## GENERATE
+    s <- Wave(left=numeric(0), right=numeric(0), samp.rate=info$sample.rate, bit=info$bits)  # empty initial sound
+    if(info$channels==2) s <- stereo(s, s) # make it stereo if the the fist file is sterep
+    diag <- rep(NA, n)                     # diagnostic report for each file read
+    for(i in 1:n){
+        test <- try(expr = tmp <- tuneR::readWave(paste(dir, files[i], sep=sep), from=from, to=to, units=units), silent=TRUE)
+        if(class(test)=="try-error"){
+            if(verbose) message("Error when reading file # ", paste(files[i]))
+            diag[i] <- "not processed"
+        } else diag[i] <- "processed"
+        if(diag[i]=="processed") {
+            s <- bind(s, tmp)
+        }
+        rm(tmp)
+        if(verbose) {print(paste("File #", i, files[i], diag[i], sep=" "))}
+    }
+
+    ## OUTPUT
+    return(s)
+}
+
+
+################################################################################
 ##                                TIMER
 ################################################################################
 
@@ -7263,7 +7586,8 @@ timer <- function(
       if(length(dmin)!=1) stop("'dmin' should be a numeric vector of length 1") 
       if(dmin <= 0) stop("'dmin' cannot be negative or equal to 0")
       if(dmin >= n/f) stop("'dmin' cannot equal or be higher than the wave duration")
-    } 
+    }
+    
     ## TIME LIMITS
     if(!is.null(tlim)) {
       wave <- cutw(wave, f=f, from=tlim[1], to=tlim[2])
@@ -7653,10 +7977,32 @@ wf <- function(
 
 
 
+################################################################################
+## WRITE.AUDACITY
+################################################################################
+
+write.audacity <- function(x,         # data frame
+                           filename   # name of the file to be saved
+                           )
+{
+    if(!is.data.frame(x)) stop("'x' should be a data frame.")
+    nc <- ncol(x)
+    if(nc!=3 & nc!=5) stop("'x' should have either 3 columns (time limits) or 5 columns (time and frequency limits)")
+    if(nc==3) {
+        x <- x[,c(2,3,1)]
+        write.table(x, file=filename, sep="\t", row.names=FALSE, col.names=FALSE, quote=FALSE)
+    }
+    else {
+        res <- paste(x$t1, "\t", x$t2, "\t", x$label, "\n\\\t", x$f1, "\t", x$f2, sep="") 
+        fileConn <- file(filename)
+        writeLines(res, fileConn)
+        close(fileConn)
+    }
+}
 
 
 ################################################################################
-##                                ZAPSILW
+## ZAPSILW
 ################################################################################
 
 zapsilw<-function(
@@ -7959,6 +8305,16 @@ flattop.w<-function (n)
   return(w)
 }
 
+################################################################################
+##                                GAUSSIAN.W
+################################################################################ 
+## by Andrey Anikin 2019-12-08
+
+gaussian.w  <-  function(n) {
+    if (n == 0) stop("'n' must be a positive integer")
+    w = (exp(-12 * (((1:n) / n) - 0.5) ^ 2) - exp(-12)) / (1 - exp(-12)) # Boersma (PRAAT)
+    return(w)
+}
 
 ################################################################################
 ##                                HAMMING.W
@@ -8239,8 +8595,8 @@ soscillo <- function(
     {
         if(from == 0) {a<-1; b<-round(to*f)}
         if(from == FALSE) {a<-1; b<-round(to*f);from<-0}
-        if(to == FALSE) {a<-round(from*f); b<-nrow(wave);to<-nrow(wave)/f}
-        else {a<-round(from*f); b<-round(to*f)}
+        if(to == FALSE) {a<-round(from*f)+1; b<-nrow(wave);to<-nrow(wave)/f}
+        else {a<-round(from*f)+1 ; b<-round(to*f)}
         wave<-as.matrix(wave[a:b,])
         n<-nrow(wave)
     }
@@ -8282,18 +8638,18 @@ sspectro <- function(
     f,
     wl = 512,
     ovlp = 0,
-    wn="hanning",
-    norm=TRUE,
-    correction="none"
+    wn = "hanning",
+    norm = TRUE,
+    correction = "none"
 )
 
 {
-  input<-inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
-  n<-nrow(wave)
-  step<-seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
-  W<-ftwindow(wl=wl,wn=wn,correction=correction)
+  input <- inputw(wave=wave,f=f) ; wave<-input$w ; f<-input$f ; rm(input)
+  n <- nrow(wave)
+  step <- seq(1,n+1-wl,wl-(ovlp*wl/100)) # +1 added @ 2017-04-20
+  W <- ftwindow(wl=wl,wn=wn,correction=correction)
   z <- apply(as.matrix(step), 1, function(x) Mod(fft(wave[x:(wl+x-1),]*W)))
-  z<-z[2:(1+wl/2),]
+  z <- z[2:(1+wl/2),]
   if(norm) {z <- z/max(z)}
   return(z)
 }
@@ -8355,7 +8711,10 @@ stdft <- function(
         z <- 2*Mod(z)  # multiplied by 2 to save the total energy see http://www.ni.com/white-paper/4278/en/, section Converting from a Two-Sided Power Spectrum to a Single-Sided Power Spectrum
         if(scale)
         {
-            if(norm) {z <- z/apply(X=z, MARGIN=2, FUN=max)} # normalise to 1 each column (ie each FFT)
+            if(norm) { # normalise to 1 each column (ie each FFT)
+                z.max <- apply(X=z, MARGIN=2, FUN=max)  # @ 2020-04-01
+                z <- t(t(z)/z.max)
+            } 
             else {z <- z/max(z)} # normalise to 1 the complete matrix
         }
     }

@@ -1,5 +1,4 @@
 ### R code from vignette source 'seewave_analysis.rnw'
-### Encoding: UTF-8
 
 ###################################################
 ### code chunk number 1: seewave_analysis.rnw:76-78

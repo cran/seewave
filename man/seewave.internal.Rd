@@ -5,6 +5,7 @@
 \alias{cunwrap}
 \alias{filled.contour.modif2}
 \alias{flattop.w}
+\alias{gaussian.w}
 \alias{hamming.w}
 \alias{hanning.w}
 \alias{inputw}

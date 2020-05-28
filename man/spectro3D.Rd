@@ -11,7 +11,7 @@
 
 \usage{
 spectro3D(wave, f, channel = 1, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, norm = TRUE, correction = "none", fftw = FALSE,
+ovlp = 0, noisereduction = FALSE, norm = TRUE, correction = "none", fftw = FALSE,
 dB = "max0", dBref = NULL, plot = TRUE,
 magt = 10, magf = 10, maga = 2,
 palette = reverse.terrain.colors)
@@ -27,6 +27,7 @@ palette = reverse.terrain.colors)
   \item{wn}{window name, see \code{\link{ftwindow}} (by default \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \% ).}
+  \item{noisereduction}{a logical, if \code{TRUE} a noise reduction is applied.}
   \item{norm}{if \code{TRUE} the STFT is normalised (i. e. scaled) by its maximum.}
   \item{correction}{a character vector of length 1 to apply an
   amplitude ("amplitude") or an energy ("energy") correction
