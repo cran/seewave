@@ -159,7 +159,7 @@ addsilw<-function(
                   ...)
 
 {
-  input<-inputw(wave=wave,f=f, channel=channel);wave<-input$w; f<-input$f; bit <- input$bit; rm(input)
+  input<-inputw(wave=wave,f=f, channel=channel); wave<-input$w ; f<-input$f ; bit <- input$bit ; rm(input)
 
   switch(at,
          start = {at<-0},
@@ -178,10 +178,10 @@ addsilw<-function(
       at<-coord$x[1]; abline(v=at,col=2,lty=2)
     }
 
-  pos<-round(at*f)
-  wave1<-wave[1:pos,1]
-  sil<-rep(0,d*f)
-  wave2<-wave[-(1:pos),1]
+  pos <- round(at*f)
+  wave1 <- wave[1:pos,1]
+  sil <- rep(0,d*f)
+  wave2 <- wave[-(1:pos),1]
 
   wave3 <- c(wave1,sil,wave2)
 
@@ -6687,7 +6687,8 @@ specflux <- function(
 ## SPECPROP
 ################################################################################
 
-specprop <- function (spec,
+specprop <- function (
+                      spec,
                       f = NULL,
                       str = FALSE,
                       flim = NULL,
@@ -6715,7 +6716,7 @@ specprop <- function (spec,
     if (is.matrix(spec))
         {
             freq <- spec[, 1]
-            freq = freq * 1000
+            freq  <-  freq * 1000
             spec <- spec[, 2]
         }
     L <- length(spec)
@@ -6725,9 +6726,10 @@ specprop <- function (spec,
         if(flim[1] < 0 || flim[2] > fhz/2) stop("'flim' should range between 0 and f/2")
         if(mel) flim <- mel(flim*1000)/1000
     }
-    else {flim <- c(0, f/2000)}
+    else {flim <- c(0, (f/2-f/wl)/1000)}
 
-    spec <- spec[(flim[1] * 1000 * wl/f):(flim[2] * 1000 * wl/f)]
+    g <- (1000*wl/2)/(f/2 - f/wl)
+    spec <- spec[(flim[1]*g):(flim[2]*g)]
     L <- length(spec)
     
     ## Amplitude
@@ -6811,7 +6813,7 @@ spectro <- function(
                   wn = "hanning",
                   zp = 0,
                   ovlp = 0,
-                  noisereduction = FALSE,
+                  noisereduction = NULL,
                   fastdisp = FALSE,
                   complex = FALSE,
                   norm = TRUE,
@@ -6891,8 +6893,9 @@ spectro <- function(
     z <- stdft(wave=wave,f=f,wl=wl,zp=zp,step=step,wn=wn,fftw=fftw,scale=norm,complex=complex,correction=correction)
 
     ## image noise reduction, ! energy conservation is lost
-    if(noisereduction){
-        noise <- apply(z, MARGIN=1, FUN=median) ## median of each row
+    if(!is.null(noisereduction)){
+        if(noisereduction!=1 & noisereduction!=2) stop ("If not NULL, 'noisereduction' should be 1 or 2")
+        noise <- apply(z, MARGIN=noisereduction, FUN=median) ## median of each row or column
         z <- abs(z-noise)
     }
 
@@ -6989,7 +6992,8 @@ spectro <- function(
         {
             layout(matrix(c(2, 1), ncol=2, byrow=TRUE), widths=widths)
             ## SCALE
-            par(mar=c(5,1,4.5,3), oma=oma, las=0, bg=colbg)
+            par(mar=c(5,1,4.5,3), oma=oma, las=0, col=colaxis, col.axis=colaxis, col.lab=collab, bg=colbg, cex.axis=cexaxis, cex.lab=cexlab,...)
+
             dBscale(collevels=collevels,palette=palette,fontlab=scalefontlab,
                     cexlab=scalecexlab,collab=collab,textlab=scalelab,colaxis=colaxis)
             ## SPECTRO
@@ -7032,7 +7036,7 @@ spectro <- function(
                                   plot.title=title(main=main,xlab="",ylab=flab),
                                   color.palette=palette,
                                   plot.axes = {if(axisY) {axis(2, at=yat, labels=ylabel)} else {NULL}},
-                                  col.lab=collab,colaxis=colaxis,...)		
+                                  col.lab=collab, colaxis=colaxis,...)		
             if(grid) abline(h=yat, col=colgrid, lty="dotted")
             if(cont){contour(X,Y,Z,add=TRUE,levels=contlevels,nlevels=5,col=colcont,...)}
             if(colaxis!=colgrid) abline(h=0,col=colaxis) else abline(h=0,col=colgrid)
@@ -7648,7 +7652,7 @@ timer <- function(
     npos <- length(positions)
     if(npos<=2) stop("It seems that the sound is continuous, there are not signal/pause events.")
     ## the wave starts with a pause
-    if (wave2[1] == 1) {
+    if (wave4[2] == 2) {   # if (wave2[1] == 1) {   ## by 2021-04-16 by Yannick Jadoul and Marianna Anichini
         first <- "pause"
         pause <- durations[seq(1, npos - 1, by = 2)]
         signal <- durations[seq(2, npos - 1, by = 2)]
@@ -7689,7 +7693,8 @@ timer <- function(
             wave8[i] <- ((wave5[i] - wave5[i - 1])/2) + wave5[i -
                 1]
         }
-        if(wave2[1] == 1) {
+        if(wave4[2] == 2) {     #@mod 2021-04-16 by Yannick Jadoul and Marianna Anichini
+            # if (wave2[1] == 1) {
             wave8.1 <- wave8[seq(2, npos, by = 2)]/f1
             wave8.2 <- wave8[seq(3, npos, by = 2)]/f1
         }  else {
@@ -7709,9 +7714,79 @@ timer <- function(
 
 
 
+################################################################################
+## TFSD
+################################################################################
+
+TFSD <- function(
+                 wave,
+                 f,
+                 channel = 1,
+                 ovlp = 0,
+                 wn = "hamming",
+                 flim = c(2,6),
+                 nbwindows = 1)
+{
+
+  # Warning, this index was initially developed to work from a third octave spectrogram with a time sampling of 125 ms.
+  
+  input <- inputw(wave = wave, f = f, channel = channel)
+  wave <- input$w
+  f <- input$f
+
+  if(is.null(flim)) flim <- rep(NA, 2)  
+    
+  wl<-round(f/8) # time step 125 ms
+  
+  rm(input)
+  z <- sspectro(wave, f, wl = wl, wn = wn, ovlp = ovlp)
+
+  freq <- seq(f/wl, (f/2) - (f/wl), length.out = wl%/%2)
+  toctave=c(50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000) # third octave band. 
+  toctavemin = toctave/(2^0.1666666)
+  toctavemax = toctave*(2^0.1666666)
+  imin <- which.min(abs(toctave-flim[1]*1000))
+  imax <- which.min(abs(toctave-flim[2]*1000))
+  
+  tfsds <- array(0, nbwindows)
+  
+  for (jj in 1:nbwindows) {
+    l <- dim(z)[2]
+    z1 <- z[, floor(l/nbwindows * (jj - 1) + 1):floor(l/nbwindows * jj)]
+
+    spectoct = matrix(0L, nrow = 20, ncol = dim(z1)[2]) # Third-octave band, 125ms spectrogram
+    
+    # third-octave band values between [100 Hz, 8kHz] from narrow band frequency values.
+    bin = 1
+    for (j in seq(4, 23)) {
+      indices = which(freq>toctavemin[j] & freq <toctavemax[j] )
+      L=0
+      spectoct[bin,]=10*log10(colSums(10^(z1[indices,]/10)))
+      bin =bin +1
+    }
+    
+    spectoctdf <- (diff(spectoct)) 
+    spectoctdft <- (diff(t(spectoctdf)))
+    spectoctdft<-t(spectoctdft)
+    
+    imin <- imin - 4 # remove the three first third octave band [50-100 Hz[
+    imax <- imax - 4 # remove the three first third octave band [50-100 Hz[
+    
+    tfsd <- 0
+    for (ind in seq(imin, imax)) {
+      tfsd =  sum(abs(spectoctdft[ind,])) + tfsd  
+      }
+    tfsds[jj] <- tfsd/sum(abs(spectoctdft))
+    rm(spectoct)
+  }
+  
+  return(na.omit(as.vector(tfsds)))
+}
+
+
 
 ################################################################################
-##                                TKEO
+## TKEO
 ################################################################################
 
 TKEO <- function(
@@ -7912,8 +7987,10 @@ wf <- function(
     }
 
                                         # colors
-  if(!is.function(col)) {col <- rep(col,dim(data)[2])} else {col <- col(dim(data)[2])}
-
+#  if(!is.function(col)) {col <- rep(col,dim(data)[2])} else {col <- col(dim(data)[2])}
+  if(!is.function(col)) {if (dim(data)[2]!=length(col)) col <- rep(col,dim(data)[2])} # + change by Maria A. Wis 2021-07-13
+  else {col <- col(dim(data)[2])}
+    
                                         # seek for axes ticks: look for the column including the maximum value
                                         # and get the values for both axes with a 'virtual' plot
 
@@ -8172,16 +8249,13 @@ zcr <- function(wave,
 ##                                BARTLETT.W
 ################################################################################ 
 
-bartlett.w<-function (n)
-{
-  if(n <= 0) stop("'n' must be a positive integer")
-
-  n<-n-1
-  m<-n%/%2
-  w<-c((2*(0:(m-1)))/n, 2-((2*(m:n))/n))
-  return(w)
+bartlett.w  <-  function (n) {
+     if (n < 3) stop("'n' must be a positive integer >2")
+     n  <-  n - 1
+     m  <-  n / 2
+     w  <-  1 - abs(0:n - m) / m
+     return(w)
 }
-
 
 ################################################################################
 ##                                BLACKMAN.W
@@ -8308,12 +8382,14 @@ flattop.w<-function (n)
 ################################################################################
 ##                                GAUSSIAN.W
 ################################################################################ 
-## by Andrey Anikin 2019-12-08
+## by Andrey Anikin 2019-12-08, fiexd 2020-08-03 for even numbers.
 
 gaussian.w  <-  function(n) {
-    if (n == 0) stop("'n' must be a positive integer")
-    w = (exp(-12 * (((1:n) / n) - 0.5) ^ 2) - exp(-12)) / (1 - exp(-12)) # Boersma (PRAAT)
-    return(w)
+   if (n < 2) stop("'n' must be a positive integer >1")
+   n1 <-  n - 1
+   e12 <-  exp(-12)
+   w <-  (exp(-12 * (((0:n1) / n1) - 0.5) ^ 2) - e12) / (1 - e12) # Boersma (PRAAT)
+   return(w)
 }
 
 ################################################################################

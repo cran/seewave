@@ -69,7 +69,7 @@
 }
 
 \references{See Wildlife Acoustics website for details regarding the
-  SongMeters 2, 3 and 4: \url{http://www.wildlifeacoustics.com/}}
+  SongMeters 2, 3 and 4: \url{https://www.wildlifeacoustics.com/}}
 
 \author{Jerome Sueur}
 

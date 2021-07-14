@@ -1,11 +1,12 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.1.6
-Date: 2020-06-28
+Version: 2.1.8
+Date: 2021-07-14
 Author: Jerome Sueur <sueur@mnhn.fr> [cre, au], Thierry Aubin [au],
         Caroline Simonis [au], Laurent Lellouch [main ctrb],
-        Ethan C. Brown [ctrb], Marion Depraetere [ctrb],
+        Pierre Aumond [ctrb], 
+	Ethan C. Brown [ctrb], Guillaume Corbeau [ctrb], Marion Depraetere [ctrb],
         Camille Desjonqueres [ctrb], Francois Fabianek [ctrb], 
         Amandine Gasc [ctrb], Eric Kasten [ctrb], Stefanie LaZerte [ctrb],
 	Jonathan Lees [ctrb], Jean Marchal [ctrb], Andre Mikulec [ctrb],
@@ -18,10 +19,10 @@ SystemRequirements: LIBSNDFILE
 Imports: graphics, grDevices, stats, utils, tuneR
 Suggests: audio, fftw, ggplot2, rgl, rpanel, phonTools, signal
 ZipData: no
-Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses.
+Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses. See Sueur et al. (2008) <doi:10.1080/09524622.2008.9753600> and Sueur (2018) <doi:10.1007/978-3-319-77647-7>.
 License: GPL (>= 2)
-URL: http://rug.mnhn.fr/seewave
+URL: http://rug.mnhn.fr/seewave/
 NeedsCompilation: no
-Packaged: 2020-05-28 12:27:24 UTC; root
+Packaged: 2021-07-14 09:37:07 UTC; root
 Repository: CRAN
-Date/Publication: 2020-05-28 14:30:02 UTC
+Date/Publication: 2021-07-14 13:00:02 UTC

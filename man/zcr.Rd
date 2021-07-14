@@ -69,7 +69,7 @@
   }
 }
 
-\references{\url{http://en.wikipedia.org/wiki/Zero-crossing_rate}}
+\references{\url{https://en.wikipedia.org/wiki/Zero-crossing_rate}}
 
 \author{Jerome Sueur}
 

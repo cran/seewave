@@ -11,7 +11,7 @@
 
 \usage{
 spectro(wave, f, channel = 1, wl = 512, wn = "hanning", zp = 0,
-ovlp = 0, noisereduction = FALSE, fastdisp = FALSE,
+ovlp = 0, noisereduction = NULL, fastdisp = FALSE,
 complex = FALSE, norm = TRUE, correction="none",
 fftw = FALSE, dB = "max0", dBref = NULL, plot = TRUE,
 flog = FALSE, grid = TRUE, osc = FALSE, scale = TRUE, cont = FALSE,
@@ -45,7 +45,9 @@ listen=FALSE,
     \code{"hanning"}).}
   \item{zp}{zero-padding (even number of points), see \code{Details}.}
   \item{ovlp}{overlap between two successive windows (in \%).}
-  \item{noisereduction}{a logical, if \code{TRUE} a noise reduction is applied. See \code{Details}.}
+  \item{noisereduction}{a numeric vector of length 1, if \code{1} a
+  noise reduction is applied along the rows of the spectrogram, if
+  \code{2} a noise reduction applied along the columns. See \code{Details}.}
   \item{fastdisp}{faster graphic display for long \code{wave}. The
   spectrogram/oscillogram is displayed/saved faster in the graphic device/
   graphic file when set to \code{TRUE}, with a cost on graphical resolution.}
@@ -137,7 +139,7 @@ listen=FALSE,
   Use \code{\link{locator}} to identify  points.
   The noise reduction using the argument \code{noisereduction} is an
   image filter, not a signal filter. The principle consists in
-  subtracting each spectrogram row by its median. Noise reduction alters
+  subtracting each spectrogram row or column by its median. Noise reduction alters
   energy conservation, it should then be used for visual display only. 
 }
 

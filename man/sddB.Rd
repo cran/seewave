@@ -18,7 +18,7 @@ is an estimation not an exact computation which is not possible.}
 
 \value{A numeric vector of length 1.}
 
-\references{Wikipedia, \url{http://en.wikipedia.org/wiki/Propagation_of_uncertainty}}
+\references{Wikipedia, \url{https://en.wikipedia.org/wiki/Propagation_of_uncertainty}}
 
 \author{Jérôme Sueur}
 

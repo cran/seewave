@@ -1,12 +1,25 @@
 		*****************************************
 		*		SEEWAVE NEWS		*
 		*****************************************
+		
+		CHANGES IN SEEWAVE VERSION 2.1.8 [14-July-2021]
+
+OTHER CHANGES
+	o TFSD(): a new function to compute the normalized Time and Frequency Second Derivative as described by Aumond et al. (2017). By Pierre Aumond and Guillaume Corbeau.
+	o specprop(): a correction regarding the frequency limits.
+	o spectro(): the argument 'noisereduction' now takes a value of 1 or 2 for applying the noise reduction according to the rows (1) or columns (2) of the spectrogram. Inspired by Sylvain Haupert.
+	o spectro(): the argument 'cexaxis' now works when 'scale=TRUE' and 'osc=FALSE'.
+	o spectro() and all functions based on the Fourier transform: 'gaussian' and 'bartlett' window asymetry fixed when n is even. By Andrey Anikin.
+	o timer(): a correction when the sounds ends with a signal section. By Yannick Jadoul and Marianna Anichini.
+        o timer(): a bug fixed regarding the first element detected is short than 'dmin'. By Yannick Jadoul.
+	o wf(): faster display. By Maria A. Wis.
+
 
 		CHANGES IN SEEWAVE VERSION 2.1.6 [28-May-2020]
 
 NEW FUNCTIONS
 	o audiomoth(): a new function to decode time information encoded in Audiomoth .wav files.
-	o audiomoth.rename(): a new function to rename in Audiomoth .wav files in a readable format.
+	o audiomoth.rename(): a new function to rename Audiomoth .wav files in a readable format.
 	o beep(): a new function to produce a simple beep to alert for the end of a process, for instance.
         o gammatone(): a new function to generate gammatone filters in the time domain (impulse response).
 	o read.audacity(): a new function to read Audacity time or time*frequency markers.

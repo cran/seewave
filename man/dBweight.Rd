@@ -28,7 +28,7 @@
 \item{ITU}{dB ITU-R 468}
 }
 
-\references{\url{http://en.wikipedia.org/wiki/A-weighting}, \url{https://en.wikipedia.org/wiki/ITU-R_468_noise_weighting}}
+\references{\url{https://en.wikipedia.org/wiki/A-weighting}, \url{https://en.wikipedia.org/wiki/ITU-R_468_noise_weighting}}
 
 \author{Jerome Sueur \email{sueur@mnhn.fr},  Zev Ross, and Andrey Anikin}
 

@@ -49,7 +49,7 @@
 
 \references{Audacity is a free software
   distributed under the terms of the GNU General Public License.\cr
-  Web site: \url{https://audacityteam.org/. }
+  Web site: \url{https://www.audacityteam.org/}
 }
 
 \author{Jerome Sueur}

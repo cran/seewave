@@ -31,7 +31,7 @@
   See the references for details on computation. }
 
 \note{Values returned were checked with the results provided by the
-  add-on Soundscapemeter for the software Wavesurfer \url{http://www.speech.kth.se/wavesurfer/}.
+  add-on Soundscapemeter for the software Wavesurfer \url{https://www.speech.kth.se/wavesurfer/}.
 }
 
   
