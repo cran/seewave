@@ -1,28 +1,63 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.1.8
-Date: 2021-07-14
-Author: Jerome Sueur <sueur@mnhn.fr> [cre, au], Thierry Aubin [au],
-        Caroline Simonis [au], Laurent Lellouch [main ctrb],
-        Pierre Aumond [ctrb], 
-	Ethan C. Brown [ctrb], Guillaume Corbeau [ctrb], Marion Depraetere [ctrb],
-        Camille Desjonqueres [ctrb], Francois Fabianek [ctrb], 
-        Amandine Gasc [ctrb], Eric Kasten [ctrb], Stefanie LaZerte [ctrb],
-	Jonathan Lees [ctrb], Jean Marchal [ctrb], Andre Mikulec [ctrb],
-	Sandrine Pavoine [ctrb], David Pinaud [ctrb], Alicia Stotz [ctrb],
-        Luis J. Villanueva-Rivera [ctrb], Zev Ross [ctrb], 
-        Carl G. Witthoft [ctrb], Hristo Zhivomirov [ctrb].
+Version: 2.2.0
+Date: 2022-03-04
+Authors@R: c(person("Jerome", "Sueur", role = c("aut", "cre"),
+                     email = "sueur@mnhn.fr"),
+              person("Thierry", "Aubin", role = "aut"),
+              person("Caroline", "Simonis", role = "aut"),
+              person("Laurent", "Lellouch", role = "ctr"),
+              person("Pierre", "Aumond", role = "ctr"),
+              person("Ethan C.", "Brown", role = "ctr"),
+              person("Guillaume", "Corbeau", role = "ctr"),	      
+              person("Marion", "Depraetere", role = "ctr"),
+              person("Camille", "Desjonquères", role = "ctr"),
+	      person("François", "Fabianek", role = "ctr"),
+	      person("Amandine", "Gasc", role = "ctr"),
+	      person("Eric", "Kasten", role = "ctr"),
+	      person("Jonathan", "Lees", role = "ctr"),
+	      person("Jean", "Marchal", role = "ctr"),
+	      person("Andre", "Mikulec", role = "ctr"),
+	      person("Sandrine", "Pavoine", role = "ctr"),
+	      person("David", "Pinaud", role = "ctr"),
+	      person("Alicia", "Stotz", role = "ctr"),
+	      person("Luis J.", "Villanueva-Rivera", role = "ctr"),
+	      person("Zev", "Ross", role = "ctr"),
+	      person("Carl G.", "Witthoft", role = "ctr"),
+	      person("Hristo", "Zhivomirov", role = "ctr"))
 Maintainer: Jerome Sueur <sueur@mnhn.fr>
 Encoding: UTF-8
 SystemRequirements: LIBSNDFILE
-Imports: graphics, grDevices, stats, utils, tuneR
+Imports: graphics, grDevices, stats, utils, tuneR, methods
 Suggests: audio, fftw, ggplot2, rgl, rpanel, phonTools, signal
 ZipData: no
 Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses. See Sueur et al. (2008) <doi:10.1080/09524622.2008.9753600> and Sueur (2018) <doi:10.1007/978-3-319-77647-7>.
 License: GPL (>= 2)
-URL: http://rug.mnhn.fr/seewave/
+URL: https://rug.mnhn.fr/seewave/
 NeedsCompilation: no
-Packaged: 2021-07-14 09:37:07 UTC; root
+Packaged: 2022-03-04 11:08:23 UTC; root
+Author: Jerome Sueur [aut, cre],
+  Thierry Aubin [aut],
+  Caroline Simonis [aut],
+  Laurent Lellouch [ctr],
+  Pierre Aumond [ctr],
+  Ethan C. Brown [ctr],
+  Guillaume Corbeau [ctr],
+  Marion Depraetere [ctr],
+  Camille Desjonquères [ctr],
+  François Fabianek [ctr],
+  Amandine Gasc [ctr],
+  Eric Kasten [ctr],
+  Jonathan Lees [ctr],
+  Jean Marchal [ctr],
+  Andre Mikulec [ctr],
+  Sandrine Pavoine [ctr],
+  David Pinaud [ctr],
+  Alicia Stotz [ctr],
+  Luis J. Villanueva-Rivera [ctr],
+  Zev Ross [ctr],
+  Carl G. Witthoft [ctr],
+  Hristo Zhivomirov [ctr]
 Repository: CRAN
-Date/Publication: 2021-07-14 13:00:02 UTC
+Date/Publication: 2022-03-04 11:40:02 UTC

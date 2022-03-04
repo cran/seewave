@@ -4279,7 +4279,7 @@ lts <- function(dir,             # directory path where to find the .wav files
     }
     if(missing(f)) {
         test <- try(expr={f <- readWave(paste(dir,files[1],sep=sep), header=TRUE)$sample.rate}, silent=TRUE)
-        if(class(test)=="try-error") stop("It seems that the first .wav file is corrupted so that the sampling frequency cannot be retrieved. Please try to use the argument 'f'.")
+        if(is(test, "try-error")) stop("It seems that the first .wav file is corrupted so that the sampling frequency cannot be retrieved. Please try to use the argument 'f'.")
     }
 
     time <- switch(match.arg(recorder), songmeter = songmeter(files)$time, audiomoth= audiomoth(files)$time)
@@ -4291,7 +4291,7 @@ lts <- function(dir,             # directory path where to find the .wav files
     diag <- rep(NA, n)
     for(i in 1:n){
         test <- try(expr = tmp <- tuneR::readWave(paste(dir, files[i], sep=sep)), silent=TRUE)
-        if(class(test)=="try-error"){
+        if(is(test, "try-error")){
             if(verbose) message("Error when reading file # ", paste(files[i]))
             diag[i] <- "not processed"
         } else diag[i] <- "processed"
@@ -7526,15 +7526,14 @@ timelapse <- function(dir,                                                 # as 
     n <- length(files)
     if(n==0 | n==1) stop("It seems that there are not enough .wav files to consider")    
     test <- try(expr={info <- tuneR::readWave(paste(dir,files[1],sep=sep), header=TRUE)}, silent=TRUE)
-    if(class(test)=="try-error") stop("It seems that there is no .wav file or that the first .wav file is corrupted so that information about files could not be retried (ie sampling frequency, bits, mono/stero.")
-
+    if(is(test, "try-error")) stop("It seems that there is no .wav file or that the first .wav file is corrupted so that information about files could not be retried (ie sampling frequency, bits, mono/stero.")
     ## GENERATE
     s <- Wave(left=numeric(0), right=numeric(0), samp.rate=info$sample.rate, bit=info$bits)  # empty initial sound
     if(info$channels==2) s <- stereo(s, s) # make it stereo if the the fist file is sterep
     diag <- rep(NA, n)                     # diagnostic report for each file read
     for(i in 1:n){
         test <- try(expr = tmp <- tuneR::readWave(paste(dir, files[i], sep=sep), from=from, to=to, units=units), silent=TRUE)
-        if(class(test)=="try-error"){
+        if(is(test, "try-error")){
             if(verbose) message("Error when reading file # ", paste(files[i]))
             diag[i] <- "not processed"
         } else diag[i] <- "processed"
@@ -7650,14 +7649,16 @@ timer <- function(
     positions <- time(wave4)[wave5]
     durations <- diff(positions)
     npos <- length(positions)
-    if(npos<=2) stop("It seems that the sound is continuous, there are not signal/pause events.")
+    if(npos<=2) stop("It seems that the sound is continuous, there are no signal/pause events.")
+    first.non.transition <- which(wave4 != 3)[1]
+    first.non.transition.even <- first.non.transition %% 2 == 0
     ## the wave starts with a pause
-    if (wave4[2] == 2) {   # if (wave2[1] == 1) {   ## by 2021-04-16 by Yannick Jadoul and Marianna Anichini
+    if ((wave4[first.non.transition] == 2) == first.non.transition.even) {   
         first <- "pause"
         pause <- durations[seq(1, npos - 1, by = 2)]
         signal <- durations[seq(2, npos - 1, by = 2)]
         start.signal <- positions[seq(2, npos - 1, by = 2)]
-        end.signal <- positions[seq(3, npos - 1, by = 2)]
+        end.signal <- positions[seq(3, npos, by = 2)]
     }
     ## the wave starts with a signal
     else {
@@ -7665,7 +7666,7 @@ timer <- function(
         pause <- durations[seq(2, npos - 1, by = 2)]
         signal <- durations[seq(1, npos - 1, by = 2)]
         start.signal <- positions[seq(1, npos - 1, by = 2)]
-        end.signal <- positions[seq(2, npos - 1, by = 2)]
+        end.signal <- positions[seq(2, npos, by = 2)]
     }
     ratio <- sum(signal)/sum(pause)
     timer <- list(s = signal, p = pause, r = ratio,
@@ -7693,8 +7694,7 @@ timer <- function(
             wave8[i] <- ((wave5[i] - wave5[i - 1])/2) + wave5[i -
                 1]
         }
-        if(wave4[2] == 2) {     #@mod 2021-04-16 by Yannick Jadoul and Marianna Anichini
-            # if (wave2[1] == 1) {
+        if((wave4[first.non.transition] == 2) == first.non.transition.even) {
             wave8.1 <- wave8[seq(2, npos, by = 2)]/f1
             wave8.2 <- wave8[seq(3, npos, by = 2)]/f1
         }  else {

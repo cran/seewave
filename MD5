@@ -1,9 +1,9 @@
-3df920f35705f3e9ae5ae5f0039e6585 *DESCRIPTION
-073cff0cead26a970477bad08fdb0f1f *NAMESPACE
-6487ac95bf75f175d799a904e04609ee *NEWS
-f2401258196751a381643205d95757ad *R/seewave.r
+c9b43230a0dd59a958a22f3428818ea3 *DESCRIPTION
+84e92d4723064e43468cde96a3c9cd5f *NAMESPACE
+db9e47abf86ec66784d215a22ffd5a63 *NEWS
+abad0ae689f4acbbdf9470e00e45c7fb *R/seewave.r
 9504a6f1eca610d7dc18a0c85a880e9e *R/zzz.r
-f60db615c466f744c5c3988694012ceb *build/vignette.rds
+b153caee4d0bd85ef27aecd5d68b5800 *build/vignette.rds
 2d4352c48eb8d366f156d0d474cecc57 *data/orni.RData
 863718cc7d960b8fc0f64350bfb4c2f4 *data/peewit.RData
 18ae0c8de3d8870ea2aadce858195eb2 *data/pellucens.RData
@@ -13,10 +13,10 @@ defd31e9ccb35c01364f72354b208645 *data/sheep.RData
 5a0d1ed835e4b10f81f9159bb94956b2 *demo/seewave.R
 297b98e09aad2681575646f85b456626 *inst/CITATION
 b7467e35d7b6d6254a5273be373ba23f *inst/doc/seewave_IO.R
-27df310691444583b330030396ede1c3 *inst/doc/seewave_IO.pdf
+f6918e379148fb33020edfedf8f81857 *inst/doc/seewave_IO.pdf
 5b3871933ae3f244edf0f2bb25e3ad38 *inst/doc/seewave_IO.rnw
 b28b20c9ba880d2004188df35bf93719 *inst/doc/seewave_analysis.R
-23ee4ca2ad0e10d8ced8e20361469935 *inst/doc/seewave_analysis.pdf
+f71bef9f4a6d6d3df0c4a7b7159a1a76 *inst/doc/seewave_analysis.pdf
 abc341ed868ee8113e3ee938c1efb0f8 *inst/doc/seewave_analysis.rnw
 2157566b9e2eb7008a41e9c88711247c *man/ACI.Rd
 73a8912cc641bb53c008eca140f2b06f *man/AR.Rd
@@ -127,7 +127,7 @@ df8059bf7e1c44f67fd99c8f691ee6ff *man/savewav.Rd
 2d694ec887910c9a16883bd7715cc51c *man/sddB.Rd
 2a2296b9a0d3b75f3529a1f90109f54a *man/seedata.Rd
 33e4c28e164aa1fd51da0c1b792a6272 *man/seewave.internal.Rd
-009512ca50ea87b8e4081aa9bf3bd603 *man/seewave.package.Rd
+251a679dd4412cac3353d1773dc68ed6 *man/seewave.package.Rd
 84085e818f95b3889158b24d8d189dfc *man/setenv.Rd
 a07b5cc54137609e111ff1c936017b2b *man/sfm.Rd
 c72523d2cd14698a482d858737caa3a3 *man/sh.Rd
@@ -152,7 +152,7 @@ bc285ea23ff017adfa0399e6fb4c18a9 *man/th.Rd
 f0f3aca08be59328ead09c15a4ecc587 *man/timelapse.Rd
 712f82fef1379d3fe64b33dbff9ccc13 *man/timer.Rd
 dd1817fd00d1e2542c2f9bef51a754e8 *man/wasp.Rd
-52ac387c609124714fd4b13d41b4c651 *man/wav2flac.Rd
+81c6a86462d7337464e7fa1ee087d8be *man/wav2flac.Rd
 5a9f6f365094b30aeec064e3e151192a *man/wf.Rd
 50cc6b28b88c72c7d67a65a0afdd1e06 *man/write.audacity.Rd
 de30e0a8351075fb32e79f1bb35820c9 *man/zapsilw.Rd
