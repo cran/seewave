@@ -7761,7 +7761,7 @@ TFSD <- function(
     for (j in seq(4, 23)) {
       indices = which(freq>toctavemin[j] & freq <toctavemax[j] )
       L=0
-      spectoct[bin,]=10*log10(colSums(10^(z1[indices,]/10)))
+      spectoct[bin, ] = 10 * log10(colSums(z1[indices, ]))
       bin =bin +1
     }
     
