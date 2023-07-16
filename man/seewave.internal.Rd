@@ -10,6 +10,8 @@
 \alias{hanning.w}
 \alias{inputw}
 \alias{outputw}
+\alias{pressure2dBSPL}
+\alias{pressure2leq}
 \alias{rectangle.w}
 \alias{rescale}
 \alias{reverse.cm.colors}
@@ -27,6 +29,10 @@
 \alias{synth0}
 \alias{temp.colors}
 \alias{unwrap}
+\alias{volt2pressure}
+\alias{wav2pressure}
+\alias{wav2volt}
+
 
 \title{Internal Seewave Functions}
 

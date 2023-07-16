@@ -38,10 +38,10 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
   \item{zoom}{time zoom in with start and end points chosen on the oscillogram with a cursor.}  
   \item{k}{number of horizontal sections (by default =1).}
   \item{j}{number of vertical sections (by default =1).}
-  \item{cex}{Pitch size if \code{type = "p"}.}
+  \item{cex}{pitch size if \code{type = "p"}.}
   \item{labels}{if \code{TRUE} plots time and amplitude labels (by default \code{TRUE}).}  
-  \item{tlab}{Label of time axis.}
-  \item{alab}{Label of amplitude axis.}
+  \item{tlab}{label of time axis.}
+  \item{alab}{label of amplitude axis.}
   \item{byrow}{logical, if \code{TRUE}, the sections are filled by
     rows, otherwise the sections are filled by colmuns (by default \code{TRUE}).}
   \item{identify}{returns the time and amplitude coordinates of points chosen  with a cursor
@@ -94,7 +94,8 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 \author{Jerome Sueur \email{sueur@mnhn.fr} and 
   Caroline Simonis \email{csimonis@mnhn.fr}.}
 
-\seealso{\code{\link{dynoscillo}}, \code{\link{oscilloST}}, \code{\link{cutw}}, \code{\link{pastew}},
+\seealso{\code{\link{dynoscillo}}, \code{\link{oscilloST}},
+  \code{\link{oscilloEQ}}, \code{\link{cutw}}, \code{\link{pastew}},
   \code{\link{timer}}}
 
 \examples{

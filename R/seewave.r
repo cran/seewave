@@ -296,13 +296,13 @@ ama<-function(
 ##                                AUDIOMOTH
 ################################################################################
 
-audiomoth <- function(x,                 # a character vector, not a Wave object
-                      tz = ""            # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
+audiomoth <- function(x,                  # a character vector, not a Wave object
+                      tz = ""             # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
                       )
-  {
+{
     ## INPUT
     if (!is.character(x)) stop("'x' should be of mode character.")
- 
+    
     ## PREPARE RESULTS
     options(stringsAsFactors = FALSE)
     res <- data.frame(year = numeric(0), month = numeric(0), day = numeric(0),
@@ -312,23 +312,36 @@ audiomoth <- function(x,                 # a character vector, not a Wave object
     ## LOOP
     for (i in 1:N)
     {
-      tmp <- x[i]
-      n <- nchar(tmp)
-      extension <- substr(tmp, start = n-3, stop = n)
-      if(extension != ".wav" & extension != ".WAV"){warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
-      else
-      {
-        hex <- unlist(strsplit(tmp, extension))
-        num <- strtoi(hex, base = 16)
-        time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
-        year <- as.numeric(format(time, "%Y"))
-        month <- as.numeric(format(time, "%m"))
-        day <- as.numeric(format(time, "%d"))
-        hour <- as.numeric(format(time, "%H"))
-        min <- as.numeric(format(time, "%M"))
-        sec <- as.numeric(format(time, "%S"))
-        res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
-      }
+        tmp <- x[i]
+        n <- nchar(tmp)
+        ## check if .WAV or .wav file
+        extension <- substr(tmp, start = n-3, stop = n)
+        if(extension != ".wav" & extension != ".WAV"){warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
+        else{
+            if(nchar(tmp)==12)   ## hexadecimal format
+            {
+                hex <- unlist(strsplit(tmp, extension))
+                num <- strtoi(hex, base = 16)
+                time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
+                year <- as.numeric(format(time, "%Y"))
+                month <- as.numeric(format(time, "%m"))
+                day <- as.numeric(format(time, "%d"))
+                hour <- as.numeric(format(time, "%H"))
+                min <- as.numeric(format(time, "%M"))
+                sec <- as.numeric(format(time, "%S"))
+            }
+            else if(nchar(tmp)==19)  ## YYYYMMDD_HHMMSS.wav format
+            {
+                year <- substr(tmp, start = 1, stop = 4)
+                month <- substr(tmp, start = 5, stop = 6)
+                day <- substr(tmp, start = 7, stop = 8)
+                hour <- substr(tmp, start = 10, stop = 11)
+                min <- substr(tmp, start = 12, stop = 13)
+                sec <- substr(tmp, start = 14, stop = 15)
+                time <- strptime(paste(year,month,day,hour,min,sec), "%Y%m%d%H%M%S")
+            }
+            res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
+        }
     }
     return(res)    
     options(stringsAsFactors = TRUE)
@@ -5078,6 +5091,64 @@ oscillo <- function(
 }
 
 
+################################################################################
+##                                OSCILLOEQ
+################################################################################
+
+
+oscilloEQ <- function(wave,
+                      f,
+                      channel = 1,
+                      flim = NULL,
+                      colwave = 1,
+                      xlab = "Time (s)",
+                      ylab = "Frequency band (kHz)",
+                      cexlab = 1,
+                      collab = 1,
+                      fontlab = 1,
+                      savedir=".",
+                      plot = TRUE,
+                      ...){
+
+    ## input
+    objname <- deparse(substitute(wave))
+    input <- inputw(wave = wave, f = f, channel = channel)
+    wave <- input$w
+    f <- input$f
+    rm(input)
+
+    ## frequency limits 
+    if(is.null(flim)) {flim <- seq(0, f/2, by=1000)/1000}
+    if(any(flim <0)) {stop("There should not be negative frequency limits.")}
+    if(any(flim >f/2000)) {stop("There upper frequency limit should not be higher than the sampling frequency 'f'.")}
+    n <- length(flim)
+
+    ## plot
+    if(plot){
+      par(mar=c(0,1,0,0), oma=c(5,4,1,1))
+      layout(mat=matrix((n-1):1, ncol=1))
+      if(!is.function(colwave)) {colwave <- rep(colwave,n)} else {colwave <- colwave(n)}
+      for(i in 1:(n-1)){
+          tmp <- fir(wave, f=f, from=flim[i]*1000, to=flim[i+1]*1000, output="Wave")
+          
+          if(i==1) {oscillo(tmp, fastdisp=TRUE, tlab="", alab="", bty="o", cexaxis=1.5, colwave=colwave[i], ...)}
+          else {oscillo(tmp, fastdisp=TRUE, tlab="", alab="", bty="o", xaxt="n", colwave=colwave[i], ...)}
+          mtext(paste("[", flim[i], "-", flim[i+1], "]", sep=""), side=2, cex=1, line=0.5)
+          rm(tmp)
+        }
+      mtext(text=xlab, side=1, line=3, cex=cexlab, col=collab, font=fontlab, outer=TRUE)
+      mtext(text=ylab, side=2, line=2, cex=cexlab, col=collab, font=fontlab, outer=TRUE)
+      }
+
+    else {
+      for(i in 1:(n-1)){    
+          tmp <- fir(wave, f=f, from=flim[i]*1000, to=flim[i+1]*1000, output="Wave")
+          filename <- paste(savedir, "/", objname, "_", formatC(flim[i], flag="0", digits=1, format="d"), "_", formatC(flim[i+1], flag="0", digits=1, format="d"), ".wav", sep="")   # formatC(i, flag="0", digits=1, format="d"), "_",
+          savewav(tmp, filename=filename)
+          print(paste(filename, "saved"))
+          }
+       }
+    }
 
 ################################################################################
 ##                                OSCILLOST
@@ -7076,7 +7147,7 @@ spectro <- function(
 ## SPECTRO3D
 ################################################################################
 
-spectro3D<-function(
+spectro3D <- function(
                     wave,
                     f,
                     channel = 1,
@@ -7135,10 +7206,10 @@ spectro3D<-function(
     
     if(plot)
     {        
-        X <- magt * (1:ncol(z))
+        X <- magt * (ncol(z):1)
         Y <- magf * (1:nrow(z))
         Z <- maga * z
-        Xat <- seq(magt, magt * ncol(z), by = (magt * ncol(z))/4)
+        Xat <- rev(seq(magt, magt * ncol(z), by = (magt * ncol(z))/4))
         Yat <- seq(magf, magf * nrow(z), by = (magf * nrow(z))/4)
         if(is.null(dB))
         {
@@ -7156,19 +7227,22 @@ spectro3D<-function(
         Zlen <- Zlim[2] - Zlim[1] + 1
         colorlut <- palette(Zlen)
         col <- colorlut[Z - Zlim[1] + 1]
-        rgl::rgl.clear()
-        rgl::rgl.bbox(color = "white", emission = "gray8", specular = "gray",
-                      shininess = 50, alpha = 0.8, xat = Yat, xlab = Ylab,
-                      xunit = 0, yat = Zat, ylab = Zlab, yunit = 0, zat = Xat,
-                      zlab = Xlab, zunit = 0)
-        rgl::rgl.texts(x = 1, z = magt * ncol(Z)/2, y = min(Z), text = "Time (s)", color = "white")
-        rgl::rgl.texts(z = 1, x = magf * nrow(Z)/2, y = min(Z), text = "Frequency (kHz)", color = "white")
-        rgl::rgl.texts(x = 1, z = 0, y = 0, text = "Amplitude (dB)", color = "white")
-        rgl::rgl.surface(Y, X, Z, color = col, back = "lines")
+        rgl::clear3d()
+        rgl::par3d(FOV = 90)
+        rgl::bg3d("gray30")
+        rgl::bbox3d(color = "white", emission = "gray8", specular = "gray",
+                    shininess = 50, alpha = 0.8, xat = Yat, xlab = Ylab,
+                    xunit = 0, yat = Xat, ylab = Xlab, yunit = 0, zat = Zat,
+                    zlab = Zlab, zunit = 0)
+        rgl::text3d(x = 1, y = magt * ncol(Z)/2, z = min(Z), text = "Time (s)", color = "white")
+        rgl::text3d(y = 1, x = magf * nrow(Z)/2, z = min(Z), text = "Frequency (kHz)", color = "white")
+        rgl::text3d(y = 1, x = 0, z = 0, text = "Amplitude (dB)", color = "white")
+        rgl::surface3d(Y, X, Z, color = col, back = "lines")
         invisible(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
-    }
-    else return(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
+     }
+     else return(list(time=seq(0,n/f,length.out=length(step)), freq=F, amp=z))
 }
+
 
 
 ################################################################################
@@ -7526,7 +7600,7 @@ timelapse <- function(dir,                                                 # as 
     n <- length(files)
     if(n==0 | n==1) stop("It seems that there are not enough .wav files to consider")    
     test <- try(expr={info <- tuneR::readWave(paste(dir,files[1],sep=sep), header=TRUE)}, silent=TRUE)
-    if(is(test, "try-error")) stop("It seems that there is no .wav file or that the first .wav file is corrupted so that information about files could not be retried (ie sampling frequency, bits, mono/stero.")
+    if(is(test, "try-error")) stop("It seems that there is no .wav file or that the first .wav file is corrupted so that information about files could not be retrived (ie sampling frequency, bits, mono/stero.")
     ## GENERATE
     s <- Wave(left=numeric(0), right=numeric(0), samp.rate=info$sample.rate, bit=info$bits)  # empty initial sound
     if(info$channels==2) s <- stereo(s, s) # make it stereo if the the fist file is sterep
@@ -7736,15 +7810,15 @@ TFSD <- function(
 
   if(is.null(flim)) flim <- rep(NA, 2)  
     
-  wl<-round(f/8) # time step 125 ms
+  wl <- round(f/8) # time step 125 ms
   
   rm(input)
   z <- sspectro(wave, f, wl = wl, wn = wn, ovlp = ovlp)
 
   freq <- seq(f/wl, (f/2) - (f/wl), length.out = wl%/%2)
-  toctave=c(50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000) # third octave band. 
-  toctavemin = toctave/(2^0.1666666)
-  toctavemax = toctave*(2^0.1666666)
+  toctave <- c(50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000) # third octave band. 
+  toctavemin <- toctave/(2^0.1666666)
+  toctavemax <- toctave*(2^0.1666666)
   imin <- which.min(abs(toctave-flim[1]*1000))
   imax <- which.min(abs(toctave-flim[2]*1000))
   
@@ -7754,14 +7828,14 @@ TFSD <- function(
     l <- dim(z)[2]
     z1 <- z[, floor(l/nbwindows * (jj - 1) + 1):floor(l/nbwindows * jj)]
 
-    spectoct = matrix(0L, nrow = 20, ncol = dim(z1)[2]) # Third-octave band, 125ms spectrogram
+    spectoct <- matrix(0L, nrow = 20, ncol = dim(z1)[2]) # Third-octave band, 125ms spectrogram
     
     # third-octave band values between [100 Hz, 8kHz] from narrow band frequency values.
     bin = 1
     for (j in seq(4, 23)) {
-      indices = which(freq>toctavemin[j] & freq <toctavemax[j] )
-      L=0
-      spectoct[bin,]=10*log10(colSums(10^(z1[indices,]/10)))
+      indices  <- which(freq>toctavemin[j] & freq <toctavemax[j] )
+      L <- 0
+      spectoct[bin, ] <- 10 * log10(colSums(z1[indices, ]))
       bin =bin +1
     }
     
@@ -7867,6 +7941,71 @@ wasp<-function(
   lambda<-C/f  
   results<-list(l=lambda,c=C)
   return(results)
+}
+
+
+
+################################################################################
+##                                WAV2DBSPL
+################################################################################
+
+wav2dBSPL <- function (
+                       wave,
+                       f,
+                       channel = 1,
+                       gain,
+                       sensitivity = -35,
+                       Vadc = 2,
+                       pref = 2*10^-5)
+
+{
+    ## INPUT
+    input <- inputw(wave = wave, f = f, channel = channel)
+    wave <- abs(input$w)
+    f <- input$f
+    bit <- input$bit
+    rm(input)
+    
+
+    p <- wav2pressure(wave, gain, sensitivity, bit=bit, Vadc) 
+    L <- pressure2dBSPL(p, pref)
+    ## replace negative dB by 0
+    L[L<0] <- 0
+    return (L)
+}
+
+################################################################################
+##                                WAV2LEQ
+################################################################################
+
+wav2leq <- function (
+                     wave,
+                     f,
+                     channel = 1,
+                     gain,
+                     dt = 1,
+                     sensitivity = -35,
+                     Vadc = 2,
+                     pref = 2*10^-5 
+                     ) 
+{
+    ## STOP
+    if(dt > duration(wave)) stop("The time of integration is greater than the duration of 'wave'") 
+
+    ## INPUT
+    input <- inputw(wave = wave, f = f, channel = channel)
+    wave <- abs(input$w)
+    f <- input$f
+    bit <- input$bit
+    rm(input)
+
+    ## convert into pressure
+    p  <-  wav2pressure(wave, gain, sensitivity, bit=bit, Vadc) 
+    
+    ## p to Leq (Equivalent Continuous Sound level)
+    Leq  <-  pressure2leq(p, f, dt, pref) 
+    
+    return(Leq)
 }
 
 
@@ -8478,6 +8617,50 @@ outputw <- function(
 
 
 ################################################################################
+##                                PRESSURE2dBSPL
+################################################################################
+## by Sylvain haupert
+
+pressure2dBSPL <- function(p, pref=2*10^-5)
+{
+    ## if p <=0 set to MIN
+    p[p==0] <- 2.2250738585072014e-308
+    ## Take the log of the ratio pressure/pref
+    L <- 20*log10(p/pref) 
+    return (L)
+}
+
+
+################################################################################
+##                                PRESSURE2LEQ
+################################################################################
+## by Sylvain haupert
+
+pressure2leq <- function (p, f, dt=1, pref = 2*10^-5 ) 
+{  
+    ## wav to RMS
+    dN  <-  dt*f # integration period in number of points
+    N_RMS  <-  floor(length(p)/dN)
+    
+    p_RMS  <-  matrix(NA,nrow=1,ncol=N_RMS)
+    
+    for (ii in 1:N_RMS)
+    {
+        p_mean  <-  mean(p[(1+(ii-1)*dN):(ii*dN)]^2)
+        p_RMS[ii]  <-  sqrt(p_mean)
+    }
+    
+    ## if p_RMS ==0 set to MIN
+    p_RMS[p_RMS==0]  <-  2.2250738585072014e-308
+    
+    ## RMS to Leq (Equivalent Continuous Sound level)
+    Leq  <-  20*log10(p_RMS/pref)
+    
+    return(Leq)
+}
+
+
+################################################################################
 ##                                RECTANGLE.W
 ################################################################################ 
 
@@ -8856,4 +9039,43 @@ unwrap <- function (a, tol = pi, dim = 1)
     r = cumsum(p)
   else r = apply(p, MARGIN = dim, FUN = cumsum)
   a + r
+}
+
+################################################################################
+##                                VOLT2PRESSURE
+################################################################################
+## by Sylvain Haupert
+
+volt2pressure <- function (volt, gain, sensitivity=-35) 
+{  
+    ## volt amplitude to instantaneous sound pressure (Pa)
+    coef <- 1/10^(sensitivity/20) 
+    p <- volt * coef / 10^(gain/20)
+    return(p)
+}
+
+
+################################################################################
+##                                WAC2PRESSURE
+################################################################################
+## by Sylvain Haupert
+
+wav2pressure <- function (wave, gain, sensitivity=-35, bit=16, Vadc=2) 
+{
+    ## Vadc => 2Vpp [peak to peak] for the SM4
+    p <- volt2pressure(wav2volt(wave, bit, Vadc), gain, sensitivity)         
+    return (p)
+}
+
+
+################################################################################
+##                                WAC2VOLT
+################################################################################
+## by Sylvain Haupert
+
+wav2volt <- function (wave, bit=16, Vadc=2) 
+{ 
+    ## convert in Volt. Vadc is 2Vpp [peak to peak] for the SM4
+    volt  <-  (wave/(2^(bit))) * Vadc
+    return (volt)
 }

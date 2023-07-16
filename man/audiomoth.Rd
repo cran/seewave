@@ -48,6 +48,7 @@
 \seealso{\code{\link{audiomoth.rename}}, \code{\link{as.POSIXct}}, \code{\link{OlsonNames}}, \code{\link{songmeter}}}
 
 \examples{
+## HEXADECIMAL EXAMPLES (OLD FORMAT)
 ## recording done on Friday 10 April 2020 16:54:44 UTC
 ## computer time zone (local time, Europe, Paris for the test)
 audiomoth("5E90A4D4.WAV")
@@ -66,6 +67,13 @@ filenames <- c("5E914ED0.WAV", "5E915128.WAV",
 "5E915380.WAV", "5E9155D8.WAV", "5E915830.WAV",
 "5E915A88.WAV", "5E915CE0.WAV", "5E915F38.WAV",
 "5E916190.WAV", "5E9163E8.WAV")
+audiomoth(filenames)
+## YYYYMMDD_HHMMSS.WAV FORMAT (ACTUAL FORMAT)
+## single file
+audiomoth("20230715_150000.wav")
+## several files
+filenames <- c("20230715_150000.wav", "20230715_151500.wav",
+"20230715_153000.wav", "20230715_154500.wav")
 audiomoth(filenames)
 }
 

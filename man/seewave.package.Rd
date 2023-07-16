@@ -14,16 +14,16 @@
   \tabular{ll}{
     Package: \tab seewave\cr
     Type: \tab Package\cr
-    Version: \tab 2.2.0\cr
-    Date: \tab 2022-03-04\cr
+    Version: \tab 2.2.1\cr
+    Date: \tab 2023-07-15\cr
     License: \tab GPL version 2 or newer\cr
     Contributors : \tab Pierre Aumond, Ethan C. Brown,\cr
                    \tab Guillaume Corbeau, Camille Desjonqueres, \cr
                    \tab Marion Depraetere, Francois Fabianek, \cr
-                   \tab Amandine Gasc, Eric Kasten, \cr
-		   \tab Laurent Lellouch, Stefanie LaZerte, \cr
-		   \tab Jonathan Lees, Jean Marchal, \cr
-		   \tab Thibaut Marin-Cudraz, \cr
+                   \tab Amandine Gasc, Sylvain Haupert, \cr
+		   \tab Eric Kasten, Laurent Lellouch,\cr
+		   \tab Stefanie LaZerte, Jonathan Lees, \cr
+		   \tab Jean Marchal, Thibaut Marin-Cudraz, \cr
 		   \tab Andre Mikulec, Sandrine Pavoine, \cr
 		   \tab David Pinaud, Luis J. Villanueva-Rivera \cr
 		   \tab Zev Ross, Carl G. Witthoft, \cr
@@ -33,7 +33,7 @@
                      \tab Kurt Fristrup, Arnold Fertin, \cr
 		     \tab Sylvain Haupert, Kurt Hornik, \cr
 		     \tab Yannick Jadoul, Emiliano A. Laca,  \cr
-		     \tab Uwe Ligges, Morgane Papin, \cr
+		     \tab Uwe Ligges, Duncan Murdoch, Morgane Papin, \cr
 		     \tab Emmanuel Paradis, Daniel Ridley-Ellis, \cr
 		     \tab Brian Ripley, Jesse Ross, \cr
 		     \tab Zev Ross, Pavel Senin, David Savage, \cr

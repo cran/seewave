@@ -26,7 +26,7 @@
 \value{If \code{plot} is \code{FALSE}, a new wave is returned. The class
   of the returned object is set with the argument \code{output}.}
 
-\author{Jerome Sueur \email{sueur@mnhn.fr}}
+\author{Jerome Sueur}
 
 \note{Use the argument \code{threshold} to set the level of silence. See
   the \code{examples}.} 

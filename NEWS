@@ -2,6 +2,19 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 2.2.1 [15-July-2023]
+
+NEW FUNCTIONS
+	o oscilloEQ(): a new oscillogram plot to display a panel of oscillograms corresponding to a bank a frequency filters.
+	o wav2dBSPL(): a new function to compute the dB SPL of a wave object. By Sylvain Haupert. 
+	o wav2leq(): a new function to compute the dB leq value of a wave object. By Sylvain Haupert. 
+	
+OTHER CHANGES
+	o audiomoth(), lts(): the functions can now handle "YYYYMMDD_HHMMSS.wav" actual format of audiomoth devices.
+	o spectro3D(): code update to follow rgl changes. By Duncan Murdoch.
+	o TFSD(): a bug fixed in the computation of the index. By Pierre Aumond.
+
+
 		CHANGES IN SEEWAVE VERSION 2.2.0 [4-March-2022]
 
 OTHER CHANGES
@@ -475,13 +488,11 @@ NEW FEATURES
 	o wf(): a new function for a waterfall display.
 
 
-BUG FIXES
-	o drawenv(): a small bug was fixed.
-	o simspec(): a small bug was fixed.
-
 OTHER CHANGES
+	o drawenv(): a small bug was fixed.
 	o seewave can now handle objects of class data.frame and audioSample (package audio).
 	o savewav() can now handle all kind of input objects.
+	o simspec(): a small bug was fixed.
 	o the I/O vignette has been updated, including the package audio.
 	o It is now possible to assign to a new object the value of a function when the argument 'plot' is TRUE.
 
@@ -517,7 +528,7 @@ NEW FEATURES
 	o revw() has a new argument (ifreq) to reverse independently the amplitude envelope and the instantaneous frequency.
 	o wav2flac(): a new function to convert .wav files into .flac files. This requires the external software flac to be installed.
 
-BUG FIXES
+OTHER CHANGES
 	o dfreq(): a small bug was fixed.
 
 
@@ -535,13 +546,12 @@ NEW FEATURES
 	o addsilw(), cutw(), deletew(), mutew(), pastew() have a new argument (choose) that allows graphical wave selection.
 	o ama(), corenv(), diffenv(), diffwave(), dynspec(), H(), setenv() have arguments (envt, msmooth, ksmooth) to set envelope type (absolute/Hilbert) and envelope smoothing (mean/kernel).
 
-BUG FIXES
-	o zapsilw(): both original and modified waves are now plotted when plot=TRUE.
 
 OTHER CHANGES
 	o autoc(), ceps(), coh(), csh(), dfreq(), fund(), ifreq(), zc(): the value returned is now a two-column matrix. The first column is time, and the second one is result of the analysis (frequency, entropy...).
 	o oscilloST(): arguments 'env', 'smooth', 'ksmooth' have been removed.
 	o oscillo(): the arguments regarding amplitude envelope have been withdrawn (env, smooth, ksmooth). A new function dedicated to envelope computation only (env()) is now available.
+	o zapsilw(): both original and modified waves are now plotted when plot=TRUE.
 
 
 
@@ -554,12 +564,10 @@ NEW FEATURES
 	o repw(): a new function that repeats a time wave.
 	o setenv(): a new function that sets the enveloppe of a time wave to another one.
 
-BUG FIXES
-	o export(): a small bug regarding filename by default was fixed.
-	o spectro3D() is faster.
-
 OTHER CHANGES
+	o export(): a small bug regarding filename by default was fixed.
 	o listen(): it is now possible to change de sampling frequency when the wave is a Sample object.
+	o spectro3D() is faster.
 
 
 
@@ -597,8 +605,6 @@ NEW FEATURES
 	o specprop(): a new function that returns a list of 15 spectral statistics
 	o zapsilw(): a new function that zaps silence periods of a time wave
 
-BUG FIXES
-
 OTHER CHANGES
 	o fir(): now works properly (!).
 
@@ -614,12 +620,10 @@ NEW FEATURES
 	o revw(): new function for time-reverse
 	o synth(): a new argument (shape) to change the overall shape of the wave
 
-BUG FIXES
+OTHER CHANGES
 	o export(): overclipping extension filename problems fixed.
 	o noise(): offset bug fixed.
 	o savewav(): overclipping problem fixed.
-
-OTHER CHANGES
 	o suggested libraries (sound and rgl) are now automatically loaded when calling seewave.
 	o an argument Sample has been added to all editing functions. This allows to return values as Sample objects.
 	o spec() and meanspec(): both coordinates (frequency and amplitude) of the chosen points are now returned when using the argument identify.
@@ -647,14 +651,12 @@ NEW FEATURES
 	o spectro() has a new argument (play) to listen to the sound displayed.
 	o th(): a new function that returns the temporal entropy.
 
-BUG FIXES
-	o oscillo(): a small problem with y-axis ticks was fixed.
-	o spec(): correction of a bug in the argument PMF.
-
 OTHER CHANGES
 	o diffspec(): slightly changed, now data are required as PMF spectra. This allows better difference estimation.
 	o fonctions utilisant plot(), type ="l" par defaut
 	o noise(): runif remplace rnorm
+	o oscillo(): a small problem with y-axis ticks was fixed.
+	o spec(): correction of a bug in the argument PMF.
 	o No more need to specify f if wave is Sample object
 
 
@@ -670,7 +672,7 @@ NEW FEATURES
 		~ flim: a new argument that changes the frequency Y-axis limits (vertical zoom),
 		~ flimd: a new argument that changes the axis limits but also the parameters of the FFT analysis (wl and ovlp) to maintain a good time/frequency resolution.
 
-BUG FIXES
+OTHER CHANGES
 	o contour plot problem solved
 
 
@@ -695,13 +697,11 @@ NEW FEATURES
 	o synth() has a new argument (play) to listen to the new file
 	o covspectro(), dfreq(),meanspec(),spec(),spectro(),spectro3D() have a new argument (wn) that allows to choose a Fourtier transform window. See the new function ftwindow().
 
-BUG FIXES
+OTHER CHANGES
+
 	o corspec(): x et y remplaces par spec1 et spec2, range par f
 	o export: colnames bug resolved
 	o oscillo(): amplitude axis limits changed such as the envelope is centered along the y-axis and multi-frame plots are calibrated.
-
-OTHER CHANGES
-
 	o mono (or first channel of stereo) .wav files can be now analysed thanks to loadSample (package sound).
 	o wl = 512 is the default value for all spectral functions.
 
@@ -727,7 +727,7 @@ NEW FEATURES
 	o export(): a new function to export sound a a .txt file.
 	o noise(): a new function to generate noise.
 
-BUG FIXES
+OTHER CHANGES
 	o dBscale(): the black line appears on the axis when side=4.
 	o spectro(): amplitude label of the oscillo aligned with frequency label of the spectro. A small frequency shift was also fixed.
 
@@ -735,13 +735,10 @@ BUG FIXES
 
 		CHANGES IN SEEWAVE VERSION 1.1 [20-Apr-2006]
 
-
-BUG FIXES
+OTHER CHANGES
 	o dBscale(): the scale can be now plotted horizontally.
 	o oscillo(): the argument "labels" has been added, outer margins modified to fit with bmp(),png() and jpeg().
 	o spectro(): oscillogram left aligned with spectrogram.
-
-OTHER CHANGES
 	o rev.gray.colors(): "agamma" value decreased from 2.2 to 1.7 to enhance contrast.
 
 		RELEASE OF SEEWAVE VERSION 1.0 [10-March-2006]
