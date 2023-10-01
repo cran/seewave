@@ -1,3 +1,4 @@
 import("graphics", "grDevices", "stats", "utils", "tuneR")
 importFrom("methods", "is")
 exportPattern(".+")
+

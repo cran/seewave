@@ -2,7 +2,12 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
-		CHANGES IN SEEWAVE VERSION 2.2.1 [15-July-2023]
+		CHANGES IN SEEWAVE VERSION 2.2.2 [29-September-2023]
+
+NEW FUNCTION
+	o scd(): a new function to draw soundscape chord diagrams. 
+
+                CHANGES IN SEEWAVE VERSION 2.2.1 [15-July-2023]
 
 NEW FUNCTIONS
 	o oscilloEQ(): a new oscillogram plot to display a panel of oscillograms corresponding to a bank a frequency filters.
@@ -18,7 +23,7 @@ OTHER CHANGES
 		CHANGES IN SEEWAVE VERSION 2.2.0 [4-March-2022]
 
 OTHER CHANGES
-	o Author formating in DESCRIPTION file as resquested by CRAN
+	o Author formating in DESCRIPTION file as resquested by CRAN.
 	o timer():  bugs fixed when multiple transitions signal-silence transitions at the start of an audio fragment. Fixed by Yannick Jadoul.
 
 

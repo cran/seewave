@@ -1,14 +1,15 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.2.1
-Date: 2023-07-15
+Version: 2.2.2
+Date: 2023-09-29
 Authors@R: c(person("Jerome", "Sueur", role = c("aut", "cre"),
                      email = "sueur@mnhn.fr"),
               person("Thierry", "Aubin", role = "aut"),
               person("Caroline", "Simonis", role = "aut"),
               person("Laurent", "Lellouch", role = "ctr"),
               person("Pierre", "Aumond", role = "ctr"),
+              person("Adèle", "de Baudouin", role = "ctr"),
               person("Ethan C.", "Brown", role = "ctr"),
               person("Guillaume", "Corbeau", role = "ctr"),	      
               person("Marion", "Depraetere", role = "ctr"),
@@ -32,6 +33,7 @@ Author: Jerome Sueur [aut, cre],
   Caroline Simonis [aut],
   Laurent Lellouch [ctr],
   Pierre Aumond [ctr],
+  Adèle de Baudouin [ctr],
   Ethan C. Brown [ctr],
   Guillaume Corbeau [ctr],
   Marion Depraetere [ctr],
@@ -54,12 +56,13 @@ Maintainer: Jerome Sueur <sueur@mnhn.fr>
 Encoding: UTF-8
 SystemRequirements: LIBSNDFILE
 Imports: graphics, grDevices, stats, utils, tuneR, methods
-Suggests: audio, fftw, ggplot2, rgl, rpanel, phonTools, signal
+Suggests: audio, circlize, FactoMineR, fftw, ggplot2, rgl, rpanel,
+        phonTools, signal
 ZipData: no
 Description: Functions for analysing, manipulating, displaying, editing and synthesizing time waves (particularly sound).  This package processes time analysis (oscillograms and envelopes), spectral content, resonance quality factor, entropy, cross correlation and autocorrelation, zero-crossing, dominant frequency, analytic signal, frequency coherence, 2D and 3D spectrograms and many other analyses. See Sueur et al. (2008) <doi:10.1080/09524622.2008.9753600> and Sueur (2018) <doi:10.1007/978-3-319-77647-7>.
 License: GPL (>= 2)
 URL: https://rug.mnhn.fr/seewave/
 NeedsCompilation: no
-Packaged: 2023-07-16 05:07:55 UTC; root
+Packaged: 2023-09-29 14:50:21 UTC; root
 Repository: CRAN
-Date/Publication: 2023-07-16 05:50:02 UTC
+Date/Publication: 2023-10-01 07:40:02 UTC

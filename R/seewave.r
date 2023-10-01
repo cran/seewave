@@ -5896,6 +5896,116 @@ SAX <- function (
 
 
 ################################################################################
+##                               SCD
+################################################################################
+
+
+scd <- function(
+                input,           
+                f,               
+                sl,              
+                wl = 512,        
+                wn = "hanning",  
+                ovlp = 0,        
+                rmoffset = TRUE, 
+                threshold = NULL,
+                HCA = TRUE,      
+                grid.col = terrain.colors, 
+                names,           
+                plot = TRUE,     
+                verbose = TRUE,  
+                ...              
+                )
+    
+{
+    ## INPUT
+#    suppressPackageStartupMessages(library(circlize))
+    if(!dir.exists(input)[1] & length(input)==1){  ## INPUT == SINGLE .WAV FILE
+        header <- readWave(input, header=TRUE)
+        ds <- header$samples/header$sample.rate    
+        step <- seq(0, ds-sl, by=sl)               
+        wl <- 512
+        n <- length(step)
+        mspectra <- matrix(NA, nrow=wl/2, ncol=n)
+        ## MEANSPECTRA
+        for(i in 1:length(step)){
+            s <- readWave(input, from=step[i], to=step[i]+sl, units="seconds")
+            mspectra[,i] <- meanspec(s, wl=wl, ovlp=ovlp, plot=FALSE)[,2]
+            if(verbose) {print(paste("spectrum ", i, "/", n, " computed", sep=""))}
+        }
+     ## default names
+    if(missing(names)) names <- paste("[",as.character(step), "-", as.character(step+sl), "]", sep="")
+    }
+    else{  ## INPUT == DIRECTORY CONTAINING .WAV FILES OR LIST OF .WAV FILES
+        if(!is.vector(input) | !is.character(input)) stop("The argument 'input' should be a character vector")
+        if(length(input)==1) {
+            files <- dir(input, pattern="[wav]$|[WAV]$")
+            sep <- "/"
+        }
+        else {
+            files <- input
+            input <- NULL
+            sep <- ""
+        }
+        n <- length(files)
+        if(n==0 | n==1) stop("It seems that there are not enough .wav files to consider")    
+
+        ## MEAN SPECTRA
+        mspectra <- matrix(NA, nrow=wl/2, ncol=n)
+        for(i in 1:n){
+            diagnostic <- rep(NA, n)
+            test <- try(expr = tmp <- tuneR::readWave(paste(input, files[i], sep=sep)), silent=TRUE)
+            if(is(test, "try-error")){
+                if(verbose) message("Error when reading file # ", paste(files[i]))
+                diagnostic[i] <- "not processed"
+            } else diagnostic[i] <- "processed"
+            if(diagnostic[i]=="processed") {
+                tmp <- rmoffset(tmp, output="Wave")
+                mspectra[,i] <- meanspec(tmp, wl=wl, wn=wn, ovlp=ovlp, plot=FALSE)[,2]
+                if(verbose) {print(paste("spectrum ", i, "/", n, " computed", sep=""))}
+            }
+        }
+    ## default names
+    if(missing(names)) names <- unlist(strsplit(files, split=".wav"))
+    }
+    
+    ## SIMILARITY MATRIX
+    ## pairwise combinations
+    comb <- combn(1:n, 2)
+    m <- matrix(NA, nrow=n, ncol=n)
+    ## (1-D_cf) computation
+    for(i in 1:ncol(comb)){m[comb[2,i], comb[1,i]] <- 1-diffcumspec(mspectra[,comb[1,i]], mspectra[,comb[2,i]], plot=FALSE)}
+    ## symetrization
+    m[upper.tri(m)] <- t(m)[upper.tri(m)]
+    diag(m) <- 1
+    ## scaling to 1
+    m  <-  m - min(m)
+    m <- m/max(m)
+    ## threshold
+    if(!is.null(threshold)) m[m<threshold] <- 0
+    ## necessary for chordDiagram
+    colnames(m) <- rownames(m) <- names
+
+    ## HCA
+    if(HCA){
+        resHCA <- FactoMineR::HCPC(as.data.frame(t(mspectra)), graph=FALSE)$data.clust$clust ## cluster assignation
+        nclust <- length(unique(resHCA))                                                 ## number of clusters
+    }
+    else resHCA <- NULL
+    
+    ## PLOT
+    if(plot){
+        if(HCA) grid.col <-  grid.col(nclust)[resHCA] else grid.col <- NULL
+        circlize::circos.clear()
+        circlize::circos.par(start.degree = 90)  
+        circlize::chordDiagram(m, symmetric = TRUE, self.link = 1,  order = names, grid.col = grid.col, ...)
+        invisible(list(m=m, clust=resHCA))    
+    }
+    else(return(list(m=m, clust=resHCA)))    
+}
+
+
+################################################################################
 ##                               SDDB
 ################################################################################
 

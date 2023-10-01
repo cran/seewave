@@ -6,6 +6,4 @@ bibentry(bibtype = "Article",
       	year = "2008",
         journal = "Bioacoustics",
         volume = "18",
-        pages = "213-226",
-        url = "https://doi.org/10.1080/09524622.2008.9753600"
-)
+        pages = "213-226")
