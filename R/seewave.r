@@ -293,86 +293,7 @@ ama<-function(
 
 
 ################################################################################
-##                                AUDIOMOTH
-################################################################################
-
-audiomoth <- function(x,                  # a character vector, not a Wave object
-                      tz = ""             # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
-                      )
-{
-    ## INPUT
-    if (!is.character(x)) stop("'x' should be of mode character.")
-    
-    ## PREPARE RESULTS
-    options(stringsAsFactors = FALSE)
-    res <- data.frame(year = numeric(0), month = numeric(0), day = numeric(0),
-                      hour = numeric(0), min = numeric(0), sec = numeric(0),
-                      time = numeric(0))
-    N <- length(x)  ## number of file names    
-    ## LOOP
-    for (i in 1:N)
-    {
-        tmp <- x[i]
-        n <- nchar(tmp)
-        ## check if .WAV or .wav file
-        extension <- substr(tmp, start = n-3, stop = n)
-        if(extension != ".wav" & extension != ".WAV"){warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
-        else{
-            if(nchar(tmp)==12)   ## hexadecimal format
-            {
-                hex <- unlist(strsplit(tmp, extension))
-                num <- strtoi(hex, base = 16)
-                time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
-                year <- as.numeric(format(time, "%Y"))
-                month <- as.numeric(format(time, "%m"))
-                day <- as.numeric(format(time, "%d"))
-                hour <- as.numeric(format(time, "%H"))
-                min <- as.numeric(format(time, "%M"))
-                sec <- as.numeric(format(time, "%S"))
-            }
-            else if(nchar(tmp)==19)  ## YYYYMMDD_HHMMSS.wav format
-            {
-                year <- substr(tmp, start = 1, stop = 4)
-                month <- substr(tmp, start = 5, stop = 6)
-                day <- substr(tmp, start = 7, stop = 8)
-                hour <- substr(tmp, start = 10, stop = 11)
-                min <- substr(tmp, start = 12, stop = 13)
-                sec <- substr(tmp, start = 14, stop = 15)
-                time <- strptime(paste(year,month,day,hour,min,sec), "%Y%m%d%H%M%S")
-            }
-            res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
-        }
-    }
-    return(res)    
-    options(stringsAsFactors = TRUE)
-}
-
-
-################################################################################
-##                                AUDIOMOTH.RENAME
-################################################################################
-
-audiomoth.rename <- function(
-                             dir,
-                             overwrite = FALSE,
-                             tz = "",
-                             prefix = ""
-                             )
-{
-    if(!is.character(dir)) stop("'dir' should be a character vector giving the path to a directory")
-    files <- dir(dir, pattern="[WAV]$")
-    from <- audiomoth(files, tz=tz)
-    if(prefix!="") prefix  <- paste(prefix, "_", sep="")
-    out <- function(x) formatC(x, flag="0", digits=1, format="d")
-    to <- paste(prefix, out(from$year), out(from$month), out(from$day), "_", out(from$hour), out(from$min), out(from$sec), ".wav", sep="")
-    from <- paste(dir, files, sep="/")
-    to <- paste(dir, to, sep="/")
-    if(overwrite) {res <- file.rename(from=from, to=to)} else {res <- file.copy(from=from, to=to)}
-    return(res)
-}
-
-################################################################################
-## AR                                        
+##                                 AR                                        
 ################################################################################
 
 AR <- function(...,
@@ -465,17 +386,18 @@ attenuation <- function(lref,
 }
 
 
+
 ################################################################################
-## AUDIOMOTH
+##                                AUDIOMOTH
 ################################################################################
 
-audiomoth <- function(x,                 # a character vector, not a Wave object
-                      tz = ""            # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
+audiomoth <- function(x,                  # a character vector, not a Wave object
+                      tz = ""             # a character vector defining a time zone specification, see as.POSIXct(), argument 'tz'
                       )
-  {
+{
     ## INPUT
     if (!is.character(x)) stop("'x' should be of mode character.")
- 
+    
     ## PREPARE RESULTS
     options(stringsAsFactors = FALSE)
     res <- data.frame(year = numeric(0), month = numeric(0), day = numeric(0),
@@ -485,26 +407,63 @@ audiomoth <- function(x,                 # a character vector, not a Wave object
     ## LOOP
     for (i in 1:N)
     {
-      tmp <- x[i]
-      n <- nchar(tmp)
-      extension <- substr(tmp, start = n-3, stop = n)
-      if(extension != ".wav" & extension != ".WAV") {warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
-      else
-      {
-        hex <- unlist(strsplit(tmp, extension))
-        num <- strtoi(hex, base = 16)
-        time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
-        year <- as.numeric(format(time, "%Y"))
-        month <- as.numeric(format(time, "%m"))
-        day <- as.numeric(format(time, "%d"))
-        hour <- as.numeric(format(time, "%H"))
-        min <- as.numeric(format(time, "%M"))
-        sec <- as.numeric(format(time, "%S"))
-        res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
-      }
+        tmp <- x[i]
+        n <- nchar(tmp)
+        ## check if .WAV or .wav file
+        extension <- substr(tmp, start = n-3, stop = n)
+        if(extension != ".wav" & extension != ".WAV"){warning(paste("File '", tmp, "' is not a '.wav' file", sep=""))}
+        else{
+            if(nchar(tmp)==12)   ## hexadecimal format
+            {
+                hex <- unlist(strsplit(tmp, extension))
+                num <- strtoi(hex, base = 16)
+                time <- as.POSIXct(num, tz=tz, origin = "1970-01-01")  ## POSIXct as in songmeter()
+                year <- as.numeric(format(time, "%Y"))
+                month <- as.numeric(format(time, "%m"))
+                day <- as.numeric(format(time, "%d"))
+                hour <- as.numeric(format(time, "%H"))
+                min <- as.numeric(format(time, "%M"))
+                sec <- as.numeric(format(time, "%S"))
+            }
+            else if(nchar(tmp)==19)  ## YYYYMMDD_HHMMSS.wav format   
+            {
+                year <- substr(tmp, start = 1, stop = 4)
+                month <- substr(tmp, start = 5, stop = 6)
+                day <- substr(tmp, start = 7, stop = 8)
+                hour <- substr(tmp, start = 10, stop = 11)
+                min <- substr(tmp, start = 12, stop = 13)
+                sec <- substr(tmp, start = 14, stop = 15)
+                time <- strptime(paste(year,month,day,hour,min,sec), "%Y%m%d%H%M%S")
+            }
+            res <- rbind(res, data.frame(year, month, day, hour, min, sec, time))
+        }
     }
     return(res)    
     options(stringsAsFactors = TRUE)
+}
+
+
+################################################################################
+##                                AUDIOMOTH.RENAME
+################################################################################
+
+audiomoth.rename <- function(
+                             dir,
+                             overwrite = FALSE,
+                             tz = "",
+                             prefix = ""
+                             )
+{
+    if(!is.character(dir)) stop("'dir' should be a character vector giving the path to a directory")
+    files <- dir(dir, pattern="[WAV]$")
+    from <- audiomoth(files, tz=tz)
+    if(prefix!="") prefix  <- paste(prefix, "_", sep="")
+    out <- function(x) formatC(x, flag="0", digits=1, format="d")
+    to <- paste(prefix, out(from$year), out(from$month), out(from$day), "_", out(from$hour), out(from$min), out(from$sec), ".wav", sep="")
+    from <- paste(dir, files, sep="/")
+    to <- paste(dir, to, sep="/")
+    if(overwrite) {res <- file.rename(from=from, to=to)} else {res <- file.copy(from=from, to=to)}
+    return(res)
 }
 
 
@@ -5906,7 +5865,8 @@ scd <- function(
                 sl,              
                 wl = 512,        
                 wn = "hanning",  
-                ovlp = 0,        
+                ovlp = 0,
+                flim = NULL,
                 rmoffset = TRUE, 
                 threshold = NULL,
                 HCA = TRUE,      
@@ -5919,7 +5879,6 @@ scd <- function(
     
 {
     ## INPUT
-#    suppressPackageStartupMessages(library(circlize))
     if(!dir.exists(input)[1] & length(input)==1){  ## INPUT == SINGLE .WAV FILE
         header <- readWave(input, header=TRUE)
         ds <- header$samples/header$sample.rate    
@@ -5967,6 +5926,14 @@ scd <- function(
         }
     ## default names
     if(missing(names)) names <- unlist(strsplit(files, split=".wav"))
+    }
+
+    ## FREQUENCY SELECTION
+    if (!is.null(flim))
+    {
+        f <- tmp@samp.rate
+        flim <- flim * 1000 * wl/f
+        mspectra[-(flim[1]:flim[2]), ] <- 0
     }
     
     ## SIMILARITY MATRIX

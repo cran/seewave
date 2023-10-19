@@ -8,9 +8,9 @@
   files or of a set segments extracted from a single audio file.}
 
 \usage{
-scd(input, f,  sl, wl = 512, wn = "hanning", ovlp = 0, rmoffset = TRUE,
-threshold = NULL, HCA = TRUE, grid.col = terrain.colors, names,
-plot = TRUE, verbose = TRUE, ...)
+scd(input, f,  sl, wl = 512, wn = "hanning", ovlp = 0, flim = NULL,
+rmoffset = TRUE, threshold = NULL, HCA = TRUE,
+grid.col = terrain.colors, names, plot = TRUE, verbose = TRUE, ...)
 }
 
 \arguments{
@@ -33,6 +33,9 @@ plot = TRUE, verbose = TRUE, ...)
   \item{ovlp}{overlap between two successive windows (in \%) for the
     spectral analysis.}
 
+  \item{flim}{a numeric vector of length 2 to select a frequency band
+    (in kHz).}
+  
   \item{rmoffset}{a logical to sepcify whether DC offset should be
     removed. By default \code{TRUE}.}
 

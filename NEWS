@@ -2,6 +2,13 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
+		CHANGES IN SEEWAVE VERSION 2.2.3 [15-October-2023]
+
+NEW FUNCTION
+	o scd(): a new argument, 'flim', to draw soundscape chord diagrams over a specified frequency range.
+	o audiomoth(), lts() : a bug fixed.
+
+
 		CHANGES IN SEEWAVE VERSION 2.2.2 [29-September-2023]
 
 NEW FUNCTION

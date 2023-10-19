@@ -1,8 +1,8 @@
 Package: seewave
 Type: Package
 Title: Sound Analysis and Synthesis
-Version: 2.2.2
-Date: 2023-09-29
+Version: 2.2.3
+Date: 2023-10-15
 Authors@R: c(person("Jerome", "Sueur", role = c("aut", "cre"),
                      email = "sueur@mnhn.fr"),
               person("Thierry", "Aubin", role = "aut"),
@@ -63,6 +63,6 @@ Description: Functions for analysing, manipulating, displaying, editing and synt
 License: GPL (>= 2)
 URL: https://rug.mnhn.fr/seewave/
 NeedsCompilation: no
-Packaged: 2023-09-29 14:50:21 UTC; root
+Packaged: 2023-10-19 09:02:03 UTC; root
 Repository: CRAN
-Date/Publication: 2023-10-01 07:40:02 UTC
+Date/Publication: 2023-10-19 09:40:02 UTC

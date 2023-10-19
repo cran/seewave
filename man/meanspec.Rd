@@ -80,7 +80,7 @@ alab = "Amplitude", flim = NULL, alim = NULL, type ="l", ...)
 
 \note{The argument \code{fftw} can be used to try to speed up process
   time. When set to \code{TRUE}, the Fourier transform is computed
-  through the function \code{FFT} of the package {fftw}. This pacakge is a
+  through the function \code{FFT} of the package \code{fftw}. This package is a
   wrapper around the fastest Fourier transform of the free C subroutine
   library FFTW (\url{http://www.fftw.org/}). FFT should be then installed on your OS.} 
 
