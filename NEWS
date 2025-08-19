@@ -2,9 +2,17 @@
 		*		SEEWAVE NEWS		*
 		*****************************************
 
-		CHANGES IN SEEWAVE VERSION 2.2.3 [15-October-2023]
+		CHANGES IN SEEWAVE VERSION 2.2.3 [20-August-2025]
 
 NEW FUNCTION
+	o bstd(): a new funtion to display a brightness-standard-deviation plot.
+
+OTHER CHANGES
+        o comply with CRAN team queries.
+
+		CHANGES IN SEEWAVE VERSION 2.2.3 [15-October-2023]
+
+OTHER CHANGES
 	o scd(): a new argument, 'flim', to draw soundscape chord diagrams over a specified frequency range.
 	o audiomoth(), lts() : a bug fixed.
 

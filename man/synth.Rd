@@ -118,7 +118,7 @@ Hz).}
 
 \author{Jerome Sueur and Laurent Lellouch.}
 
-\seealso{\code{\link{synth2}}, \code{\link{noisew}}, \code{\link{pulse}}, \code{\link{echo}}}
+\seealso{\code{\link{synth2}}, \code{\link{noisew}}, \code{\link{echo}}}
 
 \examples{
 ## You can use plot=TRUE and spectro() options

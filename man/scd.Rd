@@ -75,7 +75,7 @@ grid.col = terrain.colors, names, plot = TRUE, verbose = TRUE, ...)
 }
 
 \value{
-  THe function returns a list of two items:
+  The function returns a list of two items:
   \item{m}{spectral similarity matrix}
   \item{resHCA}{the classification result of the HCA, if \code{HCA} is \code{TRUE}}
 }

@@ -96,7 +96,7 @@ tcl = 0.5, title = FALSE, xaxt="s", yaxt="n", type="l", bty = "l")
 
 \seealso{\code{\link{dynoscillo}}, \code{\link{oscilloST}},
   \code{\link{oscilloEQ}}, \code{\link{cutw}}, \code{\link{pastew}},
-  \code{\link{timer}}}
+  \code{\link{timer}}, \code{\link{bstd}}}
 
 \examples{
 data(tico)

@@ -541,6 +541,70 @@ beep <- function(d=0.5, f=8000, cf=1000){
 
 
 ################################################################################
+##  BSTD                                       
+################################################################################
+
+
+bstd <- function(
+                 wave,
+                 f,
+                 channel = 1,
+                 wl = 512,
+                 ovlp = 0,
+                 xlab = "Time (s)",
+                 ylab = "",
+                 xlim = NULL,
+                 ylim = NULL,
+                 palette = colorRamp(c("yellow", "red")),
+                 plot = TRUE,
+                 ...)
+{
+
+    ## input
+    input <- inputw(wave=wave, f=f, channel=channel) ; wave <- input$w ; f <- input$f ; rm(input)
+
+    ## sliding window
+    n <- length(wave)
+    step <- seq(1, n+1-wl, wl-(ovlp*wl/100))
+    nstep <- length(step)
+
+    ## time
+    t <- seq(0, n/f, length.out=nstep-1)
+
+    ## rms (y)
+    y <- rep(NA, nstep-1)
+    for(i in 1:(nstep-1)) y[i] <- rms(wave[step[i]:step[(i+1)]])
+    y <- y/max(y)
+
+    ## spectral flux (width or thickness)
+    specs <- spectro(wave, wl=wl, f=f, ovlp=ovlp, dB=NULL, plot=FALSE)$amp
+    w <- rep(NA, nstep-1)
+    for(i in 1:(nstep-1)){w[i] <- diffcumspec(spec1=specs[,i+1], spec2=specs[,i], f=f)}
+    ## scaling
+    w <- w/max(w)
+
+    ## zero crossing rate (color)
+    b <- zcr(wave, wl=wl, f=f, ovlp=ovlp, plot=FALSE)[,"zcr"]
+    b <- b[-nstep]
+    b <- b/max(b)
+
+    ## output
+    res <- cbind(t, y, w, b)
+    colnames(res) <- c("time", "rms", "sf", "zcr")
+    
+    ## plot
+    if(plot){
+        if(is.null(ylim)) ylim <- c(min(y), max(y+w*10))
+        plot(t, y,  type="n", xlab=xlab, yaxt="n", ylab=ylab, ylim=ylim, ...)
+        segments(x0=t, y0=y, x1=t, y1=y+w*10, col=rgb(palette(b), maxColorValue=255))
+        invisible(res)
+    }
+
+    else return(res)
+
+}
+
+################################################################################
 ##  BWFILTER                                       
 ################################################################################
 
@@ -1580,7 +1644,7 @@ dBscale<-function
 
 {
   plot.new()
-  levels<-collevels
+  levels <- collevels
   col <- palette(length(collevels) - 1)
   par(las=1)
   
@@ -4254,7 +4318,7 @@ lts <- function(dir,             # directory path where to find the .wav files
         if(is(test, "try-error")) stop("It seems that the first .wav file is corrupted so that the sampling frequency cannot be retrieved. Please try to use the argument 'f'.")
     }
 
-    time <- switch(match.arg(recorder), songmeter = songmeter(files)$time, audiomoth= audiomoth(files)$time)
+    time <- switch(match.arg(recorder), songmeter = songmeter(files)$time, audiomoth = audiomoth(files)$time)
     
     freq <- seq(0, f/2-f/wl, length=wl/2)/1000
     
@@ -6326,7 +6390,7 @@ songmeter <- function(
                                 hour <- substr(items[3], start = 1, stop = 2)
                                 min <- substr(items[3], start = 3, stop = 4)
                                 sec <- substr(items[3], start = 5, stop = 6)
-                                time <- strptime(paste(items[2], items[3]), "%Y%m%d%H%M%S")
+                                time <- strptime(paste(items[2], items[3]), format="%Y%m%d%H%M%S")  ## 2023-01-08 does not print 00:00:00 for midnight but the time information is not lost  
                                 geo <- NA
                                 res <- rbind(res, data.frame(model, prefix, mic, year, month, day, hour, min, sec, time, geo))
                             }

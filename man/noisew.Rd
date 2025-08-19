@@ -29,7 +29,7 @@ noisew(f, d, type="unif", listen = FALSE, output = "matrix")
 
 \author{Jerome Sueur \email{sueur@mnhn.fr}}
 
-\seealso{\code{\link{synth}}, \code{\link{pulse}}}
+\seealso{\code{\link{synth}}}
 
 \examples{
 # add noise to a synthetic signal
